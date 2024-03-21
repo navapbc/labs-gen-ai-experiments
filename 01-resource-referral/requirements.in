@@ -1,0 +1,10 @@
+# Using python 3.11
+# To update requirements.txt using this file:
+# > pip install pip-tools
+# > pip-compile requirements.in
+
+langchain
+langchain_community
+langgraph
+numexpr
+graphviz
