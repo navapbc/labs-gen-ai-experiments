@@ -1,18 +1,22 @@
 
 ## Setup
 
+### Python
+* Use Python 3.11.x (higher versions cause library version problems).
+* Install Python libraries: `pip install -r requirements.txt`
+
 ### Ollama
 1. Install Ollama from https://ollama.ai/
 2. Run `ollama run openhermes` to run the OpenHermes LLM, downloading it if needed.
 
-### Enable feedback
+### (Optional) Enable Chatbot feedback
 To enable the [feedback mechanism](https://docs.chainlit.io/data-persistence/feedback):
 * Get an API key: https://docs.chainlit.io/data-persistence/overview
 * Create `.env` with the API key
 
-After running the chatbot and providing feedback, review the feedback at https://cloud.getliteral.ai/projects/YOUR_PROJECT_NAME/feedback.
+After running the chatbot and providing feedback in the UI, review the feedback at https://cloud.getliteral.ai/projects/YOUR_PROJECT_NAME/feedback.
 
-* To use a custom feedback storage instead of `getliteral`, see https://docs.chainlit.io/data-persistence/custom.
+* To use a custom feedback storage instead of `getliteral.ai`, see https://docs.chainlit.io/data-persistence/custom.
 
 
 ## Run
