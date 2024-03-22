@@ -2,9 +2,10 @@ from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmb
 from langchain.prompts import PromptTemplate
 from langchain.llms import GPT4All
 from langchain import LLMChain
-
+from bs4 import BeautifulSoup
 from langchain_community.document_loaders import JSONLoader, PyPDFLoader
-from langchain_text_splitters import CharacterTextSplitter
+from langchain.docstore.document import Document
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 from langchain.vectorstores import Chroma
@@ -58,27 +59,32 @@ import dotenv
 guru_file_path='./guru_cards_for_nava.json'
 
 
-text_splitter = CharacterTextSplitter(
-    chunk_size=350,
-    chunk_overlap=200,
-)
+def get_text_chunks_langchain(text):
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    texts = text_splitter.split_text(text)
+    docs = [Document(page_content=t) for t in texts]
+    return docs
 
-embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-json_data = JSONLoader(
-    file_path=guru_file_path,
-    jq_schema='.[].content',
-    text_content=False)
+embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
-guru_data = json_data.load()
+# extract text from json html content key
+guru_data_file = open(guru_file_path)
+guru_data = json.load(guru_data_file)
+guru_data_contents = ""
+for content in guru_data:
+    soup = BeautifulSoup(content["content"], "html.parser")
+    text = soup.get_text(separator='\n', strip=True)
+    guru_data_contents += f" {text} "
 
+chunks = get_text_chunks_langchain(guru_data_contents)
 
-#Turn the chunks into embeddings and store them in Chroma
-vectordb=Chroma.from_documents(guru_data,embedding_function)
+# Turn the chunks into embeddings and store them in Chroma
+vectordb=Chroma.from_documents(chunks,embeddings)
 
-#Configure Chroma as a retriever with top_k=5
+# Configure Chroma as a retriever with top_k=5
 retriever = vectordb.as_retriever(search_kwargs={"k": 5})
 
-#Create the retrieval chain
+# Create the retrieval chain
 template = """
 You are a helpful AI assistant.
 Answer based on the context provided. 
@@ -95,6 +101,6 @@ combine_docs_chain = create_stuff_documents_chain(llm, prompt)
 retrieval_chain = create_retrieval_chain(retriever, combine_docs_chain)
 
 # Invoke the retrieval chain
-response=retrieval_chain.invoke({"input":"what are appeals?"})
+response=retrieval_chain.invoke({"input":"can BDT assist with client appeal?"})
 
-print(response)
+print(response["answer"])
