@@ -18,7 +18,6 @@ def create_tool_calling_chain(model_name: str, tools: list):
         | debug_runnable("  Tooling PROMPT")
         | create_llm(model_name=model_name, settings={"temperature": 0.1, "top_p": 0.8})
         | RunnableLambda(_parse_llm_output)
-        # | debug_runnable("4")
     )
 
 
@@ -57,7 +56,8 @@ def _parse_llm_output(text: str) -> dict:
             _tool_input = ",".join(_tool_input)
         return {"tool": _tool, "tool_input": _tool_input}
     else:
-        # To trigger, ask: what tools are available
+        # Not part of the expected workflow
+        # To trigger, query: what tools are available
         print("!!!!!!!!!!!!!!!!")
         return {"output": text}
         # raise ValueError
