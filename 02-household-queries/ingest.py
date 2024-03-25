@@ -68,11 +68,16 @@ def get_text_chunks_langchain(text):
 embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
 # extract text from json html content key
-guru_data_file = open(guru_file_path)
-guru_data = json.load(guru_data_file)
+json_data = JSONLoader(
+    file_path=guru_file_path,
+    jq_schema='.[].content',
+    text_content=False)
+
+guru_data = json_data.load()
+
 guru_data_contents = ""
 for content in guru_data:
-    soup = BeautifulSoup(content["content"], "html.parser")
+    soup = BeautifulSoup(content.page_content, "html.parser")
     text = soup.get_text(separator='\n', strip=True)
     guru_data_contents += f" {text} "
 
