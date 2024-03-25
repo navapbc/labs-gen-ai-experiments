@@ -4,8 +4,6 @@ import random
 import requests
 from langchain.agents import tool
 from langchain.prompts import PromptTemplate
-# from langchain_experimental.agents.agent_toolkits import create_csv_agent
-# from langchain_google_genai import ChatGoogleGenerativeAI
 import numpy as np
 import pandas
 
@@ -90,13 +88,6 @@ def query_spreadsheet(city: str, service_type: str | list[str]) -> str:
     csv_with_header_to_json = results.replace(np.nan, None).to_dict('records')
     dict_json = json.dumps(csv_with_header_to_json, indent=2)
     
-    # using LLM to query CSV
-    # llm = ChatGoogleGenerativeAI(model="gemini-pro",google_api_key=os.getenv("GOOGLE_API_KEY"))
-    # if uploaded_file is not None:
-    #     agent = create_csv_agent(
-    #     llm, uploaded_file, verbose=True)
-    #     csv_str+= agent.run(query)
-    
     return dict_json
 
 @tool
@@ -110,7 +101,6 @@ def merge_json_results(user_query, result_211_api, result_spreadsheet):
     input("Press Enter to continue...")
 
     deduplicated_dict = _merge_and_deduplicate(dict_listA, dict_listB)
-    # print(deduplicated_dict)
 
     relevance_agent = create_relevance_agent()
     # A long list of resources confuses the LLM, so sample only 40
