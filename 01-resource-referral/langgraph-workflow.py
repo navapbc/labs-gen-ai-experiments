@@ -134,13 +134,12 @@ class MyWorkflow:
         user_message = next(m for m in reversed(state["messages"]) if "user_query" in m)
         print("\nLLM_211_API node", user_message)
 
-        # Human-in-the-loop example:
+        # Basic Human-in-the-loop example:
         # print("[y/n] continue with: call_211_api?")
         # response = input()
         # if response == "n":
-        #     raise ValueError
+        #     sys.exit()
 
-        # llm_response = self.llm_chain["call_211_api"].invoke(user_message)
         llm_response = self.invoke_user_message("call_211_api", user_message)
         return {"messages": [llm_response]}
 
@@ -148,7 +147,7 @@ class MyWorkflow:
         # find the last message that mentions the "user_query"
         user_message = next(m for m in reversed(state["messages"]) if "user_query" in m)
         print("\nLLM_SPREADSHEET_QUERY node", user_message)
-        llm_response = self.llm_chain["query_spreadsheet"].invoke(user_message)
+        llm_response = self.invoke_user_message("query_spreadsheet", user_message)
         return {"messages": [llm_response]}
 
     def invoke_user_message(self, tool, user_message): 
