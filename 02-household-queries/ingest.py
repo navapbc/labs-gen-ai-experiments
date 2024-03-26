@@ -15,9 +15,9 @@ import os
 from pathlib import Path
 from pprint import pprint
 import dotenv
-
+import requests
 # Implementation with Google Gemini embeddings and storing in Chroma
-# dotenv.load_dotenv()
+dotenv.load_dotenv()
 # #Load the models
 # GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
 
@@ -58,33 +58,34 @@ import dotenv
 # download from https://drive.google.com/file/d/1UoWmktXS5nqgIWj2x_O5hgzwU0yVuaJc/view
 guru_file_path='./guru_cards_for_nava.json'
 
+# GURU_ENDPOINT = "https://api.getguru.com/api/v1/"
+# def get_guru_data():
+#     url = f"{GURU_ENDPOINT}cards/3fbff9c4-56a8-4561-a7d1-09727f1b4703"
+#     headers = {
+#     'Authorization': os.environ.get('GURU_TOKEN')}
+#     response = requests.request("GET", url, headers=headers)
+#     return response.json()
+
 
 def get_text_chunks_langchain(text):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=500)
     texts = text_splitter.split_text(text)
     docs = [Document(page_content=t) for t in texts]
     return docs
 
-embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+embeddings = SentenceTransformerEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
-# extract text from json html content key
-json_data = JSONLoader(
-    file_path=guru_file_path,
-    jq_schema='.[].content',
-    text_content=False)
+# open json file method
+guru_data_file = open(guru_file_path)
+guru_data = json.load(guru_data_file)
 
-guru_data = json_data.load()
+guru_data_contents = []
 
-guru_data_contents = ""
 for content in guru_data:
-    soup = BeautifulSoup(content.page_content, "html.parser")
+    soup = BeautifulSoup(content["content"], "html.parser")
     text = soup.get_text(separator='\n', strip=True)
-    guru_data_contents += f" {text} "
-
-chunks = get_text_chunks_langchain(guru_data_contents)
-
-# Turn the chunks into embeddings and store them in Chroma
-vectordb=Chroma.from_documents(chunks,embeddings)
+    guru_data_contents.append(Document(page_content= text, metadata= { "source": content["preferredPhrase"] } ))
+    vectordb = Chroma.from_documents(get_text_chunks_langchain(text),embeddings, persist_directory="./chroma_db")
 
 # Configure Chroma as a retriever with top_k=5
 retriever = vectordb.as_retriever(search_kwargs={"k": 5})
@@ -106,6 +107,6 @@ combine_docs_chain = create_stuff_documents_chain(llm, prompt)
 retrieval_chain = create_retrieval_chain(retriever, combine_docs_chain)
 
 # Invoke the retrieval chain
-response=retrieval_chain.invoke({"input":"can BDT assist with client appeal?"})
+response=retrieval_chain.invoke({"input":"What is a disqualified household member?"})
 
 print(response["answer"])
