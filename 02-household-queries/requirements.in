@@ -10,4 +10,5 @@ langchain
 langchain_community
 langchain-google-genai
 langchain-text-splitters
+rapidocr-onnxruntime
 # sentence-transformers
