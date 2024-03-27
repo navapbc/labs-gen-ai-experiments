@@ -5,6 +5,8 @@
 beautifulsoup4
 chainlit
 chromadb
+dspy-ai
+jinja2
 jq
 langchain
 langchain_community
