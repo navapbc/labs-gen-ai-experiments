@@ -17,72 +17,43 @@ import dotenv
 
 dotenv.load_dotenv()
 
-# Load the models
-GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
-llm = ChatGoogleGenerativeAI(model="gemini-pro",
-                             verbose = True,google_api_key=GOOGLE_API_KEY,
-                             convert_system_message_to_human=True)
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-
-# initialize chroma db
-vectordb=Chroma(embedding_function=embeddings, collection_name="resources")
-# Load the PDF and create chunks
-# download from https://drive.google.com/file/d/1--qDjraIk1WGxwuCGBP-nfxzOr9IHvcZ/view?usp=drive_link
-
-pdf_path = "./tanf.pdf"
-# PDFMinerLoader only gives metadata when extract_images=True due to default using lazy_loader
-loader = PDFMinerLoader(pdf_path, extract_images=True)
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
-
-pdf_pages = loader.load_and_split(text_splitter)
-vectordb.add_documents(documents=pdf_pages)
-
-# Load the json and create chunks
-# download from https://drive.google.com/file/d/1UoWmktXS5nqgIWj2x_O5hgzwU0yVuaJc/view
-guru_file_path='./guru_cards_for_nava.json'
-
+# split text into chunks
 def get_text_chunks_langchain(text, source):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=500)
     texts = text_splitter.split_text(text)
     docs = [Document(page_content=t, metadata={"source":source}) for t in texts]
     return docs
 
-guru_data_file = open(guru_file_path)
-guru_data = json.load(guru_data_file)
+# Chunk the pdf and load into vector db
+def add_pdf_to_vector_db(file_path, chunk_size=500, chunk_overlap=100):
+    # PDFMinerLoader only gives metadata when extract_images=True due to default using lazy_loader
+    loader = PDFMinerLoader(file_path, extract_images=True)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
 
-for content in guru_data:
-    soup = BeautifulSoup(content["content"], "html.parser")
-    text = soup.get_text(separator='\n', strip=True)
-    chunks = get_text_chunks_langchain(text, content["preferredPhrase"])
-    vectordb.add_documents(documents=chunks)
+    pdf_pages = loader.load_and_split(text_splitter)
+    vectordb.add_documents(documents=pdf_pages)
 
+# Chunk the json data and load into vector db
+def add_json_html_data_to_vector_db(file_path, content_key, index_key):
+    data_file = open(file_path)
+    json_data = json.load(data_file)
 
-retriever = vectordb.as_retriever(search_kwargs={"k": 1})
+    for content in json_data:
+        soup = BeautifulSoup(content[content_key], "html.parser")
+        text = soup.get_text(separator='\n', strip=True)
+        chunks = get_text_chunks_langchain(text, content[index_key])
+        vectordb.add_documents(documents=chunks)
 
-# Create the retrieval chain
-template = """
-You are a helpful AI assistant.
-Answer based on the context provided. 
-context: {context}
-input: {input}
-answer:
-"""
+embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
-# Open source option
-# gpt4all_path= "./mistral-7b-instruct-v0.1.Q4_0.gguf"
-# llm = GPT4All(model=gpt4all_path,max_tokens=1000, verbose=True,repeat_last_n=0)
-# embeddings = SentenceTransformerEmbeddings(model_name="BAAI/bge-small-en-v1.5")
-prompt = PromptTemplate.from_template(template)
-llm_chain = LLMChain(prompt=prompt, llm=llm)
-combine_docs_chain = create_stuff_documents_chain(llm, prompt)
-retrieval_chain = RetrievalQA.from_chain_type(
-    llm=llm,
-    retriever=retriever,
-    return_source_documents=True,
-    verbose=False,
-)
+# initialize chroma db
+vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
+# Load the PDF and create chunks
+# download from https://drive.google.com/file/d/1--qDjraIk1WGxwuCGBP-nfxzOr9IHvcZ/view?usp=drive_link
 
-# Invoke the retrieval chain
-response=retrieval_chain.invoke({"query":"Should all household members be listed even if they are not in the food stamp household?"})
-print("RESULT: ", response["result"])
-print("SOURCE DOC: ",response["source_documents"])
+pdf_path = "./tanf.pdf"
+add_pdf_to_vector_db(pdf_path)
+
+# download from https://drive.google.com/file/d/1UoWmktXS5nqgIWj2x_O5hgzwU0yVuaJc/view?usp=drive_link
+guru_file_path='./guru_cards_for_nava.json'
+add_json_html_data_to_vector_db(guru_file_path, "content", "preferredPhrase")
