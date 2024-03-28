@@ -118,8 +118,6 @@ googleapis-common-protos==1.63.0
     #   grpcio-status
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
-greenlet==3.0.3
-    # via sqlalchemy
 grpcio==1.62.1
     # via
     #   chromadb
@@ -152,9 +150,7 @@ idna==3.6
     #   requests
     #   yarl
 importlib-metadata==6.11.0
-    # via
-    #   build
-    #   opentelemetry-api
+    # via opentelemetry-api
 importlib-resources==6.4.0
     # via chromadb
 jq==1.7.0
