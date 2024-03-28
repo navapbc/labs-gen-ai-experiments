@@ -21,8 +21,8 @@ def add_pdf_to_vector_db(file_path, chunk_size=500, chunk_overlap=100):
     # PDFMinerLoader only gives metadata when extract_images=True due to default using lazy_loader
     loader = PDFMinerLoader(file_path, extract_images=True)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-
     pdf_pages = loader.load_and_split(text_splitter)
+    print("Loading PDF chunks into vector db")
     vectordb.add_documents(documents=pdf_pages)
 
 # Chunk the json data and load into vector db
@@ -34,6 +34,7 @@ def add_json_html_data_to_vector_db(file_path, content_key, index_key):
         soup = BeautifulSoup(content[content_key], "html.parser")
         text = soup.get_text(separator='\n', strip=True)
         chunks = get_text_chunks_langchain(text, content[index_key])
+        print(f"Loading Document {content[index_key]} chunk into vector db")
         vectordb.add_documents(documents=chunks)
 
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
