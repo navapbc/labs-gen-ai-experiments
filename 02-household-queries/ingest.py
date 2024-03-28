@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 from pprint import pprint
 import dotenv
-import requests
 
 dotenv.load_dotenv()
 
@@ -41,14 +40,6 @@ vectordb.add_documents(documents=pdf_pages)
 # Load the json and create chunks
 # download from https://drive.google.com/file/d/1UoWmktXS5nqgIWj2x_O5hgzwU0yVuaJc/view
 guru_file_path='./guru_cards_for_nava.json'
-
-# GURU_ENDPOINT = "https://api.getguru.com/api/v1/"
-# def get_guru_data():
-#     url = f"{GURU_ENDPOINT}cards/3fbff9c4-56a8-4561-a7d1-09727f1b4703"
-#     headers = {
-#     'Authorization': os.environ.get('GURU_TOKEN')}
-#     response = requests.request("GET", url, headers=headers)
-#     return response.json()
 
 def get_text_chunks_langchain(text, source):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=500)
