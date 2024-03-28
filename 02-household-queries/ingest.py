@@ -43,7 +43,6 @@ embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
 # Load the PDF and create chunks
 # download from https://drive.google.com/file/d/1--qDjraIk1WGxwuCGBP-nfxzOr9IHvcZ/view?usp=drive_link
-
 pdf_path = "./tanf.pdf"
 add_pdf_to_vector_db(pdf_path)
 
