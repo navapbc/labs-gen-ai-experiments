@@ -27,7 +27,7 @@ def add_pdf_to_vector_db(file_path, chunk_size=500, chunk_overlap=100):
 
 # Chunk the json data and load into vector db
 def add_json_html_data_to_vector_db(file_path, content_key, index_key):
-    data_file = open(file_path)
+    data_file = open(file_path, encoding="utf-8")
     json_data = json.load(data_file)
 
     for content in json_data:
