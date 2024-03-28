@@ -10,6 +10,8 @@ import dotenv
 dotenv.load_dotenv()
 
 # Load the models
+# Get a Google API key by following the steps after clicking on Get an API key button 
+# at https://ai.google.dev/tutorials/setup
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
 llm = ChatGoogleGenerativeAI(model="gemini-pro",
                              verbose = True,google_api_key=GOOGLE_API_KEY,
