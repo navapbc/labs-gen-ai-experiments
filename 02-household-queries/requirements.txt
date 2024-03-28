@@ -51,10 +51,14 @@ certifi==2024.2.2
     #   kubernetes
     #   pulsar-client
     #   requests
+cffi==1.16.0
+    # via cryptography
 chainlit==1.0.401
     # via -r requirements.in
 charset-normalizer==3.3.2
-    # via requests
+    # via
+    #   pdfminer-six
+    #   requests
 chevron==0.14.0
     # via literalai
 chroma-hnswlib==0.7.3
@@ -68,6 +72,8 @@ click==8.1.7
     #   uvicorn
 coloredlogs==15.0.1
     # via onnxruntime
+cryptography==42.0.5
+    # via pdfminer-six
 dataclasses-json==0.5.14
     # via
     #   chainlit
@@ -292,6 +298,10 @@ packaging==23.2
     #   literalai
     #   marshmallow
     #   onnxruntime
+pdfminer==20191125
+    # via -r requirements.in
+pdfminer-six==20231228
+    # via -r requirements.in
 pillow==10.2.0
     # via rapidocr-onnxruntime
 posthog==3.5.0
@@ -320,6 +330,10 @@ pyasn1-modules==0.4.0
     # via google-auth
 pyclipper==1.3.0.post5
     # via rapidocr-onnxruntime
+pycparser==2.21
+    # via cffi
+pycryptodome==3.20.0
+    # via pdfminer
 pydantic==2.6.4
     # via
     #   chainlit
