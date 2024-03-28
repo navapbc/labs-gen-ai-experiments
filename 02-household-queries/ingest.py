@@ -1,18 +1,10 @@
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from langchain.prompts import PromptTemplate
-from langchain_community.llms import GPT4All
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from bs4 import BeautifulSoup
-from langchain_community.document_loaders import JSONLoader, PDFMinerLoader
+from langchain_community.document_loaders import PDFMinerLoader
 from langchain.docstore.document import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain.chains import create_retrieval_chain, LLMChain, RetrievalQA
 from langchain_community.vectorstores import Chroma
-from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 import json
-import os
-from pathlib import Path
-from pprint import pprint
 import dotenv
 
 dotenv.load_dotenv()
