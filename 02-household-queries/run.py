@@ -32,6 +32,7 @@ llm_choice = input()
 # Load the models
 if llm_choice == 2 or llm_choice == "Mistral":
     # Open source option
+    # download Mistral at https://mistral.ai/news/announcing-mistral-7b/
     gpt4all_path= "./mistral-7b-instruct-v0.1.Q4_0.gguf"
     llm = GPT4All(model=gpt4all_path,max_tokens=1000, verbose=True,repeat_last_n=0)
 else:
