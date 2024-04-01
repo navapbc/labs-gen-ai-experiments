@@ -46,5 +46,20 @@ else:
 # initialize chroma db
 vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
 
-ingest_call(vectordb=vectordb)
-retrieval_call(llm=llm, vectordb=vectordb)
+print("""
+Initialize DB and retrieve? 
+1. Retrieve only (default)
+2. Init andd retrieve
+3. Init only
+      """)
+run_option = input()
+if run_option == 2:
+    ingest_call(vectordb=vectordb)
+    retrieval_call(llm=llm, vectordb=vectordb)
+elif run_option == 3:
+    ingest_call(vectordb=vectordb)
+else:
+    retrieval_call(llm=llm, vectordb=vectordb)
+
+
+

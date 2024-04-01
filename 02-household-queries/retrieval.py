@@ -19,7 +19,9 @@ def retrieval_call(llm, vectordb):
 
     )
 
+    print("Please state your question here: ")
+    question = input()
     # Invoke the retrieval chain
-    response=retrieval_chain.invoke({"query":"Should all household members be listed even if they are not in the food stamp household?"})
+    response=retrieval_chain.invoke({"query":question})
     print("RESULT: ", response["result"])
     print("SOURCE DOC: ",response["source_documents"])
