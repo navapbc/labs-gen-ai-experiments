@@ -1,13 +1,8 @@
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from bs4 import BeautifulSoup
 from langchain_community.document_loaders import PDFMinerLoader
 from langchain.docstore.document import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import Chroma
 import json
-import dotenv
-
-dotenv.load_dotenv()
 
 # split text into chunks
 def get_text_chunks_langchain(text, source):
@@ -17,7 +12,7 @@ def get_text_chunks_langchain(text, source):
     return docs
 
 # Chunk the pdf and load into vector db
-def add_pdf_to_vector_db(file_path, chunk_size=500, chunk_overlap=100):
+def add_pdf_to_vector_db(vectordb, file_path, chunk_size=500, chunk_overlap=100):
     # PDFMinerLoader only gives metadata when extract_images=True due to default using lazy_loader
     loader = PDFMinerLoader(file_path, extract_images=True)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -26,7 +21,7 @@ def add_pdf_to_vector_db(file_path, chunk_size=500, chunk_overlap=100):
     vectordb.add_documents(documents=pdf_pages)
 
 # Chunk the json data and load into vector db
-def add_json_html_data_to_vector_db(file_path, content_key, index_key):
+def add_json_html_data_to_vector_db(vectordb, file_path, content_key, index_key):
     data_file = open(file_path, encoding="utf-8")
     json_data = json.load(data_file)
 
@@ -37,15 +32,12 @@ def add_json_html_data_to_vector_db(file_path, content_key, index_key):
         print(f"Loading Document {content[index_key]} chunk into vector db")
         vectordb.add_documents(documents=chunks)
 
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+def ingest_call(vectordb):    
+    # Load the PDF and create chunks
+    # download from https://drive.google.com/file/d/1--qDjraIk1WGxwuCGBP-nfxzOr9IHvcZ/view?usp=drive_link
+    pdf_path = "./tanf.pdf"
+    add_pdf_to_vector_db(vectordb=vectordb, file_path=pdf_path)
 
-# initialize chroma db
-vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
-# Load the PDF and create chunks
-# download from https://drive.google.com/file/d/1--qDjraIk1WGxwuCGBP-nfxzOr9IHvcZ/view?usp=drive_link
-pdf_path = "./tanf.pdf"
-add_pdf_to_vector_db(pdf_path)
-
-# download from https://drive.google.com/file/d/1UoWmktXS5nqgIWj2x_O5hgzwU0yVuaJc/view?usp=drive_link
-guru_file_path='./guru_cards_for_nava.json'
-add_json_html_data_to_vector_db(guru_file_path, "content", "preferredPhrase")
+    # download from https://drive.google.com/file/d/1UoWmktXS5nqgIWj2x_O5hgzwU0yVuaJc/view?usp=drive_link
+    guru_file_path='./guru_cards_for_nava.json'
+    add_json_html_data_to_vector_db(vectordb=vectordb, file_path=guru_file_path, content_key="content", index_key="preferredPhrase")
