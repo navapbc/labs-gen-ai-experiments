@@ -1,31 +1,40 @@
+import os
 import dotenv
-from langchain_community.embeddings import SentenceTransformerEmbeddings
+from langchain_community.embeddings import SentenceTransformerEmbeddings, HuggingFaceEmbeddings
 from langchain_community.llms import GPT4All
 from langchain_community.vectorstores import Chroma
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-import os
 
 from ingest import ingest_call
 from retrieval import retrieval_call
+from llm import ollama_client
 
 dotenv.load_dotenv()
 
-print("""
+_embeddings_model_name = os.environ.get("EMBEDDINGS_MODEL_NAME", "all-MiniLM-L6-v2")
+_llm_model_name = os.environ.get("LLM_MODEL_NAME", "mistral")
+
+print(f"""
 Which embedding function would you like to use?
 1. Google Gen AI (default)
 2. all-MiniLM-L6-v2
+3. $EMBEDDINGS_MODEL_NAME{_embeddings_model_name}) via HuggingFace
       """)
 embedding_choice = input()
 # Set embedding function
 if embedding_choice == "2" or embedding_choice == "all-MiniLM-L6-v2":
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+elif embedding_choice == "3":
+    # "The all-mpnet-base-v2 model provides the best quality, while all-MiniLM-L6-v2 is 5 times faster and still offers good quality."
+    embeddings = HuggingFaceEmbeddings(model_name=_embeddings_model_name)
 else:
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
-print("""
+print(f"""
 Which LLM would you like to use? 
 1. Gemini (default)
 2. Mistral (via GPT4All)
+3. $LLM_MODEL_NAME ({_llm_model_name}) via Ollama
       """)
 
 llm_choice = input()
@@ -35,6 +44,10 @@ if llm_choice == "2" or llm_choice == "Mistral":
     # download Mistral at https://mistral.ai/news/announcing-mistral-7b/
     gpt4all_path= "./mistral-7b-instruct-v0.1.Q4_0.gguf"
     llm = GPT4All(model=gpt4all_path,max_tokens=1000, verbose=True,repeat_last_n=0)
+elif llm_choice == "3":
+    # _llm_model_name = "mistral" # "openhermes", "llama2", "mistral"
+    llm_settings = {"temperature": 0.1}
+    llm = ollama_client(_llm_model_name, settings=llm_settings)
 else:
     # Get a Google API key by following the steps after clicking on Get an API key button 
     # at https://ai.google.dev/tutorials/setup
@@ -60,6 +73,3 @@ elif run_option == "3":
     ingest_call(vectordb=vectordb)
 else:
     retrieval_call(llm=llm, vectordb=vectordb)
-
-
-
