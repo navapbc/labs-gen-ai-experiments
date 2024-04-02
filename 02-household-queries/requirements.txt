@@ -112,7 +112,10 @@ fastapi==0.108.0
 fastapi-socketio==0.0.10
     # via chainlit
 filelock==3.13.3
-    # via huggingface-hub
+    # via
+    #   huggingface-hub
+    #   torch
+    #   transformers
 filetype==1.2.0
     # via chainlit
 flatbuffers==24.3.25
@@ -125,6 +128,7 @@ fsspec[http]==2023.10.0
     # via
     #   datasets
     #   huggingface-hub
+    #   torch
 google-ai-generativelanguage==0.4.0
     # via google-generativeai
 google-api-core[grpc]==2.18.0
@@ -144,8 +148,6 @@ googleapis-common-protos==1.63.0
     #   grpcio-status
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
-greenlet==3.0.3
-    # via sqlalchemy
 grpcio==1.62.1
     # via
     #   chromadb
@@ -171,7 +173,9 @@ httpx==0.27.0
 huggingface-hub==0.22.2
     # via
     #   datasets
+    #   sentence-transformers
     #   tokenizers
+    #   transformers
 humanfriendly==10.0
     # via coloredlogs
 idna==3.6
@@ -181,15 +185,17 @@ idna==3.6
     #   requests
     #   yarl
 importlib-metadata==6.11.0
-    # via
-    #   build
-    #   opentelemetry-api
+    # via opentelemetry-api
 importlib-resources==6.4.0
     # via chromadb
 jinja2==3.1.3
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   torch
 joblib==1.3.2
-    # via dspy-ai
+    # via
+    #   dspy-ai
+    #   scikit-learn
 jq==1.7.0
     # via -r requirements.in
 jsonpatch==1.33
@@ -251,6 +257,8 @@ mypy-extensions==1.0.0
     # via typing-inspect
 nest-asyncio==1.6.0
     # via chainlit
+networkx==3.2.1
+    # via torch
 numpy==1.26.4
     # via
     #   chroma-hnswlib
@@ -264,7 +272,11 @@ numpy==1.26.4
     #   pandas
     #   pyarrow
     #   rapidocr-onnxruntime
+    #   scikit-learn
+    #   scipy
+    #   sentence-transformers
     #   shapely
+    #   transformers
 oauthlib==3.2.2
     # via
     #   kubernetes
@@ -346,10 +358,18 @@ packaging==23.2
     #   literalai
     #   marshmallow
     #   onnxruntime
+    #   optuna
+    #   transformers
+pandas==2.2.1
+    # via
+    #   datasets
+    #   dspy-ai
 pdfminer-six==20231228
     # via -r requirements.in
 pillow==10.2.0
-    # via rapidocr-onnxruntime
+    # via
+    #   rapidocr-onnxruntime
+    #   sentence-transformers
 posthog==3.5.0
     # via chromadb
 proto-plus==1.23.0
@@ -382,7 +402,7 @@ pyclipper==1.3.0.post5
     # via rapidocr-onnxruntime
 pycparser==2.21
     # via cffi
-pydantic==2.6.4
+pydantic==2.5.0
     # via
     #   chainlit
     #   chromadb
@@ -432,11 +452,14 @@ pyyaml==6.0.1
     #   langchain-core
     #   optuna
     #   rapidocr-onnxruntime
+    #   transformers
     #   uvicorn
 rapidocr-onnxruntime==1.3.15
     # via -r requirements.in
 regex==2023.12.25
-    # via dspy-ai
+    # via
+    #   dspy-ai
+    #   transformers
 requests==2.31.0
     # via
     #   chromadb
@@ -454,10 +477,21 @@ requests==2.31.0
     #   posthog
     #   python-graphql-client
     #   requests-oauthlib
+    #   transformers
 requests-oauthlib==2.0.0
     # via kubernetes
 rsa==4.9
     # via google-auth
+safetensors==0.4.2
+    # via transformers
+scikit-learn==1.4.1.post1
+    # via sentence-transformers
+scipy==1.12.0
+    # via
+    #   scikit-learn
+    #   sentence-transformers
+sentence-transformers==2.6.1
+    # via -r requirements.in
 shapely==2.0.3
     # via rapidocr-onnxruntime
 simple-websocket==1.0.0
@@ -486,7 +520,9 @@ starlette==0.32.0.post1
     #   chainlit
     #   fastapi
 sympy==1.12
-    # via onnxruntime
+    # via
+    #   onnxruntime
+    #   torch
 syncer==2.0.3
     # via chainlit
 tenacity==8.2.3
@@ -495,13 +531,19 @@ tenacity==8.2.3
     #   langchain
     #   langchain-community
     #   langchain-core
+threadpoolctl==3.4.0
+    # via scikit-learn
 tokenizers==0.15.2
-    # via chromadb
+    # via
+    #   chromadb
+    #   transformers
 tomli==2.0.1
     # via
     #   build
     #   chainlit
     #   pyproject-hooks
+torch==2.2.2
+    # via sentence-transformers
 tqdm==4.66.2
     # via
     #   chromadb
@@ -511,6 +553,10 @@ tqdm==4.66.2
     #   huggingface-hub
     #   openai
     #   optuna
+    #   sentence-transformers
+    #   transformers
+transformers==4.39.2
+    # via sentence-transformers
 typer==0.11.1
     # via chromadb
 typing-extensions==4.10.0
@@ -526,6 +572,7 @@ typing-extensions==4.10.0
     #   pydantic
     #   pydantic-core
     #   sqlalchemy
+    #   torch
     #   typer
     #   typing-inspect
     #   uvicorn
