@@ -17,7 +17,7 @@ def ollama_client(model_name=None, callbacks=None, settings=None, print_to_stdou
             "stop": None
         }
 
-    print("LLM settings:", settings)
+    print("LLM settings:", model_name, settings)
     # To connect via another URL: Ollama(base_url='http://localhost:11434', ...)
     return Ollama(model=model_name, callbacks=callbacks, **settings)
 
