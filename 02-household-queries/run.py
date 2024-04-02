@@ -18,7 +18,7 @@ print(f"""
 Which embedding function would you like to use?
 1. Google Gen AI (default)
 2. all-MiniLM-L6-v2
-3. $EMBEDDINGS_MODEL_NAME{_embeddings_model_name}) via HuggingFace
+3. $EMBEDDINGS_MODEL_NAME ({_embeddings_model_name}) via HuggingFace
       """)
 embedding_choice = input()
 # Set embedding function
