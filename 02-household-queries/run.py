@@ -17,7 +17,7 @@ Which embedding function would you like to use?
       """)
 embedding_choice = input()
 # Set embedding function
-if embedding_choice == 2 or embedding_choice == "all-MiniLM-L6-v2":
+if embedding_choice == "2" or embedding_choice == "all-MiniLM-L6-v2":
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 else:
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
@@ -25,12 +25,12 @@ else:
 print("""
 Which LLM would you like to use? 
 1. Gemini (default)
-2. Mistral
+2. Mistral (via GPT4All)
       """)
 
 llm_choice = input()
 # Load the models
-if llm_choice == 2 or llm_choice == "Mistral":
+if llm_choice == "2" or llm_choice == "Mistral":
     # Open source option
     # download Mistral at https://mistral.ai/news/announcing-mistral-7b/
     gpt4all_path= "./mistral-7b-instruct-v0.1.Q4_0.gguf"
@@ -49,14 +49,14 @@ vectordb=Chroma(embedding_function=embeddings, collection_name="resources", pers
 print("""
 Initialize DB and retrieve? 
 1. Retrieve only (default)
-2. Init andd retrieve
-3. Init only
+2. Ingest and retrieve
+3. Ingest only
       """)
 run_option = input()
-if run_option == 2:
+if run_option == "2":
     ingest_call(vectordb=vectordb)
     retrieval_call(llm=llm, vectordb=vectordb)
-elif run_option == 3:
+elif run_option == "3":
     ingest_call(vectordb=vectordb)
 else:
     retrieval_call(llm=llm, vectordb=vectordb)
