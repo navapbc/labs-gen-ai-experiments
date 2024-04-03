@@ -1,3 +1,4 @@
+import os
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 
@@ -8,9 +9,12 @@ def retrieval_call(llm, vectordb, question):
     Answer based on the context provided. 
     context: {context}
     """
+    llm_prompt = os.environ.get("LLM_PROMPT", template)
+    print("\n## PROMPT TEMPLATE: ", llm_prompt)
 
-    prompt = PromptTemplate.from_template(template)
-    retriever = vectordb.as_retriever(search_kwargs={"k": 1})
+    prompt = PromptTemplate.from_template(llm_prompt)
+    retrieve_k = int(os.environ.get("RETRIEVE_K", "1"))
+    retriever = vectordb.as_retriever(search_kwargs={"k": retrieve_k})
     retrieval_chain = RetrievalQA.from_chain_type(
         llm=llm,
         retriever=retriever,
@@ -20,10 +24,15 @@ def retrieval_call(llm, vectordb, question):
     )
 
     print("Please state your question here: ")
+    # question = os.environ.get("USER_QUERY")
     if question == None:
         question = input()
     # Invoke the retrieval chain
     response=retrieval_chain.invoke({"query":question})
-    print("RESULT: ", response["result"])
-    print("SOURCE DOC: ",response["source_documents"])
+    print("\n## QUERY: ", question)
+    print("\n## RESULT: ", response["result"])
+    print("\n## SOURCE DOC: ")
+    for d in response["source_documents"]:
+        print(d)
+        print()
     return response
