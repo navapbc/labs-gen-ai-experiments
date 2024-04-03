@@ -1,7 +1,7 @@
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 
-def retrieval_call(llm, vectordb):
+def retrieval_call(llm, vectordb, question):
     # Create the retrieval chain
     template = """
     You are a helpful AI assistant.
@@ -20,8 +20,10 @@ def retrieval_call(llm, vectordb):
     )
 
     print("Please state your question here: ")
-    question = input()
+    if question == None:
+        question = input()
     # Invoke the retrieval chain
     response=retrieval_chain.invoke({"query":question})
     print("RESULT: ", response["result"])
     print("SOURCE DOC: ",response["source_documents"])
+    return response
