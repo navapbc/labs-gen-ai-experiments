@@ -21,7 +21,7 @@ from retrieval import retrieval_call
 
 OLLAMA_LLMS = ["openhermes", "llama2", "mistral"]
 GOOGLE_LLMS = ["gemini-pro"]
-OTHER_LLMS = ["gpt4all"]
+GPT4ALL_LLMS = ["gpt4all"]
 
 GOOGLE_EMBEDDINGS=["models/embedding-001"]
 OPEN_SOURCE_EMBEDDINGS=["all-MiniLM-L6-v2"]
