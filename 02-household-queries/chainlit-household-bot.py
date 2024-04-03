@@ -24,7 +24,7 @@ from retrieval import retrieval_call
 
 OLLAMA_LLMS = ["openhermes", "llama2", "mistral"]
 GOOGLE_LLMS = ["gemini-pro"]
-GPT4ALL_LLMS = ["gpt4all"]
+# GPT4ALL_LLMS = ["gpt4all"]
 
 GOOGLE_EMBEDDINGS=["models/embedding-001"]
 OPEN_SOURCE_EMBEDDINGS=["all-MiniLM-L6-v2"]
@@ -56,7 +56,8 @@ async def init_chat():
             Select(
                 id="model",
                 label="LLM Model",
-                values=OLLAMA_LLMS + GOOGLE_LLMS + GPT4ALL_LLMS,
+                values=OLLAMA_LLMS + GOOGLE_LLMS,
+                # values=OLLAMA_LLMS + GOOGLE_LLMS + GPT4ALL_LLMS,
                 initial_index=0,
             ),
             Select(
@@ -165,8 +166,8 @@ async def set_llm_model():
         client = ollama_client(llm_name, settings=llm_settings)
     elif llm_name in GOOGLE_LLMS:
         client = google_gemini_client(llm_name, settings=llm_settings)
-    elif llm_name in GPT4ALL_LLMS:
-        client = gpt4all_client()
+    # elif llm_name in GPT4ALL_LLMS:
+    #     client = gpt4all_client()
     else:
         await cl.Message(content=f"Could not initialize model: {llm_name}").send()
         return
