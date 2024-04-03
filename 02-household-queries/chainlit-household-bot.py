@@ -49,8 +49,6 @@ async def init_chat():
         ],
     ).send()
 
-    # memory = ConversationBufferMemory(memory_key="chat_history", input_key="input", output_key="output", return_messages=True)
-
     settings = await cl.ChatSettings(
         [
             Select(
@@ -66,7 +64,7 @@ async def init_chat():
                 values= GOOGLE_EMBEDDINGS + OPEN_SOURCE_EMBEDDINGS + HUGGING_FACE_EMBEDDINGS,
                 initial_index=0,
             ),
-            Switch(id="use_vector_db", label="Use vector db sources", initial=False),
+            Switch(id="use_vector_db", label="Use vector db sources", initial=os.environ.get("USE_VECTOR_DB", False)),
             Slider(
                 id="temperature",
                 label="LLM Temperature",
@@ -178,11 +176,10 @@ async def set_llm_model():
 
 async def set_embeddings():
     settings = cl.user_session.get("settings")
-    llm_name = settings["model"]
     embeddings = settings["embedding"]
     msg = cl.Message(
         author="backend",
-        content=f"Setting up LLM: {llm_name} with `{embeddings}`...\n",
+        content=f"Setting up embedding: `{embeddings}`...\n",
     )
     embedding = None
     if embeddings in GOOGLE_EMBEDDINGS:
@@ -250,6 +247,7 @@ async def message_submitted(message: cl.Message):
     # 3. Use LlmPrompts lp.register_answer
 
     # Reminder to use make_async for long running tasks: https://docs.chainlit.io/guides/sync-async#long-running-synchronous-tasks
+    # If options `streaming` and `use_vector_db` are set the RAG chain will not be called 
     if settings["streaming"]:
         await call_llm_async(message)
     else:
