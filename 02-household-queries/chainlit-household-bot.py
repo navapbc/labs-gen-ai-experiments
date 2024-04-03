@@ -26,9 +26,9 @@ OLLAMA_LLMS = ["openhermes", "llama2", "mistral"]
 GOOGLE_LLMS = ["gemini-pro"]
 # GPT4ALL_LLMS = ["gpt4all"]
 
-GOOGLE_EMBEDDINGS=["models/embedding-001"]
+GOOGLE_EMBEDDINGS=["Google::models/embedding-001"]
 OPEN_SOURCE_EMBEDDINGS=["all-MiniLM-L6-v2"]
-HUGGING_FACE_EMBEDDINGS=["HF_all-MiniLM-L6-v2", "all-mpnet-base-v2"]
+HUGGING_FACE_EMBEDDINGS=["HuggingFace::all-MiniLM-L6-v2", "HuggingFace::all-mpnet-base-v2"]
 
 @cl.on_chat_start
 async def init_chat():
@@ -184,11 +184,13 @@ async def set_embeddings():
     embedding = None
     if embeddings in GOOGLE_EMBEDDINGS:
         GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
-        embedding =  GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=GOOGLE_API_KEY)
+        model_name= embeddings.split('::')[1]
+        embedding =  GoogleGenerativeAIEmbeddings(model=model_name, google_api_key=GOOGLE_API_KEY)
     elif embeddings in OPEN_SOURCE_EMBEDDINGS:
         embedding = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
     elif embeddings in HUGGING_FACE_EMBEDDINGS:
-        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2") if embeddings == "HF_all-MiniLM-L6-v2" else HuggingFaceEmbeddings(model_name=embeddings) 
+        model_name= embeddings.split('::')[1]
+        embeddings = HuggingFaceEmbeddings(model_name=model_name)
     else:
         await cl.Message(content=f"Could not initialize embedding: {embeddings}").send()
         return
