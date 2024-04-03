@@ -4,4 +4,4 @@ tanf.pdf
 guru_cards_for_nava.json
 chroma_db/
 *cache/
-*.chainlit
+.chainlit
