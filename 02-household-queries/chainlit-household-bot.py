@@ -14,7 +14,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 import os
 
-from ingest import add_json_html_data_to_vector_db, add_pdf_to_vector_db
+from ingest import add_json_html_data_to_vector_db, add_pdf_to_vector_db, ingest_call
 from llm import google_gemini_client, gpt4all_client, ollama_client
 from retrieval import retrieval_call
 
@@ -40,7 +40,8 @@ async def init_chat():
                 value="chooseBetter",
                 label="Demo choosing better response",
             ),
-            cl.Action(name="uploadQueryAct", value="upload_query", label="Upload query")
+            cl.Action(name="uploadDefaultFiles", value="upload_default_files", label="Upload default files"),
+            cl.Action(name="uploadFilesToVectorAct", value="upload_files_to_vector", label="Upload files to vector")
         ],
     ).send()
 
@@ -137,6 +138,8 @@ async def update_settings(settings):
     cl.user_session.set("settings", settings)
     await set_llm_model()
     await set_embeddings()
+    if settings["use_vector_db"]:
+        await set_vector_db()
 
 
 async def set_llm_model():
@@ -185,6 +188,18 @@ async def set_embeddings():
     await msg.stream_token(f"Done setting up {embeddings} embedding")
     await msg.send()
 
+async def set_vector_db():
+    await init_embedding_function_if_needed()
+    embeddings = cl.user_session.get("embedding")
+    msg = cl.Message(
+        author="backend",
+        content=f"Setting up Chroma DB with `{embeddings}`...\n",
+    )
+    vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
+    cl.user_session.set("vectordb", vectordb)
+    await msg.stream_token(f"Done setting up vector db")
+    await msg.send()
+
 async def init_llm_client_if_needed():
     client = cl.user_session.get("client")
     if not client:
@@ -193,6 +208,10 @@ async def init_embedding_function_if_needed():
     embedding = cl.user_session.get("embedding")
     if not embedding:
         await set_embeddings()
+async def init_vector_db_if_needed():
+    vectordb=cl.user_session.get("vectordb")
+    if vectordb is None:
+        await set_vector_db()
 
 
 @cl.on_message
@@ -211,16 +230,16 @@ async def message_submitted(message: cl.Message):
 
     # Reminder to use make_async for long running tasks: https://docs.chainlit.io/guides/sync-async#long-running-synchronous-tasks
     if settings["streaming"]:
+        await call_llm_async(message)
+    else:
         if settings["use_vector_db"] and vectordb:
+            await retrieval_function(vectordb=vectordb, llm=client)
             response = retrieval_call(client, vectordb, message.content)
             answer = f"Result: {response['result']} \nSources: {response['source_documents'][0].metadata}"
             await cl.Message(content=answer).send()
         else:
-            await call_llm_async(message)
-    else:
-        response = call_llm(message)
-        await cl.Message(content=f"*Response*: {response}").send()
-
+            response = call_llm(message)
+            await cl.Message(content=f"*Response*: {response}").send()
 
 @cl.step(type="llm", show_input=True)
 async def call_llm_async(message: cl.Message):
@@ -240,10 +259,19 @@ def call_llm(message: cl.Message):
     response = client.invoke(message.content)
     return response
 
-@cl.action_callback("uploadQueryAct")
-async def on_click_upload_file_query(action: cl.Action):
+
+@cl.action_callback("uploadDefaultFiles")
+async def on_click_upload_default_files(action: cl.Action):
     embeddings = cl.user_session.get("embedding")
-    llm = cl.user_session.get("client")
+    vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
+    msg = cl.Message(content=f"Processing files...", disable_feedback=True)
+    await msg.send()
+    ingest_call(vectordb)
+    msg.content = f"Processing default files done. You can now ask questions!"
+    await msg.update()
+
+@cl.action_callback("uploadFilesToVectorAct")
+async def on_click_upload_file_query(action: cl.Action):
     files = None
     # Wait for the user to upload a file
     while files == None:
@@ -256,16 +284,18 @@ async def on_click_upload_file_query(action: cl.Action):
     file = files[0]
     
     # initialize db
-    vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
-    cl.user_session.set("vectordb", vectordb)
-
+    await set_vector_db()
+    vectordb=cl.user_session.get("vectordb")
     if(file.type == "application/pdf"):
         add_pdf_to_vector_db(vectordb=vectordb, file_path=file.path)
     elif(file.type == "application/json"):
         add_json_html_data_to_vector_db(vectordb=vectordb, file_path=file.path, content_key="content", index_key="preferredPhrase")
     msg = cl.Message(content=f"Processing `{file.name}`...", disable_feedback=True)
     await msg.send()
-    
+    msg.content = f"Processing `{file.name}` done. You can now ask questions!"
+    await msg.update()
+
+async def retrieval_function(vectordb, llm):    
     retriever = vectordb.as_retriever(search_kwargs={"k": 1})
     message_history = ChatMessageHistory()
 
@@ -285,11 +315,5 @@ async def on_click_upload_file_query(action: cl.Action):
         return_source_documents=True,
     )
     
-    
     # Let the user know that the system is ready
-    msg.content = f"Processing `{file.name}` done. You can now ask questions!"
-    await msg.update()
-
     cl.user_session.set("chain", chain)
-
-
