@@ -49,9 +49,9 @@ def run_cot_predictor(question):
 class GenerateAnswer(dspy.Signature):
     """Answer the question with a short factoid answer."""
 
-    context = dspy.InputField(desc="may contain relevant facts")
+    context = dspy.InputField(desc="may contain relevant facts used to answer the question")
     question = dspy.InputField()
-    answer = dspy.OutputField(desc="often between 1 and 5 words")
+    answer = dspy.OutputField(desc="Start with one of these words: Yes, No, Maybe. Between 1 and 5 words")
 
 
 class RAG(dspy.Module):
@@ -80,7 +80,6 @@ def run_retrieval(question, retrieve_k):
 
 
 def run_rag(question, retrieve_k):
-    print(f"\nQUESTION : {question}")
     rag = RAG(retrieve_k)
     pred = rag(question=question)
     print(f"\nRATIONALE: {pred.get('rationale')}")
@@ -91,6 +90,7 @@ def run_rag(question, retrieve_k):
     # debugging.debug_here(locals())
 
 
+# https://dspy-docs.vercel.app/docs/deep-dive/retrieval_models_clients/custom-rm-client
 class RetrievalModelWrapper(dspy.Retrieve):
     def __init__(self, vectordb):
         super().__init__()
@@ -145,23 +145,27 @@ def load_training_json():
         return json_data
 
 
-def main():
+def main(question):
     retrieve_k = int(os.environ.get("RETRIEVE_K", "2"))
-
-    qa = load_training_json()
-    question = qa[2]["question"]
 
     # run_basic_predictor(question)
     # run_cot_predictor(question)
     # run_retrieval(question, retrieve_k)
     run_rag(question, retrieve_k)
 
-    print("----- llm_model.inspect_history ------------------")
-    llm_model.inspect_history(n=10)
-
 
 if __name__ == "__main__":
     llm_model = create_llm_model()
     dspy.settings.configure(lm=llm_model, rm=create_retriever_model())
 
-    main()
+    qa = load_training_json()
+    q_index = 4
+    question = qa[q_index]["question"]
+    print(f"\nQUESTION {q_index}: {question}")
+    answer = qa[q_index]["answer"]
+    print(f"\nDesired ANSWER : {answer}")
+
+    main(question)
+
+    print("----- llm_model.inspect_history ------------------")
+    llm_model.inspect_history(n=10)
