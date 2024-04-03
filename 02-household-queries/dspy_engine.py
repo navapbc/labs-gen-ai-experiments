@@ -155,15 +155,19 @@ def main(question):
 
 
 if __name__ == "__main__":
+    qa = load_training_json()
+    for qa_dict in qa:
+        orig_question = qa_dict["orig_question"]
+        question = qa_dict.get("question", orig_question)
+        print(f"\nQUESTION {qa_dict['id']}: {question}")
+        answer = qa_dict["answer"]
+        short_answer = qa_dict.get("short_answer", answer)
+        print(f"  SHORT   ANSWER : {short_answer}")
+        print(f"  Desired ANSWER : {answer}")
+    print()
+
     llm_model = create_llm_model()
     dspy.settings.configure(lm=llm_model, rm=create_retriever_model())
-
-    qa = load_training_json()
-    q_index = 4
-    question = qa[q_index]["question"]
-    print(f"\nQUESTION {q_index}: {question}")
-    answer = qa[q_index]["answer"]
-    print(f"\nDesired ANSWER : {answer}")
 
     main(question)
 
