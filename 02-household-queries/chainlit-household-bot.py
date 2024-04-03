@@ -7,7 +7,7 @@ import chainlit as cl
 from chainlit.input_widget import Select, Switch, Slider
 
 from langchain.chains import ConversationalRetrievalChain
-from langchain_community.embeddings import SentenceTransformerEmbeddings
+from langchain_community.embeddings import SentenceTransformerEmbeddings, HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -25,6 +25,7 @@ GPT4ALL_LLMS = ["gpt4all"]
 
 GOOGLE_EMBEDDINGS=["models/embedding-001"]
 OPEN_SOURCE_EMBEDDINGS=["all-MiniLM-L6-v2"]
+HUGGING_FACE_EMBEDDINGS=["HF_all-MiniLM-L6-v2", "all-mpnet-base-v2"]
 
 @cl.on_chat_start
 async def init_chat():
@@ -50,13 +51,13 @@ async def init_chat():
             Select(
                 id="model",
                 label="LLM Model",
-                values=OLLAMA_LLMS + GOOGLE_LLMS + OTHER_LLMS,
+                values=OLLAMA_LLMS + GOOGLE_LLMS + GPT4ALL_LLMS,
                 initial_index=0,
             ),
             Select(
                 id="embedding",
                 label="Embeddings",
-                values= GOOGLE_EMBEDDINGS + OPEN_SOURCE_EMBEDDINGS,
+                values= GOOGLE_EMBEDDINGS + OPEN_SOURCE_EMBEDDINGS + HUGGING_FACE_EMBEDDINGS,
                 initial_index=0,
             ),
             Switch(id="use_vector_db", label="Use vector db sources", initial=False),
@@ -151,7 +152,7 @@ async def set_llm_model():
         client = ollama_client(llm_name, settings=llm_settings)
     elif llm_name in GOOGLE_LLMS:
         client = google_gemini_client(llm_name, settings=llm_settings)
-    elif llm_name in OTHER_LLMS:
+    elif llm_name in GPT4ALL_LLMS:
         client = gpt4all_client()
     else:
         await cl.Message(content=f"Could not initialize model: {llm_name}").send()
@@ -175,6 +176,8 @@ async def set_embeddings():
         embedding =  GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=GOOGLE_API_KEY)
     elif embeddings in OPEN_SOURCE_EMBEDDINGS:
         embedding = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+    elif embeddings in HUGGING_FACE_EMBEDDINGS:
+        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2") if embeddings == "HF_all-MiniLM-L6-v2" else HuggingFaceEmbeddings(model_name=embeddings) 
     else:
         await cl.Message(content=f"Could not initialize embedding: {embeddings}").send()
         return
