@@ -2,7 +2,6 @@
 
 from datetime import date
 import pprint
-import shutil
 
 import chainlit as cl
 from chainlit.input_widget import Select, Switch, Slider
@@ -103,7 +102,7 @@ contentA = """This is text A.
 async def on_click_resetDB(action: cl.Action):
     persistent_client = cl.user_session.get("persistent_client")
     if persistent_client is None:
-        persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True))
+        persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True), )
     persistent_client.reset()
 
 @cl.action_callback("stepsDemoAct")
@@ -207,7 +206,7 @@ async def set_vector_db():
     )
     
     # clean up db when setting embedding for embedding dimension does not match collection dimensionality
-    persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True))
+    persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True), path="./chroma_db")
     cl.user_session.set("chromadb_client", persistent_client)
     vectordb=Chroma(
         client=persistent_client,
