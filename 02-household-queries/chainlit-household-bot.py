@@ -2,9 +2,13 @@
 
 from datetime import date
 import pprint
+import shutil
 
 import chainlit as cl
 from chainlit.input_widget import Select, Switch, Slider
+
+import chromadb
+from chromadb.config import Settings
 
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.embeddings import SentenceTransformerEmbeddings, HuggingFaceEmbeddings
@@ -17,7 +21,6 @@ import os
 from ingest import add_json_html_data_to_vector_db, add_pdf_to_vector_db, ingest_call
 from llm import google_gemini_client, gpt4all_client, ollama_client
 from retrieval import retrieval_call
-
 
 OLLAMA_LLMS = ["openhermes", "llama2", "mistral"]
 GOOGLE_LLMS = ["gemini-pro"]
@@ -195,7 +198,17 @@ async def set_vector_db():
         author="backend",
         content=f"Setting up Chroma DB with `{embeddings}`...\n",
     )
-    vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
+    
+    # clean up db when setting embedding for embedding dimension does not match collection dimensionality
+    persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True))
+    persistent_client.reset()
+    vectordb=Chroma(
+        client=persistent_client,
+        collection_name="resources", 
+        persist_directory="./chroma_db",
+        embedding_function=embeddings
+    )
+
     cl.user_session.set("vectordb", vectordb)
     await msg.stream_token(f"Done setting up vector db")
     await msg.send()
@@ -262,10 +275,11 @@ def call_llm(message: cl.Message):
 
 @cl.action_callback("uploadDefaultFiles")
 async def on_click_upload_default_files(action: cl.Action):
-    embeddings = cl.user_session.get("embedding")
-    vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
+    await set_vector_db()
+    vectordb= cl.user_session.get("vectordb")
     msg = cl.Message(content=f"Processing files...", disable_feedback=True)
     await msg.send()
+
     ingest_call(vectordb)
     msg.content = f"Processing default files done. You can now ask questions!"
     await msg.update()
