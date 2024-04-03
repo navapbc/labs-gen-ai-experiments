@@ -44,7 +44,8 @@ async def init_chat():
                 label="Demo choosing better response",
             ),
             cl.Action(name="uploadDefaultFiles", value="upload_default_files", label="Upload default files"),
-            cl.Action(name="uploadFilesToVectorAct", value="upload_files_to_vector", label="Upload files to vector")
+            cl.Action(name="uploadFilesToVectorAct", value="upload_files_to_vector", label="Upload files to vector"),
+            cl.Action(name="resetDB", value="reset_db", label="Reset DB"),
         ],
     ).send()
 
@@ -99,6 +100,12 @@ contentA = """This is text A.
     E.g. **bold**, *italic*, `code`, [links](https://www.example.com), etc.
 """
 
+@cl.action_callback("resetDB")
+async def on_click_resetDB(action: cl.Action):
+    persistent_client = cl.user_session.get("persistent_client")
+    if persistent_client is None:
+        persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True))
+    persistent_client.reset()
 
 @cl.action_callback("stepsDemoAct")
 async def on_click_stepsDemo(action: cl.Action):
@@ -201,7 +208,7 @@ async def set_vector_db():
     
     # clean up db when setting embedding for embedding dimension does not match collection dimensionality
     persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True))
-    persistent_client.reset()
+    cl.user_session.set("chromadb_client", persistent_client)
     vectordb=Chroma(
         client=persistent_client,
         collection_name="resources", 
