@@ -2,8 +2,6 @@ __pycache__
 .env
 tanf.pdf
 guru_cards_for_nava.json
-# chroma is for the client directly from the chromadb package
-chroma/
-# chromadb is the directory for the db initialized by the langchain_community.vector package
 chroma_db/
 *cache/
+*.log
