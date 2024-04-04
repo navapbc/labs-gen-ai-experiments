@@ -49,14 +49,14 @@ def get_services_from_211(city:str, keyword:str | list[str]):
         # difficult to find param {location_id}, location_id returns dataowner
         location_id = first_result["idLocation"]
         print("211 location_id: " + location_id)
-    except:
+    except Exception:
         print("Failed to get location result")
     try:
         # In Query: /api/Locations/complete/{location_id}, location_id is inconsistent with other queries
         service_list = f"{TWO_ONE_ONE_BASE_SEARCH_ENDPOINT}/ServicesAtLocation?idLocation={location_id}"
         service_search = requests.get(service_list, headers=headers)
         return json.dumps(service_search.json(), indent=2)
-    except:
+    except Exception:
         print("Failed to get services at location")
     return "[]"
 
