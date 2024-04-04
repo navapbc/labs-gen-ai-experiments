@@ -296,26 +296,27 @@ async def on_click_upload_default_files(action: cl.Action):
 async def on_click_upload_file_query(action: cl.Action):
     files = None
     # Wait for the user to upload a file
-    while files == None:
+    while files is None:
         files = await cl.AskFileMessage(
             content="Please upload a pdf or json file to begin!",
             accept=["text/plain", "application/pdf", "application/json"],
             max_size_mb=20,
             timeout=180,
         ).send()
-    file = files[0]
+        file = files[0]
+        if(file.type == "application/pdf"):
+            add_pdf_to_vector_db(vectordb=vectordb, file_path=file.path)
+        elif(file.type == "application/json"):
+            add_json_html_data_to_vector_db(vectordb=vectordb, file_path=file.path, content_key="content", index_key="preferredPhrase")
+        msg = cl.Message(content=f"Processing `{file.name}`...", disable_feedback=True)
+        await msg.send()
+        msg.content = f"Processing `{file.name}` done. You can now ask questions!"
+        await msg.update()
     
     # initialize db
     await set_vector_db()
     vectordb=cl.user_session.get("vectordb")
-    if(file.type == "application/pdf"):
-        add_pdf_to_vector_db(vectordb=vectordb, file_path=file.path)
-    elif(file.type == "application/json"):
-        add_json_html_data_to_vector_db(vectordb=vectordb, file_path=file.path, content_key="content", index_key="preferredPhrase")
-    msg = cl.Message(content=f"Processing `{file.name}`...", disable_feedback=True)
-    await msg.send()
-    msg.content = f"Processing `{file.name}` done. You can now ask questions!"
-    await msg.update()
+    
 
 async def retrieval_function(vectordb, llm):    
     retriever = vectordb.as_retriever(search_kwargs={"k": 1})

@@ -24,7 +24,7 @@ def retrieval_call(llm, vectordb, question):
     )
 
     # question = os.environ.get("USER_QUERY")
-    if question == None:
+    if question is None:
         print("Please state your question here: ")
         question = input()
     # Invoke the retrieval chain
