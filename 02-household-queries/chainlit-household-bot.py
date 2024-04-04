@@ -245,7 +245,7 @@ async def message_submitted(message: cl.Message):
     # 3. Use LlmPrompts lp.register_answer
 
     # Reminder to use make_async for long running tasks: https://docs.chainlit.io/guides/sync-async#long-running-synchronous-tasks
-    # If options `streaming` and `use_vector_db` are set the RAG chain will not be called 
+    # If options `streaming` is set, or `use_vector_db` is not set, the RAG chain will not be called 
     if settings["streaming"]:
         if settings["use_vector_db"]:
             await cl.Message("Change the setting to use non-streaming instead").send()
@@ -256,7 +256,7 @@ async def message_submitted(message: cl.Message):
         if settings["use_vector_db"] and vectordb:
             await retrieval_function(vectordb=vectordb, llm=client)
             response = retrieval_call(client, vectordb, message.content)
-            answer = f"Result: {response['result']} \nSources: {response['source_documents'][0].metadata}"
+            answer = f"Result: {response['result']} \nSources: \n" + "\n".join([doc.metadata for doc in response['source_documents']])
             await cl.Message(content=answer).send()
         else:
             response = call_llm(message)
