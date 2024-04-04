@@ -42,8 +42,8 @@ async def init_chat():
                 value="chooseBetter",
                 label="Demo choosing better response",
             ),
-            cl.Action(name="uploadDefaultFiles", value="upload_default_files", label="Upload default files"),
-            cl.Action(name="uploadFilesToVectorAct", value="upload_files_to_vector", label="Upload files to vector"),
+            cl.Action(name="uploadDefaultFiles", value="upload_default_files", label="Load default files into vector DB"),
+            cl.Action(name="uploadFilesToVectorAct", value="upload_files_to_vector", label="Upload files for vector DB"),
             cl.Action(name="resetDB", value="reset_db", label="Reset DB"),
         ],
     ).send()
@@ -100,9 +100,9 @@ contentA = """This is text A.
 
 @cl.action_callback("resetDB")
 async def on_click_resetDB(action: cl.Action):
+    # reset db after changing to avoid error: embedding dimension does not match collection dimensionality
+    await init_persistent_client_if_needed()
     persistent_client = cl.user_session.get("persistent_client")
-    if persistent_client is None:
-        persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True), )
     persistent_client.reset()
 
 @cl.action_callback("stepsDemoAct")
@@ -204,10 +204,8 @@ async def set_vector_db():
         author="backend",
         content=f"Setting up Chroma DB with `{embeddings}`...\n",
     )
-    
-    # clean up db when setting embedding for embedding dimension does not match collection dimensionality
     persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True), path="./chroma_db")
-    cl.user_session.set("chromadb_client", persistent_client)
+    cl.user_session.set("persistent_client", persistent_client)
     vectordb=Chroma(
         client=persistent_client,
         collection_name="resources", 
@@ -227,11 +225,10 @@ async def init_embedding_function_if_needed():
     embedding = cl.user_session.get("embedding")
     if not embedding:
         await set_embeddings()
-async def init_vector_db_if_needed():
-    vectordb=cl.user_session.get("vectordb")
-    if vectordb is None:
+async def init_persistent_client_if_needed():
+    persistent_client=cl.user_session.get("persistent_client")
+    if persistent_client is None:
         await set_vector_db()
-
 
 @cl.on_message
 async def message_submitted(message: cl.Message):
@@ -250,7 +247,11 @@ async def message_submitted(message: cl.Message):
     # Reminder to use make_async for long running tasks: https://docs.chainlit.io/guides/sync-async#long-running-synchronous-tasks
     # If options `streaming` and `use_vector_db` are set the RAG chain will not be called 
     if settings["streaming"]:
-        await call_llm_async(message)
+        if settings["use_vector_db"]:
+            await cl.Message("Change the setting to use non-streaming instead").send()
+        else:
+            await call_llm_async(message)
+        
     else:
         if settings["use_vector_db"] and vectordb:
             await retrieval_function(vectordb=vectordb, llm=client)
