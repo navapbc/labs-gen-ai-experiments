@@ -256,7 +256,11 @@ async def message_submitted(message: cl.Message):
         if settings["use_vector_db"] and vectordb:
             await retrieval_function(vectordb=vectordb, llm=client)
             response = retrieval_call(client, vectordb, message.content)
-            answer = f"Result: {response['result']} \nSources: \n" + "\n".join([doc.metadata for doc in response['source_documents']])
+            source_list = [doc.metadata for doc in response['source_documents']]
+            print(source_list)
+            sources = ', '.join([sources_item['source'] for sources_item in source_list]) 
+            answer = f"Result:\n{response['result']} \nSources: \n" + sources
+            print(sources)
             await cl.Message(content=answer).send()
         else:
             response = call_llm(message)
