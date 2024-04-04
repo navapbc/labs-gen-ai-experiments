@@ -8,6 +8,9 @@ from chainlit.input_widget import Select, Switch, Slider
 
 from llm import ollama_client
 
+from langchain_community.vectorstores import Chroma
+from langchain_community.embeddings import SentenceTransformerEmbeddings
+
 OLLAMA_LLMS = ["openhermes", "llama2", "mistral"]
 OTHER_LLMS = ["someOtherLLM"]
 
@@ -143,10 +146,26 @@ async def init_llm_client_if_needed():
     if not client:
         await set_llm_model()
 
+async def init_vectordb_if_needed():
+    if not cl.user_session.get("vectordb"):
+        await init_vectordb()
+
+async def init_vectordb():
+    msg = cl.Message(
+        author="backend",
+        content="Setting up VectorDB...\n",
+    )
+    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+    vectordb = Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
+    cl.user_session.set("vectordb", vectordb)
+    await msg.stream_token(f"Done setting up VectorDB")
+    await msg.send()
+
 
 @cl.on_message
 async def message_submitted(message: cl.Message):
     await init_llm_client_if_needed()
+    await init_vectordb_if_needed()
     settings = cl.user_session.get("settings")
 
     # 3 ways to manage history for LLM:
@@ -169,8 +188,16 @@ async def message_submitted(message: cl.Message):
 async def call_llm_async(message: cl.Message):
     client = cl.user_session.get("client")
 
+    context = get_context(message.content)
+    message_with_context = (
+f"""Answer the following user message based on the context provided.
+The context may or may not be relevant to the user query.
+Context:\n{context}\n
+Message:\n{message.content}"
+""")
+
     botMsg = cl.Message(content="", disable_feedback=False)
-    async for chunk in client.astream(message.content):
+    async for chunk in client.astream(message_with_context):
         await botMsg.stream_token(chunk)
     await botMsg.send()
 
@@ -182,3 +209,14 @@ def call_llm(message: cl.Message):
     client = cl.user_session.get("client")
     response = client.invoke(message.content)
     return response
+
+@cl.step(type="rag", show_input=True)
+def get_context(input_text):
+    vectordb = cl.user_session.get("vectordb")
+    documents = vectordb.similarity_search(input_text)
+    context = "".join(
+        [   f"Question: {document.metadata['source']}\nAnswer: {document.page_content}\n\n"
+            for document in documents
+        ]
+    )
+    return context  
