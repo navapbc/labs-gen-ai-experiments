@@ -10,6 +10,7 @@ from chainlit.types import ThreadDict
 from langchain_core.runnables import RunnableLambda
 from langchain.callbacks.base import BaseCallbackHandler
 
+
 def timer(func):
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):
