@@ -18,7 +18,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import os
 
 from ingest import add_json_html_data_to_vector_db, add_pdf_to_vector_db, ingest_call
-from llm import google_gemini_client, gpt4all_client, ollama_client
+from llm import google_gemini_client, ollama_client #, gpt4all_client
 from retrieval import retrieval_call
 
 OLLAMA_LLMS = ["openhermes", "llama2", "mistral"]
@@ -214,7 +214,7 @@ async def set_vector_db():
     )
 
     cl.user_session.set("vectordb", vectordb)
-    await msg.stream_token(f"Done setting up vector db")
+    await msg.stream_token("Done setting up vector db")
     await msg.send()
 
 async def init_llm_client_if_needed():
@@ -285,11 +285,11 @@ def call_llm(message: cl.Message):
 async def on_click_upload_default_files(action: cl.Action):
     await set_vector_db()
     vectordb= cl.user_session.get("vectordb")
-    msg = cl.Message(content=f"Processing files...", disable_feedback=True)
+    msg = cl.Message(content="Processing files...", disable_feedback=True)
     await msg.send()
 
     ingest_call(vectordb)
-    msg.content = f"Processing default files done. You can now ask questions!"
+    msg.content = "Processing default files done. You can now ask questions!"
     await msg.update()
 
 @cl.action_callback("uploadFilesToVectorAct")
@@ -304,6 +304,9 @@ async def on_click_upload_file_query(action: cl.Action):
             timeout=180,
         ).send()
         file = files[0]
+        # initialize db
+        await set_vector_db()
+        vectordb=cl.user_session.get("vectordb")
         if(file.type == "application/pdf"):
             add_pdf_to_vector_db(vectordb=vectordb, file_path=file.path)
         elif(file.type == "application/json"):
@@ -312,10 +315,6 @@ async def on_click_upload_file_query(action: cl.Action):
         await msg.send()
         msg.content = f"Processing `{file.name}` done. You can now ask questions!"
         await msg.update()
-    
-    # initialize db
-    await set_vector_db()
-    vectordb=cl.user_session.get("vectordb")
     
 
 async def retrieval_function(vectordb, llm):    
