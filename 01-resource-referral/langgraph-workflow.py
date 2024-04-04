@@ -4,6 +4,7 @@ from datetime import datetime
 from dotenv import main
 import operator
 from typing import TypedDict, Annotated, Sequence
+
 # import os
 import graphviz  # type: ignore
 
@@ -32,7 +33,6 @@ class WorkflowState(TypedDict):
 
 
 class MyWorkflow:
-
     def __init__(self, model_name: str, tools: list):
         main.load_dotenv()
         self.graph = self._init_graph()
@@ -41,7 +41,6 @@ class MyWorkflow:
             self.llm_chain[tool.name] = create_tool_calling_chain(model_name, [tool])
         # tool_executor will be used to call the tool specified by the LLM in the llm_chain
         self.tool_executor = ToolExecutor(tools)
-
 
     def _init_graph(self):
         graph = StateGraph(WorkflowState)
@@ -92,7 +91,7 @@ class MyWorkflow:
 
     # Determines next node to call
     def decide_next_node(self, state):
-        print("\nNEXT_EDGE") # , json.dumps(state, indent=2))
+        print("\nNEXT_EDGE")  # , json.dumps(state, indent=2))
 
         if state["final_answer"]:
             return END
@@ -120,7 +119,7 @@ class MyWorkflow:
         print("\nHAS_FINAL_ANSWER node: Waiting for more responses")
 
     def _got_responses_from_all_tools(self, state):
-        expected_tools = [ "spreadsheet", "211_api" ]
+        expected_tools = ["spreadsheet", "211_api"]
         return all(key in state["tool_responses"] for key in expected_tools)
 
     def run_llms(self, state):
@@ -148,7 +147,7 @@ class MyWorkflow:
         llm_response = self.invoke_user_message("query_spreadsheet", user_message)
         return {"messages": [llm_response]}
 
-    def invoke_user_message(self, tool, user_message): 
+    def invoke_user_message(self, tool, user_message):
         return self.llm_chain[tool].invoke(user_message)
 
     def call_211_tool(self, state):
@@ -235,5 +234,4 @@ inputs = {"messages": [{"user_query": user_input}]}
 final_state = runnable_graph.invoke(inputs)
 # print("\nFINAL_STATE", type(final_state), final_state)
 print("\nFINAL_ANSWER")
-print(final_state['final_answer'])
-
+print(final_state["final_answer"])

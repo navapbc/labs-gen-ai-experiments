@@ -1,6 +1,9 @@
 import os
 import dotenv
-from langchain_community.embeddings import SentenceTransformerEmbeddings, HuggingFaceEmbeddings
+from langchain_community.embeddings import (
+    SentenceTransformerEmbeddings,
+    HuggingFaceEmbeddings,
+)
 from langchain_community.llms import GPT4All
 from langchain_community.vectorstores import Chroma
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
@@ -42,22 +45,29 @@ llm_choice = input()
 if llm_choice == "2" or llm_choice == "Mistral":
     # Open source option
     # download Mistral at https://mistral.ai/news/announcing-mistral-7b/
-    gpt4all_path= "./mistral-7b-instruct-v0.1.Q4_0.gguf"
-    llm = GPT4All(model=gpt4all_path,max_tokens=1000, verbose=True,repeat_last_n=0)
+    gpt4all_path = "./mistral-7b-instruct-v0.1.Q4_0.gguf"
+    llm = GPT4All(model=gpt4all_path, max_tokens=1000, verbose=True, repeat_last_n=0)
 elif llm_choice == "3":
     # _llm_model_name = "mistral" # "openhermes", "llama2", "mistral"
     llm_settings = {"temperature": 0.1}
     llm = ollama_client(_llm_model_name, settings=llm_settings)
 else:
-    # Get a Google API key by following the steps after clicking on Get an API key button 
+    # Get a Google API key by following the steps after clicking on Get an API key button
     # at https://ai.google.dev/tutorials/setup
-    GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
-    llm = ChatGoogleGenerativeAI(model="gemini-pro",
-                                verbose = True,google_api_key=GOOGLE_API_KEY,
-                                convert_system_message_to_human=True)
-        
+    GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-pro",
+        verbose=True,
+        google_api_key=GOOGLE_API_KEY,
+        convert_system_message_to_human=True,
+    )
+
 # initialize chroma db
-vectordb=Chroma(embedding_function=embeddings, collection_name="resources", persist_directory="./chroma_db")
+vectordb = Chroma(
+    embedding_function=embeddings,
+    collection_name="resources",
+    persist_directory="./chroma_db",
+)
 
 print("""
 Initialize DB and retrieve? 

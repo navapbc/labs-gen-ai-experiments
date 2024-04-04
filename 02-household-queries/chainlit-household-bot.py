@@ -10,7 +10,10 @@ import chromadb
 from chromadb.config import Settings
 
 from langchain.chains import ConversationalRetrievalChain
-from langchain_community.embeddings import SentenceTransformerEmbeddings, HuggingFaceEmbeddings
+from langchain_community.embeddings import (
+    SentenceTransformerEmbeddings,
+    HuggingFaceEmbeddings,
+)
 from langchain_community.vectorstores import Chroma
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -18,16 +21,20 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import os
 
 from ingest import add_json_html_data_to_vector_db, add_pdf_to_vector_db, ingest_call
-from llm import google_gemini_client, ollama_client #, gpt4all_client
+from llm import google_gemini_client, ollama_client  # , gpt4all_client
 from retrieval import retrieval_call
 
 OLLAMA_LLMS = ["openhermes", "llama2", "mistral"]
 GOOGLE_LLMS = ["gemini-pro"]
 # GPT4ALL_LLMS = ["gpt4all"]
 
-GOOGLE_EMBEDDINGS=["Google::models/embedding-001"]
-OPEN_SOURCE_EMBEDDINGS=["all-MiniLM-L6-v2"]
-HUGGING_FACE_EMBEDDINGS=["HuggingFace::all-MiniLM-L6-v2", "HuggingFace::all-mpnet-base-v2"]
+GOOGLE_EMBEDDINGS = ["Google::models/embedding-001"]
+OPEN_SOURCE_EMBEDDINGS = ["all-MiniLM-L6-v2"]
+HUGGING_FACE_EMBEDDINGS = [
+    "HuggingFace::all-MiniLM-L6-v2",
+    "HuggingFace::all-mpnet-base-v2",
+]
+
 
 @cl.on_chat_start
 async def init_chat():
@@ -42,8 +49,16 @@ async def init_chat():
                 value="chooseBetter",
                 label="Demo choosing better response",
             ),
-            cl.Action(name="uploadDefaultFiles", value="upload_default_files", label="Load default files into vector DB"),
-            cl.Action(name="uploadFilesToVectorAct", value="upload_files_to_vector", label="Upload files for vector DB"),
+            cl.Action(
+                name="uploadDefaultFiles",
+                value="upload_default_files",
+                label="Load default files into vector DB",
+            ),
+            cl.Action(
+                name="uploadFilesToVectorAct",
+                value="upload_files_to_vector",
+                label="Upload files for vector DB",
+            ),
             cl.Action(name="resetDB", value="reset_db", label="Reset DB"),
         ],
     ).send()
@@ -60,10 +75,16 @@ async def init_chat():
             Select(
                 id="embedding",
                 label="Embeddings",
-                values= GOOGLE_EMBEDDINGS + OPEN_SOURCE_EMBEDDINGS + HUGGING_FACE_EMBEDDINGS,
+                values=GOOGLE_EMBEDDINGS
+                + OPEN_SOURCE_EMBEDDINGS
+                + HUGGING_FACE_EMBEDDINGS,
                 initial_index=0,
             ),
-            Switch(id="use_vector_db", label="Use vector db sources", initial=os.environ.get("USE_VECTOR_DB", False)),
+            Switch(
+                id="use_vector_db",
+                label="Use vector db sources",
+                initial=os.environ.get("USE_VECTOR_DB", False),
+            ),
             Slider(
                 id="temperature",
                 label="LLM Temperature",
@@ -98,12 +119,14 @@ contentA = """This is text A.
     E.g. **bold**, *italic*, `code`, [links](https://www.example.com), etc.
 """
 
+
 @cl.action_callback("resetDB")
 async def on_click_resetDB(action: cl.Action):
     # reset db after changing to avoid error: embedding dimension does not match collection dimensionality
     await init_persistent_client_if_needed()
     persistent_client = cl.user_session.get("persistent_client")
     persistent_client.reset()
+
 
 @cl.action_callback("stepsDemoAct")
 async def on_click_stepsDemo(action: cl.Action):
@@ -173,6 +196,7 @@ async def set_llm_model():
     await msg.stream_token(f"Done setting up {llm_name} LLM")
     await msg.send()
 
+
 async def set_embeddings():
     settings = cl.user_session.get("settings")
     embeddings = settings["embedding"]
@@ -182,13 +206,15 @@ async def set_embeddings():
     )
     embedding = None
     if embeddings in GOOGLE_EMBEDDINGS:
-        GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
-        model_name= embeddings.split('::')[1]
-        embedding =  GoogleGenerativeAIEmbeddings(model=model_name, google_api_key=GOOGLE_API_KEY)
+        GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+        model_name = embeddings.split("::")[1]
+        embedding = GoogleGenerativeAIEmbeddings(
+            model=model_name, google_api_key=GOOGLE_API_KEY
+        )
     elif embeddings in OPEN_SOURCE_EMBEDDINGS:
         embedding = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
     elif embeddings in HUGGING_FACE_EMBEDDINGS:
-        model_name= embeddings.split('::')[1]
+        model_name = embeddings.split("::")[1]
         embeddings = HuggingFaceEmbeddings(model_name=model_name)
     else:
         await cl.Message(content=f"Could not initialize embedding: {embeddings}").send()
@@ -197,6 +223,7 @@ async def set_embeddings():
     await msg.stream_token(f"Done setting up {embeddings} embedding")
     await msg.send()
 
+
 async def set_vector_db():
     await init_embedding_function_if_needed()
     embeddings = cl.user_session.get("embedding")
@@ -204,39 +231,47 @@ async def set_vector_db():
         author="backend",
         content=f"Setting up Chroma DB with `{embeddings}`...\n",
     )
-    persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True), path="./chroma_db")
+    persistent_client = chromadb.PersistentClient(
+        settings=Settings(allow_reset=True), path="./chroma_db"
+    )
     cl.user_session.set("persistent_client", persistent_client)
-    vectordb=Chroma(
+    vectordb = Chroma(
         client=persistent_client,
-        collection_name="resources", 
+        collection_name="resources",
         persist_directory="./chroma_db",
-        embedding_function=embeddings
+        embedding_function=embeddings,
     )
 
     cl.user_session.set("vectordb", vectordb)
     await msg.stream_token("Done setting up vector db")
     await msg.send()
 
+
 async def init_llm_client_if_needed():
     client = cl.user_session.get("client")
     if not client:
         await set_llm_model()
+
+
 async def init_embedding_function_if_needed():
     embedding = cl.user_session.get("embedding")
     if not embedding:
         await set_embeddings()
+
+
 async def init_persistent_client_if_needed():
-    persistent_client=cl.user_session.get("persistent_client")
+    persistent_client = cl.user_session.get("persistent_client")
     if persistent_client is None:
         await set_vector_db()
+
 
 @cl.on_message
 async def message_submitted(message: cl.Message):
     await init_llm_client_if_needed()
     await init_embedding_function_if_needed()
     settings = cl.user_session.get("settings")
-    client=cl.user_session.get("client")
-    vectordb=cl.user_session.get("vectordb")
+    client = cl.user_session.get("client")
+    vectordb = cl.user_session.get("vectordb")
     # 3 ways to manage history for LLM:
     # 1. Use Chainlit
     # message_history = cl.user_session.get("message_history")
@@ -245,24 +280,27 @@ async def message_submitted(message: cl.Message):
     # 3. Use LlmPrompts lp.register_answer
 
     # Reminder to use make_async for long running tasks: https://docs.chainlit.io/guides/sync-async#long-running-synchronous-tasks
-    # If options `streaming` is set, or `use_vector_db` is not set, the RAG chain will not be called 
+    # If options `streaming` is set, or `use_vector_db` is not set, the RAG chain will not be called
     if settings["streaming"]:
         if settings["use_vector_db"]:
             await cl.Message("Change the setting to use non-streaming instead").send()
         else:
             await call_llm_async(message)
-        
+
     else:
         if settings["use_vector_db"] and vectordb:
             await retrieval_function(vectordb=vectordb, llm=client)
             response = retrieval_call(client, vectordb, message.content)
-            source_list = [doc.metadata for doc in response['source_documents']]
-            sources = ', '.join([sources_item['source'] for sources_item in source_list]) 
+            source_list = [doc.metadata for doc in response["source_documents"]]
+            sources = ", ".join(
+                [sources_item["source"] for sources_item in source_list]
+            )
             answer = f"Result:\n{response['result']} \nSources: \n" + sources
             await cl.Message(content=answer).send()
         else:
             response = call_llm(message)
             await cl.Message(content=f"*Response*: {response}").send()
+
 
 @cl.step(type="llm", show_input=True)
 async def call_llm_async(message: cl.Message):
@@ -286,13 +324,14 @@ def call_llm(message: cl.Message):
 @cl.action_callback("uploadDefaultFiles")
 async def on_click_upload_default_files(action: cl.Action):
     await set_vector_db()
-    vectordb= cl.user_session.get("vectordb")
+    vectordb = cl.user_session.get("vectordb")
     msg = cl.Message(content="Processing files...", disable_feedback=True)
     await msg.send()
 
     ingest_call(vectordb)
     msg.content = "Processing default files done. You can now ask questions!"
     await msg.update()
+
 
 @cl.action_callback("uploadFilesToVectorAct")
 async def on_click_upload_file_query(action: cl.Action):
@@ -308,18 +347,23 @@ async def on_click_upload_file_query(action: cl.Action):
         file = files[0]
         # initialize db
         await set_vector_db()
-        vectordb=cl.user_session.get("vectordb")
-        if(file.type == "application/pdf"):
+        vectordb = cl.user_session.get("vectordb")
+        if file.type == "application/pdf":
             add_pdf_to_vector_db(vectordb=vectordb, file_path=file.path)
-        elif(file.type == "application/json"):
-            add_json_html_data_to_vector_db(vectordb=vectordb, file_path=file.path, content_key="content", index_key="preferredPhrase")
+        elif file.type == "application/json":
+            add_json_html_data_to_vector_db(
+                vectordb=vectordb,
+                file_path=file.path,
+                content_key="content",
+                index_key="preferredPhrase",
+            )
         msg = cl.Message(content=f"Processing `{file.name}`...", disable_feedback=True)
         await msg.send()
         msg.content = f"Processing `{file.name}` done. You can now ask questions!"
         await msg.update()
-    
 
-async def retrieval_function(vectordb, llm):    
+
+async def retrieval_function(vectordb, llm):
     retriever = vectordb.as_retriever(search_kwargs={"k": 1})
     message_history = ChatMessageHistory()
 
@@ -338,6 +382,6 @@ async def retrieval_function(vectordb, llm):
         memory=memory,
         return_source_documents=True,
     )
-    
+
     # Let the user know that the system is ready
     cl.user_session.set("chain", chain)

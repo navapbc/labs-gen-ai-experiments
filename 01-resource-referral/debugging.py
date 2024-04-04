@@ -6,6 +6,7 @@ import traceback
 from langchain_core.runnables import RunnableLambda
 from langchain_core.prompt_values import PromptValue
 
+
 def stacktrace():
     traceback.print_stack()
 
@@ -20,6 +21,7 @@ def debug_here(local_vars):
 
 def debug_runnable(prefix: str):
     """Useful to see output/input between Runnables in a LangChain"""
+
     def debug_chainlink(x):
         print(f"{prefix if prefix else 'DEBUG_CHAINLINK'}")
         if isinstance(x, PromptValue):

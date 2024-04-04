@@ -2,6 +2,7 @@ import os
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 
+
 def retrieval_call(llm, vectordb, question):
     # Create the retrieval chain
     template = """
@@ -20,7 +21,6 @@ def retrieval_call(llm, vectordb, question):
         retriever=retriever,
         return_source_documents=True,
         chain_type_kwargs={"prompt": prompt},
-
     )
 
     # question = os.environ.get("USER_QUERY")
@@ -28,7 +28,7 @@ def retrieval_call(llm, vectordb, question):
         print("Please state your question here: ")
         question = input()
     # Invoke the retrieval chain
-    response=retrieval_chain.invoke({"query":question})
+    response = retrieval_chain.invoke({"query": question})
     print("\n## QUERY: ", question)
     print("\n## RESULT: ", response["result"])
     print("\n## SOURCE DOC: ")

@@ -6,9 +6,13 @@ from langchain_community.llms import GPT4All
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 import os
+
 dotenv.load_dotenv()
 
-def ollama_client(model_name=None, callbacks=None, settings=None, print_to_stdout=False):
+
+def ollama_client(
+    model_name=None, callbacks=None, settings=None, print_to_stdout=False
+):
     if not callbacks:
         callbacks = []
     if print_to_stdout:
@@ -27,8 +31,14 @@ def ollama_client(model_name=None, callbacks=None, settings=None, print_to_stdou
     # To connect via another URL: Ollama(base_url='http://localhost:11434', ...)
     return Ollama(model=model_name, callbacks=callbacks, **settings)
 
+
 # Add LLM client for other LLMs here...
-def gpt4all_client(model_path="./models/mistral-7b-instruct-v0.1.Q4_0.gguf", callbacks=None, settings=None,print_to_stdout=False):
+def gpt4all_client(
+    model_path="./models/mistral-7b-instruct-v0.1.Q4_0.gguf",
+    callbacks=None,
+    settings=None,
+    print_to_stdout=False,
+):
     # Open source option
     # download Mistral at https://mistral.ai/news/announcing-mistral-7b/
     if not callbacks:
@@ -44,13 +54,18 @@ def gpt4all_client(model_path="./models/mistral-7b-instruct-v0.1.Q4_0.gguf", cal
         }
 
     print("LLM settings:", settings)
-    
-    return GPT4All(model=model_path,max_tokens=1000, verbose=True,repeat_last_n=0, **settings)
 
-def google_gemini_client(model_name="gemini-pro", callbacks=None, settings=None, print_to_stdout=False):
-    # Get a Google API key by following the steps after clicking on Get an API key button 
+    return GPT4All(
+        model=model_path, max_tokens=1000, verbose=True, repeat_last_n=0, **settings
+    )
+
+
+def google_gemini_client(
+    model_name="gemini-pro", callbacks=None, settings=None, print_to_stdout=False
+):
+    # Get a Google API key by following the steps after clicking on Get an API key button
     # at https://ai.google.dev/tutorials/setup
-    GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
+    GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
     if not callbacks:
         callbacks = []
     if print_to_stdout:
@@ -65,8 +80,10 @@ def google_gemini_client(model_name="gemini-pro", callbacks=None, settings=None,
         }
 
     print("LLM settings:", settings)
-    return ChatGoogleGenerativeAI(model=model_name,
-                                verbose = True,google_api_key=GOOGLE_API_KEY,
-                                convert_system_message_to_human=True, **settings)
-        
-
+    return ChatGoogleGenerativeAI(
+        model=model_name,
+        verbose=True,
+        google_api_key=GOOGLE_API_KEY,
+        convert_system_message_to_human=True,
+        **settings,
+    )
