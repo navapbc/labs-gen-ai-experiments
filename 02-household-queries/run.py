@@ -1,4 +1,5 @@
 import os
+import json
 import dotenv
 from langchain_community.embeddings import (
     SentenceTransformerEmbeddings,
@@ -9,7 +10,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 from ingest import ingest_call
-from retrieval import retrieval_call
+from retrieval import create_retriever, retrieval_call
 from llm import ollama_client
 
 dotenv.load_dotenv()
@@ -69,11 +70,40 @@ vectordb = Chroma(
     persist_directory="./chroma_db",
 )
 
+
+def load_training_json():
+    with open("question_answer_citations.json", encoding="utf-8") as data_file:
+        json_data = json.load(data_file)
+        # print(json.dumps(json_data, indent=2))
+        return json_data
+
+def evaluate_retrieval():
+    qa = load_training_json()
+    results = []
+    retriever = create_retriever(vectordb)
+    for qa_dict in qa[1:]:
+        orig_question = qa_dict["orig_question"]
+        question = qa_dict.get("question", orig_question)
+        # print(f"\nQUESTION {qa_dict['id']}: {question}")
+        guru_cards = qa_dict.get("guru_cards", [])
+        # print(f"  Desired CARDS : {guru_cards}")
+
+        retrieval = retriever.invoke(question)
+        results.append({
+            "question": question,
+            "guru_cards": guru_cards,
+            "retrieved_cards": [doc.metadata['source'] for doc in retrieval]
+        })
+    print(retriever)
+    print("EVALUATION RESULTS:\n", "\n".join([json.dumps(r, indent=2) for r in results]))
+
+
 print("""
 Initialize DB and retrieve? 
 1. Retrieve only (default)
 2. Ingest and retrieve
 3. Ingest only
+4. Evaluate retrieval
       """)
 run_option = input()
 if run_option == "2":
@@ -81,5 +111,7 @@ if run_option == "2":
     retrieval_call(llm=llm, vectordb=vectordb)
 elif run_option == "3":
     ingest_call(vectordb=vectordb)
+elif run_option == "4":
+    evaluate_retrieval()
 else:
     retrieval_call(llm=llm, vectordb=vectordb)
