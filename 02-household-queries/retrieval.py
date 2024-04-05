@@ -7,6 +7,7 @@ def create_retriever(vectordb):
     retrieve_k = int(os.environ.get("RETRIEVE_K", "1"))
     return vectordb.as_retriever(search_kwargs={"k": retrieve_k})
 
+
 def retrieval_call(llm, vectordb, question):
     # Create the retrieval chain
     template = """
@@ -39,4 +40,3 @@ def retrieval_call(llm, vectordb, question):
         print(d)
         print()
     return response
-

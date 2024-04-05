@@ -77,6 +77,7 @@ def load_training_json():
         # print(json.dumps(json_data, indent=2))
         return json_data
 
+
 def evaluate_retrieval():
     qa = load_training_json()
     results = []
@@ -89,13 +90,18 @@ def evaluate_retrieval():
         # print(f"  Desired CARDS : {guru_cards}")
 
         retrieval = retriever.invoke(question)
-        results.append({
-            "question": question,
-            "guru_cards": guru_cards,
-            "retrieved_cards": [doc.metadata['source'] for doc in retrieval]
-        })
+        results.append(
+            {
+                "id": qa_dict["id"],
+                "question": question,
+                "guru_cards": guru_cards,
+                "retrieved_cards": [doc.metadata["source"] for doc in retrieval],
+            }
+        )
     print(retriever)
-    print("EVALUATION RESULTS:\n", "\n".join([json.dumps(r, indent=2) for r in results]))
+    print(
+        "EVALUATION RESULTS:\n", "\n".join([json.dumps(r, indent=2) for r in results])
+    )
 
 
 print("""
