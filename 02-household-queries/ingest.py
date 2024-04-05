@@ -44,7 +44,7 @@ def ingest_call(vectordb):
     pdf_path = "./tanf.pdf"
     add_pdf_to_vector_db(vectordb=vectordb, file_path=pdf_path)
 
-    # download from https://drive.google.com/file/d/1UoWmktXS5nqgIWj2x_O5hgzwU0yVuaJc/view?usp=drive_link
+    # download from https://drive.google.com/drive/folders/1DkAQ03bBVIPoO1d8gcHVnilQ-9VXfhJ8?usp=drive_link
     guru_file_path = "./guru_cards_for_nava.json"
     add_json_html_data_to_vector_db(
         vectordb=vectordb,
