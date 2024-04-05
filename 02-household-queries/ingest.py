@@ -9,7 +9,7 @@ import json
 def get_text_chunks_langchain(text, source):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=500)
     texts = text_splitter.split_text(text)
-    docs = [Document(page_content=t, metadata={"source": source}) for t in texts]
+    docs = [Document(page_content=t, metadata={"source": source.strip()}) for t in texts]
     return docs
 
 
