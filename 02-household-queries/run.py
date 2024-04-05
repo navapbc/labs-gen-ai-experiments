@@ -109,6 +109,9 @@ def evaluate_retrieval():
     print(
         "EVALUATION RESULTS:\n", "\n".join([json.dumps(r, indent=2) for r in results])
     )
+    print("\nTable:")
+    for res in results:
+        print(res["id"], "|", res["recall"])
 
 
 print("""
