@@ -83,6 +83,11 @@ def compute_percent_retrieved(retrieved_cards, guru_cards):
     return (len(guru_cards) - len(missed_cards)) / len(guru_cards)
 
 
+def count_extra_cards(retrieved_cards, guru_cards):
+    extra_cards = set(retrieved_cards) - set(guru_cards)
+    return len(extra_cards)
+
+
 def evaluate_retrieval():
     qa = load_training_json()
     results = []
@@ -103,6 +108,7 @@ def evaluate_retrieval():
                 "guru_cards": guru_cards,
                 "retrieved_cards": retrieved_cards,
                 "recall": compute_percent_retrieved(retrieved_cards, guru_cards),
+                "extra_cards": count_extra_cards(retrieved_cards, guru_cards),
             }
         )
     print(retriever)
@@ -111,7 +117,7 @@ def evaluate_retrieval():
     )
     print("\nTable:")
     for res in results:
-        print(res["id"], "|", res["recall"])
+        print(res["id"], "|", res["recall"], "|", res["extra_cards"])
 
 
 print("""
