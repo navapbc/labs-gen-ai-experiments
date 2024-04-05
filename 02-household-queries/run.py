@@ -78,6 +78,11 @@ def load_training_json():
         return json_data
 
 
+def compute_percent_retrieved(retrieved_cards, guru_cards):
+    missed_cards = set(guru_cards) - set(retrieved_cards)
+    return (len(guru_cards) - len(missed_cards)) / len(guru_cards)
+
+
 def evaluate_retrieval():
     qa = load_training_json()
     results = []
@@ -90,12 +95,14 @@ def evaluate_retrieval():
         # print(f"  Desired CARDS : {guru_cards}")
 
         retrieval = retriever.invoke(question)
+        retrieved_cards = [doc.metadata["source"] for doc in retrieval]
         results.append(
             {
                 "id": qa_dict["id"],
                 "question": question,
                 "guru_cards": guru_cards,
-                "retrieved_cards": [doc.metadata["source"] for doc in retrieval],
+                "retrieved_cards": retrieved_cards,
+                "recall": compute_percent_retrieved(retrieved_cards, guru_cards),
             }
         )
     print(retriever)
