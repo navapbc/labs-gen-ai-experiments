@@ -88,7 +88,7 @@ def count_extra_cards(retrieved_cards, guru_cards):
     return len(extra_cards)
 
 
-def evaluate_retrieval():
+def evaluate_retrieval(vectordb):
     qa = load_training_json()
     results = []
     retriever = create_retriever(vectordb)
@@ -126,6 +126,7 @@ Initialize DB and retrieve?
 2. Ingest and retrieve
 3. Ingest only
 4. Evaluate retrieval
+5. Ingest and Evaluate retrieval
       """)
 run_option = input()
 if run_option == "2":
@@ -134,6 +135,9 @@ if run_option == "2":
 elif run_option == "3":
     ingest_call(vectordb=vectordb)
 elif run_option == "4":
-    evaluate_retrieval()
+    evaluate_retrieval(vectordb)
+elif run_option == "5":
+    ingest_call(vectordb=vectordb)
+    evaluate_retrieval(vectordb)
 else:
     retrieval_call(llm=llm, vectordb=vectordb)

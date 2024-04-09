@@ -7,9 +7,12 @@ import json
 
 # split text into chunks
 def get_text_chunks_langchain(text, source):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=500)
-    texts = text_splitter.split_text(text)
-    docs = [Document(page_content=t, metadata={"source": source}) for t in texts]
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    texts = text_splitter.split_text(source + "\n\n" + text)
+    print("  Split into ", len(texts))
+    docs = [
+        Document(page_content=t, metadata={"source": source.strip()}) for t in texts
+    ]
     return docs
 
 
@@ -31,10 +34,12 @@ def add_json_html_data_to_vector_db(vectordb, file_path, content_key, index_key)
     json_data = json.load(data_file)
 
     for content in json_data:
+        if content[index_key].strip().endswith("?"):
+            continue
         soup = BeautifulSoup(content[content_key], "html.parser")
         text = soup.get_text(separator="\n", strip=True)
+        print("Processing document:", content[index_key])
         chunks = get_text_chunks_langchain(text, content[index_key])
-        print(f"Loading Document {content[index_key]} chunk into vector db")
         vectordb.add_documents(documents=chunks)
 
 
