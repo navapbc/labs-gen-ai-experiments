@@ -5,6 +5,8 @@
 beautifulsoup4
 chainlit
 chromadb
+dspy-ai
+jinja2
 jq
 langchain
 langchain_community
@@ -13,4 +15,4 @@ langchain-text-splitters
 # Needed by langchain_community/document_loaders/pdf.py
 pdfminer.six
 rapidocr-onnxruntime
-# sentence-transformers
+sentence-transformers
