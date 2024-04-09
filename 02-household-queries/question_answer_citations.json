@@ -22,7 +22,7 @@
     {
         "id": 2,
         "orig_question": "The client's son is 20 and is still living with them, but has his own job and buys his own food. The client doesn't want to list him on the application, do they have to? If so, do we need to include the son's income?",
-        "question": "The client's son is 20, is still living with them, but has his own job and buys his own food. Does the client have to list him on the application? If so, do we need to include the son's income?",
+        "question": "The client's son is 20, is still living with them, but has his own job and buys his own food. Does the client have to list him on the application? If so, do we need to include the dependent's income for SNAP?",
         "orig_answer": "Yes, since the son is under 22, he is a mandatory household member and needs to be on the application. His income would also need to be listed since he is no longer a minor.",
         "answer": "Yes",
         "guru_cards": [
@@ -37,7 +37,7 @@
         "orig_answer": "Not necessarily. If the client want to apply by himself, he can, he just needs to only use the benefit for himself and no longer share meals with the rest of his household. If he wants to continue to share food with his roommates, they would need to be included in the application.",
         "answer": "Not necessarily",
         "guru_cards": [
-            "What if my client shares meals but whats to apply to food stamps on their own?"
+            "What if my client shares meals but wants to apply for food stamps on their own?"
         ]
     },
     {
@@ -47,7 +47,7 @@
         "orig_answer": "No. She would need to include her husband if they are still married and living at the same address.",
         "answer": "No",
         "guru_cards": [
-            "How is spouse defined for food stamp applications?"
+            "How is \"spouse\" defined for food stamp applications?"
         ]
     },
     {
@@ -73,7 +73,7 @@
     {
         "id": 7,
         "orig_question": "The client and her husband live with her parents. She is 20, but her husband is 23. They buy their own groceries. Can they apply by themselves?",
-        "question": "The client is 20 years old. She and her husband live with her parents, but they buy their own groceries. Can the client and her husband apply by themselves?",
+        "question": "The client is 20 years old. She and her husband live with her parents, but they buy their own groceries. Can the client and her husband apply for food stamps by themselves?",
         "orig_answer": "The client would need to include their parents if they live in the same address since she is under 22.",
         "answer": "No",
         "guru_cards": [
@@ -83,7 +83,7 @@
     {
         "id": 8,
         "orig_question": "This client and her husband are ineligible (LPR but only for 2 years), they have three kids. One 16, one 14 and one is 20. I just apply the kids right?",
-        "question": "The client and her husband have been landed permanent residents for 2 years. They have children ages 14, 16, and 20. Which family members should be listed on the application?",
+        "question": "The client and her husband have been landed permanent residents for 2 years. They have non-citizen children under 18 (ages 14, 16, and 20). Which family members should be listed on the SNAP application?",
         "orig_answer": "The two younger kids would be eligible, but the parents would still need to be listed on the application. They are considered countable non-applicants. The 20 year old may need to be listed if they meet citizenship eligibility and share meals with the rest of the household.",
         "answer": "The parents, the two younger children, and potentially the 20 year old child",
         "guru_cards": [
@@ -95,7 +95,7 @@
     {
         "id": 9,
         "orig_question": "The client lives with her boyfriend and they have a kid together. With the boyfriend's income, they are ineligible. Can I just apply the client with her kid since they aren't married?",
-        "question": "The client and her boyfriend have a child. Can the client and the child apply without listing the boyfriend?",
+        "question": "The client and her boyfriend have a child. Can the client and the child apply for food stamps without listing the boyfriend?",
         "orig_answer": "No, boyfriend is still a mandatory household member because of the child. So he would need to be listed on the application.",
         "answer": "No",
         "guru_cards": [
@@ -115,7 +115,7 @@
     {
         "id": 11,
         "orig_question": "This client is 21 so I'm including his mother on the application. We managed to get by the income and resources on best estimations but now we're on the expenses step and the client is unsure if his mother pays mortgage and is really at loss on how much anything in the household costs. Are we able to continue without this information or should the client call back when he does have it? The household is likely eligible based on what we have so far.",
-        "question": "Can the client apply without knowing their household expenses?",
+        "question": "This client is 21 so I'm including his mother on the food stamps application. The client is unsure about household costs. The household is likely eligible based on what we have so far. Are we able to continue without this information or should the client call back when he does have it?",
         "orig_answer": "Yes, we can continue with the application. Expenses do not determine eligibility, but can add to benefit amount. They should add the expenses later on to potentially increase the benefit amount.",
         "answer": "Yes",
         "guru_cards": [
