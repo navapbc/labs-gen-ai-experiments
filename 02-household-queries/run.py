@@ -26,13 +26,18 @@ Which embedding function would you like to use?
       """)
 embedding_choice = input()
 # Set embedding function
+# For association between chunks and tokens, see https://github.com/langchain-ai/langchain/issues/2026#issuecomment-1579885362
 if embedding_choice == "2" or embedding_choice == "all-MiniLM-L6-v2":
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+    print(f"Max sequence length (max tokens): {embeddings.client.get_max_seq_length()}")
 elif embedding_choice == "3":
     # "The all-mpnet-base-v2 model provides the best quality, while all-MiniLM-L6-v2 is 5 times faster and still offers good quality."
     embeddings = HuggingFaceEmbeddings(model_name=_embeddings_model_name)
+    print(f"Max sequence length (max tokens): {embeddings.client.get_max_seq_length()}")
 else:
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+
+print(embeddings)
 
 print(f"""
 Which LLM would you like to use? 
