@@ -1,15 +1,5 @@
 [
     {
-        "id": 0,
-        "orig_question": "",
-        "question": "",
-        "orig_answer": "",
-        "answer": "",
-        "guru_cards": [
-            ""
-        ]
-    },
-    {
         "id": 1,
         "orig_question": "The client has her 19 year old grandchild living with her. She says she does her own thing and they don't really share food. Does the grandchild need to be included?",
         "question": "The client has her 19 year old grandchild living with her but they don't really share food. Does the client need to include the grandchild on the application?",
@@ -35,7 +25,7 @@
         "orig_question": "The client rents a room in a house. He said he wants to apply on his own, but then he admitted he shares a kitchen with his roommates and they often cook and eat together. Do the roommates need to be included?",
         "question": "The client rents a room in a house. He wants to apply on his own. He shares a kitchen with his roommates and they often cook and eat together. Do the roommates need to be included?",
         "orig_answer": "Not necessarily. If the client want to apply by himself, he can, he just needs to only use the benefit for himself and no longer share meals with the rest of his household. If he wants to continue to share food with his roommates, they would need to be included in the application.",
-        "answer": "Not necessarily",
+        "answer": "Maybe",
         "guru_cards": [
             "What if my client shares meals but wants to apply for food stamps on their own?"
         ]
@@ -55,7 +45,7 @@
         "orig_question": "Client lives in assisted living , but doesn't go to the cafeteria. She tends to cook all her food in her kitchen because she doesn't like the facilities food. Can she apply for food stamps?",
         "question": "Client lives in assisted living, but cooks all her food in her kitchen and doesn't eat the facilities food. Can she apply for food stamps?",
         "orig_answer": "If the facility is authorized to accept SNAP, then the client could apply.",
-        "answer": "Potentially",
+        "answer": "Maybe",
         "guru_cards": [
             ""
         ]
@@ -84,8 +74,10 @@
         "id": 8,
         "orig_question": "This client and her husband are ineligible (LPR but only for 2 years), they have three kids. One 16, one 14 and one is 20. I just apply the kids right?",
         "question": "The client and her husband have been landed permanent residents for 2 years. They have non-citizen children under 18 (ages 14, 16, and 20). Which family members should be listed on the SNAP application?",
+        "easy_question": "The client and her husband have been landed permanent residents for 2 years. They have non-citizen children under 18 (ages 14, 16, and 20). Should all family members be listed on the SNAP application?",
         "orig_answer": "The two younger kids would be eligible, but the parents would still need to be listed on the application. They are considered countable non-applicants. The 20 year old may need to be listed if they meet citizenship eligibility and share meals with the rest of the household.",
         "answer": "The parents, the two younger children, and potentially the 20 year old child",
+        "short_answer": "Yes",
         "guru_cards": [
             "Does a qualified non-citizen under 18 have to reside in the US for five years before they can receive SNAP benefits?",
             "If a non-citizen child receiving SNAP turns 18 years of age during a certification period and has been living in the US for under 5 years, is the child still eligible to receive SNAP?",
@@ -128,6 +120,7 @@
         "question": "The client has a 20-year-old child who is a college student and only lives with the client during the summer. Should this child be listed on the client's application?",
         "orig_answer": "a. The 20 year should still be listed, but should be marked as an ineligible student unless he meets another exemption. Even if he comes home on breaks, he would remain an ineligible student until graduation unless he qualifies for an exemption at some point. b. If the parents intend to keep sharing their food with the 23 year old, then he would also need to be listed on the application as well as his income. If they do not want to include him, then he will need to be responsible for his own food and meals. c. They do not need to include the foster children. If they choose to do so, they need to include the foster payments they receive as income. d. The client's mother can apply on her own on a separate application. The living attendant would not need to be included.",
         "answer": "Yes, marked as an ineligible student",
+        "short_answer": "Yes",
         "guru_cards": [
             "Who are mandatory HH members for food stamps?",
             "Can students be part of a SNAP household?",
@@ -141,6 +134,7 @@
         "question": "The client has a 23-year-old child who lives with them but sometimes buys their own food and sometimes shares meals with the client. Should this child be listed on the client's application?",
         "orig_answer": "a. The 20 year should still be listed, but should be marked as an ineligible student unless he meets another exemption. Even if he comes home on breaks, he would remain an ineligible student until graduation unless he qualifies for an exemption at some point. b. If the parents intend to keep sharing their food with the 23 year old, then he would also need to be listed on the application as well as his income. If they do not want to include him, then he will need to be responsible for his own food and meals. c. They do not need to include the foster children. If they choose to do so, they need to include the foster payments they receive as income. d. The client's mother can apply on her own on a separate application. The living attendant would not need to be included.",
         "answer": "Yes, if the child will continue sharing some meals",
+        "short_answer": "Yes",
         "guru_cards": [
             "Who are mandatory HH members for food stamps?",
             "What if my client shares meals but wants to apply for food stamps on their own?"
@@ -152,6 +146,7 @@
         "question": "The client has foster children. Should they be included on the application?",
         "orig_answer": "a. The 20 year should still be listed, but should be marked as an ineligible student unless he meets another exemption. Even if he comes home on breaks, he would remain an ineligible student until graduation unless he qualifies for an exemption at some point. b. If the parents intend to keep sharing their food with the 23 year old, then he would also need to be listed on the application as well as his income. If they do not want to include him, then he will need to be responsible for his own food and meals. c. They do not need to include the foster children. If they choose to do so, they need to include the foster payments they receive as income. d. The client's mother can apply on her own on a separate application. The living attendant would not need to be included.",
         "answer": "Not necessarily",
+        "short_answer": "Maybe",
         "guru_cards": [
             "Does an applicant with foster children (or adults) need to include them on the food stamp application?"
         ]
@@ -162,6 +157,7 @@
         "question": "The client's mother lives with them, but has a live in attendant who cooks for her separately. Can the mother be included on the client's application?",
         "orig_answer": "a. The 20 year should still be listed, but should be marked as an ineligible student unless he meets another exemption. Even if he comes home on breaks, he would remain an ineligible student until graduation unless he qualifies for an exemption at some point. b. If the parents intend to keep sharing their food with the 23 year old, then he would also need to be listed on the application as well as his income. If they do not want to include him, then he will need to be responsible for his own food and meals. c. They do not need to include the foster children. If they choose to do so, they need to include the foster payments they receive as income. d. The client's mother can apply on her own on a separate application. The living attendant would not need to be included.",
         "answer": "No, the mother should apply separately.",
+        "short_answer": "No",
         "guru_cards": [
             "Who are mandatory HH members for food stamps?"
         ]

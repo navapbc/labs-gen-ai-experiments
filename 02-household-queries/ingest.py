@@ -8,10 +8,15 @@ import json
 # split text into chunks
 def get_text_chunks_langchain(text, source):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=750, chunk_overlap=100)
-    texts = text_splitter.split_text(source + "\n\n" + text)
+    entire_text = source + "\n\n" + text
+    texts = text_splitter.split_text(entire_text)
     print("  Split into", len(texts))
     docs = [
-        Document(page_content=t, metadata={"source": source.strip()}) for t in texts
+        Document(
+            page_content=t,
+            metadata={"source": source.strip(), "entire_card": entire_text},
+        )
+        for t in texts
     ]
     return docs
 
