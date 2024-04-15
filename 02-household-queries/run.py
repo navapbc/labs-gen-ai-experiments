@@ -97,7 +97,7 @@ def evaluate_retrieval(vectordb):
     qa = load_training_json()
     results = []
     retriever = create_retriever(vectordb)
-    for qa_dict in qa[1:]:
+    for qa_dict in qa:
         orig_question = qa_dict["orig_question"]
         question = qa_dict.get("question", orig_question)
         # print(f"\nQUESTION {qa_dict['id']}: {question}")
@@ -114,6 +114,7 @@ def evaluate_retrieval(vectordb):
                 "retrieved_cards": retrieved_cards,
                 "recall": compute_percent_retrieved(retrieved_cards, guru_cards),
                 "extra_cards": count_extra_cards(retrieved_cards, guru_cards),
+                "card_contents": [doc.metadata["entire_card"] for doc in retrieval],
             }
         )
     print(retriever)
