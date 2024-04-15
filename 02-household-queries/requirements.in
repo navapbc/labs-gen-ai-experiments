@@ -3,9 +3,9 @@
 # > pip-compile requirements.in
 
 beautifulsoup4
-chainlit
+chainlit==1.0.500
 chromadb
-dspy-ai
+dspy-ai==2.4.3
 jinja2
 jq
 langchain
@@ -16,3 +16,5 @@ langchain-text-splitters
 pdfminer.six
 rapidocr-onnxruntime
 sentence-transformers
+# Used by dspy
+structlog
