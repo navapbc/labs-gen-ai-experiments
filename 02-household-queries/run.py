@@ -128,8 +128,8 @@ def evaluate_retrieval(vectordb):
 
 print("""
 Initialize DB and retrieve? 
-1. Retrieve only (default)
-2. Ingest and retrieve
+1. RAG only (default)
+2. Ingest and RAG
 3. Ingest only
 4. Evaluate retrieval
 5. Ingest and Evaluate retrieval
