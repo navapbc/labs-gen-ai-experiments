@@ -2,7 +2,7 @@ import os
 from bs4 import BeautifulSoup
 import dotenv
 from langchain.docstore.document import Document
-from langchain_text_splitters import RecursiveCharacterTextSplitter, NLTKTextSplitter, SpacyTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter #, NLTKTextSplitter, SpacyTextSplitter
 import json
 from langchain_community.embeddings import (
     SentenceTransformerEmbeddings,
@@ -11,13 +11,13 @@ from langchain_community.embeddings import (
 import chromadb
 from chromadb.config import Settings
 
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+# from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 from llm import ollama_client
 from retrieval import create_retriever
 from langchain_community.vectorstores import Chroma
 # import nltk
-import spacy
+# import spacy
 
 dotenv.load_dotenv()
 
@@ -85,7 +85,6 @@ def add_json_html_data_to_vector_db(vectordb, file_path, content_key, index_key,
 
 def ingest_call(vectordb, chunk_size, chunk_overlap):
     # download from https://drive.google.com/drive/folders/1DkAQ03bBVIPoO1d8gcHVnilQ-9VXfhJ8?usp=drive_link
-    # spacy.cli.download("en_core_web_sm")
     guru_file_path = "./guru_cards_for_nava.json"
     add_json_html_data_to_vector_db(
         vectordb=vectordb,
@@ -134,7 +133,6 @@ def evaluate_retrieval(vectordb, recall_results):
     return recall_results
 
 def run_embedding_func_and_eval_retrieval(embeddings, chunk_size, chunk_overlap):
-    # nltk.download('punkt')
     selected_embedding = embeddings["func"]
     persistent_client= chromadb.PersistentClient(
             settings=Settings(allow_reset=True), path="./chroma_db"
@@ -151,6 +149,8 @@ def run_embedding_func_and_eval_retrieval(embeddings, chunk_size, chunk_overlap)
     persistent_client.reset()
     return recall_results
 
+# nltk.download('punkt')
+# spacy.cli.download("en_core_web_sm")
 overall_results = []
 for embedding in EMBEDDINGS:
     print("Embedding: " + embedding)
