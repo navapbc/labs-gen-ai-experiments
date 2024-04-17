@@ -16,3 +16,7 @@ langchain-text-splitters
 pdfminer.six
 rapidocr-onnxruntime
 sentence-transformers
+nltk
+setuptools
+wheel
+spacy

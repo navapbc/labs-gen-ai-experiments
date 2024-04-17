@@ -74,6 +74,7 @@ chromadb==0.4.24
 click==8.1.7
     # via
     #   chainlit
+    #   nltk
     #   typer
     #   uvicorn
 coloredlogs==15.0.1
@@ -148,6 +149,8 @@ googleapis-common-protos==1.63.0
     #   grpcio-status
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
+greenlet==3.0.3
+    # via sqlalchemy
 grpcio==1.62.1
     # via
     #   chromadb
@@ -185,7 +188,9 @@ idna==3.6
     #   requests
     #   yarl
 importlib-metadata==6.11.0
-    # via opentelemetry-api
+    # via
+    #   build
+    #   opentelemetry-api
 importlib-resources==6.4.0
     # via chromadb
 jinja2==3.1.3
@@ -195,6 +200,7 @@ jinja2==3.1.3
 joblib==1.3.2
     # via
     #   dspy-ai
+    #   nltk
     #   scikit-learn
 jq==1.7.0
     # via -r requirements.in
@@ -259,6 +265,8 @@ nest-asyncio==1.6.0
     # via chainlit
 networkx==3.2.1
     # via torch
+nltk==3.8.1
+    # via -r requirements.in
 numpy==1.26.4
     # via
     #   chroma-hnswlib
@@ -459,6 +467,7 @@ rapidocr-onnxruntime==1.3.15
 regex==2023.12.25
     # via
     #   dspy-ai
+    #   nltk
     #   transformers
 requests==2.31.0
     # via
@@ -551,6 +560,7 @@ tqdm==4.66.2
     #   dspy-ai
     #   google-generativeai
     #   huggingface-hub
+    #   nltk
     #   openai
     #   optuna
     #   sentence-transformers

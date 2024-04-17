@@ -4,7 +4,7 @@ from langchain.chains import RetrievalQA
 
 
 def create_retriever(vectordb):
-    retrieve_k = int(os.environ.get("RETRIEVE_K", "1"))
+    retrieve_k = int(os.environ.get("RETRIEVE_K", "10"))
     return vectordb.as_retriever(search_kwargs={"k": retrieve_k})
 
 
