@@ -61,7 +61,7 @@ def get_text_chunks_langchain(text, source, chunk_size, chunk_overlap):
     # text_splitter= NLTKTextSplitter()
     # text_splitter= SpacyTextSplitter()
     texts = text_splitter.split_text(source + "\n\n" + text)
-    # docs = text_splitter.split_text(text)
+
     docs = [
         Document(page_content=t, metadata={"source": source.strip()}) for t in texts
     ]
