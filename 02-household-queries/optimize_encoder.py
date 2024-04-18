@@ -10,6 +10,7 @@ from langchain_community.embeddings import (
 )
 import chromadb
 from chromadb.config import Settings
+from llm import ollama_client
 # from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 from retrieval import create_retriever
@@ -18,6 +19,11 @@ from langchain_community.vectorstores import Chroma
 # import spacy
 
 dotenv.load_dotenv()
+
+_llm_model_name = os.environ.get("LLM_MODEL_NAME", "mistral")
+
+llm =  ollama_client(_llm_model_name, settings={"temperature":0.1})
+
 EMBEDDINGS = {
      "st_all-MiniLM-L6-v2" : {"func": SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"), "token_limit":256},
      "hf_all-MiniLM-L6-v2" : {"func": HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2"), "token_limit":256},
@@ -45,13 +51,18 @@ def count_extra_cards(retrieved_cards, guru_cards):
 
 
 # split text into chunks
-def get_text_chunks_langchain(text, source, chunk_size, chunk_overlap):
+def get_text_chunks_langchain(text, source, chunk_size, chunk_overlap, token_limit):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     # text_splitter= NLTKTextSplitter()
     # text_splitter= SpacyTextSplitter()
     texts = text_splitter.split_text(source + "\n\n" + text)
     # print("  Split into", len(texts))
-
+    token_total = 0
+    for t in texts:
+        token_total+=llm.get_num_tokens(t)
+    if (token_total > token_limit):
+        print(f"{source} exceeded token size: {str(token_total)}")
+    
     docs = [
         Document(page_content=t, metadata={"source": source.strip()}) for t in texts
     ]
@@ -60,7 +71,7 @@ def get_text_chunks_langchain(text, source, chunk_size, chunk_overlap):
 
 
 # Chunk the json data and load into vector db
-def add_json_html_data_to_vector_db(vectordb, file_path, content_key, index_key, chunk_size, chunk_overlap):
+def add_json_html_data_to_vector_db(vectordb, file_path, content_key, index_key, chunk_size, chunk_overlap, token_limit):
     data_file = open(file_path, encoding="utf-8")
     json_data = json.load(data_file)
     for content in json_data:
@@ -69,11 +80,11 @@ def add_json_html_data_to_vector_db(vectordb, file_path, content_key, index_key,
         soup = BeautifulSoup(content[content_key], "html.parser")
         text = soup.get_text(separator="\n", strip=True)
         # print("Processing document:", content[index_key])
-        chunks = get_text_chunks_langchain(text, content[index_key], chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+        chunks = get_text_chunks_langchain(text, content[index_key], chunk_size=chunk_size, chunk_overlap=chunk_overlap, token_limit=token_limit)
         vectordb.add_documents(documents=chunks)
 
 
-def ingest_call(vectordb, chunk_size, chunk_overlap):
+def ingest_call(vectordb, chunk_size, chunk_overlap, token_limit):
     # download from https://drive.google.com/drive/folders/1DkAQ03bBVIPoO1d8gcHVnilQ-9VXfhJ8?usp=drive_link
     guru_file_path = "./guru_cards_for_nava.json"
     add_json_html_data_to_vector_db(
@@ -81,7 +92,7 @@ def ingest_call(vectordb, chunk_size, chunk_overlap):
         file_path=guru_file_path,
         content_key="content",
         index_key="preferredPhrase",
-        chunk_size= chunk_size, chunk_overlap=chunk_overlap
+        chunk_size= chunk_size, chunk_overlap=chunk_overlap, token_limit=token_limit
     )
 
 
@@ -126,15 +137,14 @@ def run_embedding_func_and_eval_retrieval(embeddings, chunk_size, chunk_overlap)
     persistent_client= chromadb.PersistentClient(
             settings=Settings(allow_reset=True), path="./chroma_db"
         )
-    if (embeddings["token_limit"]> chunk_size):
-        print("Exceeding token length: "+ embeddings["token_limit"])
+
     vectordb = Chroma(
         client=persistent_client,
         collection_name="resources",
         persist_directory="./chroma_db",
         embedding_function=selected_embedding,
     )
-    ingest_call(vectordb=vectordb, chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+    ingest_call(vectordb=vectordb, chunk_size=chunk_size, chunk_overlap=chunk_overlap, token_limit= embeddings["token_limit"])
     recall_results = {}
     evaluate_retrieval(vectordb, recall_results)
     persistent_client.reset()
