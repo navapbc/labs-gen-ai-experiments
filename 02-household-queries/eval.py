@@ -86,9 +86,10 @@ def gpt_4_turbo(prompt):
 ################################################################
 
 parameters = {
-    "chunk_size": [(128, 0), (256, 0), (512, 256)],  # (size, overlap)
-    "k": [0, 5, 10],
-    "model": [gpt_4_turbo, mistral_7b],
+    # (size, overlap)
+    "chunk_size": [(128, 0)],  # [(128, 0), (256, 0), (512, 256)],
+    "k": [5],  # [0, 5, 10],
+    "model": [mistral_7b],  # [gpt_4_turbo, mistral_7b],
 }
 
 eval_llm_client = gpt_4_turbo
