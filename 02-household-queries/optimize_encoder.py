@@ -10,7 +10,6 @@ from langchain_community.embeddings import (
 )
 import chromadb
 from chromadb.config import Settings
-
 # from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 from retrieval import create_retriever
@@ -19,7 +18,6 @@ from langchain_community.vectorstores import Chroma
 # import spacy
 
 dotenv.load_dotenv()
-
 EMBEDDINGS = {
      "st_all-MiniLM-L6-v2" : {"func": SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"), "token_limit":256},
      "hf_all-MiniLM-L6-v2" : {"func": HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2"), "token_limit":256},
@@ -128,8 +126,8 @@ def run_embedding_func_and_eval_retrieval(embeddings, chunk_size, chunk_overlap)
     persistent_client= chromadb.PersistentClient(
             settings=Settings(allow_reset=True), path="./chroma_db"
         )
-    if (selected_embedding["token_length"]> chunk_size):
-        print("Exceeding token length: "+ selected_embedding["token_length"])
+    if (embeddings["token_limit"]> chunk_size):
+        print("Exceeding token length: "+ embeddings["token_limit"])
     vectordb = Chroma(
         client=persistent_client,
         collection_name="resources",
