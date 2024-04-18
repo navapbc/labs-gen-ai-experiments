@@ -21,12 +21,12 @@ from langchain_community.vectorstores import Chroma
 dotenv.load_dotenv()
 
 EMBEDDINGS = {
-     "st_all-MiniLM-L6-v2" : {"func": SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")},
-     "hf_all-MiniLM-L6-v2" : {"func": HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")},
-    #  "google_models/embedding-001": {"func": GoogleGenerativeAIEmbeddings(model="models/embedding-001")},
-    #  "google_models/text-embedding-004": {"func": GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")},
-     "BAAI/bge-small-en-v1.5" : {"func": SentenceTransformerEmbeddings(model_name="BAAI/bge-small-en-v1.5")},
-     "mixedbread-ai/mxbai-embed-large-v1" : {"func": SentenceTransformerEmbeddings(model_name="mixedbread-ai/mxbai-embed-large-v1")},
+     "st_all-MiniLM-L6-v2" : {"func": SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"), "token_limit":256},
+     "hf_all-MiniLM-L6-v2" : {"func": HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2"), "token_limit":256},
+    #  "google_models/embedding-001": {"func": GoogleGenerativeAIEmbeddings(model="models/embedding-001"), "token_limit":2048},
+    #  "google_models/text-embedding-004": {"func": GoogleGenerativeAIEmbeddings(model="models/text-embedding-004"), "token_limit":768},
+     "BAAI/bge-small-en-v1.5" : {"func": SentenceTransformerEmbeddings(model_name="BAAI/bge-small-en-v1.5"), "token_limit":512},
+     "mixedbread-ai/mxbai-embed-large-v1" : {"func": SentenceTransformerEmbeddings(model_name="mixedbread-ai/mxbai-embed-large-v1"), "token_limit":1024},
 }
 
 def load_training_json():
@@ -128,6 +128,8 @@ def run_embedding_func_and_eval_retrieval(embeddings, chunk_size, chunk_overlap)
     persistent_client= chromadb.PersistentClient(
             settings=Settings(allow_reset=True), path="./chroma_db"
         )
+    if (selected_embedding["token_length"]> chunk_size):
+        print("Exceeding token length: "+ selected_embedding["token_length"])
     vectordb = Chroma(
         client=persistent_client,
         collection_name="resources",
