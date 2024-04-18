@@ -13,21 +13,12 @@ from chromadb.config import Settings
 
 # from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
-from llm import ollama_client
 from retrieval import create_retriever
 from langchain_community.vectorstores import Chroma
 # import nltk
 # import spacy
 
 dotenv.load_dotenv()
-
-_llm_model_name = os.environ.get("LLM_MODEL_NAME", "mistral")
-
-
-llm = {
-    "gpt4all_path": "./mistral-7b-instruct-v0.1.Q4_0.gguf",
-    "ollama": ollama_client(_llm_model_name, settings={"temperature":0.1})
-}
 
 EMBEDDINGS = {
      "st_all-MiniLM-L6-v2" : {"func": SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")},
@@ -61,6 +52,7 @@ def get_text_chunks_langchain(text, source, chunk_size, chunk_overlap):
     # text_splitter= NLTKTextSplitter()
     # text_splitter= SpacyTextSplitter()
     texts = text_splitter.split_text(source + "\n\n" + text)
+    # print("  Split into", len(texts))
 
     docs = [
         Document(page_content=t, metadata={"source": source.strip()}) for t in texts
@@ -129,7 +121,6 @@ def evaluate_retrieval(vectordb, recall_results):
     recall_results["result"] = results
     recall_results["recall_percentage"] = recall/15
     recall_results["extra_card_count"] = extra_card_count
-    
     return recall_results
 
 def run_embedding_func_and_eval_retrieval(embeddings, chunk_size, chunk_overlap):
