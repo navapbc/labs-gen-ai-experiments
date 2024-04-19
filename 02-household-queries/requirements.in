@@ -5,6 +5,7 @@
 beautifulsoup4
 chainlit
 chromadb
+cohere
 dspy-ai
 jinja2
 jq
