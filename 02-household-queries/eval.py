@@ -201,12 +201,12 @@ def evaluate(eval_llm_client, questions, parameters):
             "question_id": question["id"],
             "question_text": question["question"],
             "correct_answer": question[
-                "orig_answer" if not "short_answer" in question else "answer"
+                "orig_answer" if "short_answer" not in question else "answer"
             ],
             "ai_generated_answer": get_answer(question["question"], parameters),
         }
         result["evaluation"] = eval_llm_client(EVAL_PROMPT.format(**result))
-        result["correct"] = not "incorrect" in result["evaluation"].lower()
+        result["correct"] = "incorrect" not in result["evaluation"].lower()
         result |= parameters
         result["model"] = result["model"].__name__
         results.append(result)
