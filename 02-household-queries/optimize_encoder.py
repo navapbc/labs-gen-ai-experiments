@@ -229,9 +229,9 @@ elif text_splitter_choice == "3":
     spacy.cli.download("en_core_web_sm")
 else:
     print("Define chunk size: 750(default) ")
-    chunk_size = int(input())
+    chunk_size = int(input() or 750)
     print("Define chunk overlap: 300(default) ")
-    chunk_overlap = int(input())
+    chunk_overlap = int(input() or 300)
 
 chunk_size = 750 if chunk_size is None else chunk_size
 chunk_overlap = 300 if chunk_overlap is None else chunk_overlap
