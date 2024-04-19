@@ -10,6 +10,7 @@ import spacy
 
 dotenv.load_dotenv()
 
+
 def compute_percent_retrieved(retrieved_cards, guru_cards):
     missed_cards = set(guru_cards) - set(retrieved_cards)
     return (len(guru_cards) - len(missed_cards)) / len(guru_cards)
