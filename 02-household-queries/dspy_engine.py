@@ -9,7 +9,7 @@ import dsp
 from dsp.utils import dotdict
 import dspy
 from dspy.evaluate import Evaluate
-from dspy.teleprompt import *
+from dspy.teleprompt import COPRO, LabeledFewShot, BootstrapFewShot
 
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
