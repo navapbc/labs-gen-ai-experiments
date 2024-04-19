@@ -6,11 +6,16 @@ import json
 
 
 # split text into chunks
-def get_text_chunks_langchain(text, source):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=750, chunk_overlap=100)
+def get_text_chunks_langchain(
+    text, source, silent=False, chunk_size=750, chunk_overlap=100
+):
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size, chunk_overlap=chunk_overlap
+    )
     entire_text = source + "\n\n" + text
     texts = text_splitter.split_text(entire_text)
-    print("  Split into", len(texts))
+    if not silent:
+        print("  Split into", len(texts))
     docs = [
         Document(
             page_content=t,
@@ -34,7 +39,15 @@ def add_pdf_to_vector_db(vectordb, file_path, chunk_size=500, chunk_overlap=100)
 
 
 # Chunk the json data and load into vector db
-def add_json_html_data_to_vector_db(vectordb, file_path, content_key, index_key):
+def add_json_html_data_to_vector_db(
+    vectordb,
+    file_path,
+    content_key,
+    index_key,
+    silent=False,
+    chunk_size=750,
+    chunk_overlap=100,
+):
     data_file = open(file_path, encoding="utf-8")
     json_data = json.load(data_file)
 
@@ -43,12 +56,19 @@ def add_json_html_data_to_vector_db(vectordb, file_path, content_key, index_key)
             continue
         soup = BeautifulSoup(content[content_key], "html.parser")
         text = soup.get_text(separator="\n", strip=True)
-        print("Processing document:", content[index_key])
-        chunks = get_text_chunks_langchain(text, content[index_key])
+        if not silent:
+            print("Processing document:", content[index_key])
+        chunks = get_text_chunks_langchain(
+            text,
+            content[index_key],
+            silent=silent,
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap,
+        )
         vectordb.add_documents(documents=chunks)
 
 
-def ingest_call(vectordb):
+def ingest_call(vectordb, silent=False, chunk_size=750, chunk_overlap=100):
     # Load the PDF and create chunks
     # download from https://drive.google.com/file/d/1--qDjraIk1WGxwuCGBP-nfxzOr9IHvcZ/view?usp=drive_link
     # pdf_path = "./tanf.pdf"
@@ -61,4 +81,7 @@ def ingest_call(vectordb):
         file_path=guru_file_path,
         content_key="content",
         index_key="preferredPhrase",
+        silent=silent,
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
     )
