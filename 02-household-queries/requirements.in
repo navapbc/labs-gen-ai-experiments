@@ -3,9 +3,10 @@
 # > pip-compile requirements.in
 
 beautifulsoup4
-chainlit
+chainlit==1.0.500
 chromadb
-dspy-ai
+cohere
+dspy-ai==2.4.3
 jinja2
 jq
 langchain
@@ -18,3 +19,5 @@ rapidocr-onnxruntime
 sentence-transformers
 nltk
 spacy==3.7.4
+# Used by dspy
+structlog
