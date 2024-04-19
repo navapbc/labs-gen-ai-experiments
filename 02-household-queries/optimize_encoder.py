@@ -12,14 +12,6 @@ import spacy
 
 dotenv.load_dotenv()
 
-
-def load_training_json():
-    with open("question_answer_citations.json", encoding="utf-8") as data_file:
-        json_data = json.load(data_file)
-        # print(json.dumps(json_data, indent=2))
-        return json_data
-
-
 def compute_percent_retrieved(retrieved_cards, guru_cards):
     missed_cards = set(guru_cards) - set(retrieved_cards)
     return (len(guru_cards) - len(missed_cards)) / len(guru_cards)
