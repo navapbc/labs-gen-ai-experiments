@@ -1,21 +1,53 @@
 from bs4 import BeautifulSoup
+import os
+import dotenv
+import json
 from langchain_community.document_loaders import PDFMinerLoader
 from langchain.docstore.document import Document
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-import json
+from langchain_text_splitters import (
+    RecursiveCharacterTextSplitter,
+    NLTKTextSplitter,
+    SpacyTextSplitter,
+)
+from llm import ollama_client
+
+
+dotenv.load_dotenv()
+
+_llm_model_name = os.environ.get("LLM_MODEL_NAME", "mistral")
+
+llm = ollama_client(_llm_model_name, settings={"temperature": 0.1})
 
 
 # split text into chunks
 def get_text_chunks_langchain(
-    text, source, silent=False, chunk_size=750, chunk_overlap=100
+    text, source, chunk_size, chunk_overlap, token_limit, text_splitter_choice, silent
 ):
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size, chunk_overlap=chunk_overlap
-    )
+    if text_splitter_choice == "2":
+        text_splitter = NLTKTextSplitter()
+    elif text_splitter_choice == "3":
+        text_splitter = SpacyTextSplitter()
+    else:
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size, chunk_overlap=chunk_overlap
+        )
+
     entire_text = source + "\n\n" + text
     texts = text_splitter.split_text(entire_text)
+
     if not silent:
         print("  Split into", len(texts))
+    for t in texts:
+        token_count = llm.get_num_tokens(t)
+        overlap_and_token = token_count + chunk_overlap
+        if token_count > token_limit:
+            print(f"Exceeded token limit of {token_limit}: {token_count};")
+        elif chunk_size > (overlap_and_token):
+            print(
+                f"Exceeded token count and overlap {overlap_and_token}: {chunk_size};"
+            )
+        entire_text = source + "\n\n" + text
+
     docs = [
         Document(
             page_content=t,
@@ -23,6 +55,7 @@ def get_text_chunks_langchain(
         )
         for t in texts
     ]
+
     return docs
 
 
@@ -44,9 +77,11 @@ def add_json_html_data_to_vector_db(
     file_path,
     content_key,
     index_key,
-    silent=False,
+    token_limit,
+    text_splitter_choice,
     chunk_size=750,
-    chunk_overlap=100,
+    chunk_overlap=300,
+    silent=False,
 ):
     data_file = open(file_path, encoding="utf-8")
     json_data = json.load(data_file)
@@ -61,19 +96,23 @@ def add_json_html_data_to_vector_db(
         chunks = get_text_chunks_langchain(
             text,
             content[index_key],
-            silent=silent,
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
+            token_limit=token_limit,
+            text_splitter_choice=text_splitter_choice,
+            silent=silent,
         )
         vectordb.add_documents(documents=chunks)
 
 
-def ingest_call(vectordb, silent=False, chunk_size=750, chunk_overlap=100):
-    # Load the PDF and create chunks
-    # download from https://drive.google.com/file/d/1--qDjraIk1WGxwuCGBP-nfxzOr9IHvcZ/view?usp=drive_link
-    # pdf_path = "./tanf.pdf"
-    # add_pdf_to_vector_db(vectordb=vectordb, file_path=pdf_path)
-
+def ingest_call(
+    vectordb,
+    text_splitter_choice=1,
+    chunk_size=750,
+    chunk_overlap=300,
+    token_limit=256,
+    silent=False,
+):
     # download from https://drive.google.com/drive/folders/1DkAQ03bBVIPoO1d8gcHVnilQ-9VXfhJ8?usp=drive_link
     guru_file_path = "./guru_cards_for_nava.json"
     add_json_html_data_to_vector_db(
@@ -84,4 +123,6 @@ def ingest_call(vectordb, silent=False, chunk_size=750, chunk_overlap=100):
         silent=silent,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
+        token_limit=token_limit,
+        text_splitter_choice=text_splitter_choice,
     )

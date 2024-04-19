@@ -1,20 +1,14 @@
-import os
-from bs4 import BeautifulSoup
+import json
 import dotenv
 from langchain.docstore.document import Document
-from langchain_text_splitters import (
-    RecursiveCharacterTextSplitter,
-    NLTKTextSplitter,
-    SpacyTextSplitter,
-)
-import json
 from langchain_community.embeddings import (
     SentenceTransformerEmbeddings,
     HuggingFaceEmbeddings,
 )
 import chromadb
 from chromadb.config import Settings
-from llm import ollama_client
+from dspy_engine import load_training_json
+from ingest import ingest_call
 # from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 from retrieval import create_retriever
@@ -23,10 +17,6 @@ import nltk
 import spacy
 
 dotenv.load_dotenv()
-
-_llm_model_name = os.environ.get("LLM_MODEL_NAME", "mistral")
-
-llm = ollama_client(_llm_model_name, settings={"temperature": 0.1})
 
 EMBEDDINGS = {
     "st_all-MiniLM-L6-v2": {
@@ -67,83 +57,6 @@ def compute_percent_retrieved(retrieved_cards, guru_cards):
 def count_extra_cards(retrieved_cards, guru_cards):
     extra_cards = set(retrieved_cards) - set(guru_cards)
     return len(extra_cards)
-
-
-# split text into chunks
-def get_text_chunks_langchain(
-    text, source, chunk_size, chunk_overlap, token_limit, text_splitter_choice
-):
-    if text_splitter_choice == "2":
-        text_splitter = NLTKTextSplitter()
-    elif text_splitter_choice == "3":
-        text_splitter = SpacyTextSplitter()
-    else:
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=chunk_size, chunk_overlap=chunk_overlap
-        )
-
-    texts = text_splitter.split_text(source + "\n\n" + text)
-    # print("  Split into", len(texts))
-    for t in texts:
-        token_count = llm.get_num_tokens(t)
-        overlap_and_token = token_count + chunk_overlap
-        if token_count > token_limit:
-            print(f"Exceeded token limit of {token_limit}: {token_count}; {t}")
-        elif chunk_size > (overlap_and_token):
-            print(
-                f"Exceeded token count and overlap {overlap_and_token}: {chunk_size}; {t}"
-            )
-
-    docs = [
-        Document(page_content=t, metadata={"source": source.strip()}) for t in texts
-    ]
-
-    return docs
-
-
-# Chunk the json data and load into vector db
-def add_json_html_data_to_vector_db(
-    vectordb,
-    file_path,
-    content_key,
-    index_key,
-    chunk_size,
-    chunk_overlap,
-    token_limit,
-    text_splitter_choice,
-):
-    data_file = open(file_path, encoding="utf-8")
-    json_data = json.load(data_file)
-    for content in json_data:
-        if not content[index_key].strip().endswith("?"):
-            continue
-        soup = BeautifulSoup(content[content_key], "html.parser")
-        text = soup.get_text(separator="\n", strip=True)
-        # print("Processing document:", content[index_key])
-        chunks = get_text_chunks_langchain(
-            text,
-            content[index_key],
-            chunk_size=chunk_size,
-            chunk_overlap=chunk_overlap,
-            token_limit=token_limit,
-            text_splitter_choice=text_splitter_choice,
-        )
-        vectordb.add_documents(documents=chunks)
-
-
-def ingest_call(vectordb, chunk_size, chunk_overlap, token_limit, text_splitter_choice):
-    # download from https://drive.google.com/drive/folders/1DkAQ03bBVIPoO1d8gcHVnilQ-9VXfhJ8?usp=drive_link
-    guru_file_path = "./guru_cards_for_nava.json"
-    add_json_html_data_to_vector_db(
-        vectordb=vectordb,
-        file_path=guru_file_path,
-        content_key="content",
-        index_key="preferredPhrase",
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-        token_limit=token_limit,
-        text_splitter_choice=text_splitter_choice,
-    )
 
 
 def evaluate_retrieval(vectordb):
@@ -209,6 +122,7 @@ def run_embedding_func_and_eval_retrieval(
         chunk_overlap=chunk_overlap,
         token_limit=embeddings["token_limit"],
         text_splitter_choice=text_splitter_choice,
+        silent=True,
     )
     recall_results = evaluate_retrieval(vectordb)
     persistent_client.reset()
