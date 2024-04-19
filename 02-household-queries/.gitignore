@@ -6,4 +6,7 @@ chroma_db/
 *cache/
 *.log
 
-evaluation_results_*.csv
+*.DS_STORE
+.python-version
+
+evaluation_results*.csv
