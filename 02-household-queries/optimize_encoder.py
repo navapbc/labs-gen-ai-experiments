@@ -136,7 +136,7 @@ def print_and_set_recall_stats(results):
         extra_card_count+=res["extra_cards"]
         recall += res["recall"]
     recall_results["result"] = results
-    recall_results["recall_percentage"] = recall/15
+    recall_results["recall_percentage"] = recall/len(results)
     recall_results["extra_card_count"] = extra_card_count
     return recall_results
 
