@@ -1,45 +1,16 @@
 import json
 import dotenv
 from langchain.docstore.document import Document
-from langchain_community.embeddings import (
-    SentenceTransformerEmbeddings,
-    HuggingFaceEmbeddings,
-)
 import chromadb
 from chromadb.config import Settings
 from dspy_engine import load_training_json
-from ingest import ingest_call
-# from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-
+from ingest import EMBEDDINGS, ingest_call
 from retrieval import create_retriever
 from langchain_community.vectorstores import Chroma
 import nltk
 import spacy
 
 dotenv.load_dotenv()
-
-EMBEDDINGS = {
-    "st_all-MiniLM-L6-v2": {
-        "func": SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"),
-        "token_limit": 256,
-    },
-    "hf_all-MiniLM-L6-v2": {
-        "func": HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2"),
-        "token_limit": 256,
-    },
-    #  "google_models/embedding-001": {"func": GoogleGenerativeAIEmbeddings(model="models/embedding-001"), "token_limit":2048},
-    #  "google_models/text-embedding-004": {"func": GoogleGenerativeAIEmbeddings(model="models/text-embedding-004"), "token_limit":768},
-    "BAAI/bge-small-en-v1.5": {
-        "func": SentenceTransformerEmbeddings(model_name="BAAI/bge-small-en-v1.5"),
-        "token_limit": 512,
-    },
-    "mixedbread-ai/mxbai-embed-large-v1": {
-        "func": SentenceTransformerEmbeddings(
-            model_name="mixedbread-ai/mxbai-embed-large-v1"
-        ),
-        "token_limit": 1024,
-    },
-}
 
 
 def load_training_json():
@@ -103,7 +74,7 @@ def print_and_set_recall_stats(results):
 
 
 def run_embedding_func_and_eval_retrieval(
-    embeddings, chunk_size, chunk_overlap, text_splitter_choice
+    embedding_name, embeddings, chunk_size, chunk_overlap, text_splitter_choice
 ):
     selected_embedding = embeddings["func"]
     persistent_client = chromadb.PersistentClient(
@@ -120,6 +91,7 @@ def run_embedding_func_and_eval_retrieval(
         vectordb=vectordb,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
+        embedding_name=embedding_name,
         token_limit=embeddings["token_limit"],
         text_splitter_choice=text_splitter_choice,
         silent=True,
@@ -156,6 +128,7 @@ overall_results = []
 for embedding in EMBEDDINGS:
     print("Embedding: " + embedding)
     results = run_embedding_func_and_eval_retrieval(
+        embedding,
         EMBEDDINGS[embedding],
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,

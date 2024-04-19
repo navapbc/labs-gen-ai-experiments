@@ -148,7 +148,11 @@ def get_answer(question, parameters):
         )
 
         ingest_call(
-            vector_db, silent=True, chunk_size=chunk_size, chunk_overlap=chunk_overlap
+            vector_db,
+            embedding_name="all-MiniLM-L6-v2",
+            silent=True,
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap,
         )
         vector_db_chunk_size = parameters["chunk_size"]
 

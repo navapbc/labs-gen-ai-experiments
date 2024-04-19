@@ -14,13 +14,20 @@ from langchain_community.embeddings import (
     SentenceTransformerEmbeddings,
     HuggingFaceEmbeddings,
 )
+# from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+
 from langchain_community.vectorstores import Chroma
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 import os
 
-from ingest import add_json_html_data_to_vector_db, add_pdf_to_vector_db, ingest_call
+from ingest import (
+    EMBEDDINGS,
+    add_json_html_data_to_vector_db,
+    add_pdf_to_vector_db,
+    ingest_call,
+)
 from llm import google_gemini_client, ollama_client  # , gpt4all_client
 from retrieval import retrieval_call
 
@@ -328,7 +335,9 @@ async def on_click_upload_default_files(action: cl.Action):
     msg = cl.Message(content="Processing files...", disable_feedback=True)
     await msg.send()
 
-    ingest_call(vectordb)
+    settings = cl.user_session.get("settings")
+    embeddings = settings["embedding"]
+    ingest_call(vectordb, embeddings)
     msg.content = "Processing default files done. You can now ask questions!"
     await msg.update()
 
@@ -348,11 +357,18 @@ async def on_click_upload_file_query(action: cl.Action):
         # initialize db
         await set_vector_db()
         vectordb = cl.user_session.get("vectordb")
+        settings = cl.user_session.get("settings")
+        embeddings = settings["embedding"]
+
         if file.type == "application/pdf":
-            add_pdf_to_vector_db(vectordb=vectordb, file_path=file.path)
+            add_pdf_to_vector_db(
+                vectordb=vectordb, file_path=file.path, embedding_name=embeddings
+            )
         elif file.type == "application/json":
             add_json_html_data_to_vector_db(
                 vectordb=vectordb,
+                embedding_name=embeddings,
+                token_limit=EMBEDDINGS[embeddings]["token_limit"],
                 file_path=file.path,
                 content_key="content",
                 index_key="preferredPhrase",
