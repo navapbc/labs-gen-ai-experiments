@@ -5,3 +5,4 @@ guru_cards_for_nava.json
 chroma_db/
 *cache/
 *.log
+compiled_module-*.json
