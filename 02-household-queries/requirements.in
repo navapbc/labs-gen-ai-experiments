@@ -17,6 +17,4 @@ pdfminer.six
 rapidocr-onnxruntime
 sentence-transformers
 nltk
-setuptools
-wheel
-spacy
+spacy==3.7.4
