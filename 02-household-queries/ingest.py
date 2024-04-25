@@ -76,14 +76,8 @@ def get_text_chunks_langchain(
         print("  Split into", len(texts))
     for t in texts:
         token_count = llm.get_num_tokens(t)
-        overlap_and_token = token_count + chunk_overlap
         if token_count > token_limit:
             print(f"Exceeded token limit of {token_limit}: {token_count};")
-        elif chunk_size > (overlap_and_token):
-            print(
-                f"Exceeded token count and overlap {overlap_and_token}: {chunk_size};"
-            )
-        entire_text = source + "\n\n" + text
 
     docs = [
         Document(
