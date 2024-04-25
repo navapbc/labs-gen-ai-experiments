@@ -81,7 +81,7 @@ async def init_chat():
             ),
             Select(
                 id="embedding",
-                label="Embeddings",
+                label="Embedding",
                 values=GOOGLE_EMBEDDINGS
                 + OPEN_SOURCE_EMBEDDINGS
                 + HUGGING_FACE_EMBEDDINGS,
@@ -175,7 +175,7 @@ async def update_settings(settings):
     print("Settings updated:", pprint.pformat(settings, indent=4))
     cl.user_session.set("settings", settings)
     await set_llm_model()
-    await set_embeddings()
+    await set_embedding()
     if settings["use_vector_db"]:
         await set_vector_db()
 
@@ -204,39 +204,39 @@ async def set_llm_model():
     await msg.send()
 
 
-async def set_embeddings():
+async def set_embedding():
     settings = cl.user_session.get("settings")
-    embeddings = settings["embedding"]
+    embedding = settings["embedding"]
     msg = cl.Message(
         author="backend",
-        content=f"Setting up embedding: `{embeddings}`...\n",
+        content=f"Setting up embedding: `{embedding}`...\n",
     )
-    embedding = None
-    if embeddings in GOOGLE_EMBEDDINGS:
+    embedding_function = None
+    if embedding in GOOGLE_EMBEDDINGS:
         GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
-        model_name = embeddings.split("::")[1]
-        embedding = GoogleGenerativeAIEmbeddings(
+        model_name = embedding.split("::")[1]
+        embedding_function = GoogleGenerativeAIEmbeddings(
             model=model_name, google_api_key=GOOGLE_API_KEY
         )
-    elif embeddings in OPEN_SOURCE_EMBEDDINGS:
-        embedding = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    elif embeddings in HUGGING_FACE_EMBEDDINGS:
-        model_name = embeddings.split("::")[1]
-        embeddings = HuggingFaceEmbeddings(model_name=model_name)
+    elif embedding in OPEN_SOURCE_EMBEDDINGS:
+        embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+    elif embedding in HUGGING_FACE_EMBEDDINGS:
+        model_name = embedding.split("::")[1]
+        embedding_function = HuggingFaceEmbeddings(model_name=model_name)
     else:
-        await cl.Message(content=f"Could not initialize embedding: {embeddings}").send()
+        await cl.Message(content=f"Could not initialize embedding: {embedding}").send()
         return
-    cl.user_session.set("embedding", embedding)
-    await msg.stream_token(f"Done setting up {embeddings} embedding")
+    cl.user_session.set("embedding", embedding_function)
+    await msg.stream_token(f"Done setting up {embedding} embedding")
     await msg.send()
 
 
 async def set_vector_db():
     await init_embedding_function_if_needed()
-    embeddings = cl.user_session.get("embedding")
+    embedding = cl.user_session.get("embedding")
     msg = cl.Message(
         author="backend",
-        content=f"Setting up Chroma DB with `{embeddings}`...\n",
+        content=f"Setting up Chroma DB with `{embedding}`...\n",
     )
     persistent_client = chromadb.PersistentClient(
         settings=Settings(allow_reset=True), path="./chroma_db"
@@ -246,7 +246,7 @@ async def set_vector_db():
         client=persistent_client,
         collection_name="resources",
         persist_directory="./chroma_db",
-        embedding_function=embeddings,
+        embedding_function=embedding,
     )
 
     cl.user_session.set("vectordb", vectordb)
@@ -263,7 +263,7 @@ async def init_llm_client_if_needed():
 async def init_embedding_function_if_needed():
     embedding = cl.user_session.get("embedding")
     if not embedding:
-        await set_embeddings()
+        await set_embedding()
 
 
 async def init_persistent_client_if_needed():
@@ -336,8 +336,8 @@ async def on_click_upload_default_files(action: cl.Action):
     await msg.send()
 
     settings = cl.user_session.get("settings")
-    embeddings = settings["embedding"]
-    ingest_call(vectordb, embeddings)
+    embedding = settings["embedding"]
+    ingest_call(vectordb, embedding)
     msg.content = "Processing default files done. You can now ask questions!"
     await msg.update()
 
@@ -358,17 +358,17 @@ async def on_click_upload_file_query(action: cl.Action):
         await set_vector_db()
         vectordb = cl.user_session.get("vectordb")
         settings = cl.user_session.get("settings")
-        embeddings = settings["embedding"]
+        embedding = settings["embedding"]
 
         if file.type == "application/pdf":
             add_pdf_to_vector_db(
-                vectordb=vectordb, file_path=file.path, embedding_name=embeddings
+                vectordb=vectordb, file_path=file.path, embedding_name=embedding
             )
         elif file.type == "application/json":
             add_json_html_data_to_vector_db(
                 vectordb=vectordb,
-                embedding_name=embeddings,
-                token_limit=EMBEDDINGS[embeddings]["token_limit"],
+                embedding_name=embedding,
+                token_limit=EMBEDDINGS[embedding]["token_limit"],
                 file_path=file.path,
                 content_key="content",
                 index_key="preferredPhrase",
