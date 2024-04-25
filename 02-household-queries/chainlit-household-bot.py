@@ -219,7 +219,9 @@ async def set_embedding():
             model=model_name, google_api_key=GOOGLE_API_KEY
         )
     elif embedding in OPEN_SOURCE_EMBEDDINGS:
-        embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+        embedding_function = SentenceTransformerEmbeddings(
+            model_name="all-MiniLM-L6-v2"
+        )
     elif embedding in HUGGING_FACE_EMBEDDINGS:
         model_name = embedding.split("::")[1]
         embedding_function = HuggingFaceEmbeddings(model_name=model_name)
