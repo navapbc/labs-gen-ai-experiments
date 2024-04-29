@@ -232,7 +232,8 @@ async def set_vector_db():
     cl.user_session.set("persistent_client", persistent_client)
     vectordb = Chroma(
         client=persistent_client,
-        collection_name="resources",
+        # Must use collection_name="langchain" -- https://github.com/langchain-ai/langchain/issues/10864#issuecomment-1730303411
+        collection_name="langchain",
         persist_directory="./chroma_db",
         embedding_function=embedding,
     )

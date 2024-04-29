@@ -71,7 +71,8 @@ else:
 # initialize chroma db
 vectordb = Chroma(
     embedding_function=embeddings,
-    collection_name="resources",
+    # Must use collection_name="langchain" -- https://github.com/langchain-ai/langchain/issues/10864#issuecomment-1730303411
+    collection_name="langchain",
     persist_directory="./chroma_db",
 )
 

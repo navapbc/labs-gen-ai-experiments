@@ -70,7 +70,8 @@ def run_embedding_func_and_eval_retrieval(embedding_name, embeddings, chunk_size
 
     vectordb = Chroma(
         client=persistent_client,
-        collection_name="resources",
+        # Must use collection_name="langchain" -- https://github.com/langchain-ai/langchain/issues/10864#issuecomment-1730303411
+        collection_name="langchain",
         persist_directory="./chroma_db",
         embedding_function=selected_embedding,
     )

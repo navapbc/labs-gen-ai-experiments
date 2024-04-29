@@ -136,7 +136,8 @@ def get_answer(question, parameters):
         # Rebuild whatever this is to avoid chromadb.errors.InvalidCollectionException
         vector_db = Chroma(
             client=vector_db_client,
-            collection_name="resources",
+            # Must use collection_name="langchain" -- https://github.com/langchain-ai/langchain/issues/10864#issuecomment-1730303411
+            collection_name="langchain",
             persist_directory="./chroma_db",
             embedding_function=SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"),
         )
