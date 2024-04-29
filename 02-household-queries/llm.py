@@ -10,9 +10,7 @@ import os
 dotenv.load_dotenv()
 
 
-def ollama_client(
-    model_name=None, callbacks=None, settings=None, print_to_stdout=False
-):
+def ollama_client(model_name=None, callbacks=None, settings=None, print_to_stdout=False):
     if not callbacks:
         callbacks = []
     if print_to_stdout:
@@ -55,14 +53,10 @@ def gpt4all_client(
 
     print("LLM settings:", settings)
 
-    return GPT4All(
-        model=model_path, max_tokens=1000, verbose=True, repeat_last_n=0, **settings
-    )
+    return GPT4All(model=model_path, max_tokens=1000, verbose=True, repeat_last_n=0, **settings)
 
 
-def google_gemini_client(
-    model_name="gemini-pro", callbacks=None, settings=None, print_to_stdout=False
-):
+def google_gemini_client(model_name="gemini-pro", callbacks=None, settings=None, print_to_stdout=False):
     # Get a Google API key by following the steps after clicking on Get an API key button
     # at https://ai.google.dev/tutorials/setup
     GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")

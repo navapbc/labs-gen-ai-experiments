@@ -78,9 +78,7 @@ def gpt3_5(prompt, model="gpt-3.5-turbo"):
     if not openai_client:
         openai_client = OpenAI()  # Uses OPENAI_API_KEY
     return (
-        openai_client.chat.completions.create(
-            model=model, messages=[{"role": "user", "content": prompt}]
-        )
+        openai_client.chat.completions.create(model=model, messages=[{"role": "user", "content": prompt}])
         .choices[0]
         .message.content
     )
@@ -118,9 +116,7 @@ parameter_permutations = list(itertools.product(*values))
 
 # We'll call this function for each question in the Q&A set,
 # so we don't want to re-ingest all the data for each question
-vector_db_client = chromadb.PersistentClient(
-    settings=Settings(allow_reset=True), path="./chroma_db"
-)
+vector_db_client = chromadb.PersistentClient(settings=Settings(allow_reset=True), path="./chroma_db")
 vector_db = None
 vector_db_chunk_size = None
 
@@ -142,9 +138,7 @@ def get_answer(question, parameters):
             client=vector_db_client,
             collection_name="resources",
             persist_directory="./chroma_db",
-            embedding_function=SentenceTransformerEmbeddings(
-                model_name="all-MiniLM-L6-v2"
-            ),
+            embedding_function=SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"),
         )
 
         ingest_call(
@@ -156,20 +150,14 @@ def get_answer(question, parameters):
         )
         vector_db_chunk_size = parameters["chunk_size"]
 
-    context_search = (
-        hyde(parameters["model"], question) if parameters["hyde"] else question
-    )
+    context_search = hyde(parameters["model"], question) if parameters["hyde"] else question
 
     docs = vector_db.similarity_search(context_search, k=parameters["k"])
     unique_cards = set(doc.metadata["entire_card"] for doc in docs)
-    reranked_cards = (
-        rerank(question, unique_cards) if parameters["reranking"] else unique_cards
-    )
+    reranked_cards = rerank(question, unique_cards) if parameters["reranking"] else unique_cards
     context = "\n".join(reranked_cards)
 
-    return parameters["model"](
-        PROMPT_WITH_CONTEXT.format(question_text=question, context=context)
-    )
+    return parameters["model"](PROMPT_WITH_CONTEXT.format(question_text=question, context=context))
 
 
 cohere_client = None
@@ -204,9 +192,7 @@ def evaluate(eval_llm_client, questions, parameters):
         result = {
             "question_id": question["id"],
             "question_text": question["question"],
-            "correct_answer": question[
-                "orig_answer" if "short_answer" not in question else "answer"
-            ],
+            "correct_answer": question["orig_answer" if "short_answer" not in question else "answer"],
             "ai_generated_answer": get_answer(question["question"], parameters),
         }
         result["evaluation"] = eval_llm_client(EVAL_PROMPT.format(**result))
@@ -237,9 +223,7 @@ with open(f"evaluation_results_{evaluation_timestamp}.csv", "w") as file:
     writer = csv.DictWriter(file, fieldnames=result_keys)
     writer.writeheader()
 
-    for i, parameter_values in enumerate(
-        tqdm(parameter_permutations, desc="Evaluating parameter combinations")
-    ):
+    for i, parameter_values in enumerate(tqdm(parameter_permutations, desc="Evaluating parameter combinations")):
         param_dict = dict(zip(parameter_names, parameter_values))
         results = evaluate(eval_llm_client, questions, param_dict)
         writer.writerows(results)

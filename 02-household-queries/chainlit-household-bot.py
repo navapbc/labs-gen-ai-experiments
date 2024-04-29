@@ -82,9 +82,7 @@ async def init_chat():
             Select(
                 id="embedding",
                 label="Embedding",
-                values=GOOGLE_EMBEDDINGS
-                + OPEN_SOURCE_EMBEDDINGS
-                + HUGGING_FACE_EMBEDDINGS,
+                values=GOOGLE_EMBEDDINGS + OPEN_SOURCE_EMBEDDINGS + HUGGING_FACE_EMBEDDINGS,
                 initial_index=0,
             ),
             Switch(
@@ -150,24 +148,18 @@ async def on_click_chooseBetter(action: cl.Action):
     await cl.Message(
         content=contentA,
         disable_feedback=True,
-        actions=[
-            cl.Action(name="choose_response", value="optionA", label="This is better")
-        ],
+        actions=[cl.Action(name="choose_response", value="optionA", label="This is better")],
     ).send()
     await cl.Message(
         content="Hello, this is a text B.",
         disable_feedback=True,
-        actions=[
-            cl.Action(name="choose_response", value="optionB", label="This is better")
-        ],
+        actions=[cl.Action(name="choose_response", value="optionB", label="This is better")],
     ).send()
 
 
 @cl.action_callback("choose_response")
 async def on_choose_response(action: cl.Action):
-    await cl.Message(
-        content=f"User chose: {action.value}", disable_feedback=True
-    ).send()
+    await cl.Message(content=f"User chose: {action.value}", disable_feedback=True).send()
 
 
 @cl.on_settings_update
@@ -215,13 +207,9 @@ async def set_embedding():
     if embedding in GOOGLE_EMBEDDINGS:
         GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
         model_name = embedding.split("::")[1]
-        embedding_function = GoogleGenerativeAIEmbeddings(
-            model=model_name, google_api_key=GOOGLE_API_KEY
-        )
+        embedding_function = GoogleGenerativeAIEmbeddings(model=model_name, google_api_key=GOOGLE_API_KEY)
     elif embedding in OPEN_SOURCE_EMBEDDINGS:
-        embedding_function = SentenceTransformerEmbeddings(
-            model_name="all-MiniLM-L6-v2"
-        )
+        embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
     elif embedding in HUGGING_FACE_EMBEDDINGS:
         model_name = embedding.split("::")[1]
         embedding_function = HuggingFaceEmbeddings(model_name=model_name)
@@ -240,9 +228,7 @@ async def set_vector_db():
         author="backend",
         content=f"Setting up Chroma DB with `{embedding}`...\n",
     )
-    persistent_client = chromadb.PersistentClient(
-        settings=Settings(allow_reset=True), path="./chroma_db"
-    )
+    persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True), path="./chroma_db")
     cl.user_session.set("persistent_client", persistent_client)
     vectordb = Chroma(
         client=persistent_client,
@@ -301,9 +287,7 @@ async def message_submitted(message: cl.Message):
             await retrieval_function(vectordb=vectordb, llm=client)
             response = retrieval_call(client, vectordb, message.content)
             source_list = [doc.metadata for doc in response["source_documents"]]
-            sources = ", ".join(
-                [sources_item["source"] for sources_item in source_list]
-            )
+            sources = ", ".join([sources_item["source"] for sources_item in source_list])
             answer = f"Result:\n{response['result']} \nSources: \n" + sources
             await cl.Message(content=answer).send()
         else:
@@ -363,9 +347,7 @@ async def on_click_upload_file_query(action: cl.Action):
         embedding = settings["embedding"]
 
         if file.type == "application/pdf":
-            add_pdf_to_vector_db(
-                vectordb=vectordb, file_path=file.path, embedding_name=embedding
-            )
+            add_pdf_to_vector_db(vectordb=vectordb, file_path=file.path, embedding_name=embedding)
         elif file.type == "application/json":
             add_json_html_data_to_vector_db(
                 vectordb=vectordb,

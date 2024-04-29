@@ -64,13 +64,9 @@ def print_and_set_recall_stats(results):
     return recall_results
 
 
-def run_embedding_func_and_eval_retrieval(
-    embedding_name, embeddings, chunk_size, chunk_overlap, text_splitter_choice
-):
+def run_embedding_func_and_eval_retrieval(embedding_name, embeddings, chunk_size, chunk_overlap, text_splitter_choice):
     selected_embedding = embeddings["func"]
-    persistent_client = chromadb.PersistentClient(
-        settings=Settings(allow_reset=True), path="./chroma_db"
-    )
+    persistent_client = chromadb.PersistentClient(settings=Settings(allow_reset=True), path="./chroma_db")
 
     vectordb = Chroma(
         client=persistent_client,

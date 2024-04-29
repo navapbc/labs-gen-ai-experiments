@@ -48,26 +48,20 @@ EMBEDDINGS = {
         "token_limit": 512,
     },
     "mixedbread-ai/mxbai-embed-large-v1": {
-        "func": SentenceTransformerEmbeddings(
-            model_name="mixedbread-ai/mxbai-embed-large-v1"
-        ),
+        "func": SentenceTransformerEmbeddings(model_name="mixedbread-ai/mxbai-embed-large-v1"),
         "token_limit": 1024,
     },
 }
 
 
 # split text into chunks
-def get_text_chunks_langchain(
-    text, source, chunk_size, chunk_overlap, token_limit, text_splitter_choice, silent
-):
+def get_text_chunks_langchain(text, source, chunk_size, chunk_overlap, token_limit, text_splitter_choice, silent):
     if text_splitter_choice == "2":
         text_splitter = NLTKTextSplitter()
     elif text_splitter_choice == "3":
         text_splitter = SpacyTextSplitter()
     else:
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=chunk_size, chunk_overlap=chunk_overlap
-        )
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
 
     entire_text = source + "\n\n" + text
     texts = text_splitter.split_text(entire_text)
@@ -91,16 +85,12 @@ def get_text_chunks_langchain(
 
 
 # Chunk the pdf and load into vector db
-def add_pdf_to_vector_db(
-    vectordb, file_path, embedding_name=None, chunk_size=500, chunk_overlap=100
-):
+def add_pdf_to_vector_db(vectordb, file_path, embedding_name=None, chunk_size=500, chunk_overlap=100):
     if embedding_name:
         check_embedding(chunk_size, EMBEDDINGS.get(embedding_name, ""))
     # PDFMinerLoader only gives metadata when extract_images=True due to default using lazy_loader
     loader = PDFMinerLoader(file_path, extract_images=True)
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size, chunk_overlap=chunk_overlap
-    )
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     pdf_pages = loader.load_and_split(text_splitter)
     print("Loading PDF chunks into vector db")
     vectordb.add_documents(documents=pdf_pages)
@@ -170,6 +160,4 @@ def ingest_call(
 def check_embedding(chunk_size, embedding):
     token_limit = embedding.get("token_limit", 0)
     if token_limit != 0 and chunk_size > token_limit:
-        print(
-            f"You've defined the chunk size as {chunk_size}, the token limit for this embedding is {token_limit}"
-        )
+        print(f"You've defined the chunk size as {chunk_size}, the token limit for this embedding is {token_limit}")

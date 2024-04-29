@@ -24,9 +24,7 @@ class BasicQA(dspy.Signature):
     """Answer questions with short answers."""
 
     question = dspy.InputField()
-    answer = dspy.OutputField(
-        desc="Respond with only one of these words: Yes, No, Maybe"
-    )
+    answer = dspy.OutputField(desc="Respond with only one of these words: Yes, No, Maybe")
 
 
 def run_basic_predictor(query):
@@ -71,9 +69,7 @@ Provide a direct response with either \"Yes\", \"No\", or \"Maybe\" based on the
 Focus on clarity and decisiveness, being concise in conveying your evaluation while catering to the specifics of the question.
 """
 
-    context = dspy.InputField(
-        desc="may contain relevant facts used to answer the question"
-    )
+    context = dspy.InputField(desc="may contain relevant facts used to answer the question")
     question = dspy.InputField()
     answer = dspy.OutputField(
         desc="Start with one of these words: Yes, No, Maybe",
@@ -210,9 +206,7 @@ def main_train(qa_pairs):
     print("Using retrieve_k =", retrieve_k)
     module: dspy.Module = RAG(retrieve_k)
 
-    filename = input(
-        "Specify compiled_module file to load optimized module or press Enter to start from scratch: "
-    )
+    filename = input("Specify compiled_module file to load optimized module or press Enter to start from scratch: ")
     if filename:
         module.load(filename)
         compiled_module = module
@@ -243,15 +237,11 @@ def main_train(qa_pairs):
     """)
     if not llm_choice:
         llm_choice = "openhermes"
-    dspy.settings.configure(
-        lm=create_llm_model(llm_choice), rm=create_retriever_model()
-    )
+    dspy.settings.configure(lm=create_llm_model(llm_choice), rm=create_retriever_model())
 
     if not filename:
         file_suffix = f"optimizer{optimizer_choice}_{retrieve_k}_{llm_choice}_{time.strftime('%Y-%m-%d-%H%M%S')}"
-        compiled_module = optimize_module(
-            optimizer, module, training, eval_kwargs, file_suffix
-        )
+        compiled_module = optimize_module(optimizer, module, training, eval_kwargs, file_suffix)
     print_optimization(compiled_module)
 
     evaluate_module(compiled_module, eval_metric, training)
@@ -345,9 +335,7 @@ def optimize_module(optimizer, module, training, eval_kwargs, file_suffix):
     print("----- optimizing ------------------")
     if eval_kwargs:
         # COPRO requires eval_kwargs whereas other optimizers don't
-        compiled_module = optimizer.compile(
-            module, trainset=training, eval_kwargs=eval_kwargs
-        )
+        compiled_module = optimizer.compile(module, trainset=training, eval_kwargs=eval_kwargs)
     else:
         compiled_module = optimizer.compile(module, trainset=training)
     compiled_module.save(f"compiled_module-{file_suffix}.json")

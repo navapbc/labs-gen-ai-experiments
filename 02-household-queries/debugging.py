@@ -65,9 +65,7 @@ class CaptureLlmPromptHandler(BaseCallbackHandler):
     def __init__(self, printToStdOut=True):
         self.toStdout = printToStdOut
 
-    async def on_llm_start(
-        self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
-    ) -> Any:
+    async def on_llm_start(self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any) -> Any:
         formatted_prompts = "\n".join(prompts).replace("```", "``")
         if self.toStdout:
             print(f"\nPROMPT:\n{formatted_prompts}")
