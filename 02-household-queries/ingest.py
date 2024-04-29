@@ -21,9 +21,9 @@ from llm import ollama_client
 
 dotenv.load_dotenv()
 
-_llm_model_name = os.environ.get("LLM_MODEL_NAME", "mistral")
+# _llm_model_name = os.environ.get("LLM_MODEL_NAME", "mistral")
 
-llm = ollama_client(_llm_model_name, settings={"temperature": 0.1})
+# llm = ollama_client(_llm_model_name, settings={"temperature": 0.1})
 
 
 EMBEDDINGS = {
