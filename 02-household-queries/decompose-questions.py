@@ -3,20 +3,22 @@
 ##
 # Use specified LLM to decompose a set of user questions into
 # derived/decomposed questions, which will be used to retrieve Guru cards.
-# Evaluate the retrieval performance.
+# Also evaluates the Guru card retrieval performance.
 
-# import time
 import os
 import json
 import csv
+import sys
+import traceback
+import dotenv
 
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
 
 import dspy
-import dspy_engine
 
-# from retrieval import create_retriever
+# print("Loading our libraries...")
+import dspy_engine
 import ingest
 import debugging
 
@@ -71,8 +73,6 @@ def cache_derived_questions(llm_model, predictor):
             add_transformation(indexed_qs, qa_dict["id"], question, llm_model, derived_questions)
         except Exception as e:
             print("  => Error:", e)
-            import traceback
-
             traceback.print_exc()
             # dspy_engine.print_last_llm_history()
             break
@@ -89,10 +89,6 @@ def create_predictor(llm_choice):
         lm=dspy_engine.create_llm_model(llm_choice)  # , rm=create_retriever_model()
     )
     print("LLM model created", dspy.settings.lm)
-
-    system_prompt = 'Decompose into multiple questions so that we can search for relevant SNAP and food assistance eligibility rules. Be concise -- only respond with JSON. Only output the questions as a JSON list: ["question1", "question2", ...]'
-
-    transform_prompt = system_prompt + "The question is: {question}"
 
     class DecomposeQuestion(dspy.Signature):
         """Decompose into multiple questions so that we can search for relevant SNAP and food assistance eligibility rules. \
@@ -137,7 +133,6 @@ def eval_retrieval(llm_model, qa, derived_qs, vectordb, retrieve_k=5):
     for qa_dict in qa:
         question = qa_dict["orig_question"]
         guru_cards = qa_dict.get("guru_cards", [])
-        # debugging.debug_here(locals())
         if not narrowed_qs[question]:
             print(f"Derived questions not found -- Skipping {question}")
             continue
@@ -188,7 +183,7 @@ def eval_retrieval(llm_model, qa, derived_qs, vectordb, retrieve_k=5):
     return eval_results
 
 
-def main0():
+def main0_ingest_guru_cards():
     def ingest_call(
         vectordb,
         embedding_name=None,
@@ -217,11 +212,33 @@ def main0():
     ingest_call(vectordb=vectordb)
 
 
-def main1():
-    llm_model = _llm_model_name
+def main1_decompose_user_questions():
+    llm_model = os.environ.get("LLM_MODEL_NAME", "openhermes")
+    print(f"LLM_MODEL_NAME: {llm_model}")
     predictor = create_predictor(llm_model)
     print("Predictor created", predictor)
     cache_derived_questions(llm_model, predictor)
+
+
+def main2_evaluate_retrieval():
+    derived_qs = load_derived_questions_cache()
+    list_models(derived_qs)
+    vectordb = create_vectordb()
+    qa = load_user_questions()
+
+    llm_model = os.environ.get("LLM_MODEL_NAME", "openhermes")
+    print(f"LLM_MODEL_NAME: {llm_model}")
+    retrieve_k = int(os.environ.get("RETRIEVE_K", "4"))
+    print("RETRIEVE_K:", retrieve_k)
+    eval_results = eval_retrieval(llm_model, qa, derived_qs, vectordb, retrieve_k)
+
+    with open(f"qt-retrieval-eval_results-{llm_model}-k_{retrieve_k}.json", "w", encoding="utf-8") as f:
+        json.dump(eval_results, f, indent=4)
+
+    save_summary_csv(f"qt-retrieval-eval_results-{llm_model}-k_{retrieve_k}.csv", eval_results)
+    print("\nResult summary: (id, recall, extra_cards, retrieved_cards_count)")
+    for r in eval_results:
+        print(r["id"], r["recall"], r["extra_cards"], len(r["all_retrieved_cards"]))
 
 
 def save_summary_csv(filename, eval_results):
@@ -236,30 +253,34 @@ def save_summary_csv(filename, eval_results):
             writer.writerow(r)
 
 
-def main2():
-    llm_model = _llm_model_name
-    derived_qs = load_derived_questions_cache()
-
-    vectordb = create_vectordb()
-    # retriever = create_retriever(vectordb)
-
-    qa = load_user_questions()
-
-    retrieve_k = int(os.environ.get("RETRIEVE_K", "4"))
-    eval_results = eval_retrieval(llm_model, qa, derived_qs, vectordb, retrieve_k)
-
-    # timestamp_str = time.strftime('%Y-%m-%d-%H%M%S')
-    with open(f"qt-retrieval-eval_results-{llm_model}-k_{retrieve_k}.json", "w", encoding="utf-8") as f:
-        json.dump(eval_results, f, indent=4)
-
-    save_summary_csv(f"qt-retrieval-eval_results-{llm_model}-k_{retrieve_k}.csv", eval_results)
-    print("\nResult summary:")
-    for r in eval_results:
-        print(r["id"], r["recall"], r["extra_cards"], len(r["all_retrieved_cards"]))
+def list_models(derived_qs):
+    models = set()
+    for item in derived_qs:
+        models.update(item["transformations"].keys())
+    cached_models = sorted(models)
+    print("Available LLM models in derived questions cache:", " ".join(f"'{m}'" for m in cached_models))
+    return cached_models
 
 
-print("Running...")
-_llm_model_name = os.environ.get("LLM_MODEL_NAME", "openhermes")
-main2()
+if __name__ == "__main__":
+    print("""
+    0. ingest Guru cards into vector DB
+    1. cache decomposed/derived questions
+    2. evaluate Guru card retrieval""")
+    dotenv.load_dotenv()
+    if args := sys.argv[1:]:
+        choice = args[0]
+        print("Running option:", choice)
+    else:
+        print("What would you like to do?")
+        choice = input()
 
-# RETRIEVE_K=4 for LLM_MODEL_NAME in mistral:instruct gpt-3.5-turbo gemini-1.0-pro llama3-70b-8192; do echo $LLM_MODEL_NAME; ./decompose-questions.py > "qt-retrieval-eval-$LLM_MODEL_NAME-k_$RETRIEVE_K.log"; echo .; done
+    if choice in ["0", "ingest"]:
+        main0_ingest_guru_cards()
+    elif choice in ["1", "decompose"]:
+        main1_decompose_user_questions()
+    elif choice in ["2", "evaluate"]:
+        main2_evaluate_retrieval()
+
+# Copy and paste to evaluate several models on the command line:
+# RETRIEVE_K=4 for LLM_MODEL_NAME in mistral:instruct ...; do ./decompose-questions.py evaluate > "qt-retrieval-eval-$LLM_MODEL_NAME-k_$RETRIEVE_K.log"; echo .; done

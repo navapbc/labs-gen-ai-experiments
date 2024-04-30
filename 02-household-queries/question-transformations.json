@@ -82,7 +82,7 @@
     "q_id": 3,
     "question": "The client rents a room in a house. He said he wants to apply on his own, but then he admitted he shares a kitchen with his roommates and they often cook and eat together. Do the roommates need to be included?",
     "transformations": {
-      "OpenAI/gpt-3.5-turbo": [
+      "_manual-OpenAI/gpt-3.5-turbo": [
         "Is shared kitchen use with roommates a factor in determining SNAP eligibility for an individual renting a room in a house?",
         "Are individuals who share a kitchen with the applicant considered part of the household for SNAP eligibility purposes?",
         "Does the frequency of cooking and eating together impact SNAP eligibility?",
@@ -90,11 +90,11 @@
         "Are there any specific criteria or guidelines for determining SNAP eligibility when multiple individuals share a kitchen but have separate living arrangements within the same house?",
         "How does SNAP eligibility treat situations where roommates contribute to shared expenses such as groceries or utilities?"
       ],
-      "Google/gemini": [
+      "_manual-Google/gemini": [
         "Does a person who rents a room in a house qualify as a separate SNAP household?",
         "If a SNAP applicant shares a kitchen with roommates and occasionally cooks and eats meals together, does this require including the roommates in the SNAP application?"
       ],
-      "Anthopic/claude": [
+      "_manual-Anthopic/claude": [
         "Do individuals who rent a room in a house and share a kitchen with roommates typically qualify as a separate household for SNAP purposes?",
         "Does cooking and eating together with roommates affect an individual's eligibility to apply for SNAP benefits separately?",
         "Under what circumstances are roommates required to be included in a single SNAP household?",

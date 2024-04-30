@@ -1,7 +1,9 @@
-from bs4 import BeautifulSoup
 import os
-import dotenv
 import json
+import dotenv
+
+from bs4 import BeautifulSoup
+
 from langchain_community.document_loaders import PDFMinerLoader
 from langchain.docstore.document import Document
 from langchain_text_splitters import (
@@ -18,40 +20,51 @@ from langchain_community.embeddings import (
 
 from llm import ollama_client
 
-
-dotenv.load_dotenv()
-
-# _llm_model_name = os.environ.get("LLM_MODEL_NAME", "mistral")
-
-# llm = ollama_client(_llm_model_name, settings={"temperature": 0.1})
+_llm = None
 
 
-EMBEDDINGS = {
-    "all-MiniLM-L6-v2": {
-        "func": SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"),
-        "token_limit": 256,
-    },
-    "HuggingFace::all-MiniLM-L6-v2": {
-        "func": HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2"),
-        "token_limit": 256,
-    },
-    # "Google::models/embedding-001": {
-    #     "func": GoogleGenerativeAIEmbeddings(model="models/embedding-001"),
-    #     "token_limit": 2048,
-    # },
-    # "google_models/text-embedding-004": {
-    #     "func": GoogleGenerativeAIEmbeddings(model="models/text-embedding-004"),
-    #     "token_limit": 768,
-    # },
-    "BAAI/bge-small-en-v1.5": {
-        "func": SentenceTransformerEmbeddings(model_name="BAAI/bge-small-en-v1.5"),
-        "token_limit": 512,
-    },
-    "mixedbread-ai/mxbai-embed-large-v1": {
-        "func": SentenceTransformerEmbeddings(model_name="mixedbread-ai/mxbai-embed-large-v1"),
-        "token_limit": 1024,
-    },
-}
+def get_llm():
+    global _llm
+    if not _llm:
+        dotenv.load_dotenv()
+        _llm_model_name = os.environ.get("LLM_MODEL_NAME", "mistral")
+        _llm = ollama_client(_llm_model_name, settings={"temperature": 0.1})
+    return _llm
+
+
+_embeddings = None
+
+
+def get_embeddings():
+    global _embeddings
+    if not _embeddings:
+        _embeddings = {
+            "all-MiniLM-L6-v2": {
+                "func": SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"),
+                "token_limit": 256,
+            },
+            "HuggingFace::all-MiniLM-L6-v2": {
+                "func": HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2"),
+                "token_limit": 256,
+            },
+            # "Google::models/embedding-001": {
+            #     "func": GoogleGenerativeAIEmbeddings(model="models/embedding-001"),
+            #     "token_limit": 2048,
+            # },
+            # "google_models/text-embedding-004": {
+            #     "func": GoogleGenerativeAIEmbeddings(model="models/text-embedding-004"),
+            #     "token_limit": 768,
+            # },
+            "BAAI/bge-small-en-v1.5": {
+                "func": SentenceTransformerEmbeddings(model_name="BAAI/bge-small-en-v1.5"),
+                "token_limit": 512,
+            },
+            "mixedbread-ai/mxbai-embed-large-v1": {
+                "func": SentenceTransformerEmbeddings(model_name="mixedbread-ai/mxbai-embed-large-v1"),
+                "token_limit": 1024,
+            },
+        }
+    return _embeddings
 
 
 # split text into chunks
@@ -69,7 +82,7 @@ def get_text_chunks_langchain(text, source, chunk_size, chunk_overlap, token_lim
     if not silent:
         print("  Split into", len(texts))
     for t in texts:
-        token_count = llm.get_num_tokens(t)
+        token_count = get_llm().get_num_tokens(t)
         if token_count > token_limit:
             print(f"Exceeded token limit of {token_limit}: {token_count};")
 
@@ -87,7 +100,7 @@ def get_text_chunks_langchain(text, source, chunk_size, chunk_overlap, token_lim
 # Chunk the pdf and load into vector db
 def add_pdf_to_vector_db(vectordb, file_path, embedding_name=None, chunk_size=500, chunk_overlap=100):
     if embedding_name:
-        check_embedding(chunk_size, EMBEDDINGS.get(embedding_name, ""))
+        check_embedding(chunk_size, get_embeddings().get(embedding_name, ""))
     # PDFMinerLoader only gives metadata when extract_images=True due to default using lazy_loader
     loader = PDFMinerLoader(file_path, extract_images=True)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -112,7 +125,7 @@ def add_json_html_data_to_vector_db(
     data_file = open(file_path, encoding="utf-8")
     json_data = json.load(data_file)
     if embedding_name:
-        check_embedding(chunk_size, EMBEDDINGS.get(embedding_name, ""))
+        check_embedding(chunk_size, get_embeddings().get(embedding_name, ""))
     for content in json_data:
         if not content[index_key].strip().endswith("?"):
             continue

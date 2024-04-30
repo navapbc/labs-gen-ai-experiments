@@ -17,9 +17,6 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 import debugging
 
 
-dotenv.load_dotenv()
-
-
 class BasicQA(dspy.Signature):
     """Answer questions with short answers."""
 
@@ -83,13 +80,12 @@ class RAG(dspy.Module):
     def __init__(self, num_passages):
         super().__init__()
         self.retrieve = dspy.Retrieve(k=num_passages)
-        signature = GenerateAnswer
         self.generate_answer = dspy.ChainOfThought(
-            signature,
-            rationale_type=dspy.OutputField(
-                prefix="Reasoning: Let's think step by step in order to",
-                desc="${produce the " + "answer" + "}. We ...",
-            ),
+            GenerateAnswer,
+            # rationale_type=dspy.OutputField(
+            #     prefix="Reasoning: Let's think step by step in order to",
+            #     desc="${produce the " + "answer" + "}. We ...",
+            # ),
         )
 
     def forward(self, question):
@@ -409,6 +405,7 @@ def examples_from(qa):
 
 
 if __name__ == "__main__":
+    dotenv.load_dotenv()
     examples_qa = examples_from(load_training_json())
 
     # main_baseline(examples_qa[0].question)
