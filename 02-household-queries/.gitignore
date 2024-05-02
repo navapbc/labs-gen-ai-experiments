@@ -5,9 +5,9 @@ guru_cards_for_nava.json
 chroma_db/
 *cache/
 *.log
+log/
 compiled_module-*.json
 
 *.DS_STORE
 .python-version
 
-evaluation_results*.csv

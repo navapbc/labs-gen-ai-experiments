@@ -1,0 +1,549 @@
+[
+  {
+    "q_id": 1,
+    "question": "The client has her 19 year old grandchild living with her. She says she does her own thing and they don't really share food. Does the grandchild need to be included?",
+    "transformations": {
+      "openhermes": [
+        "Does the grandchild live with you?",
+        "Is the grandchild financially dependent on you?",
+        "Do you provide regular support for the grandchild?"
+      ],
+      "mistral:instruct": [
+        "Does the grandchild live in the household?",
+        "If yes, do they share food with other household members?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "Does the grandchild need to be included in the client's SNAP and food assistance eligibility?"
+      ],
+      "gpt-3.5-turbo": [
+        "Is a 19 year old grandchild considered a member of the household for SNAP eligibility purposes?"
+      ],
+      "llama3-70b-8192": [
+        "Is a 19-year-old grandchild considered a household member for SNAP eligibility?",
+        "Does a grandchild living with a client need to be included in the SNAP application if they do their own thing and don't share food?",
+        "How does SNAP define 'household' for eligibility purposes?",
+        "Can a grandchild be excluded from a SNAP application if they are financially independent?"
+      ],
+      "gemini-1.0-pro": [
+        "Does the grandchild meet the definition of a household member?",
+        "Does the grandchild meet the definition of a dependent?"
+      ],
+      "gpt-4-turbo": [
+        "What are the household composition rules for SNAP eligibility?",
+        "Does a grandchild living with a grandparent need to be included in the SNAP household if they do not share meals?",
+        "How does SNAP define a household for food assistance purposes?"
+      ],
+      "mixtral-8x7b-32768": [
+        "What is the relationship between the client and the 19 year old grandchild?",
+        "Do the client and the grandchild share food and meals together?",
+        "Is the grandchild financially contributing to the household?"
+      ]
+    }
+  },
+  {
+    "q_id": 2,
+    "question": "The client's son is 20 and is still living with them, but has his own job and buys his own food. The client doesn't want to list him on the application, do they have to? If so, do we need to include the son's income?",
+    "transformations": {
+      "openhermes": [
+        "Do clients have to list their adult children living with them if they have jobs and buy their own food?",
+        "If they do have to list them, do we need to include the adult child's income?"
+      ],
+      "mistral:instruct": [
+        "Does the client need to include their adult son (age 20) who has a job and buys his own food on the SNAP application?",
+        "If yes, do we need to report the son's income?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "Does the client's son need to be listed on the application?",
+        "Do we need to include the son's income on the application?"
+      ],
+      "gpt-3.5-turbo": [
+        "Does the client need to include their 20-year-old son on the SNAP application?",
+        "If the client includes their son on the application, do they need to report the son's income for SNAP eligibility?"
+      ],
+      "llama3-70b-8192": [
+        "Is a 20-year-old son who buys his own food and has a job considered a household member for SNAP eligibility?",
+        "Does the income of a 20-year-old son who buys his own food and has a job need to be included in the SNAP application?"
+      ],
+      "gemini-1.0-pro": [
+        "Does the client have to list their son on the application?",
+        "Do we need to include the son's income?"
+      ],
+      "gpt-4-turbo": [
+        "Do household members need to be listed on SNAP applications even if they buy and prepare their own food?",
+        "Does the income of a household member who buys and prepares their own food need to be included in the SNAP application?"
+      ],
+      "mixtral-8x7b-32768": [
+        "Does the SNAP program require the inclusion of all household members on the application?",
+        "How is income counted towards SNAP benefits for household members who purchase and prepare their own food separately?"
+      ]
+    }
+  },
+  {
+    "q_id": 3,
+    "question": "The client rents a room in a house. He said he wants to apply on his own, but then he admitted he shares a kitchen with his roommates and they often cook and eat together. Do the roommates need to be included?",
+    "transformations": {
+      "_manual-OpenAI/gpt-3.5-turbo": [
+        "Is shared kitchen use with roommates a factor in determining SNAP eligibility for an individual renting a room in a house?",
+        "Are individuals who share a kitchen with the applicant considered part of the household for SNAP eligibility purposes?",
+        "Does the frequency of cooking and eating together impact SNAP eligibility?",
+        "Does the rental arrangement (renting a room in a house) affect SNAP eligibility differently compared to renting an entire apartment or house?",
+        "Are there any specific criteria or guidelines for determining SNAP eligibility when multiple individuals share a kitchen but have separate living arrangements within the same house?",
+        "How does SNAP eligibility treat situations where roommates contribute to shared expenses such as groceries or utilities?"
+      ],
+      "_manual-Google/gemini": [
+        "Does a person who rents a room in a house qualify as a separate SNAP household?",
+        "If a SNAP applicant shares a kitchen with roommates and occasionally cooks and eats meals together, does this require including the roommates in the SNAP application?"
+      ],
+      "_manual-Anthopic/claude": [
+        "Do individuals who rent a room in a house and share a kitchen with roommates typically qualify as a separate household for SNAP purposes?",
+        "Does cooking and eating together with roommates affect an individual's eligibility to apply for SNAP benefits separately?",
+        "Under what circumstances are roommates required to be included in a single SNAP household?",
+        "Are there any exceptions to the rules regarding shared living arrangements and SNAP eligibility?"
+      ],
+      "mistral:instruct": [
+        "Does the DB contain a rule regarding SNAP eligibility for an individual renting a room in a house?",
+        "If so, does this rule include a provision for the presence of roommates or shared kitchen use?",
+        "If yes to question 2, what specific requirements must be met with respect to the number and income of roommates before they are considered part of the eligibility determination for the individual applicant?",
+        "In this case, where there is a shared kitchen used frequently by the roommates, what specific guidelines must be followed in order to accurately assess the eligibility of the individual applicant based on the DB's SNAP rules for household size and income?"
+      ],
+      "openhermes": [
+        "Does the client share a kitchen with his roommates?",
+        "Do the roommates often cook and eat together in the shared kitchen?"
+      ],
+      "llama3-70b-8192": [
+        "Do SNAP applicants who share a kitchen with roommates need to be included in the same application?",
+        "Does sharing a kitchen and occasionally eating together with roommates make them a SNAP household?",
+        "Can SNAP applicants who rent a room in a house with shared kitchen facilities apply separately?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "Do roommates need to be included in SNAP application?"
+      ],
+      "gpt-3.5-turbo": [
+        "Are roommates considered part of the household for SNAP eligibility purposes?"
+      ],
+      "gemini-1.0-pro": [
+        "Does the client share a kitchen with roommates?",
+        "Do the roommates cook and eat together?",
+        "Should the roommates be included in the SNAP application?"
+      ],
+      "gpt-4-turbo": [
+        "What are the SNAP eligibility rules regarding household composition?",
+        "Does sharing a kitchen with roommates affect SNAP application as an individual?",
+        "Are individuals who cook and eat together considered a single household for SNAP benefits?"
+      ],
+      "mixtral-8x7b-32768": [
+        "Does the client have exclusive use of a kitchen?",
+        "Are the roommates considered a household for food assistance purposes?"
+      ]
+    }
+  },
+  {
+    "q_id": 4,
+    "question": "Husband and wife consider themselves separated, but they still live in the same house. The husband lives on the 2nd floor and the wife lives on the first. They do not speak or share any food. Can the wife apply on her own?",
+    "transformations": {
+      "openhermes": [
+        "What is the situation between the husband and wife?",
+        "Can they still be considered separated if they live in the same house?",
+        "Do they have any communication with each other?",
+        "Do they share any food or resources?",
+        "Is the wife able to apply for something on her own?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "Can a separated wife apply for SNAP on her own?"
+      ],
+      "gpt-3.5-turbo": [
+        "Can a spouse apply for SNAP benefits separately if they consider themselves separated but still live in the same house?"
+      ],
+      "llama3-70b-8192": [
+        "Is a person considered a separate household if they live in the same house as their spouse but do not share food or living expenses?",
+        "Can a person apply for SNAP benefits independently if they are separated from their spouse but still living in the same house?",
+        "How does SNAP define 'household' for eligibility purposes?",
+        "Can a person be considered a separate economic unit if they do not share food or expenses with their spouse, even if they live in the same house?"
+      ],
+      "mistral:instruct": [
+        "What is the definition of separated under SNAP eligibility rules?",
+        "Does living in the same house but on different floors and not sharing food disqualify a person from applying for SNAP individually?"
+      ],
+      "gemini-1.0-pro": [
+        "Can a wife apply for SNAP on her own if she is separated from her husband but they still live in the same house?"
+      ],
+      "gpt-4-turbo": [
+        "What are the SNAP eligibility rules regarding household composition?",
+        "Does living in the same house affect SNAP eligibility if the parties consider themselves separated?",
+        "Can individuals living in the same house apply separately for SNAP if they do not share food or expenses?",
+        "What constitutes a separate household under SNAP guidelines?"
+      ],
+      "mixtral-8x7b-32768": [
+        "Can a separated couple apply for SNAP separately if they live in the same house?",
+        "Does living on different floors in the same house affect SNAP eligibility for a separated couple?"
+      ]
+    }
+  },
+  {
+    "q_id": 5,
+    "question": "Client lives in assisted living , but doesn't go to the cafeteria. She tends to cook all her food in her kitchen because she doesn't like the facilities food. Can she apply for food stamps?",
+    "transformations": {
+      "openhermes": [
+        "Does the client live in an assisted living facility?",
+        "Is the client able to cook her own food in her kitchen?",
+        "Does the client have a valid reason for not using the cafeteria facilities?"
+      ],
+      "mistral:instruct": [
+        "What are the eligibility requirements for applicants living in assisted living facilities for SNAP benefits?",
+        "Does not using the cafeteria food affect an applicant's eligibility for SNAP?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "What are the eligibility rules for SNAP and food assistance for individuals living in assisted living facilities?",
+        "Can individuals living in assisted living facilities apply for SNAP and food assistance if they do not use the facility's cafeteria?",
+        "Are there any exceptions for individuals living in assisted living facilities who prefer to cook their own food in their own kitchen?"
+      ],
+      "gpt-3.5-turbo": [
+        "What are the eligibility rules for SNAP benefits for individuals living in assisted living facilities?",
+        "Can individuals who cook their own food in assisted living facilities qualify for food assistance programs like SNAP?"
+      ],
+      "llama3-70b-8192": [
+        "Does living in assisted living affect SNAP eligibility?",
+        "Can a person cook their own food in assisted living and still be eligible for SNAP?",
+        "Are there any specific rules for SNAP eligibility in assisted living facilities?",
+        "Can food preferences or dislikes affect SNAP eligibility?"
+      ],
+      "gemini-1.0-pro": [
+        "Can a client who lives in assisted living and cooks all their food in their kitchen apply for food stamps?"
+      ],
+      "gpt-4-turbo": [
+        "Can individuals living in assisted living facilities apply for food stamps?",
+        "Does cooking one's own meals in an assisted living facility affect SNAP eligibility?",
+        "Are there specific SNAP eligibility rules for residents who do not use communal dining facilities in assisted living?"
+      ],
+      "mixtral-8x7b-32768": [
+        "Does the client live in a facility that provides them with meals as part of their living arrangement?",
+        "If the client does not take advantage of the meals provided by the facility, are they still required to pay for those meals?",
+        "Is the client's income and asset level within the eligibility limits for SNAP benefits?"
+      ]
+    }
+  },
+  {
+    "q_id": 6,
+    "question": "The client's kid used to live with his mom more, but now mainly stays with him. His ex has food stamps, but he's not sure whether his kid is on her case or not because they don't really talk. Should we list the kid on the application?",
+    "transformations": {
+      "openhermes": [
+        "Does the client have custody of the child?",
+        "Is the child currently receiving food stamps through the ex-partner's case?",
+        "What is the current living arrangement of the child?"
+      ],
+      "mistral:instruct": [
+        "Is the child currently living with the applicant most of the time?",
+        "Does the ex-spouse have an active food stamp case?",
+        "If yes, is the child listed on the ex-spouse's food stamp case?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "Should we list the kid on the application?"
+      ],
+      "gpt-3.5-turbo": [
+        "Is the child living with the client more than half the time?",
+        "Does the client provide the majority of the child's financial support?",
+        "Is the child legally obligated to receive support from the client?"
+      ],
+      "llama3-70b-8192": [
+        "Is a child's eligibility for SNAP benefits affected if they live with a non-custodial parent?",
+        "Can a child be listed on a SNAP application if they are already receiving benefits with another household?",
+        "How does a non-custodial parent's SNAP benefits affect the child's eligibility for benefits with the custodial parent?",
+        "Can a child receive SNAP benefits in two separate households?"
+      ],
+      "gemini-1.0-pro": [
+        "Is the client's child currently living with him?",
+        "Is the client's child currently receiving SNAP benefits through his ex's case?"
+      ],
+      "gpt-4-turbo": [
+        "What are the SNAP eligibility rules regarding household composition?",
+        "Does a child need to be listed on both parents' SNAP applications if the parents are separated?",
+        "How does primary custody affect SNAP application for a child?",
+        "What steps should be taken to verify if a child is already included in another SNAP case?"
+      ],
+      "mixtral-8x7b-32768": [
+        "Does the client's kid have a separate food stamp case with his mom?",
+        "Is the client's ex-partner still receiving food stamps for the kid?"
+      ]
+    }
+  },
+  {
+    "q_id": 7,
+    "question": "The client and her husband live with her parents. She is 20, but her husband is 23. They buy their own groceries. Can they apply by themselves?",
+    "transformations": {
+      "openhermes": [
+        "Can the client and her husband apply for benefits without her parents' information?",
+        "What is the age difference between the client and her husband?"
+      ],
+      "mistral:instruct": [
+        "What are the age requirements for SNAP applicants living with others?",
+        "Can adults living with their parents apply for SNAP separately?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "Can the client and her husband apply for SNAP and food assistance by themselves?"
+      ],
+      "gpt-3.5-turbo": [
+        "Are individuals under 22 years old required to apply with their parents for SNAP benefits?",
+        "Can a married couple living with parents apply for SNAP benefits separately?"
+      ],
+      "llama3-70b-8192": [
+        "Are individuals under 22 living with parents eligible for SNAP benefits?",
+        "Can a married couple living with parents apply for SNAP benefits separately?",
+        "Does buying own groceries affect SNAP eligibility?"
+      ],
+      "gemini-1.0-pro": [
+        "Can a 20-year-old apply for SNAP with a 23-year-old spouse if they live with their parents and buy their own groceries?"
+      ],
+      "gpt-4-turbo": [
+        "Can a married couple living with parents apply for SNAP separately if they buy their own groceries?",
+        "Does the age of the applicants affect SNAP eligibility when living with parents?",
+        "Are there specific SNAP rules for young married couples living with family?"
+      ],
+      "mixtral-8x7b-32768": [
+        "What is the age requirement for the client to apply for SNAP benefits?",
+        "Can the client and her husband purchase and prepare food separately from her parents?",
+        "Do the client and her husband contribute to the household's grocery expenses?"
+      ]
+    }
+  },
+  {
+    "q_id": 8,
+    "question": "This client and her husband are ineligible (LPR but only for 2 years), they have three kids. One 16, one 14 and one is 20. I just apply the kids right?",
+    "transformations": {
+      "openhermes": [
+        "Are all three children LPRs?",
+        "How long has the client been an LPR herself?",
+        "What is the age of the youngest child?"
+      ],
+      "mistral:instruct": [
+        "What are the eligibility requirements for dependent children in SNAP and food assistance programs for a family where the head of household is a Legal Permanent Resident but has only been in the US for 2 years?",
+        "What is the age limit for dependent children to be eligible for SNAP and food assistance under this scenario?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "What is the eligibility for LPRs for SNAP and food assistance?",
+        "How many years must an LPR be in the US to be eligible for SNAP and food assistance?",
+        "What is the eligibility for children of LPRs for SNAP and food assistance?",
+        "What is the age limit for children to be eligible for SNAP and food assistance?"
+      ],
+      "gpt-3.5-turbo": [
+        "Are LPRs eligible for SNAP benefits?",
+        "What are the age requirements for children to receive SNAP benefits?",
+        "Are there any exceptions for children of ineligible LPRs to receive SNAP benefits?"
+      ],
+      "llama3-70b-8192": [
+        "Are children of ineligible non-citizens eligible for SNAP benefits?",
+        "Do the eligibility rules for SNAP benefits differ for children versus adults?",
+        "Can a 20-year-old be considered a dependent for SNAP benefits?",
+        "How does the immigration status of parents affect the eligibility of their children for SNAP benefits?"
+      ],
+      "gemini-1.0-pro": [
+        "What are the SNAP eligibility rules for Legal Permanent Residents (LPRs)?",
+        "What are the SNAP eligibility rules for children under 18?",
+        "What are the SNAP eligibility rules for children over 18?"
+      ],
+      "gpt-4-turbo": [
+        "What are the SNAP eligibility requirements for lawful permanent residents?",
+        "Can children of ineligible parents qualify for SNAP benefits?",
+        "Does the age of a child affect their eligibility for SNAP benefits?",
+        "Are there specific SNAP eligibility rules for dependents over 18?"
+      ],
+      "mixtral-8x7b-32768": [
+        "What is the immigration status of the client and her husband?",
+        "How long has the client and her husband been Lawful Permanent Residents (LPRs)?",
+        "How many children does the client have and what are their ages?"
+      ]
+    }
+  },
+  {
+    "q_id": 9,
+    "question": "The client lives with her boyfriend and they have a kid together. With the boyfriend's income, they are ineligible. Can I just apply the client with her kid since they aren't married?",
+    "transformations": {
+      "openhermes": [
+        "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?",
+        "Is there any way to adjust the application process to include only the client and her child?"
+      ],
+      "mistral:instruct": [
+        "What is the SNAP eligibility rule for living with an ineligible household member?",
+        "What is the SNAP eligibility rule for applying as a single parent?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "Can I apply for SNAP with just my child if I live with my boyfriend?",
+        "Is my child eligible for SNAP if I live with my boyfriend?",
+        "Can I receive SNAP benefits if I live with my boyfriend and we have a child together?"
+      ],
+      "gpt-3.5-turbo": [
+        "Can an unmarried individual apply for SNAP benefits for themselves and their child if they live with a partner who is ineligible due to income?"
+      ],
+      "llama3-70b-8192": [
+        "Is a client's eligibility for SNAP/food assistance affected by their marital status?",
+        "Can a client's income be separated from their partner's income for SNAP eligibility purposes?",
+        "How does the income of a non-recipient parent or partner affect a client's SNAP eligibility?",
+        "Can a client apply for SNAP benefits separately from their household income if they are not married?"
+      ],
+      "gemini-1.0-pro": [
+        "Can I apply the client with her kid since they aren't married?"
+      ],
+      "gpt-4-turbo": [
+        "What are the household composition rules for SNAP eligibility?",
+        "Does living with a partner affect SNAP eligibility if they are not married?",
+        "Are the incomes of all adults in the household considered when applying for SNAP?",
+        "Can a parent apply for SNAP benefits separately from their partner if they are not married?"
+      ],
+      "mixtral-8x7b-32768": [
+        "What is the income limit for SNAP eligibility for a family of three?",
+        "Is the client's boyfriend's income considered in the calculation of SNAP benefits for the client and her kid?",
+        "Can the client apply for SNAP separately from her boyfriend?"
+      ]
+    }
+  },
+  {
+    "q_id": 10,
+    "question": "The client lives with his girlfriend in her parent's basement. He's 24 and she's 21. She's pregnant.  Can he apply with his girlfriend and not include her parents?",
+    "transformations": {
+      "openhermes": [
+        "Can the client apply for a mortgage with his girlfriend without including her parents?",
+        "What is the age of the client and his girlfriend?"
+      ],
+      "mistral:instruct": [
+        "What are the eligibility rules for including household members in SNAP applications?",
+        "Can a 24-year-old applicant apply for SNAP benefits without including his pregnant girlfriend, if they live together but not as the head of household?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "Can the client apply for SNAP with his girlfriend?",
+        "Can the client apply for SNAP without including her parents?"
+      ],
+      "gpt-3.5-turbo": [
+        "Can an individual apply for SNAP benefits with their girlfriend if they live together?",
+        "Are individuals who are not related by blood or marriage eligible to apply for SNAP benefits together?"
+      ],
+      "llama3-70b-8192": [
+        "Can a client apply for SNAP benefits with their partner and exclude their partner's parents who they live with?",
+        "Does the pregnancy of the client's partner affect their eligibility for SNAP benefits?",
+        "Can a client choose which household members to include in their SNAP application?",
+        "How does the USDA define a 'household' for SNAP benefits eligibility?"
+      ],
+      "gemini-1.0-pro": [
+        "Can a 24-year-old man apply for SNAP with his 21-year-old pregnant girlfriend without including her parents?"
+      ],
+      "gpt-4-turbo": [
+        "Can a couple apply together for SNAP benefits if they are not married?",
+        "Does living in someone else's household affect SNAP eligibility?",
+        "Are the parents' incomes considered in SNAP eligibility if an adult child lives with them but applies separately?",
+        "Does pregnancy affect SNAP eligibility or benefit amount?"
+      ],
+      "mixtral-8x7b-32768": [
+        "Can a pregnant girlfriend and her boyfriend apply for SNAP separately from the girlfriend's parents?",
+        "What are the SNAP eligibility rules for individuals living with their parents?",
+        "How does pregnancy affect SNAP eligibility and benefits?"
+      ]
+    }
+  },
+  {
+    "q_id": 11,
+    "question": "This client is 21 so I'm including his mother on the application. We managed to get by the income and resources on best estimations but now we're on the expenses step and the client is unsure if his mother pays mortgage and is really at loss on how much anything in the household costs. Are we able to continue without this information or should the client call back when he does have it? The household is likely eligible based on what we have so far.",
+    "transformations": {
+      "openhermes": [
+        "Does the client need to provide his mother's mortgage payment information to continue with the application?",
+        "Is the household likely eligible based on the current information provided?"
+      ],
+      "mistral:instruct": [
+        "What is your mother's contribution towards mortgage payments, if any?",
+        "What are the approximate monthly expenses for household utilities (electricity, water, gas, etc.)?",
+        "What is the monthly cost of rent or property taxes?",
+        "Are there any other regular monthly expenses (insurance, medical bills, etc.) that need to be reported?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "What information is needed to determine SNAP and food assistance eligibility?",
+        "What are the eligibility rules for SNAP and food assistance?",
+        "What are the income and resource requirements for SNAP and food assistance?",
+        "What are the household expenses that are considered for SNAP and food assistance eligibility?",
+        "Can a household be eligible for SNAP and food assistance without providing all necessary information?",
+        "What should the client do if they are unsure about certain household expenses when applying for SNAP and food assistance?"
+      ],
+      "gpt-3.5-turbo": [
+        "What are the eligibility rules for including a parent on a SNAP application?",
+        "Can an application proceed without complete information on household expenses for SNAP eligibility?"
+      ],
+      "llama3-70b-8192": [
+        "Can SNAP applications be completed without exact expense information?",
+        "Are estimated expenses acceptable for SNAP eligibility determination?",
+        "Can a SNAP application be processed without complete expense information if the household is likely eligible?",
+        "How does incomplete expense information impact SNAP eligibility determination?"
+      ],
+      "gemini-1.0-pro": [
+        "Is it possible to continue the SNAP application without knowing the exact amount of household expenses?",
+        "What are the eligibility criteria for SNAP based on income and resources?"
+      ],
+      "gpt-4-turbo": [
+        "What are the requirements for reporting household expenses when applying for SNAP benefits?",
+        "Can an application for SNAP benefits proceed without complete information on household expenses?",
+        "How does incomplete information on household expenses affect SNAP eligibility and benefit calculation?",
+        "What steps should be taken if an applicant is unsure about specific household expenses during the SNAP application process?"
+      ],
+      "mixtral-8x7b-32768": [
+        "What is the policy for continuing a SNAP application when household expenses information is not immediately available?",
+        "Can SNAP applicants provide estimates for household expenses or are exact figures required?",
+        "What is the impact of incomplete expense information on SNAP eligibility determination?"
+      ]
+    }
+  },
+  {
+    "q_id": 12,
+    "question": "This household has everything! I can't keep everything straight and I don't remember who needs to be included. The client is married and they have two adult kids and then two foster kids. The client's mother lives with them and they have a live in attendant who takes care of her. One of the kids is 20 and in college full time. He's not working and comes home on summer and winter breaks. I think he's an ineligible student, but does he still need to be listed on the application, would he be included in the summer? Their other child is 23 and buys some of his own food, but will eat when his mother cooks a big dinner. The foster kids are 11 and 12. They eat with them, so I think they need to be included? The client's mother has special food needs so her live in attendant cooks for her separately and they eat together. She also wants to apply. How do I enter this?",
+    "transformations": {
+      "openhermes": [
+        "What is the situation with the client's 20-year-old child who is in college full time?",
+        "Are the foster kids included in family meals and should be listed on the application?",
+        "How should the client's mother, who has special food needs, be entered into the application?",
+        "What about the live-in attendant who takes care of the client's mother?"
+      ],
+      "mistral:instruct": [
+        "Who needs to be listed as a household member for SNAP eligibility, despite not working or contributing financially: the 20-year-old college student?",
+        "What is the eligibility status of foster kids under 18 in SNAP programs?",
+        "Is the client's mother eligible for SNAP benefits and how should her live-in attendant be listed on the application?",
+        "Does the 23-year-old adult child need to be included in the household size for SNAP eligibility, even if they buy some of their own food?"
+      ],
+      "gpt-3.5-turbo-instruct": [
+        "Does the client's 20 year old child need to be listed on the application?",
+        "Is the client's 20 year old child included in the summer?",
+        "Do the foster kids need to be included?",
+        "Does the client's mother need to be included in the application?"
+      ],
+      "gpt-3.5-turbo": [
+        "Do ineligible college students need to be listed on the SNAP application?",
+        "Should the foster children be included in the SNAP application?",
+        "How should the client's mother and her live-in attendant be included in the SNAP application?"
+      ],
+      "llama3-70b-8192": [
+        "Who is included in the SNAP household?",
+        "Is the 20-year-old college student considered an ineligible student?",
+        "Does the 20-year-old college student need to be listed on the application?",
+        "Is the 20-year-old college student included in the household during summer and winter breaks?",
+        "How do I handle the 23-year-old who buys some of his own food but eats with the family occasionally?",
+        "Do the foster children need to be included in the household?",
+        "How do I handle the client's mother who has special food needs and is cared for by a live-in attendant?",
+        "Can the client's mother apply for SNAP benefits separately?"
+      ],
+      "gemini-1.0-pro": [
+        "Who needs to be included in the SNAP household?",
+        "Is the 20 year old ineligible student included in the summer?",
+        "Are the foster children included in the SNAP household?",
+        "How is the client's mother's live in attendant included in the SNAP household?",
+        "How does the client's mother apply for SNAP?"
+      ],
+      "gpt-4-turbo": [
+        "Who needs to be included in a SNAP application for a household with multiple family members and non-family members?",
+        "Does a full-time college student who is not working and only home during breaks need to be listed on a SNAP application?",
+        "Should foster children be included in the household count for SNAP benefits?",
+        "How should food purchases and meals prepared separately by a live-in attendant for another household member affect SNAP eligibility?",
+        "Can a household member who has a separate food preparer due to special dietary needs apply for SNAP independently?"
+      ],
+      "mixtral-8x7b-32768": [
+        "What household members should be included in the SNAP application?",
+        "How is an ineligible college student treated in a SNAP application?",
+        "How are foster children treated in a SNAP application?",
+        "How are adult children who purchase some of their own food treated in a SNAP application?",
+        "How are live-in attendants treated in a SNAP application?"
+      ]
+    }
+  }
+]
