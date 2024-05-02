@@ -177,7 +177,7 @@ def create_retriever_model():
 
 
 @debugging.timer
-def create_llm_model(llm_name="openhermes"):
+def create_llm_model(llm_name="openhermes", respond_with_json=False):
     print("LLM model name:", llm_name)
     if llm_name in ["openhermes", "llama2", "llama2:chat", "llama3", "mistral", "mistral:instruct"]:
         # Alternative using OpenAI-compatible API: https://gist.github.com/jrknox1977/78c17e492b5a75ee5bbaf9673aee4641
@@ -188,7 +188,10 @@ def create_llm_model(llm_name="openhermes"):
         "gpt-4",
         "gpt-4-turbo",
     ]:
-        return dspy.OpenAI(model=llm_name, temperature=0.1, response_format={"type": "json_object"})
+        if respond_with_json:
+            return dspy.OpenAI(model=llm_name, temperature=0.1, response_format={"type": "json_object"})
+        else:
+            return dspy.OpenAI(model=llm_name, temperature=0.1)
     elif llm_name in ["gemini-1.0-pro"]:
         return dspy.Google(model=f"models/{llm_name}", temperature=0.1)
     elif llm_name in ["llama3-70b-8192", "mixtral-8x7b-32768"]:
@@ -323,9 +326,9 @@ def manual_evaluation(program, dataset):
     print(scores)
 
 
-def print_last_llm_history():
-    print("----- last evaluation ------------------")
-    dspy.settings.lm.inspect_history(n=1)
+def print_last_llm_history(n=1):
+    print("----- DSPy history  ------------------")
+    dspy.settings.lm.inspect_history(n=n)
     print("--------------------------------------")
 
 
