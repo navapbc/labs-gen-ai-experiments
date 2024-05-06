@@ -5,8 +5,10 @@
 # derived/decomposed questions, which will be used to retrieve Guru cards.
 # Also evaluates the Guru card retrieval performance.
 
+import sys
 import os
 import json
+import importlib
 import dotenv
 
 import dspy
@@ -16,49 +18,27 @@ import dspy_engine
 import ingest
 import debugging
 
-import importlib
-
 dq = importlib.import_module("decompose-questions")
 
 """
-Options
-- summarize based on original question vs. derived question vs. both
-
+Overall process:
 1. Load original questions
 For each original question:
-    2. Generate derived questions (from cache if available, otherwise generate and cache)
+    2. Load derived questions from cache
     3. For each derived question, retrieve Guru cards
     4. Deduplicate Guru cards while retaining associate with corresponding derived questions.
-    5. For each Guru card, 
-        a. summarize w.r.t. original question (don't need to show)
-        b. summarize w.r.t. derived questions (don't show derived questions prominently)
+    5. For each Guru card, summarize w.r.t. original question and derived questions
+
+Parameters:
+- Question-Transformer LLM and its prompt
+- Retrieval k
+- Summarizer LLM and its prompt
 
 TODO:
-- Limit Guru cards based on score and/or card count
-- For either or both of the LLM uses, incorporate rationale/CoT (chain-of-thought) to walk the human through the LLM’s thought process so that the user can double-check the LLM’s responses.
+- For either or both of the LLM uses, incorporate rationale/CoT (chain-of-thought) to walk the human through the LLM's thought process so that the user can double-check the LLM’s responses.
 - Extract intent of original question and incorporate into derived questions
 - Consider adding the glossary Guru card to the vector DB
 """
-
-dotenv.load_dotenv()
-
-# 1. Load original questions
-orig_qs = dq.load_user_questions()
-
-# for 2. Generate derived questions (from cache if available, otherwise generate and cache)
-# main1_decompose_user_questions
-derived_qs = dq.load_derived_questions_cache()
-indexed_qs = {item["question"]: item for item in derived_qs}
-
-guru_card_texts = ingest.extract_qa_text_from_guru()
-
-# for 3. For each derived question, retrieve Guru cards
-# main2_evaluate_retrieval
-vectordb = dq.create_vectordb()
-llm_model = os.environ.get("LLM_MODEL_NAME", "openhermes")
-print(f"LLM_MODEL_NAME: {llm_model}")
-retrieve_k = int(os.environ.get("RETRIEVE_K", "4"))
-print("RETRIEVE_K:", retrieve_k)
 
 
 @debugging.timer
@@ -69,10 +49,10 @@ def retrieve_guru_cards_for_question(q_dict, narrowed_qs, vectordb, retrieve_k):
         print(f"Derived questions not found -- Skipping {question}")
         return
 
-    questions = narrowed_qs[question]
+    derived_questions = narrowed_qs[question]
     results = []
-    print(f"Processing user question {q_dict['id']}: with {len(questions)} derived questions")
-    for q in questions:
+    print(f"Processing user question {q_dict['id']}: with {len(derived_questions)} derived questions")
+    for q in derived_questions:
         retrieval_tups = vectordb.similarity_search_with_relevance_scores(q, k=retrieve_k)
         retrieval = [tup[0] for tup in retrieval_tups]
         retrieved_cards = [doc.metadata["source"] for doc in retrieval]
@@ -89,9 +69,7 @@ def retrieve_guru_cards_for_question(q_dict, narrowed_qs, vectordb, retrieve_k):
     return results
 
 
-def save_retrieval_results_for_summary():
-    narrowed_qs = dq.narrow_transformations_to(llm_model, derived_qs)
-
+def get_retrieval_results(orig_qs, narrowed_qs, vectordb, retrieve_k):
     retrieval_results = []
     for question_item in orig_qs:
         derived_qs_retrievals = retrieve_guru_cards_for_question(question_item, narrowed_qs, vectordb, retrieve_k)
@@ -134,19 +112,7 @@ def save_retrieval_results_for_summary():
                 # "results": derived_qs_retrievals,
             }
         )
-
-    with open(f"qt_retrieval_results_forSummary-{llm_model}-k_{retrieve_k}.json", "w", encoding="utf-8") as f:
-        json.dump(retrieval_results, f, indent=4)
-
-
-def load_retrieval_results_for_summary():
-    with open(f"qt_retrieval_results_forSummary-{llm_model}-k_{retrieve_k}.json", "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-# 5. For each Guru card,
-#     a. summarize w.r.t. original question (don't need to show)
-#     b. summarize w.r.t. derived questions (don't show derived questions prominently)
+    return retrieval_results
 
 
 def create_summarizer(llm_choice):
@@ -169,31 +135,87 @@ def create_summarizer(llm_choice):
     return dspy.Predict(SummarizeCardGivenQuestion)
 
 
-retrieval_results_for_summary = load_retrieval_results_for_summary()
+def create_summaries(retrieval_results, summarizer_llm_model, guru_card_texts):
+    summarizer = create_summarizer(summarizer_llm_model)
 
-# 'gemini-1.0-pro' 'gpt-3.5-turbo' 'gpt-3.5-turbo-instruct' 'gpt-4-turbo' 'llama3-70b-8192'
-# 'mistral:instruct' 'mixtral-8x7b-32768' 'openhermes'
-summarizer_llm_model = "gpt-3.5-turbo-instruct"
-summarizer = create_summarizer(summarizer_llm_model)
+    for rr in retrieval_results:
+        question = rr["question"]
+        retrievals = rr["all_retrieved_cards"]
+        print(f"Processing question {rr['id']} with {len(retrievals)} retrieved cards...")
+        for i, (card_title, metadata) in enumerate(retrievals.items()):
+            score = metadata["score_sum"]
+            # Limit summarizing of Guru cards based on score and card count
+            if i > 3 and score < 0.3:
+                continue
+            card_text = guru_card_texts[card_title]
+            entire_card = "\n".join([card_title, card_text])
+            print(f"  {i}. Summarizing {card_title}...")
+            # Summarize based on derived question and original question
+            # Using only the original question causes the LLM to try to answer the question.
+            context_questions = " ".join(metadata["derived_questions"] + [question])
+            prediction = summarizer(context_question=context_questions, context=entire_card)
+            metadata["entire_card"] = entire_card
+            metadata["summary"] = prediction.answer
 
-for rr in retrieval_results_for_summary:
-    question = rr["question"]
-    retrievals = rr["all_retrieved_cards"]
-    print(f"Processing question {rr['id']} with {len(retrievals)} retrieved cards...")
-    for i, (card_title, metadata) in enumerate(retrievals.items()):
-        score = metadata["score_sum"]
-        if i > 3 and score < 0.3:
-            continue
-        card_text = guru_card_texts[card_title]
-        entire_card = "\n".join([card_title, card_text])
-        print(f"  {i}. Summarizing {card_title}...")
-        derived_questions = " ".join(metadata["derived_questions"] + [question])
-        prediction = summarizer(context_question=derived_questions, context=entire_card)
-        metadata["entire_card"] = entire_card
-        metadata["summary"] = prediction.answer
-
-with open(f"qt_summaries-{summarizer_llm_model}-k_{retrieve_k}.json", "w", encoding="utf-8") as f:
-    json.dump(retrieval_results_for_summary, f, indent=4)
+    # retrieval_results are updated with summaries
+    return retrieval_results
 
 
-# debugging.debug_here(locals())
+def main(cmd_choice):
+    questioner_llm_model = os.environ.get("LLM_MODEL_NAME", "openhermes")
+    print(f"Questioner LLM_MODEL_NAME: {questioner_llm_model}")
+    retrieve_k = int(os.environ.get("RETRIEVE_K", "4"))
+    print("RETRIEVE_K:", retrieve_k)
+    retrieval_results_filename = f"qt_retrieval_results_forSummary-{questioner_llm_model}-k_{retrieve_k}.json"
+
+    if cmd_choice in ["1", "save_retrieval_results"]:
+        # Load original questions verbatim from BDT
+        orig_qs = dq.load_user_questions()
+
+        # Load derived questions from cache to minimize LLM cost
+        # To create the cache, run decompose-questions.py's main1_decompose_user_questions()
+        derived_qs = dq.load_derived_questions_cache()
+
+        # Set up Guru card retrieval for each derived question
+        # Similar to decompose-questions.py's main2_evaluate_retrieval
+        vectordb = dq.create_vectordb()
+
+        narrowed_qs = dq.narrow_transformations_to(questioner_llm_model, derived_qs)
+
+        print(f"Saving retrieval results to {retrieval_results_filename}")
+        orig_qs_retrieval_results = get_retrieval_results(orig_qs, narrowed_qs, vectordb, retrieve_k)
+        with open(retrieval_results_filename, "w", encoding="utf-8") as f:
+            json.dump(orig_qs_retrieval_results, f, indent=4)
+
+    elif cmd_choice in ["2", "create_summaries"]:
+        print(f"Creating summaries from {retrieval_results_filename}")
+        with open(retrieval_results_filename, "r", encoding="utf-8") as f:
+            retrieval_results = json.load(f)
+
+        # Options: 'gemini-1.0-pro' 'gpt-3.5-turbo' 'gpt-3.5-turbo-instruct' 'gpt-4-turbo'
+        #   'llama3-70b-8192' 'mistral:instruct' 'mixtral-8x7b-32768' 'openhermes'
+        summarizer_llm_model = os.environ.get("SUMMARIZER_LLM_MODEL_NAME", "openhermes")
+        print(f"Summarizer SUMMARIZER_LLM_MODEL_NAME: {summarizer_llm_model}")
+
+        # Extract Guru card texts so it can be summarized
+        guru_card_texts = ingest.extract_qa_text_from_guru()
+
+        summary_results = create_summaries(retrieval_results, summarizer_llm_model, guru_card_texts)
+
+        with open(f"qt_summaries-{summarizer_llm_model}-k_{retrieve_k}.json", "w", encoding="utf-8") as f:
+            json.dump(summary_results, f, indent=4)
+
+
+if __name__ == "__main__":
+    print("""
+    1. save_retrieval_results
+    2. create_summaries""")
+    dotenv.load_dotenv()
+    if args := sys.argv[1:]:
+        choice = args[0]
+        print("Running option:", choice)
+    else:
+        print("What would you like to do?")
+        choice = input()
+
+    main(choice)
