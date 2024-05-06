@@ -8,7 +8,10 @@ import os
 
 dotenv.load_dotenv()
 
-def ollama_client(model_name=None, prompt="", callbacks=None, settings=None, print_to_stdout=False):
+
+def ollama_client(
+    model_name=None, prompt="", callbacks=None, settings=None, print_to_stdout=False
+):
     if not callbacks:
         callbacks = []
     if print_to_stdout:
@@ -28,7 +31,13 @@ def ollama_client(model_name=None, prompt="", callbacks=None, settings=None, pri
     return Ollama(model=model_name, callbacks=callbacks, **settings).invoke(prompt)
 
 
-def google_gemini_client(model_name="gemini-pro", prompt ="", callbacks=None, settings={}, print_to_stdout=False):
+def google_gemini_client(
+    model_name="gemini-pro",
+    prompt="",
+    callbacks=None,
+    settings={},
+    print_to_stdout=False,
+):
     # Get a Google API key by following the steps after clicking on Get an API key button
     # at https://ai.google.dev/tutorials/setup
     GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
@@ -39,13 +48,15 @@ def google_gemini_client(model_name="gemini-pro", prompt ="", callbacks=None, se
     genai.GenerationConfig(**settings)
     model = genai.GenerativeModel(model_name)
     return model.generate_content(prompt)
-    
+
 
 def gpt3_5(prompt, model="gpt-3.5-turbo"):
     OPEN_AI_API_KEY = os.environ.get("OPEN_AI_API_KEY")
     openai_client = OpenAI(api_key=OPEN_AI_API_KEY)  # Uses OPENAI_API_KEY
     return (
-        openai_client.chat.completions.create(model=model, messages=[{"role": "user", "content": prompt}])
+        openai_client.chat.completions.create(
+            model=model, messages=[{"role": "user", "content": prompt}]
+        )
         .choices[0]
         .message.content
     )

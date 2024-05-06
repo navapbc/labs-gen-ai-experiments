@@ -1,4 +1,4 @@
-from llm import google_gemini_client, ollama_client, gpt3_5, gpt_4_turbo;
+from llm import google_gemini_client, ollama_client, gpt3_5, gpt_4_turbo
 from langchain_core.prompts import PromptTemplate
 
 transcript = """
@@ -1885,7 +1885,7 @@ print("""
 
 llm = input() or "1"
 prompt_template = PromptTemplate.from_template(prompt)
-formatted_prompt= prompt_template.format(transcript=transcript)
+formatted_prompt = prompt_template.format(transcript=transcript)
 
 if llm == "2":
     test = ollama_client(model_name="dolphin-mistral", prompt=formatted_prompt)
@@ -1893,7 +1893,7 @@ if llm == "2":
         Dolphin
         """)
 if llm == "3":
-    test= google_gemini_client(prompt=formatted_prompt).text
+    test = google_gemini_client(prompt=formatted_prompt).text
     print("""----------
         Gemini
         """)
