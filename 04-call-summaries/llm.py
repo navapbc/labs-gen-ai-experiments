@@ -1,6 +1,5 @@
 import dotenv
 
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain_community.llms.ollama import Ollama
 import google.generativeai as genai
 from openai import OpenAI
