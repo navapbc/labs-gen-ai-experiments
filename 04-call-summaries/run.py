@@ -2,7 +2,7 @@ from llm import google_gemini_client, ollama_client, gpt3_5, gpt_4_turbo
 from langchain_core.prompts import PromptTemplate
 
 
-# download transcript from https://navasage.atlassian.net/wiki/spaces/NL/pages/1037271052/Transcript+No+screening
+# download transcripts from https://drive.google.com/drive/folders/19r6x3Zep4N9Rl_x4n4H6RpWkXviwbxyw?usp=sharing
 def get_transcript(file_path="./transcript.txt"):
     file = open(file_path)
     content = file.read()
