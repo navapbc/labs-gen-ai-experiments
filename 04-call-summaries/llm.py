@@ -9,14 +9,18 @@ import os
 dotenv.load_dotenv()
 
 
-def ollama_client(
-    model_name=None, prompt="", callbacks=None, settings=None, print_to_stdout=False
-):
-    if not callbacks:
-        callbacks = []
-    if print_to_stdout:
-        callbacks.append(StreamingStdOutCallbackHandler())
+def get_transcript(file_path="./transcript.txt"):
+    file = open(file_path)
+    content = file.read()
+    return content
 
+
+def ollama_client(
+    model_name=None,
+    prompt=None,
+    callbacks=None,
+    settings=None,
+):
     if not settings:
         settings = {
             # "temperature": 0.1,
@@ -33,10 +37,8 @@ def ollama_client(
 
 def google_gemini_client(
     model_name="gemini-pro",
-    prompt="",
-    callbacks=None,
+    prompt=None,
     settings={},
-    print_to_stdout=False,
 ):
     # Get a Google API key by following the steps after clicking on Get an API key button
     # at https://ai.google.dev/tutorials/setup
