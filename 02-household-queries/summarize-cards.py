@@ -35,8 +35,10 @@ Parameters:
 - Summarizer LLM and its prompt
 
 TODO:
+- Update LLM prompts based on summary comments in PR
 - For either or both of the LLM uses, incorporate rationale/CoT (chain-of-thought) to walk the human through the LLM's thought process so that the user can double-check the LLM’s responses.
 - Extract intent of original question and incorporate into derived questions
+- Print a 1-2 sentence quote from the card
 - Consider adding the glossary Guru card to the vector DB
 """
 
@@ -47,7 +49,7 @@ def retrieve_guru_cards_for_question(q_dict, narrowed_qs, vectordb, retrieve_k):
     guru_cards = q_dict.get("guru_cards", [])
     if not narrowed_qs[question]:
         print(f"Derived questions not found -- Skipping {question}")
-        return
+        return None
 
     derived_questions = narrowed_qs[question]
     results = []
