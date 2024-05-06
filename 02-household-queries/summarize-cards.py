@@ -117,13 +117,7 @@ def get_retrieval_results(orig_qs, narrowed_qs, vectordb, retrieve_k):
     return retrieval_results
 
 
-def create_summarizer(llm_choice):
-    assert llm_choice is not None, "llm_choice must be specified."
-    dspy.settings.configure(
-        lm=dspy_engine.create_llm_model(llm_choice)  # , rm=create_retriever_model()
-    )
-    print("LLM model created", dspy.settings.lm)
-
+def create_summarizer():
     class SummarizeCardGivenQuestion(dspy.Signature):
         """Summarize the following context into 1 sentence without explicitly answering the question(s): {context_question}
 
@@ -138,24 +132,26 @@ def create_summarizer(llm_choice):
 
 
 def create_summaries(retrieval_results, summarizer_llm_model, guru_card_texts):
-    summarizer = create_summarizer(summarizer_llm_model)
+    assert summarizer_llm_model is not None, "summarizer_llm_model must be specified."
+    llm = dspy_engine.create_llm_model(summarizer_llm_model)  # , rm=create_retriever_model()
+    print("LLM model created", llm)
 
+    summarizer = create_summarizer()
     for rr in retrieval_results:
-        question = rr["question"]
         retrievals = rr["all_retrieved_cards"]
         print(f"Processing question {rr['id']} with {len(retrievals)} retrieved cards...")
         for i, (card_title, metadata) in enumerate(retrievals.items()):
-            score = metadata["score_sum"]
             # Limit summarizing of Guru cards based on score and card count
-            if i > 3 and score < 0.3:
+            if i > 3 and metadata["score_sum"] < 0.3:
                 continue
             card_text = guru_card_texts[card_title]
             entire_card = "\n".join([card_title, card_text])
-            print(f"  {i}. Summarizing {card_title}...")
             # Summarize based on derived question and original question
             # Using only the original question causes the LLM to try to answer the question.
-            context_questions = " ".join(metadata["derived_questions"] + [question])
-            prediction = summarizer(context_question=context_questions, context=entire_card)
+            context_questions = " ".join(metadata["derived_questions"] + [rr["question"]])
+            with dspy.context(lm=llm):
+                print(f"  {i}. Summarizing {card_title}...")
+                prediction = summarizer(context_question=context_questions, context=entire_card)
             metadata["entire_card"] = entire_card
             metadata["summary"] = prediction.answer
 
@@ -164,11 +160,14 @@ def create_summaries(retrieval_results, summarizer_llm_model, guru_card_texts):
 
 
 def main(cmd_choice):
+    # LLM Options: 'gemini-1.0-pro' 'gpt-3.5-turbo' 'gpt-3.5-turbo-instruct' 'gpt-4-turbo'
+    #   'llama3-70b-8192' 'mistral:instruct' 'mixtral-8x7b-32768' 'openhermes'
     questioner_llm_model = os.environ.get("LLM_MODEL_NAME", "openhermes")
     print(f"Questioner LLM_MODEL_NAME: {questioner_llm_model}")
     retrieve_k = int(os.environ.get("RETRIEVE_K", "4"))
     print("RETRIEVE_K:", retrieve_k)
-    retrieval_results_filename = f"qt_retrieval_results_forSummary-{questioner_llm_model}-k_{retrieve_k}.json"
+    filename_prefix = f"qt-{questioner_llm_model}-k_{retrieve_k}"
+    retrieval_results_filename = f"{filename_prefix}--retrievals.json"
 
     if cmd_choice in ["1", "save_retrieval_results"]:
         # Load original questions verbatim from BDT
@@ -194,8 +193,6 @@ def main(cmd_choice):
         with open(retrieval_results_filename, "r", encoding="utf-8") as f:
             retrieval_results = json.load(f)
 
-        # Options: 'gemini-1.0-pro' 'gpt-3.5-turbo' 'gpt-3.5-turbo-instruct' 'gpt-4-turbo'
-        #   'llama3-70b-8192' 'mistral:instruct' 'mixtral-8x7b-32768' 'openhermes'
         summarizer_llm_model = os.environ.get("SUMMARIZER_LLM_MODEL_NAME", "openhermes")
         print(f"Summarizer SUMMARIZER_LLM_MODEL_NAME: {summarizer_llm_model}")
 
@@ -204,7 +201,7 @@ def main(cmd_choice):
 
         summary_results = create_summaries(retrieval_results, summarizer_llm_model, guru_card_texts)
 
-        with open(f"qt_summaries-{summarizer_llm_model}-k_{retrieve_k}.json", "w", encoding="utf-8") as f:
+        with open(f"{filename_prefix}--{summarizer_llm_model}--summaries.json", "w", encoding="utf-8") as f:
             json.dump(summary_results, f, indent=4)
 
 
