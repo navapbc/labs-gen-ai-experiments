@@ -37,7 +37,7 @@ def ollama_client(
 def google_gemini_client(
     model_name="gemini-pro",
     prompt=None,
-    settings={},
+    settings=None,
 ):
     # Get a Google API key by following the steps after clicking on Get an API key button
     # at https://ai.google.dev/tutorials/setup
@@ -46,7 +46,8 @@ def google_gemini_client(
     print("LLM settings:", model_name, settings)
 
     genai.configure(api_key=GOOGLE_API_KEY)
-    genai.GenerationConfig(**settings)
+    if settings:
+        genai.GenerationConfig(**settings)
     model = genai.GenerativeModel(model_name)
     return model.generate_content(prompt)
 
