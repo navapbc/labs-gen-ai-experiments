@@ -194,3 +194,19 @@ def check_embedding(chunk_size, embedding):
     token_limit = embedding.get("token_limit", 0)
     if token_limit != 0 and chunk_size > token_limit:
         print(f"You've defined the chunk size as {chunk_size}, the token limit for this embedding is {token_limit}")
+
+def save_simplified_json(file_path="./guru_cards_for_nava.json", content_key="content", index_key="preferredPhrase"):
+    json_data = load_guru_cards(file_path)
+    # Save simplified json
+    with open("simplified_guru_cards.json", "w", encoding="utf-8") as f:
+        simplified_json = []
+        for card in json_data:
+            tags = [tagsItem.get("value") for tagsItem in card.get("tags", [])]
+            soup = BeautifulSoup(card[content_key], "html.parser")
+            content = soup.get_text(separator="\n", strip=True)
+            simplified_json.append({index_key: card[index_key], 'tags': ",".join(tags), content_key: content})
+        json.dump(simplified_json, f, indent=4)
+
+
+if __name__ == "__main__":
+    save_simplified_json("guru_cards_for_nava--Multi-benefit.json")
