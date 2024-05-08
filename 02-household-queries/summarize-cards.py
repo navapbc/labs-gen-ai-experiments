@@ -34,6 +34,21 @@ Parameters:
 - Retrieval k
 - Summarizer LLM and its prompt
 
+Next steps:
+- improve recall
+  - increase k ("using a bigger net"), which will result in more retrieved (likely irrelevant) cards
+  - improve derived questions via prompt engineering; but currently specific to Household questions
+  - postpone until we have Multi-benefit questions
+  - use manually-rephrased questions and move on focus on summaries
+- improve summaries, assuming/forcing retrieved cards to be relevant
+  - work on providing quotes
+  - incorporate rationale/CoT (chain-of-thought)
+
+Goals?
+- Optimize software given dataset (recall, accuracy, etc.)
+- Build capabilities (summarizing, quoting, rationale/CoT, etc.)
+
+
 TODO:
 - Update LLM prompts based on summary comments in PR
 - For either or both of the LLM uses, incorporate rationale/CoT (chain-of-thought) to walk the human through the LLM's thought process so that the user can double-check the LLM’s responses.
