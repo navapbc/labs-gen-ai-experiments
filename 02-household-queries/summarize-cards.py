@@ -113,7 +113,8 @@ def get_retrieval_results(orig_qs, narrowed_qs, vectordb, retrieve_k):
             for card, quote in derived_q_result["retrieval_chunks"].items():
                 if card not in card_to_quotes:
                     card_to_quotes[card] = set()
-                card_to_quotes[card].add(quote)
+                if quote != card:
+                    card_to_quotes[card].add(quote)
 
         all_retrieved_cards = {
             card: {
@@ -140,7 +141,7 @@ def get_retrieval_results(orig_qs, narrowed_qs, vectordb, retrieve_k):
                         reverse=True,
                     )
                 ),
-                "results": derived_qs_retrievals,
+                # "results": derived_qs_retrievals,
             }
         )
     return retrieval_results
