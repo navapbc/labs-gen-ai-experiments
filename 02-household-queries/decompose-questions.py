@@ -95,6 +95,8 @@ def create_predictor(llm_choice):
 Be concise -- only respond with JSON. Only output the questions as a JSON list: ["question1", "question2", ...]. \
 The question is: {question}"""
 
+        # TODO: Incorporate https://gist.github.com/hugodutka/6ef19e197feec9e4ce42c3b6994a919d
+
         question = dspy.InputField()
         answer = dspy.OutputField(desc='["question1", "question2", ...]')
 
@@ -209,7 +211,8 @@ def main0_ingest_guru_cards():
         )
 
     vectordb = create_vectordb()
-    ingest_call(vectordb=vectordb)
+    # Use smaller chunks for shorter-length quotes
+    ingest_call(vectordb=vectordb, chunk_size=250, chunk_overlap=100)
 
 
 def main1_decompose_user_questions():

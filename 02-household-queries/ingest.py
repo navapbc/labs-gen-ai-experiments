@@ -126,7 +126,7 @@ def add_json_html_data_to_vector_db(
 
     if embedding_name:
         check_embedding(chunk_size, get_embeddings().get(embedding_name, ""))
-    for question, answer in question_answers:
+    for question, answer in question_answers.items():
         if not silent:
             print("Processing document:", question)
         chunks = get_text_chunks_langchain(
@@ -195,18 +195,24 @@ def check_embedding(chunk_size, embedding):
     if token_limit != 0 and chunk_size > token_limit:
         print(f"You've defined the chunk size as {chunk_size}, the token limit for this embedding is {token_limit}")
 
+
 def save_simplified_json(file_path="./guru_cards_for_nava.json", content_key="content", index_key="preferredPhrase"):
     json_data = load_guru_cards(file_path)
+
+    name, ext = os.path.splitext(file_path)
     # Save simplified json
-    with open("simplified_guru_cards.json", "w", encoding="utf-8") as f:
+    with open(f"{name}_simplified{ext}", "w", encoding="utf-8") as f:
         simplified_json = []
         for card in json_data:
             tags = [tagsItem.get("value") for tagsItem in card.get("tags", [])]
             soup = BeautifulSoup(card[content_key], "html.parser")
             content = soup.get_text(separator="\n", strip=True)
-            simplified_json.append({index_key: card[index_key], 'tags': ",".join(tags), content_key: content})
+            simplified_json.append({index_key: card[index_key], "tags": ",".join(tags), content_key: content})
         json.dump(simplified_json, f, indent=4)
 
 
 if __name__ == "__main__":
-    save_simplified_json("guru_cards_for_nava--Multi-benefit.json")
+    import sys
+
+    if args := sys.argv[1:]:
+        save_simplified_json(args[0])

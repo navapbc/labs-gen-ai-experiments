@@ -73,11 +73,15 @@ def retrieve_guru_cards_for_question(q_dict, narrowed_qs, vectordb, retrieve_k):
         retrieval_tups = vectordb.similarity_search_with_relevance_scores(q, k=retrieve_k)
         retrieval = [tup[0] for tup in retrieval_tups]
         retrieved_cards = [doc.metadata["source"] for doc in retrieval]
+        retrieval_chunks = [doc.page_content for doc in retrieval]
+        # debugging.debug_here(locals())
+        # return None
         scores = [tup[1] for tup in retrieval_tups]
         results.append(
             {
                 "derived_question": q,
                 "retrieved_cards": retrieved_cards,
+                "retrieval_chunks": dict(zip(retrieved_cards, retrieval_chunks)),
                 "retrieval_scores": scores,
                 "recall": dq.compute_percent_retrieved(retrieved_cards, guru_cards),
                 "extra_cards": dq.count_extra_cards(retrieved_cards, guru_cards),
@@ -97,16 +101,26 @@ def get_retrieval_results(orig_qs, narrowed_qs, vectordb, retrieve_k):
             for i, card in enumerate(derived_q_result["retrieved_cards"]):
                 retrieved_card_tallies[card] = retrieved_card_tallies.get(card, 0) + retrieval_scores[i]
 
-        card_to_dq = {}
+        card_to_dqs = {}
+        card_to_quotes = {}
         for derived_q_result in derived_qs_retrievals:
             derived_question = derived_q_result["derived_question"]
             for card in derived_q_result["retrieved_cards"]:
-                if card not in card_to_dq:
-                    card_to_dq[card] = set()
-                card_to_dq[card].add(derived_question)
+                if card not in card_to_dqs:
+                    card_to_dqs[card] = set()
+                card_to_dqs[card].add(derived_question)
+
+            for card, quote in derived_q_result["retrieval_chunks"].items():
+                if card not in card_to_quotes:
+                    card_to_quotes[card] = set()
+                card_to_quotes[card].add(quote)
 
         all_retrieved_cards = {
-            card: {"score_sum": tally, "derived_questions": list(card_to_dq[card])}
+            card: {
+                "score_sum": tally,
+                "derived_questions": list(card_to_dqs[card]),
+                "quotes": list(card_to_quotes[card]),
+            }
             for card, tally in retrieved_card_tallies.items()
         }
 
@@ -126,7 +140,7 @@ def get_retrieval_results(orig_qs, narrowed_qs, vectordb, retrieve_k):
                         reverse=True,
                     )
                 ),
-                # "results": derived_qs_retrievals,
+                "results": derived_qs_retrievals,
             }
         )
     return retrieval_results
