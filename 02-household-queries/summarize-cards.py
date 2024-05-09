@@ -53,7 +53,6 @@ TODO:
 - Update LLM prompts based on summary comments in PR
 - For either or both of the LLM uses, incorporate rationale/CoT (chain-of-thought) to walk the human through the LLM's thought process so that the user can double-check the LLM’s responses.
 - Extract intent of original question and incorporate into derived questions
-- Print a 1-2 sentence quote from the card
 - Consider adding the glossary Guru card to the vector DB
 """
 
@@ -119,7 +118,7 @@ def get_retrieval_results(orig_qs, narrowed_qs, vectordb, retrieve_k):
         all_retrieved_cards = {
             card: {
                 "score_sum": tally,
-                "derived_questions": list(card_to_dqs[card]),
+                "assoc_derived_questions": list(card_to_dqs[card]),
                 "quotes": list(card_to_quotes[card]),
             }
             for card, tally in retrieved_card_tallies.items()
