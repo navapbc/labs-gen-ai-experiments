@@ -12,14 +12,17 @@ on:
         description: 'Folder containing Dockerfile to build'
         required: true
         type: string
+        default: '02-household-queries'
       image_name:
         description: 'Name of the image to push'
         required: true
         type: string
+        default: 'chainlit_bot'
       image_tag:
         description: 'Tag/Version of the image to push'
         required: true
         type: string
+        default: '0.01'
 
 env:
   # Add prefix to be clear that we're not using the original image
@@ -29,9 +32,11 @@ env:
 
 jobs:
   publish-image:
-    if: github.repository == 'navapbc/labs-gen-ai-experiments'
     runs-on: ubuntu-latest
     steps:
+    - name: "Checkout source code"
+      uses: actions/checkout@v4
+
     - name: "Login to GitHub Container Registry"
       uses: docker/login-action@v3.0.0
       with:
@@ -43,8 +48,9 @@ jobs:
       id: docker-push
       shell: bash
       run: |
+        ls
         cd ${{ inputs.dockerfile_folder }}
-        docker build -t "${{ inputs.image_name }}:${{ inputs.image_tag }}"
+        docker build -t "${{ inputs.image_name }}:${{ inputs.image_tag }}" .
 
         echo "# Publishing image ${{ inputs.image_name }}:${{ inputs.image_tag }} to ${{ env.GHCR_PATH }}"
 
