@@ -1,15 +1,16 @@
-import dotenv
-
-from langchain_community.llms.ollama import Ollama
-import google.generativeai as genai
-from openai import OpenAI
 import os
+
+import anthropic
+import dotenv
+import google.generativeai as genai
+from langchain_community.llms.ollama import Ollama
+from openai import OpenAI
 
 dotenv.load_dotenv()
 
 
 def get_transcript(file_path="./transcript.txt"):
-    file = open(file_path)
+    file = open(file_path, encoding="utf-8")
     content = file.read()
     return content
 
@@ -53,6 +54,7 @@ def google_gemini_client(
 
 
 def gpt3_5(prompt, model="gpt-3.5-turbo"):
+    # Get API key from https://platform.openai.com/api-keys
     OPEN_AI_API_KEY = os.environ.get("OPEN_AI_API_KEY")
     openai_client = OpenAI(api_key=OPEN_AI_API_KEY)  # Uses OPENAI_API_KEY
     return (
@@ -66,3 +68,20 @@ def gpt3_5(prompt, model="gpt-3.5-turbo"):
 
 def gpt_4_turbo(prompt):
     return gpt3_5(prompt, model="gpt-4-turbo")
+
+
+def claude(prompt, model="claude-3-opus-20240229", max_tokens=1024):
+    # Get API key from https://console.anthropic.com/settings/keys
+    ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+
+    client = anthropic.Anthropic(
+        api_key=ANTHROPIC_API_KEY,
+    )
+    generated_response = client.messages.create(
+        model=model,
+        max_tokens=max_tokens,
+        messages=[{"role": "user", "content": prompt}],
+    ).content
+    text_response = "\n".join([text_block.text for text_block in generated_response])
+
+    return text_response
