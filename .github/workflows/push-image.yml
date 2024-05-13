@@ -44,14 +44,16 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: "Publish images using tags '${{ inputs.image_tag }}'"
-      id: docker-push
+    - name: "Build image in ${{ inputs.dockerfile_folder }} with tag '${{ inputs.image_tag }}'"
       shell: bash
       run: |
-        ls
         cd ${{ inputs.dockerfile_folder }}
         docker build -t "${{ inputs.image_name }}:${{ inputs.image_tag }}" .
 
+    - name: "Publish image ${{ inputs.image_name }} with tag '${{ inputs.image_tag }}'"
+      id: docker-push
+      shell: bash
+      run: |
         echo "# Publishing image ${{ inputs.image_name }}:${{ inputs.image_tag }} to ${{ env.GHCR_PATH }}"
 
         docker tag "${{ inputs.image_name }}:${{ inputs.image_tag }}" "${{ env.GHCR_PATH }}:${{ inputs.image_tag }}"
