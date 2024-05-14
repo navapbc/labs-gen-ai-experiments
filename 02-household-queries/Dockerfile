@@ -17,9 +17,7 @@ RUN pip3 install -r requirements.txt
 COPY . .
 
 EXPOSE 8000
-
-# HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
-
+HEALTHCHECK CMD curl http://localhost:8000 || exit 1
 ENTRYPOINT ["chainlit", "run", "--port", "8000", "-h", "chainlit-household-bot.py"]
 
 # docker build -t chainlit1 .
