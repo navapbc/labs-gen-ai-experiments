@@ -41,7 +41,7 @@ jobs:
       uses: docker/login-action@v3.0.0
       with:
         registry: ghcr.io
-        username: ${{ github.actor }}
+        username: yoomlam
         password: ${{ secrets.MY_GITHUB_TOKEN }}
 
     - name: "Build image in ${{ inputs.dockerfile_folder }} with tag '${{ inputs.image_tag }}'"
