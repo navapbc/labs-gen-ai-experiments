@@ -12,15 +12,14 @@ import sys
 import traceback
 import dotenv
 
-from langchain_community.embeddings import SentenceTransformerEmbeddings
-from langchain_community.vectorstores import Chroma
-
+import dataclasses
 import dspy
 
 # print("Loading our libraries...")
 import dspy_engine
 import ingest
 import debugging
+from decompose_and_summarize import create_predictor, generate_derived_questions, create_vectordb, retrieve_cards, collate_by_card_score_sum
 
 
 @debugging.timer
@@ -63,13 +62,7 @@ def cache_derived_questions(llm_model, predictor):
             print("  already transformed")
             continue
         try:
-            pred = predictor(question=question)
-            print("Answer:", pred.answer)
-            derived_questions = json.loads(pred.answer)
-            if "Answer" in derived_questions:
-                # For OpenAI 'gpt-4-turbo' in json mode
-                derived_questions = derived_questions["Answer"]
-            print("  => ", derived_questions)
+            derived_questions = generate_derived_questions(predictor, question)
             add_transformation(indexed_qs, qa_dict["id"], question, llm_model, derived_questions)
         except Exception as e:
             print("  => Error:", e)
@@ -82,40 +75,8 @@ def cache_derived_questions(llm_model, predictor):
     return qs
 
 
-@debugging.timer
-def create_predictor(llm_choice):
-    assert llm_choice is not None, "llm_choice must be specified."
-    dspy.settings.configure(
-        lm=dspy_engine.create_llm_model(llm_choice)  # , rm=create_retriever_model()
-    )
-    print("LLM model created", dspy.settings.lm)
-
-    class DecomposeQuestion(dspy.Signature):
-        """Decompose into multiple questions so that we can search for relevant SNAP and food assistance eligibility rules. \
-Be concise -- only respond with JSON. Only output the questions as a JSON list: ["question1", "question2", ...]. \
-The question is: {question}"""
-
-        # TODO: Incorporate https://gist.github.com/hugodutka/6ef19e197feec9e4ce42c3b6994a919d
-
-        question = dspy.InputField()
-        answer = dspy.OutputField(desc='["question1", "question2", ...]')
-
-    return dspy.Predict(DecomposeQuestion)
-
-
 def narrow_transformations_to(llm_model, qs):
     return {item["question"]: item["transformations"].get(llm_model) for item in qs}
-
-
-@debugging.timer
-def create_vectordb():
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    return Chroma(
-        embedding_function=embeddings,
-        # Must use collection_name="langchain" -- https://github.com/langchain-ai/langchain/issues/10864#issuecomment-1730303411
-        collection_name="langchain",
-        persist_directory="./chroma_db",
-    )
 
 
 def compute_percent_retrieved(retrieved_cards, guru_cards):
@@ -140,28 +101,22 @@ def eval_retrieval(llm_model, qa, derived_qs, vectordb, retrieve_k=5):
             continue
 
         questions = narrowed_qs[question]
-        results = []
         print(f"Processing user question {qa_dict['id']}: with {len(questions)} derived questions")
-        for q in questions:
-            retrieval_tups = vectordb.similarity_search_with_relevance_scores(q, k=retrieve_k)
-            retrieval = [tup[0] for tup in retrieval_tups]
-            retrieved_cards = [doc.metadata["source"] for doc in retrieval]
-            scores = [tup[1] for tup in retrieval_tups]
+        derived_question_entries = retrieve_cards(questions, vectordb, retrieve_k)
+        results = []
+        for r in derived_question_entries:
             results.append(
                 {
-                    "derived_question": q,
-                    "retrieved_cards": retrieved_cards,
-                    "retrieval_scores": scores,
-                    "recall": compute_percent_retrieved(retrieved_cards, guru_cards),
-                    "extra_cards": count_extra_cards(retrieved_cards, guru_cards),
+                    "derived_question": r.derived_question,
+                    "retrieved_cards": r.retrieved_cards,
+                    "retrieval_scores": r.retrieval_scores,
+                    "recall": compute_percent_retrieved(r.retrieved_cards, guru_cards),
+                    "extra_cards": count_extra_cards(r.retrieved_cards, guru_cards),
                 }
             )
 
-        all_retrieved_cards = dict()
-        for result in results:
-            scores = result["retrieval_scores"]
-            for i, card in enumerate(result["retrieved_cards"]):
-                all_retrieved_cards[card] = all_retrieved_cards.get(card, 0) + scores[i]
+        sorted_cards_dict = dict([(entry.card,entry.score_sum) for entry in collate_by_card_score_sum(derived_question_entries)])
+        sorted_cards = list(sorted_cards_dict)
 
         eval_results.append(
             {
@@ -169,16 +124,10 @@ def eval_retrieval(llm_model, qa, derived_qs, vectordb, retrieve_k=5):
                 "question": question,
                 "derived_questions": questions,
                 "results": results,
-                "all_retrieved_cards": dict(
-                    sorted(
-                        all_retrieved_cards.items(),
-                        key=lambda item: item[1],
-                        reverse=True,
-                    )
-                ),
+                "all_retrieved_cards": sorted_cards_dict,
                 "guru_cards": guru_cards,
-                "recall": compute_percent_retrieved(all_retrieved_cards, guru_cards),
-                "extra_cards": count_extra_cards(all_retrieved_cards, guru_cards),
+                "recall": compute_percent_retrieved(sorted_cards, guru_cards),
+                "extra_cards": count_extra_cards(sorted_cards, guru_cards),
             }
         )
 
