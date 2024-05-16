@@ -47,34 +47,55 @@ class GenerationResults:
     derived_questions: List[DerivedQuestionEntry] = None
     cards: List[CardResponseEntry] = None
 
-
-def on_question(question):
-    gen_results = GenerationResults(question)
-
-    # TODO: retry if don't get JSON array response
-    derived_questions = main1_decompose_user_questions(question)
-
-    main2_retrieve_cards(derived_questions, gen_results)
-
-    generate_summaries(gen_results)
-
-    return gen_results
-
-
-def main1_decompose_user_questions(question):
-    llm_model = os.environ.get("LLM_MODEL_NAME", "openhermes")
-    print(f"LLM_MODEL_NAME: {llm_model}")
-    llm = dspy_engine.create_llm_model(llm_model)
-
-    predictor = get_question_transformer_llm()
-    print("Predictor created", predictor)
-    with dspy.context(lm=llm):
-        return generate_derived_questions(predictor, question)
+def init():
+    dotenv.load_dotenv()
+    return {
+        "decompose_llm_name": os.environ.get("LLM_MODEL_NAME", "openhermes"),
+        "decompose_llm": None,
+        "decompose_predictor": None,
+        "vectordb": None,
+        "retrieve_k": int(os.environ.get("RETRIEVE_K", "4")),
+        "summarizer_llm_name": os.environ.get("SUMMARIZER_LLM_MODEL_NAME", "openhermes"),
+        "summarizer_llm": None,
+        "summarizer_predictor": None,
+        "guru_card_texts": None,
+    }
 
 
-def get_question_transformer_llm():
-    # TODO: create only once
-    return create_predictor()
+def get_guru_card_texts():
+    if settings["guru_card_texts"] is None:
+        # Extract Guru card texts so it can be summarized
+        settings["guru_card_texts"] = ingest.extract_qa_text_from_guru()
+    return settings["guru_card_texts"]
+
+
+def get_decompose_llm():
+    if settings["decompose_llm"] is None:
+        llm_model = settings["decompose_llm_name"]
+        print(f"decompose_llm_name: {llm_model}")
+        settings["decompose_llm"] = dspy_engine.create_llm_model(llm_model)
+    return settings["decompose_llm"]
+
+
+def get_summarizer_llm():
+    if settings["summarizer_llm"] is None:
+        llm_model = settings["summarizer_llm_name"]
+        print(f"summarizer_llm_name: {llm_model}")
+        settings["summarizer_llm"] = dspy_engine.create_llm_model(llm_model)
+    return settings["summarizer_llm"]
+
+
+def get_decompose_predictor():
+    if settings["decompose_predictor"] is None:
+        settings["decompose_predictor"] = create_predictor()
+        print("Created decompose_predictor:", settings["decompose_predictor"])
+    return settings["decompose_predictor"]
+
+
+def get_summarizer_predictor():
+    if settings["summarizer_predictor"] is None:
+        settings["summarizer_predictor"] = create_summarizer()
+    return settings["summarizer_predictor"]
 
 
 @debugging.timer
@@ -92,6 +113,53 @@ The question is: {question}"""
     return dspy.Predict(DecomposeQuestion)
 
 
+def get_vectordb():
+    if settings["vectordb"] is None:
+        settings["vectordb"] = create_vectordb()
+    return settings["vectordb"]
+
+
+def create_summarizer():
+    class SummarizeCardGivenQuestion(dspy.Signature):
+        """Summarize the following context into 1 sentence without explicitly answering the question(s): {context_question}
+
+        Context: {context}
+        """
+
+        context_question = dspy.InputField()
+        context = dspy.InputField()
+        answer = dspy.OutputField()
+
+    return dspy.Predict(SummarizeCardGivenQuestion)
+
+
+@debugging.timer
+def create_vectordb():
+    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+    return Chroma(
+        embedding_function=embeddings,
+        # Must use collection_name="langchain" -- https://github.com/langchain-ai/langchain/issues/10864#issuecomment-1730303411
+        collection_name="langchain",
+        persist_directory="./chroma_db",
+    )
+
+
+@debugging.timer
+def on_question(question):
+    gen_results = GenerationResults(question)
+
+    # TODO: retry if don't get JSON array response
+    with dspy.context(lm=get_decompose_llm()):
+        derived_questions = generate_derived_questions(get_decompose_predictor(), question)
+
+    collect_retrieved_cards(derived_questions, gen_results)
+
+    with dspy.context(lm=get_summarizer_llm()):
+        create_summaries(gen_results, get_summarizer_predictor(), get_guru_card_texts())
+
+    return gen_results
+
+
 @debugging.timer
 def generate_derived_questions(predictor, question):
     pred = predictor(question=question)
@@ -104,14 +172,10 @@ def generate_derived_questions(predictor, question):
     return derived_questions
 
 
-def main2_retrieve_cards(derived_qs, gen_results):
-    vectordb = create_vectordb()
-
-    # llm_model = os.environ.get("LLM_MODEL_NAME", "openhermes")
-    # print(f"LLM_MODEL_NAME: {llm_model}")
-    retrieve_k = int(os.environ.get("RETRIEVE_K", "4"))
+def collect_retrieved_cards(derived_qs, gen_results):
+    retrieve_k = settings["retrieve_k"]
     print("RETRIEVE_K:", retrieve_k)
-    gen_results.derived_questions = retrieve_cards(derived_qs, vectordb, retrieve_k)
+    gen_results.derived_questions = retrieve_cards(derived_qs, get_vectordb(), retrieve_k)
     gen_results.cards = collate_by_card_score_sum(gen_results.derived_questions)
 
 
@@ -152,17 +216,6 @@ def collate_by_card_score_sum(derived_question_entries):
 
 
 @debugging.timer
-def create_vectordb():
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    return Chroma(
-        embedding_function=embeddings,
-        # Must use collection_name="langchain" -- https://github.com/langchain-ai/langchain/issues/10864#issuecomment-1730303411
-        collection_name="langchain",
-        persist_directory="./chroma_db",
-    )
-
-
-@debugging.timer
 def retrieve_cards(derived_qs, vectordb, retrieve_k=5):
     results = []  # list of DerivedQuestionEntry
     # print(f"Processing user question {qa_dict['id']}: with {len(derived_qs)} derived questions")
@@ -174,24 +227,6 @@ def retrieve_cards(derived_qs, vectordb, retrieve_k=5):
         scores = [tup[1] for tup in retrieval_tups]
         results.append(DerivedQuestionEntry(q, retrieved_cards, retrieved_chunks, scores))
     return results
-
-
-def generate_summaries(gen_results):
-    summarizer_llm_model = os.environ.get("SUMMARIZER_LLM_MODEL_NAME", "openhermes")
-    print(f"Summarizer SUMMARIZER_LLM_MODEL_NAME: {summarizer_llm_model}")
-
-    # Extract Guru card texts so it can be summarized
-    guru_card_texts = ingest.extract_qa_text_from_guru()
-
-    assert summarizer_llm_model is not None, "summarizer_llm_model must be specified."
-    llm = dspy_engine.create_llm_model(summarizer_llm_model)
-    print("LLM model created", llm)
-
-    # TODO: reuse one summarizer
-    summarizer = create_summarizer()
-
-    with dspy.context(lm=llm):
-        create_summaries(gen_results, summarizer, guru_card_texts)
 
 
 def create_summaries(gen_results, summarizer, guru_card_texts):
@@ -210,20 +245,6 @@ def create_summaries(gen_results, summarizer, guru_card_texts):
         card_entry.summary = prediction.answer
 
 
-def create_summarizer():
-    class SummarizeCardGivenQuestion(dspy.Signature):
-        """Summarize the following context into 1 sentence without explicitly answering the question(s): {context_question}
-
-        Context: {context}
-        """
-
-        context_question = dspy.InputField()
-        context = dspy.InputField()
-        answer = dspy.OutputField()
-
-    return dspy.Predict(SummarizeCardGivenQuestion)
-
-
 def format_response(gen_results):
     resp = ["==="]
     resp.append("Q: {gen_results.question}")
@@ -234,10 +255,12 @@ def format_response(gen_results):
     resp.append("Guru cards:")
     for card in gen_results.cards:
         if card.summary:
-            resp += [ "---", card.card_title, f"  Summary: {card.summary}" ] + [f"  - \"{q}\"" for q in card.quotes]
+            resp += ["---", card.card_title, f"  Summary: {card.summary}"] + [f'  > "{q}"' for q in card.quotes]
 
     return "\n".join(resp)
 
+
+settings = init()
 if __name__ == "__main__":
     if args := sys.argv[1:]:
         user_question = args[0]
@@ -245,7 +268,6 @@ if __name__ == "__main__":
     else:
         user_question = "The client's son is 20, is still living with them, but has his own job and buys his own food. Does the client have to list him on the application? If so, do we need to include the dependent's income for SNAP?"
 
-    dotenv.load_dotenv()
     generated_results = on_question(user_question)
     print(json.dumps(dataclasses.asdict(generated_results), indent=2))
 

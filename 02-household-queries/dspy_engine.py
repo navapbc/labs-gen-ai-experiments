@@ -178,7 +178,7 @@ def create_retriever_model():
 
 @debugging.timer
 def create_llm_model(llm_name="openhermes", respond_with_json=False):
-    print("LLM model name:", llm_name)
+    # print("LLM model name:", llm_name)
     if llm_name in ["openhermes", "llama2", "llama2:chat", "llama3", "mistral", "mistral:instruct"]:
         # Alternative using OpenAI-compatible API: https://gist.github.com/jrknox1977/78c17e492b5a75ee5bbaf9673aee4641
         return dspy.OllamaLocal(model=llm_name, temperature=0.1)
