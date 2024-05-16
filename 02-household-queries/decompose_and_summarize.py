@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import dotenv
 
 import dataclasses
 from dataclasses import dataclass
@@ -57,8 +58,7 @@ def on_question(question):
 
     generate_summaries(gen_results)
 
-    # response = derived_questions, "guru_cards": [dataclasses.asdict(r1)]}
-    return json.dumps(dataclasses.asdict(gen_results), indent=2)
+    return gen_results
 
 
 def main1_decompose_user_questions(question):
@@ -224,12 +224,29 @@ def create_summarizer():
     return dspy.Predict(SummarizeCardGivenQuestion)
 
 
+def format_response(gen_results):
+    resp = ["==="]
+    resp.append("Q: {gen_results.question}")
+
+    for i, dq in enumerate(gen_results.derived_questions):
+        resp.append(f"DQ {i}: {dq.derived_question}")
+
+    resp.append("Guru cards:")
+    for card in gen_results.cards:
+        if card.summary:
+            resp += [ "---", card.card_title, f"  Summary: {card.summary}" ] + [f"  - \"{q}\"" for q in card.quotes]
+
+    return "\n".join(resp)
+
 if __name__ == "__main__":
     if args := sys.argv[1:]:
         user_question = args[0]
         print("Running option:", user_question)
     else:
-        user_question = "SNAP for childcare?"
+        user_question = "The client's son is 20, is still living with them, but has his own job and buys his own food. Does the client have to list him on the application? If so, do we need to include the dependent's income for SNAP?"
 
-    resp = on_question(user_question)
-    print(resp)
+    dotenv.load_dotenv()
+    generated_results = on_question(user_question)
+    print(json.dumps(dataclasses.asdict(generated_results), indent=2))
+
+    print(format_response(generated_results))
