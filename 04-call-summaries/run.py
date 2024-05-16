@@ -67,78 +67,75 @@ print("""
       """)
 
 transcript = get_transcript()
-# llm = input() or "1"
-# prompt_template = PromptTemplate.from_template(PROMPT)
-# formatted_prompt = prompt_template.format(transcript=transcript)
+llm = input() or "1"
+prompt_template = PromptTemplate.from_template(PROMPT)
+formatted_prompt = prompt_template.format(transcript=transcript)
 
-# if llm == "2":
-#     test = ollama_client(model_name="dolphin-mistral", prompt=formatted_prompt)
-#     print("""----------
-#         Dolphin
-#         """)
-# elif llm == "3":
-#     test = google_gemini_client(prompt=formatted_prompt).text
-#     print("""----------
-#         Gemini Flash 1.5
-#         """)
-# elif llm == "4":
-#     print("""----------
-#       GPT 4
-#       """)
-#     test = gpt_4_turbo(prompt=formatted_prompt)
-# elif llm == "5":
-#     print("""----------
-#       GPT 4o
-#       """)
-#     test = gpt_4o(prompt=formatted_prompt)
-# elif llm == "6":
-#     print("""----------
-#         Claude 3
-#         """)
-#     test = claude(prompt=formatted_prompt)
-# elif llm == "7":
-#     test_open_hermes = ollama_client(model_name="openhermes", prompt=formatted_prompt)
-#     print("""
-#         Openhermes
-#         """)
-#     print(test_open_hermes)
+if llm == "2":
+    test = ollama_client(model_name="dolphin-mistral", prompt=formatted_prompt)
+    print("""----------
+        Dolphin
+        """)
+elif llm == "3":
+    test = google_gemini_client(prompt=formatted_prompt).text
+    print("""----------
+        Gemini Flash 1.5
+        """)
+elif llm == "4":
+    print("""----------
+      GPT 4
+      """)
+    test = gpt_4_turbo(prompt=formatted_prompt)
+elif llm == "5":
+    print("""----------
+      GPT 4o
+      """)
+    test = gpt_4o(prompt=formatted_prompt)
+elif llm == "6":
+    print("""----------
+        Claude 3
+        """)
+    test = claude(prompt=formatted_prompt)
+elif llm == "7":
+    test_open_hermes = ollama_client(model_name="openhermes", prompt=formatted_prompt)
+    print("""
+        Openhermes
+        """)
+    print(test_open_hermes)
 
-#     test_dolphin = ollama_client(model_name="dolphin-mistral", prompt=formatted_prompt)
-#     print("""----------
-#         Dolphin
-#         """)
-#     print(test_dolphin)
+    test_dolphin = ollama_client(model_name="dolphin-mistral", prompt=formatted_prompt)
+    print("""----------
+        Dolphin
+        """)
+    print(test_dolphin)
 
-#     test_gemini = google_gemini_client(prompt=formatted_prompt).text
-#     print("""----------
-#         Gemini
-#         """)
-#     print(test_gemini)
+    test_gemini = google_gemini_client(prompt=formatted_prompt).text
+    print("""----------
+        Gemini
+        """)
+    print(test_gemini)
 
-#     print("""----------
-#         GPT 4
-#         """)
-#     test_gpt4 = gpt_4_turbo(prompt=formatted_prompt)
-#     print(test_gpt4)
+    print("""----------
+        GPT 4
+        """)
+    test_gpt4 = gpt_4_turbo(prompt=formatted_prompt)
+    print(test_gpt4)
 
-#     print("""----------
-#         GPT 4o
-#         """)
-#     test_gpt4o = gpt_4o(prompt=formatted_prompt)
-#     print(test_gpt4o)
+    print("""----------
+        GPT 4o
+        """)
+    test_gpt4o = gpt_4o(prompt=formatted_prompt)
+    print(test_gpt4o)
 
-#     print("""----------
-#         Claude 3
-#         """)
-#     test_claude = claude(prompt=formatted_prompt)
-#     print(test_claude)
-# else:
-#     test = ollama_client(model_name="openhermes", prompt=formatted_prompt)
-#     print("""
-#         Openhermes
-#         """)
-# if test:
-#     print(test)
-
-
-chunking_ingest(transcript=transcript, prompt=CHUNKING_PROMPT)
+    print("""----------
+        Claude 3
+        """)
+    test_claude = claude(prompt=formatted_prompt)
+    print(test_claude)
+else:
+    test = ollama_client(model_name="openhermes", prompt=formatted_prompt)
+    print("""
+        Openhermes
+        """)
+if test:
+    print(test)
