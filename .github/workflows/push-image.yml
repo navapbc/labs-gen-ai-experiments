@@ -24,7 +24,7 @@ on:
         type: string
         default: '0.01'
 
-env:
+# env:
   # Target path where the image will be pushed, i.e., to GHCR for the current repo
   # GHCR_PATH: "ghcr.io/${{ github.repository }}/${{ inputs.image_name }}"
 
