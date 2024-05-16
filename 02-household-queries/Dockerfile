@@ -16,7 +16,5 @@ RUN pip3 install -r requirements.txt
 # LABEL org.opencontainers.image.source https://github.com/navapbc/labs-gen-ai-experiments
 
 EXPOSE 8000
-
-# HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
-
+HEALTHCHECK CMD curl http://localhost:8000 || exit 1
 ENTRYPOINT ["chainlit", "run", "--port", "8000", "-h", "chainlit-household-bot.py"]

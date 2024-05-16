@@ -25,8 +25,6 @@ on:
         default: '0.01'
 
 env:
-  # Add prefix to be clear that we're not using the original image
-  TARGET_IMAGE: "${{ inputs.image_name }}"
   # Target path where the image will be pushed, i.e., to GHCR for the current repo
   # GHCR_PATH: "ghcr.io/${{ github.repository }}/${{ inputs.image_name }}"
 
