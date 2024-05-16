@@ -16,6 +16,9 @@ import dspy
 # print("Loading our libraries...")
 import dspy_engine
 import ingest
+
+from decompose_and_summarize import create_summarizer
+
 import debugging
 
 dq = importlib.import_module("decompose-questions")
@@ -146,20 +149,6 @@ def get_retrieval_results(orig_qs, narrowed_qs, vectordb, retrieve_k):
     return retrieval_results
 
 
-def create_summarizer():
-    class SummarizeCardGivenQuestion(dspy.Signature):
-        """Summarize the following context into 1 sentence without explicitly answering the question(s): {context_question}
-
-        Context: {context}
-        """
-
-        context_question = dspy.InputField()
-        context = dspy.InputField()
-        answer = dspy.OutputField()
-
-    return dspy.Predict(SummarizeCardGivenQuestion)
-
-
 def create_summaries(retrieval_results, summarizer_llm_model, guru_card_texts):
     assert summarizer_llm_model is not None, "summarizer_llm_model must be specified."
     llm = dspy_engine.create_llm_model(summarizer_llm_model)  # , rm=create_retriever_model()
@@ -177,7 +166,7 @@ def create_summaries(retrieval_results, summarizer_llm_model, guru_card_texts):
             entire_card = "\n".join([card_title, card_text])
             # Summarize based on derived question and original question
             # Using only the original question causes the LLM to try to answer the question.
-            context_questions = " ".join(metadata["derived_questions"] + [rr["question"]])
+            context_questions = " ".join(metadata["assoc_derived_questions"] + [rr["question"]])
             with dspy.context(lm=llm):
                 print(f"  {i}. Summarizing {card_title}...")
                 prediction = summarizer(context_question=context_questions, context=entire_card)

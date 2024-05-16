@@ -19,7 +19,13 @@ import dspy
 import dspy_engine
 import ingest
 import debugging
-from decompose_and_summarize import create_predictor, generate_derived_questions, create_vectordb, retrieve_cards, collate_by_card_score_sum
+from decompose_and_summarize import (
+    create_predictor,
+    generate_derived_questions,
+    create_vectordb,
+    retrieve_cards,
+    collate_by_card_score_sum,
+)
 
 
 @debugging.timer
@@ -115,7 +121,9 @@ def eval_retrieval(llm_model, qa, derived_qs, vectordb, retrieve_k=5):
                 }
             )
 
-        sorted_cards_dict = dict([(entry.card,entry.score_sum) for entry in collate_by_card_score_sum(derived_question_entries)])
+        sorted_cards_dict = dict(
+            [(entry.card, entry.score_sum) for entry in collate_by_card_score_sum(derived_question_entries)]
+        )
         sorted_cards = list(sorted_cards_dict)
 
         eval_results.append(

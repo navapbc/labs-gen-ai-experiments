@@ -156,7 +156,7 @@ def extract_question_answers(question_key, answer_key, json_data):
             continue
         soup = BeautifulSoup(content[answer_key], "html.parser")
         answer = soup.get_text(separator="\n", strip=True)
-        question_answers[content[question_key]] = answer
+        question_answers[content[question_key].strip()] = answer
     return question_answers
 
 
