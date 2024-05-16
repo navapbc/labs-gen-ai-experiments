@@ -139,3 +139,5 @@ else:
         """)
 if test:
     print(test)
+
+chunking_ingest(transcript=transcript, prompt=CHUNKING_PROMPT)

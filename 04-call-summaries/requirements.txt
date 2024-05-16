@@ -4,3 +4,8 @@ tokenizers
 langchain
 langchain_community
 openai
+sentence-transformers
+nltk
+spacy==3.7.4
+langchain-text-splitters
+langchain_openai
