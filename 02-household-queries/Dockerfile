@@ -15,7 +15,9 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-# LABEL org.opencontainers.image.source https://github.com/navapbc/labs-gen-ai-experiments
+# Associate GHCR package with GitHub repo; otherwise, it's associated with the navapbc GitHub organization
+# See https://github.com/orgs/navapbc/packages?repo_name=labs-gen-ai-experiments
+LABEL org.opencontainers.image.source https://github.com/navapbc/labs-gen-ai-experiments
 
 EXPOSE 8000
 HEALTHCHECK CMD curl http://localhost:8000 || exit 1
