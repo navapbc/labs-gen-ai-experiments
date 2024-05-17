@@ -70,6 +70,7 @@ jobs:
       with:
         context: ${{ inputs.dockerfile_folder }}
         tags: "${{ inputs.image_name }}:${{ inputs.image_tag }}"
+        load: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
         # cache-from: type=registry,ref=${{ env.ECR_PATH }}:dockercache
