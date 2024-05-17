@@ -66,10 +66,10 @@ jobs:
         tags: "${{ inputs.image_name }}:${{ inputs.image_tag }}"
         push: true
         pull: true
-        # cache-from: type=gha
-        # cache-to: type=gha,mode=max
-        cache-from: type=registry,ref=${{ env.ECR_PATH }}:dockercache
-        cache-to: type=registry,ref=${{ env.ECR_PATH }}:dockercache,mode=max,image-manifest=true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        # cache-from: type=registry,ref=${{ env.ECR_PATH }}:dockercache
+        # cache-to: type=registry,ref=${{ env.ECR_PATH }}:dockercache,mode=max,image-manifest=true
 
     - name: "Publish image ${{ inputs.image_name }} with tag '${{ inputs.image_tag }}'"
       id: docker-push
