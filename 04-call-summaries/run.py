@@ -1,7 +1,6 @@
 from langchain_core.prompts import PromptTemplate
 
 from llm import claude_client, google_gemini_client, gpt_client, ollama_client
-from chunking import chunking_ingest
 
 
 # download transcripts from https://drive.google.com/drive/folders/19r6x3Zep4N9Rl_x4n4H6RpWkXviwbxyw?usp=sharing
@@ -31,12 +30,6 @@ Please summarize the transcript, {transcript}, with the following template:
 6. Documents Needed: e.g., Income verification, Housing documentation
 7. Next Steps for Client
 8. Next Steps for Agent
-"""
-
-CHUNKING_PROMPT = """
-You are a helpful AI assistant tasked with summarizing transcripts, however we can only process the transcripts in pieces.
-Fill out the fields with the text given {text}. If the following template already has the field filled out, do not overwrite this information.
-Please fill out the data with the following template: {template}
 """
 
 
