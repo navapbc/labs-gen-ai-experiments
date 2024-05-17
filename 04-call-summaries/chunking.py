@@ -119,6 +119,7 @@ def chunking_ingest(transcript, prompt):
         print("""----------
         GPT 4o
         """)
+        gpt = gpt_client()
         for text in text_chunks:
             formatted_prompt = prompt_template.format(
                 text=text.page_content, template=template
