@@ -13,6 +13,8 @@ RUN git clone https://github.com/navapbc/labs-gen-ai-experiments.git .
 WORKDIR /app/02-household-queries
 RUN pip3 install -r requirements.txt
 
+COPY . .
+
 # LABEL org.opencontainers.image.source https://github.com/navapbc/labs-gen-ai-experiments
 
 EXPOSE 8000
