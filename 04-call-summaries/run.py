@@ -1,11 +1,11 @@
 from langchain_core.prompts import PromptTemplate
 
-from llm import claude, google_gemini_client, gpt3_5, gpt_4_turbo, gpt_4o, ollama_client
+from llm import claude_client, google_gemini_client, gpt_client, ollama_client
 from chunking import chunking_ingest
 
 
 # download transcripts from https://drive.google.com/drive/folders/19r6x3Zep4N9Rl_x4n4H6RpWkXviwbxyw?usp=sharing
-def get_transcript(file_path="./multi_benefit_transcript.txt"):
+def get_transcript(file_path="./transcript.txt"):
     file = open(file_path, encoding="utf-8")
     content = file.read()
     file.close()
@@ -35,24 +35,8 @@ Please summarize the transcript, {transcript}, with the following template:
 
 CHUNKING_PROMPT = """
 You are a helpful AI assistant tasked with summarizing transcripts, however we can only process the transcripts in pieces.
-Fill out the fields with the text given {text_given}. If the template already has the field filled out, do not overwrite this information. 
-If the template is blank, fill out the following template the best you can using the text:
-1. Caller Information:
-- Name
-- Contact Information
-- Availability
-- Household Information
-2. Reason/Type of Call: e.g., Applying for benefits, Follow-ups
-3. Previous Benefits History:
-- Applied for
-- Receives
-- Denied
-4. Benefits Discussion: Prefix the discussed benefit with a hashtag (e.g., #SNAP, #LIHEAP)
-5. Discussion Points:
-- Key information points
-6. Documents Needed: e.g., Income verification, Housing documentation
-7. Next Steps for Client
-8. Next Steps for Agent
+Fill out the fields with the text given {text}. If the following template already has the field filled out, do not overwrite this information.
+Please fill out the data with the following template: {template}
 """
 
 print("""
@@ -72,12 +56,14 @@ prompt_template = PromptTemplate.from_template(PROMPT)
 formatted_prompt = prompt_template.format(transcript=transcript)
 
 if llm == "2":
-    test = ollama_client(model_name="dolphin-mistral", prompt=formatted_prompt)
+    ollama = ollama_client(model_name="dolphin-mistral")
+    response = ollama_client(client=ollama, prompt=formatted_prompt)
     print("""----------
         Dolphin
         """)
 elif llm == "3":
-    test = google_gemini_client(prompt=formatted_prompt).text
+    gemini = google_gemini_client()
+    response = google_gemini_client(client=gemini, prompt=formatted_prompt)
     print("""----------
         Gemini Flash 1.5
         """)
@@ -85,59 +71,72 @@ elif llm == "4":
     print("""----------
       GPT 4
       """)
-    test = gpt_4_turbo(prompt=formatted_prompt)
+    gpt = gpt_client()
+    response = gpt_client(client=gpt, model_choice="gpt4", prompt=formatted_prompt)
 elif llm == "5":
     print("""----------
       GPT 4o
       """)
-    test = gpt_4o(prompt=formatted_prompt)
+    gpt = gpt_client()
+    response = gpt_client(client=gpt, model_choice="gpt4o", prompt=formatted_prompt)
 elif llm == "6":
     print("""----------
         Claude 3
         """)
-    test = claude(prompt=formatted_prompt)
+    claude = claude_client()
+    response = claude_client(client=claude, prompt=formatted_prompt)
 elif llm == "7":
-    test_open_hermes = ollama_client(model_name="openhermes", prompt=formatted_prompt)
-    print("""
-        Openhermes
-        """)
-    print(test_open_hermes)
+    # print("""
+    #     Openhermes
+    #     """)
+    # ollama_openhermes = ollama_client(model_name="openhermes")
+    # ollama_openhermes_response = ollama_client(
+    #     client=ollama_openhermes, prompt=formatted_prompt
+    # )
+    # print(ollama_openhermes_response)
 
-    test_dolphin = ollama_client(model_name="dolphin-mistral", prompt=formatted_prompt)
-    print("""----------
-        Dolphin
-        """)
-    print(test_dolphin)
+    # print("""----------
+    #     Dolphin
+    #     """)
+    # ollama_dolphin = ollama_client(model_name="dolphin-mistral")
+    # dolphin_response = ollama_client(client=ollama_dolphin, prompt=formatted_prompt)
+    # print(dolphin_response)
 
-    test_gemini = google_gemini_client(prompt=formatted_prompt).text
-    print("""----------
-        Gemini
-        """)
-    print(test_gemini)
+    # print("""----------
+    #     Gemini Flash 1.5
+    #     """)
+    # gemini = google_gemini_client()
+    # gemini_response = google_gemini_client(client=gemini, prompt=formatted_prompt)
+    # print(gemini_response)
 
-    print("""----------
-        GPT 4
-        """)
-    test_gpt4 = gpt_4_turbo(prompt=formatted_prompt)
-    print(test_gpt4)
+    # gpt = gpt_client()
+    # print("""----------
+    #   GPT 4
+    #   """)
+    # gpt_4_response = gpt_client(
+    #     client=gpt, model_choice="gpt4", prompt=formatted_prompt
+    # )
+    # print(gpt_4_response)
 
-    print("""----------
-        GPT 4o
-        """)
-    test_gpt4o = gpt_4o(prompt=formatted_prompt)
-    print(test_gpt4o)
+    # print("""----------
+    #   GPT 4o
+    #   """)
+    # gpt_4o_response = gpt_client(
+    #     client=gpt, model_choice="gpt-4o", prompt=formatted_prompt
+    # )
+    # print(gpt_4o_response)
 
     print("""----------
         Claude 3
         """)
-    test_claude = claude(prompt=formatted_prompt)
-    print(test_claude)
+    claude = claude_client()
+    claude_response = claude_client(client=claude, prompt=formatted_prompt)
+    print(claude_response)
 else:
-    test = ollama_client(model_name="openhermes", prompt=formatted_prompt)
+    ollama = ollama_client(model_name="openhermes")
+    response = ollama_client(client=ollama, prompt=formatted_prompt)
     print("""
         Openhermes
         """)
-if test:
-    print(test)
-
-chunking_ingest(transcript=transcript, prompt=CHUNKING_PROMPT)
+if response:
+    print(response)
