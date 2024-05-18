@@ -23,7 +23,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import os
 
 from ingest import (
-    EMBEDDINGS,
+    get_embeddings,
     add_json_html_data_to_vector_db,
     add_pdf_to_vector_db,
     ingest_call,
@@ -353,7 +353,7 @@ async def on_click_upload_file_query(action: cl.Action):
             add_json_html_data_to_vector_db(
                 vectordb=vectordb,
                 embedding_name=embedding,
-                token_limit=EMBEDDINGS[embedding]["token_limit"],
+                token_limit=get_embeddings()[embedding]["token_limit"],
                 file_path=file.path,
                 content_key="content",
                 index_key="preferredPhrase",
