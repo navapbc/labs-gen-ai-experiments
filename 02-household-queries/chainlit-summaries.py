@@ -18,12 +18,14 @@ async def init_chat():
     # settings = das.init()
     pass
 
+
 @cl.on_message
 async def message_submitted(message: cl.Message):
     generated_results = on_question(message.content)
     print(json.dumps(dataclasses.asdict(generated_results), indent=2))
 
     await cl.Message(format_as_markdown(generated_results)).send()
+
 
 def format_as_markdown(gen_results):
     resp = ["", f"## Q: {gen_results.question}", "### Derived Questions"]
@@ -35,6 +37,6 @@ def format_as_markdown(gen_results):
     for card in gen_results.cards:
         if card.summary:
             resp += [f"#### {card.card_title}", f"Summary: {card.summary}", ""]
-            resp += [f'\n.\n> {q}' for q in card.quotes]
+            resp += [f"\n.\n> {q}" for q in card.quotes]
 
     return "\n".join(resp)

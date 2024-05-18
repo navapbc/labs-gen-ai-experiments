@@ -47,6 +47,7 @@ class GenerationResults:
     derived_questions: List[DerivedQuestionEntry] = None
     cards: List[CardResponseEntry] = None
 
+
 def init():
     dotenv.load_dotenv()
     return {
