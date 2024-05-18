@@ -353,7 +353,7 @@ async def on_click_upload_file_query(action: cl.Action):
             add_json_html_data_to_vector_db(
                 vectordb=vectordb,
                 embedding_name=embedding,
-                token_limit=ingest.get_embeddings()[embedding]["token_limit"],
+                token_limit=get_embeddings()[embedding]["token_limit"],
                 file_path=file.path,
                 content_key="content",
                 index_key="preferredPhrase",

@@ -1,0 +1,6 @@
+anthropic
+google-generativeai
+tokenizers
+langchain
+langchain_community
+openai
