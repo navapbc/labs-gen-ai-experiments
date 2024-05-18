@@ -1,16 +1,11 @@
-FROM python:3.11-slim
+FROM python:3.11-alpine3.19
+
+RUN apk --no-cache add g++
 
 WORKDIR /app
 
-# RUN apt-get update && apt-get install -y \
-#     build-essential \
-#     curl \
-#     software-properties-common \
-#     git \
-#     && rm -rf /var/lib/apt/lists/*
-
 COPY . .
-RUN pip3 install -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Associate GHCR package with GitHub repo; otherwise, it's associated with the navapbc GitHub organization
 # See https://github.com/orgs/navapbc/packages?repo_name=labs-gen-ai-experiments
