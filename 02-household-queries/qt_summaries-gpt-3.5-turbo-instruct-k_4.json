@@ -1,0 +1,851 @@
+[
+    {
+        "id": 1,
+        "question": "The client has her 19 year old grandchild living with her. She says she does her own thing and they don't really share food. Does the grandchild need to be included?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 1.0,
+        "extra_cards": 3,
+        "derived_questions": [
+            "Does the grandchild live with you?",
+            "Is the grandchild financially dependent on you?",
+            "Do you provide regular support for the grandchild?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.7314764598621692,
+                "derived_questions": [
+                    "Does the grandchild live with you?",
+                    "Do you provide regular support for the grandchild?",
+                    "Is the grandchild financially dependent on you?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "Children under 18 years of age can be certified as a separate household from other adults living in the home if the adults do not exercise parental control or offer financial support, and if the child is officially emancipated."
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.6699078276008735,
+                "derived_questions": [
+                    "Does the grandchild live with you?",
+                    "Do you provide regular support for the grandchild?",
+                    "Is the grandchild financially dependent on you?"
+                ],
+                "entire_card": "Who are mandatory HH members for food stamps?\nAnswer:\nThe following household members are ALWAYS included, even if they report that they do not share/prepare meals together. (see text only below, see flow chart further down)\nSpouses:\nIf living in the same residence\nChildren:\nIf age 17 or younger, the child is mandatory with legal guardian\nIf age 18-21, the child is mandatory if natural, adopted, or step child*\nA mandatory child's own child or spouse would need to be included on the application as well\n*Ex. If a 20 year old child resides with their parent, they would be mandatory.\n*Ex. If a 20 year old child resides with their grandparent, they would NOT be mandatory. They would likely be sharing/preparing meals together, but are not required to be listed on the same SNAP application.\n\ufeff\n\ufeff",
+                "summary": "The grandchild living with the client should be included as a mandatory household member for food stamps, regardless of whether they share food or not."
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.5218728563128504,
+                "derived_questions": [
+                    "Does the grandchild live with you?",
+                    "Do you provide regular support for the grandchild?",
+                    "Is the grandchild financially dependent on you?"
+                ],
+                "entire_card": "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?\nAnswer:\n(a) When the custody arrangement between parents is uneven, the child would be included in the household that provides the child with the majority of his or her meals.\n(b) When there is an equal custody arrangement and the children eat 50 percent of their meals with each parent, the case manager must decide which household should include the child. If both parents apply and cannot agree on which household will include the child, the case manager will resolve the issue by including the child in the household that applied first.\nNote: The case manager must insure that the child is included in only one household.\nFood Stamps only",
+                "summary": "The grandchild should be included in the household that provides the majority of their meals, or if there is an equal custody arrangement, the household that applied first."
+            },
+            "Can students be part of a SNAP household?": {
+                "score_sum": 0.2095682249578389,
+                "derived_questions": [
+                    "Do you provide regular support for the grandchild?"
+                ],
+                "entire_card": "Can students be part of a SNAP household?\nYes, however students must meet additional criteria to be part of the SNAP Household.\nStudents must meet one of the following conditions:\nunder age 18 or age 50 or older\nHave a physical or mental disability\nstill in high school\nresponsible for the care of a dependent household member under age 6\nresponsible for dependent household member aged 6-11 without adequate child care and therefore cannot participate in job training or work requirements\nEnrolled full-time and is a single parent with responsibility for the care of a dependent child under age 12, regardless of the availability of adequate child care\nworking at least 20 hours per week\nreceiving Temporary Cash Assistance benefits\nare attending less than half-time\nparticipating in on the job training",
+                "summary": "Yes, students can be part of a SNAP household if they meet certain criteria, such as being under 18 or over 50, having a disability, or being responsible for a dependent household member."
+            }
+        }
+    },
+    {
+        "id": 2,
+        "question": "The client's son is 20 and is still living with them, but has his own job and buys his own food. The client doesn't want to list him on the application, do they have to? If so, do we need to include the son's income?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?",
+            "How is the income of a dependent counted for SNAP?"
+        ],
+        "recall": 0.5,
+        "extra_cards": 4,
+        "derived_questions": [
+            "Do clients have to list their adult children living with them if they have jobs and buy their own food?",
+            "If they do have to list them, do we need to include the adult child's income?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.8556045602793476,
+                "derived_questions": [
+                    "Do clients have to list their adult children living with them if they have jobs and buy their own food?",
+                    "If they do have to list them, do we need to include the adult child's income?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "Children under 18 years of age can be certified as a separate household from other adults living in the home if the adults do not exercise parental control or offer financial support, and clients who are officially emancipated usually fall under this category."
+            },
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.8257677270622369,
+                "derived_questions": [
+                    "Do clients have to list their adult children living with them if they have jobs and buy their own food?"
+                ],
+                "entire_card": "What if a client does not want to provide information about other household members?\nWe always want to try and collect as much information about everyone living in the household, but sometimes clients are not comfortable disclosing information about people living there who are non-applicants.\nIf a client is living with non-mandatory household members, it is helpful to include basic information. When other household members are not included, it can pose delays down the line when caseworkers uncover other household members. When we have an idea of the composition of the household, it allows for faster troubleshooting.\nFOR FOOD STAMP BENEFITS\nIn scenarios where there are people who are\nNOT in the client's SNAP household\n(roommates/boarders/family members who share less than 50% of the grocery budget) ideally, you will want to collect full name, birth date, gender and marital status for everyone not applying.  You will\nat least\nneed to collect names and approximate ages of other people in the household.\nWe can proceed with the application if the client is insistent about not including them. We should still leave a portfolio note explaining that other household members reside with the client, but the client requested they not be included.\nFor example: Client has 3 additional roommates, but requested they not be listed on the application. Client does not share a food budget with the other members and they are not mandatory household members.",
+                "summary": "It is recommended to collect basic information about non-applicant household members, even if the client does not want to include them on the application, in order to avoid delays and facilitate troubleshooting."
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.7800342323376975,
+                "derived_questions": [
+                    "If they do have to list them, do we need to include the adult child's income?"
+                ],
+                "entire_card": "Who are mandatory HH members for food stamps?\nAnswer:\nThe following household members are ALWAYS included, even if they report that they do not share/prepare meals together. (see text only below, see flow chart further down)\nSpouses:\nIf living in the same residence\nChildren:\nIf age 17 or younger, the child is mandatory with legal guardian\nIf age 18-21, the child is mandatory if natural, adopted, or step child*\nA mandatory child's own child or spouse would need to be included on the application as well\n*Ex. If a 20 year old child resides with their parent, they would be mandatory.\n*Ex. If a 20 year old child resides with their grandparent, they would NOT be mandatory. They would likely be sharing/preparing meals together, but are not required to be listed on the same SNAP application.\n\ufeff\n\ufeff",
+                "summary": "The client's 20-year-old son who is living with them and has his own job and income must be included on the application for food stamps, as he is considered a mandatory household member."
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.40027020679409053,
+                "derived_questions": [
+                    "Do clients have to list their adult children living with them if they have jobs and buy their own food?"
+                ],
+                "entire_card": "What if my client shares meals but wants to apply for food stamps on their own?\nIf a client expresses a desire to apply for SNAP separately from those they live and currently eat with, consider the following:\nIs the client sharing meals only temporarily? (due to immediate necessity or a temporary living situation)\nIs the client expressing a desire to use SNAP benefits only for themselves? (not other people they live with)\nIs the client/their household willing to provide a signed statement to the county office that their intention is to eat/prepare meals separately from others that they live with?\nIf any of the above are answered\nYES\nand the other household members are\nnot mandatory\nSNAP HH members, then the client can apply on their own. (Find the mandatory HH members here:\nWho are mandatory HH members for food stamps?\n)\nPLEASE NOTE\nWe should never lead or encourage a client to apply themselves disingenuously, nor should we suggest to a client that defining their SNAP household in one way versus another would be better for them. The purpose of this clarification is to acknowledge that SNAP applicants who actively express a desire to receive and use SNAP for themselves only can be applied in this manner. We should explain the rule and allow the client to apply how they desire.\nIf the processing office has concerns or uncertainties about the SNAP household, they may ask the applicant(s) to supply verification (like a signed statement).",
+                "summary": "Clients who express a desire to apply for SNAP separately from those they live and currently eat with may be able to do so if they meet certain criteria and provide verification if requested by the processing office."
+            },
+            "What if the only eligible household members are children under 18?": {
+                "score_sum": 0.3784036110580531,
+                "derived_questions": [
+                    "If they do have to list them, do we need to include the adult child's income?"
+                ],
+                "entire_card": "What if the only eligible household members are children under 18?\nIf all adults in the SNAP household are ineligible non-citizens, but have children who are eligible, the adult will still need to be listed as the head of household. Minors can not be listed as head of household.\nThe income/resources of the adult is still counted in these situations. The system will know how to count it to accurately determine eligibility.",
+                "summary": "In cases where all adults in the SNAP household are ineligible non-citizens but have eligible children, the adult must still be listed as the head of household and their income/resources will be counted for determining eligibility."
+            }
+        }
+    },
+    {
+        "id": 3,
+        "question": "The client rents a room in a house. He said he wants to apply on his own, but then he admitted he shares a kitchen with his roommates and they often cook and eat together. Do the roommates need to be included?",
+        "guru_cards": [
+            "What if my client shares meals but wants to apply for food stamps on their own?"
+        ],
+        "recall": 1.0,
+        "extra_cards": 5,
+        "derived_questions": [
+            "Does the client share a kitchen with his roommates?",
+            "Do the roommates often cook and eat together in the shared kitchen?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.5376032753254323,
+                "derived_questions": [
+                    "Does the client share a kitchen with his roommates?"
+                ],
+                "entire_card": "What if a client does not want to provide information about other household members?\nWe always want to try and collect as much information about everyone living in the household, but sometimes clients are not comfortable disclosing information about people living there who are non-applicants.\nIf a client is living with non-mandatory household members, it is helpful to include basic information. When other household members are not included, it can pose delays down the line when caseworkers uncover other household members. When we have an idea of the composition of the household, it allows for faster troubleshooting.\nFOR FOOD STAMP BENEFITS\nIn scenarios where there are people who are\nNOT in the client's SNAP household\n(roommates/boarders/family members who share less than 50% of the grocery budget) ideally, you will want to collect full name, birth date, gender and marital status for everyone not applying.  You will\nat least\nneed to collect names and approximate ages of other people in the household.\nWe can proceed with the application if the client is insistent about not including them. We should still leave a portfolio note explaining that other household members reside with the client, but the client requested they not be included.\nFor example: Client has 3 additional roommates, but requested they not be listed on the application. Client does not share a food budget with the other members and they are not mandatory household members.",
+                "summary": "It is important to collect information about all household members, even if they are not mandatory, as it can help with troubleshooting and avoiding delays in the future."
+            },
+            "If a non-mandatory household (HH) member already receives SNAP, and the client says they share & prepare meals, what steps should be taken?": {
+                "score_sum": 0.3842315979369787,
+                "derived_questions": [
+                    "Does the client share a kitchen with his roommates?",
+                    "Do the roommates often cook and eat together in the shared kitchen?"
+                ],
+                "entire_card": "If a non-mandatory household (HH) member already receives SNAP, and the client says they share & prepare meals, what steps should be taken?\nProvide guidance and ask the following:\nDo you know if you're included on that household member's SNAP application?\nThe SNAP benefit typically includes people who live in the same household and share/prepare meals together on the same application. Is there a reason that you were not included on the same case?\nYou can either have (household member) add you to the existing SNAP case or you can apply on your own. If you apply on your own, you would only be able to use the SNAP benefit for yourself and you would likely have to provide a written statement from (household member) stating that the two SNAP benefits would be used separately.\nPlease note that the above does NOT apply to mandatory HH members (spouses residing together, etc.)",
+                "summary": "If a non-mandatory household member already receives SNAP and the client shares a kitchen with his roommates who often cook and eat together, the client may need to be included on the same SNAP application as the household member or apply on his own with a written statement from the household member stating that the SNAP benefits will be used separately."
+            },
+            "Are live-in attendants included in food stamp households?": {
+                "score_sum": 0.194722245249761,
+                "derived_questions": [
+                    "Do the roommates often cook and eat together in the shared kitchen?"
+                ],
+                "entire_card": "Are live-in attendants included in food stamp households?\nNo, roomers and live-in attendants are not included as part of the food stamp household even if they share and prepare meals with the client. Live-in attendants can apply as a separate HH for their own food stamp benefits",
+                "summary": "No, live-in attendants are not included in food stamp households, even if they share and prepare meals with the client. They can apply for their own food stamp benefits as a separate household."
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.18720370925870566,
+                "derived_questions": [
+                    "Does the client share a kitchen with his roommates?"
+                ],
+                "entire_card": "What if my client shares meals but wants to apply for food stamps on their own?\nIf a client expresses a desire to apply for SNAP separately from those they live and currently eat with, consider the following:\nIs the client sharing meals only temporarily? (due to immediate necessity or a temporary living situation)\nIs the client expressing a desire to use SNAP benefits only for themselves? (not other people they live with)\nIs the client/their household willing to provide a signed statement to the county office that their intention is to eat/prepare meals separately from others that they live with?\nIf any of the above are answered\nYES\nand the other household members are\nnot mandatory\nSNAP HH members, then the client can apply on their own. (Find the mandatory HH members here:\nWho are mandatory HH members for food stamps?\n)\nPLEASE NOTE\nWe should never lead or encourage a client to apply themselves disingenuously, nor should we suggest to a client that defining their SNAP household in one way versus another would be better for them. The purpose of this clarification is to acknowledge that SNAP applicants who actively express a desire to receive and use SNAP for themselves only can be applied in this manner. We should explain the rule and allow the client to apply how they desire.\nIf the processing office has concerns or uncertainties about the SNAP household, they may ask the applicant(s) to supply verification (like a signed statement).",
+                "summary": "It is possible for a client to apply for SNAP benefits separately from their roommates if they are willing to provide a signed statement stating their intention to eat and prepare meals separately from others they live with."
+            },
+            "Should all household members be listed even if they are not in the food stamp household?": {
+                "score_sum": 0.1247161281025545,
+                "derived_questions": [
+                    "Do the roommates often cook and eat together in the shared kitchen?"
+                ]
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.1190879140473805,
+                "derived_questions": [
+                    "Do the roommates often cook and eat together in the shared kitchen?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 4,
+        "question": "Husband and wife consider themselves separated, but they still live in the same house. The husband lives on the 2nd floor and the wife lives on the first. They do not speak or share any food. Can the wife apply on her own?",
+        "guru_cards": [
+            "How is \"spouse\" defined for food stamp applications?"
+        ],
+        "recall": 1.0,
+        "extra_cards": 13,
+        "derived_questions": [
+            "What is the situation between the husband and wife?",
+            "Can they still be considered separated if they live in the same house?",
+            "Do they have any communication with each other?",
+            "Do they share any food or resources?",
+            "Is the wife able to apply for something on her own?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.5970122321883444,
+                "derived_questions": [
+                    "Is the wife able to apply for something on her own?",
+                    "Can they still be considered separated if they live in the same house?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "Children under 18 years of age can be certified as a separate household if the adults they live with do not exercise parental control or offer financial support, and if they are officially emancipated."
+            },
+            "How is \"spouse\" defined for food stamp applications?": {
+                "score_sum": 0.5276235971132459,
+                "derived_questions": [
+                    "What is the situation between the husband and wife?",
+                    "Is the wife able to apply for something on her own?"
+                ],
+                "entire_card": "How is \"spouse\" defined for food stamp applications?\nSpouses are either of two individuals who:\nAre married to each other under applicable state law; or\nAre living together and are holding themselves out to the community as a married couple",
+                "summary": "The husband and wife are living separately in the same house and do not consider themselves married, so the wife may be able to apply for food stamps on her own."
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.4915337942298562,
+                "derived_questions": [
+                    "Is the wife able to apply for something on her own?"
+                ],
+                "entire_card": "What if my client shares meals but wants to apply for food stamps on their own?\nIf a client expresses a desire to apply for SNAP separately from those they live and currently eat with, consider the following:\nIs the client sharing meals only temporarily? (due to immediate necessity or a temporary living situation)\nIs the client expressing a desire to use SNAP benefits only for themselves? (not other people they live with)\nIs the client/their household willing to provide a signed statement to the county office that their intention is to eat/prepare meals separately from others that they live with?\nIf any of the above are answered\nYES\nand the other household members are\nnot mandatory\nSNAP HH members, then the client can apply on their own. (Find the mandatory HH members here:\nWho are mandatory HH members for food stamps?\n)\nPLEASE NOTE\nWe should never lead or encourage a client to apply themselves disingenuously, nor should we suggest to a client that defining their SNAP household in one way versus another would be better for them. The purpose of this clarification is to acknowledge that SNAP applicants who actively express a desire to receive and use SNAP for themselves only can be applied in this manner. We should explain the rule and allow the client to apply how they desire.\nIf the processing office has concerns or uncertainties about the SNAP household, they may ask the applicant(s) to supply verification (like a signed statement).",
+                "summary": "If a client expresses a desire to apply for SNAP separately from those they live and currently eat with, they can apply on their own if they are temporarily sharing meals, only want to use SNAP benefits for themselves, and are willing to provide a signed statement to the county office."
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.48289715515813214,
+                "derived_questions": [
+                    "Can they still be considered separated if they live in the same house?",
+                    "Do they share any food or resources?"
+                ],
+                "entire_card": "Who are mandatory HH members for food stamps?\nAnswer:\nThe following household members are ALWAYS included, even if they report that they do not share/prepare meals together. (see text only below, see flow chart further down)\nSpouses:\nIf living in the same residence\nChildren:\nIf age 17 or younger, the child is mandatory with legal guardian\nIf age 18-21, the child is mandatory if natural, adopted, or step child*\nA mandatory child's own child or spouse would need to be included on the application as well\n*Ex. If a 20 year old child resides with their parent, they would be mandatory.\n*Ex. If a 20 year old child resides with their grandparent, they would NOT be mandatory. They would likely be sharing/preparing meals together, but are not required to be listed on the same SNAP application.\n\ufeff\n\ufeff",
+                "summary": "Spouses who live in the same house but do not speak or share food can still be considered separated, and the wife can apply for food stamps on her own."
+            },
+            "If a person is living in a household temporarily, do they need to be included on the application?": {
+                "score_sum": 0.2072755206925433,
+                "derived_questions": [
+                    "Can they still be considered separated if they live in the same house?"
+                ]
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.06650213232266033,
+                "derived_questions": [
+                    "What is the situation between the husband and wife?",
+                    "Do they share any food or resources?"
+                ]
+            },
+            "What is an \"institution of higher education\" for food stamp purposes?": {
+                "score_sum": 0.06203233880848413,
+                "derived_questions": [
+                    "Do they share any food or resources?"
+                ]
+            },
+            "Are live-in attendants included in food stamp households?": {
+                "score_sum": 0.054871407656272075,
+                "derived_questions": [
+                    "Do they share any food or resources?"
+                ]
+            },
+            "What are the steps if the client is in a violent situation?": {
+                "score_sum": 0.026024178783201735,
+                "derived_questions": [
+                    "What is the situation between the husband and wife?"
+                ]
+            },
+            "If a client's spouse lives in a nursing home and has Medicaid, but some or all of their income goes to the client. Does this count as income for SNAP?": {
+                "score_sum": 0.005686777499324114,
+                "derived_questions": [
+                    "What is the situation between the husband and wife?"
+                ]
+            },
+            "What is the procedure if the client asks to speak to a specific BOS?": {
+                "score_sum": -0.027987934814176052,
+                "derived_questions": [
+                    "Do they have any communication with each other?"
+                ]
+            },
+            "What is queue bumping?": {
+                "score_sum": -0.08312874101467593,
+                "derived_questions": [
+                    "Do they have any communication with each other?"
+                ]
+            },
+            "What are best practices when using Transperfect services?": {
+                "score_sum": -0.08516822701411808,
+                "derived_questions": [
+                    "Do they have any communication with each other?"
+                ]
+            },
+            "What are the best practices for communicating with clients in a mental health crisis?": {
+                "score_sum": -0.08595325421448186,
+                "derived_questions": [
+                    "Do they have any communication with each other?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 5,
+        "question": "Client lives in assisted living , but doesn't go to the cafeteria. She tends to cook all her food in her kitchen because she doesn't like the facilities food. Can she apply for food stamps?",
+        "guru_cards": [
+            ""
+        ],
+        "recall": 0.0,
+        "extra_cards": 7,
+        "derived_questions": [
+            "Does the client live in an assisted living facility?",
+            "Is the client able to cook her own food in her kitchen?",
+            "Does the client have a valid reason for not using the cafeteria facilities?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.6137923256613056,
+                "derived_questions": [
+                    "Is the client able to cook her own food in her kitchen?",
+                    "Does the client live in an assisted living facility?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "Children under 18 years of age can be certified as a separate household from other adults living in the home if the adults do not exercise parental control or offer financial support, and if the child is officially emancipated."
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.4512543061061163,
+                "derived_questions": [
+                    "Is the client able to cook her own food in her kitchen?",
+                    "Does the client have a valid reason for not using the cafeteria facilities?"
+                ],
+                "entire_card": "What if my client shares meals but wants to apply for food stamps on their own?\nIf a client expresses a desire to apply for SNAP separately from those they live and currently eat with, consider the following:\nIs the client sharing meals only temporarily? (due to immediate necessity or a temporary living situation)\nIs the client expressing a desire to use SNAP benefits only for themselves? (not other people they live with)\nIs the client/their household willing to provide a signed statement to the county office that their intention is to eat/prepare meals separately from others that they live with?\nIf any of the above are answered\nYES\nand the other household members are\nnot mandatory\nSNAP HH members, then the client can apply on their own. (Find the mandatory HH members here:\nWho are mandatory HH members for food stamps?\n)\nPLEASE NOTE\nWe should never lead or encourage a client to apply themselves disingenuously, nor should we suggest to a client that defining their SNAP household in one way versus another would be better for them. The purpose of this clarification is to acknowledge that SNAP applicants who actively express a desire to receive and use SNAP for themselves only can be applied in this manner. We should explain the rule and allow the client to apply how they desire.\nIf the processing office has concerns or uncertainties about the SNAP household, they may ask the applicant(s) to supply verification (like a signed statement).",
+                "summary": "Clients who express a desire to apply for SNAP separately from those they live and currently eat with may be able to do so if they are sharing meals temporarily, want to use SNAP benefits only for themselves, and are willing to provide a signed statement to the county office."
+            },
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.3524766571360596,
+                "derived_questions": [
+                    "Does the client have a valid reason for not using the cafeteria facilities?"
+                ],
+                "entire_card": "What if a client does not want to provide information about other household members?\nWe always want to try and collect as much information about everyone living in the household, but sometimes clients are not comfortable disclosing information about people living there who are non-applicants.\nIf a client is living with non-mandatory household members, it is helpful to include basic information. When other household members are not included, it can pose delays down the line when caseworkers uncover other household members. When we have an idea of the composition of the household, it allows for faster troubleshooting.\nFOR FOOD STAMP BENEFITS\nIn scenarios where there are people who are\nNOT in the client's SNAP household\n(roommates/boarders/family members who share less than 50% of the grocery budget) ideally, you will want to collect full name, birth date, gender and marital status for everyone not applying.  You will\nat least\nneed to collect names and approximate ages of other people in the household.\nWe can proceed with the application if the client is insistent about not including them. We should still leave a portfolio note explaining that other household members reside with the client, but the client requested they not be included.\nFor example: Client has 3 additional roommates, but requested they not be listed on the application. Client does not share a food budget with the other members and they are not mandatory household members.",
+                "summary": "It is important to collect information about all household members, even if they are not mandatory, in order to avoid delays in the application process."
+            },
+            "If a person is living in a household temporarily, do they need to be included on the application?": {
+                "score_sum": 0.28904554871919597,
+                "derived_questions": [
+                    "Does the client live in an assisted living facility?"
+                ],
+                "entire_card": "If a person is living in a household temporarily, do they need to be included on the application?\nIn general, we should include everyone who is currently living with the household and will remain there during the duration of the application processing period (30 days from submission for SNAP/Medicaid).\nIf the client does not want to include the person, we can submit without them, but should leave a PRISM/TERRI AND submission note (if applicable) explaining that there is another individual temporarily living the house, but is not a countable applicant. This way if the administering agencies has questions about that individual, the case resolution team can troubleshoot more effectively.\nOnly pertains to non-mandatory household members.",
+                "summary": "The client can apply for food stamps even if they are living in an assisted living facility and cook their own food, as long as they are not a mandatory household member."
+            },
+            "If a non-mandatory household (HH) member already receives SNAP, and the client says they share & prepare meals, what steps should be taken?": {
+                "score_sum": 0.276052717012954,
+                "derived_questions": [
+                    "Is the client able to cook her own food in her kitchen?",
+                    "Does the client have a valid reason for not using the cafeteria facilities?"
+                ]
+            },
+            "What is good scripting if the client states they are Already Enrolled?": {
+                "score_sum": 0.23248245496884767,
+                "derived_questions": [
+                    "Does the client live in an assisted living facility?"
+                ]
+            },
+            "Are live-in attendants included in food stamp households?": {
+                "score_sum": 0.14449834163597297,
+                "derived_questions": [
+                    "Is the client able to cook her own food in her kitchen?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 6,
+        "question": "The client's kid used to live with his mom more, but now mainly stays with him. His ex has food stamps, but he's not sure whether his kid is on her case or not because they don't really talk. Should we list the kid on the application?",
+        "guru_cards": [
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?"
+        ],
+        "recall": 1.0,
+        "extra_cards": 4,
+        "derived_questions": [
+            "Does the client have custody of the child?",
+            "Is the child currently receiving food stamps through the ex-partner's case?",
+            "What is the current living arrangement of the child?"
+        ],
+        "all_retrieved_cards": {
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 1.8096245199025371,
+                "derived_questions": [
+                    "What is the current living arrangement of the child?",
+                    "Does the client have custody of the child?",
+                    "Is the child currently receiving food stamps through the ex-partner's case?"
+                ],
+                "entire_card": "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?\nAnswer:\n(a) When the custody arrangement between parents is uneven, the child would be included in the household that provides the child with the majority of his or her meals.\n(b) When there is an equal custody arrangement and the children eat 50 percent of their meals with each parent, the case manager must decide which household should include the child. If both parents apply and cannot agree on which household will include the child, the case manager will resolve the issue by including the child in the household that applied first.\nNote: The case manager must insure that the child is included in only one household.\nFood Stamps only",
+                "summary": "The child should be listed on the application if they primarily live with the client and receive the majority of their meals from the client's household. If there is an equal custody arrangement and the child eats 50 percent of their meals with each parent, the case manager must decide which household should include the child. If both parents apply and cannot agree, the child should be included in the household that applied first."
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.8608839455883729,
+                "derived_questions": [
+                    "What is the current living arrangement of the child?",
+                    "Does the client have custody of the child?",
+                    "Is the child currently receiving food stamps through the ex-partner's case?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "The client's child may be eligible for food stamps through the ex-partner's case, but the client is unsure if the child is currently receiving them as they do not communicate often."
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.41630145816067,
+                "derived_questions": [
+                    "Is the child currently receiving food stamps through the ex-partner's case?"
+                ],
+                "entire_card": "What if my client shares meals but wants to apply for food stamps on their own?\nIf a client expresses a desire to apply for SNAP separately from those they live and currently eat with, consider the following:\nIs the client sharing meals only temporarily? (due to immediate necessity or a temporary living situation)\nIs the client expressing a desire to use SNAP benefits only for themselves? (not other people they live with)\nIs the client/their household willing to provide a signed statement to the county office that their intention is to eat/prepare meals separately from others that they live with?\nIf any of the above are answered\nYES\nand the other household members are\nnot mandatory\nSNAP HH members, then the client can apply on their own. (Find the mandatory HH members here:\nWho are mandatory HH members for food stamps?\n)\nPLEASE NOTE\nWe should never lead or encourage a client to apply themselves disingenuously, nor should we suggest to a client that defining their SNAP household in one way versus another would be better for them. The purpose of this clarification is to acknowledge that SNAP applicants who actively express a desire to receive and use SNAP for themselves only can be applied in this manner. We should explain the rule and allow the client to apply how they desire.\nIf the processing office has concerns or uncertainties about the SNAP household, they may ask the applicant(s) to supply verification (like a signed statement).",
+                "summary": "If a client expresses a desire to apply for SNAP separately from those they live and currently eat with, they can apply on their own if they are sharing meals only temporarily, expressing a desire to use SNAP benefits only for themselves, and are willing to provide a signed statement to the county office."
+            },
+            "If a client receives less child support than what is reported, what should be entered?": {
+                "score_sum": 0.31712082891775784,
+                "derived_questions": [
+                    "Does the client have custody of the child?"
+                ],
+                "entire_card": "If a client receives less child support than what is reported, what should be entered?\nIf the client receives an amount of child support that is less than the court ordered amount, we should enter the amount that the client actually receives.\nThe caseworker will have access to the court ordered amount and will likely ask the client about any discrepancies. Clients should be prepared to show proof (bank statement or letter from the provider showing the amount).",
+                "summary": "If a client receives less child support than what is reported, they should enter the amount that they actually receive, and be prepared to show proof to the caseworker if asked."
+            },
+            "Can students be part of a SNAP household?": {
+                "score_sum": 0.13284022441854437,
+                "derived_questions": [
+                    "What is the current living arrangement of the child?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 7,
+        "question": "The client and her husband live with her parents. She is 20, but her husband is 23. They buy their own groceries. Can they apply by themselves?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 0.0,
+        "extra_cards": 5,
+        "derived_questions": [
+            "Can the client and her husband apply for benefits without her parents' information?",
+            "What is the age difference between the client and her husband?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.49369919825957354,
+                "derived_questions": [
+                    "Can the client and her husband apply for benefits without her parents' information?",
+                    "What is the age difference between the client and her husband?"
+                ],
+                "entire_card": "What if a client does not want to provide information about other household members?\nWe always want to try and collect as much information about everyone living in the household, but sometimes clients are not comfortable disclosing information about people living there who are non-applicants.\nIf a client is living with non-mandatory household members, it is helpful to include basic information. When other household members are not included, it can pose delays down the line when caseworkers uncover other household members. When we have an idea of the composition of the household, it allows for faster troubleshooting.\nFOR FOOD STAMP BENEFITS\nIn scenarios where there are people who are\nNOT in the client's SNAP household\n(roommates/boarders/family members who share less than 50% of the grocery budget) ideally, you will want to collect full name, birth date, gender and marital status for everyone not applying.  You will\nat least\nneed to collect names and approximate ages of other people in the household.\nWe can proceed with the application if the client is insistent about not including them. We should still leave a portfolio note explaining that other household members reside with the client, but the client requested they not be included.\nFor example: Client has 3 additional roommates, but requested they not be listed on the application. Client does not share a food budget with the other members and they are not mandatory household members.",
+                "summary": "It is important to collect information about all household members, but if a client is not comfortable disclosing information about non-applicants, we can proceed with the application and make a note explaining the situation."
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.4617722456441862,
+                "derived_questions": [
+                    "Can the client and her husband apply for benefits without her parents' information?",
+                    "What is the age difference between the client and her husband?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "Yes, if the adults with whom they are living do not exercise parental control or offer financial support, children under 18 years of age can be certified as a separate household from other adults living in the home."
+            },
+            "What if a client cannot apply for benefits by phone?": {
+                "score_sum": 0.4225079699480355,
+                "derived_questions": [
+                    "Can the client and her husband apply for benefits without her parents' information?"
+                ],
+                "entire_card": "What if a client cannot apply for benefits by phone?\nIf we receive a notification from a client that they are unable to complete a screening by phone due to a disability, but still indicate an interest to apply, please alert your supervisor.\nThis will only occur if the client sends us a correspondence based on our outreach letter or insists while speaking with us that they are unable to complete the screening by phone and require a paper application or alternative means of applying.\nCCS should print a paper application and include it with the following letter template. State specific information should be filled out on the letter.\nClient Response Letter_Alternative Application Request _Final.docx\nThis letter and application response should only be used for clients who required an alternative accommodation versus expressing a preference. If the client indicates a preference for a paper application, BOS should still explain the benefits of completing a screening/application over the phone.",
+                "summary": "If a client is unable to complete a screening by phone due to a disability and requests a paper application or alternative means of applying, CCS should print a paper application and include it with a letter template, but BOS should still explain the benefits of completing a screening/application over the phone if the client only expresses a preference for a paper application."
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.2584667946078757,
+                "derived_questions": [
+                    "Can the client and her husband apply for benefits without her parents' information?"
+                ],
+                "entire_card": "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?\nAnswer:\n(a) When the custody arrangement between parents is uneven, the child would be included in the household that provides the child with the majority of his or her meals.\n(b) When there is an equal custody arrangement and the children eat 50 percent of their meals with each parent, the case manager must decide which household should include the child. If both parents apply and cannot agree on which household will include the child, the case manager will resolve the issue by including the child in the household that applied first.\nNote: The case manager must insure that the child is included in only one household.\nFood Stamps only",
+                "summary": "A child can only be included in one household for food stamp benefits, and the case manager must determine which household should include the child if there is an equal custody arrangement and both parents apply."
+            },
+            "What do I do if a client\u2019s name or gender is different than what is listed on some of their documents? Do clients need to report it?": {
+                "score_sum": 0.2392751110702256,
+                "derived_questions": [
+                    "What is the age difference between the client and her husband?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 8,
+        "question": "This client and her husband are ineligible (LPR but only for 2 years), they have three kids. One 16, one 14 and one is 20. I just apply the kids right?",
+        "guru_cards": [
+            "Does a qualified non-citizen under 18 have to reside in the US for five years before they can receive SNAP benefits?",
+            "If a non-citizen child receiving SNAP turns 18 years of age during a certification period and has been living in the US for under 5 years, is the child still eligible to receive SNAP?",
+            "What if the only eligible household members are children under 18?"
+        ],
+        "recall": 0.3333333333333333,
+        "extra_cards": 8,
+        "derived_questions": [
+            "Are all three children LPRs?",
+            "How long has the client been an LPR herself?",
+            "What is the age of the youngest child?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.22303255416754109,
+                "derived_questions": [
+                    "What is the age of the youngest child?",
+                    "Are all three children LPRs?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "The youngest child in this family is 14 years old and all three children are LPRs."
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.14924671056763184,
+                "derived_questions": [
+                    "Are all three children LPRs?"
+                ],
+                "entire_card": "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?\nAnswer:\n(a) When the custody arrangement between parents is uneven, the child would be included in the household that provides the child with the majority of his or her meals.\n(b) When there is an equal custody arrangement and the children eat 50 percent of their meals with each parent, the case manager must decide which household should include the child. If both parents apply and cannot agree on which household will include the child, the case manager will resolve the issue by including the child in the household that applied first.\nNote: The case manager must insure that the child is included in only one household.\nFood Stamps only",
+                "summary": "The 16, 14, and 20-year-old children of this client and her husband, who are ineligible for food stamps, can be included in the food stamp application."
+            },
+            "What are the steps if the client is in a violent situation?": {
+                "score_sum": 0.12959483278950845,
+                "derived_questions": [
+                    "How long has the client been an LPR herself?"
+                ],
+                "entire_card": "What are the steps if the client is in a violent situation?\nIf a client explicitly expresses they are in a violent situation or you can clearly hear an altercation occurring, use the scripting below to navigate through the call.\nIf the client is not able to continue the call at this time or you overhear the violence escalating, alert your CCS immediately so they can assess how to proceed.\nBASIC STEPS:\nNotify a CCS and avoid holding - Slack to notify the CCS and Do your best to not put client on hold in order remain on the line with the client.\nPost in the campaign channel if no CCS are available.\nAnyone from the management team should be able to listen into the call and offer support\nConfirm Intent -\nConfirm the client\u2019s intention with the scripting below\n\u201cAre you able to continue talking with me safely right now?\"\nNO-\nIf the Client states \u201cNo\u201d  they\u2019re unable to continue the call ask them in whichever order makes sense based on what you\u2019re hearing:\nMessage\n-\nAlert a CCS immediately.\nIt is appropriate to interrupt a meeting in these instances.\nSchedule a Callback: C\nonfirm the best line to contact them on, what time/s and day/s are best and whether they would prefer to call us back\n\u201cIs there a better time to call you back?\u201d\nConfirm if Client needs Assistance:\nuse scripting below\n\u201cAre you in need of immediate assistance from authorities?\u201d\nFor more information see the flow chart or full SOP below\nYES\n- If client states \"Yes\":\nCollect contact information right away.\nOffer referrals immediately.\nIf the client is in a state where they are able to continue the screening, you can continue with the application. Do not hesitate to ask for support.\nGet guidance from your CCS on how to leave an appropriate note.\nTake a break if needed.\nPLEASE SEE FULL CLIENTS IN A VIOLENT SITUATION SOP FOR ADDITIONAL DETAILS\nClients in a Violent Situation SOP Text.pdf\nClients in a Violent Situation SOP Flow Chart.pdf\n\ufeff\n\ufeff\ufeff\n\ufeff",
+                "summary": "If a client is in a violent situation, follow the basic steps of notifying a CCS, confirming the client's intention to continue the call safely, and offering assistance if needed."
+            },
+            "When should a screening be started for a client who we have screened in the past?": {
+                "score_sum": 0.12845838516626074,
+                "derived_questions": [
+                    "How long has the client been an LPR herself?"
+                ],
+                "entire_card": "When should a screening be started for a client who we have screened in the past?\nOur standard is that a new screening should be started if:\nwe have not spoken to the client in the current calendar year\nthere are new/seasonal benefits that were not offered the last time we spoke to the client\nIf we are screening them for just new/seasonal benefits it's encouraged to do a full screening but bare minimum the new/seasonal benefits must be opened for a screening.\nExample:\nClient calls in July, we screened them in December the previous year. A new screening should be started.\nScreenings should be started regardless if the client was previously closed out as a\nhard or soft determination\n. The reasoning is that eligibility guidelines tend to change in January so clients who were formally ineligible may be eligible at this time.\nNote: If the client does not fall within these guidelines, but does indicate a need, they should be re-screened regardless of when we talked to them previously.",
+                "summary": "A new screening should be started for a client if we have not spoken to them in the current calendar year or if there are new/seasonal benefits that were not offered during the last screening, regardless of whether they were previously closed out as a hard or soft determination."
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.10969071316658174,
+                "derived_questions": [
+                    "What is the age of the youngest child?",
+                    "Are all three children LPRs?"
+                ]
+            },
+            "What are the steps if a client indicates they intend to harm themselves or others?": {
+                "score_sum": 0.10435569832094171,
+                "derived_questions": [
+                    "How long has the client been an LPR herself?"
+                ]
+            },
+            "How should I enter both the client's legal information and correct information into the portfolio/profile if they do not match?": {
+                "score_sum": 0.10144866159175137,
+                "derived_questions": [
+                    "How long has the client been an LPR herself?"
+                ]
+            },
+            "If a non-citizen child receiving SNAP turns 18 years of age during a certification period and has been living in the US for under 5 years, is the child still eligible to receive SNAP?": {
+                "score_sum": 0.0772746622787519,
+                "derived_questions": [
+                    "What is the age of the youngest child?"
+                ]
+            },
+            "Can students be part of a SNAP household?": {
+                "score_sum": 0.03503913679859094,
+                "derived_questions": [
+                    "What is the age of the youngest child?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 9,
+        "question": "The client lives with her boyfriend and they have a kid together. With the boyfriend's income, they are ineligible. Can I just apply the client with her kid since they aren't married?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 0.0,
+        "extra_cards": 7,
+        "derived_questions": [
+            "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?",
+            "Is there any way to adjust the application process to include only the client and her child?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.6513941186271457,
+                "derived_questions": [
+                    "Is there any way to adjust the application process to include only the client and her child?"
+                ],
+                "entire_card": "What if a client does not want to provide information about other household members?\nWe always want to try and collect as much information about everyone living in the household, but sometimes clients are not comfortable disclosing information about people living there who are non-applicants.\nIf a client is living with non-mandatory household members, it is helpful to include basic information. When other household members are not included, it can pose delays down the line when caseworkers uncover other household members. When we have an idea of the composition of the household, it allows for faster troubleshooting.\nFOR FOOD STAMP BENEFITS\nIn scenarios where there are people who are\nNOT in the client's SNAP household\n(roommates/boarders/family members who share less than 50% of the grocery budget) ideally, you will want to collect full name, birth date, gender and marital status for everyone not applying.  You will\nat least\nneed to collect names and approximate ages of other people in the household.\nWe can proceed with the application if the client is insistent about not including them. We should still leave a portfolio note explaining that other household members reside with the client, but the client requested they not be included.\nFor example: Client has 3 additional roommates, but requested they not be listed on the application. Client does not share a food budget with the other members and they are not mandatory household members.",
+                "summary": "It is important to collect information about all household members, but if a client is not comfortable disclosing information about non-applicants, we can proceed with the application and make a note explaining the situation."
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.39329474263882747,
+                "derived_questions": [
+                    "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "Children under 18 years of age can be certified as a separate household from other adults living in the home if the adults do not exercise parental control or offer financial support, and if the child is officially emancipated."
+            },
+            "Who can complete an application on a client's behalf?": {
+                "score_sum": 0.35603745866507996,
+                "derived_questions": [
+                    "Is there any way to adjust the application process to include only the client and her child?"
+                ],
+                "entire_card": "Who can complete an application on a client's behalf?\nAnyone can complete a SCREENING on behalf of a client, but there are restrictions on who can complete an application for a client.\nBenefit\nStates Affected\nRule\nSNAP\nPA, MD, NC, SC, MI, NY\nTechnically anyone calling in can complete an application for a client, but they must be listed as an AR so that they can then provide a telephonic signature.\nMedicaid\nPA, MD, NY\nPerson applying for Medicaid needs to agree to the R&Rs before application is submitted or an AR\nPaper applications\nPA, MD, NY\nAnyone can go through the full application over the phone for paper application benefits since the actual application will be signed . (PTRR, HTC/RTC, SCRIE, DRIE, HEAP, HEAP Cooling)\nEnergy Assistance\nPA, MD, NY\nPerson in the heating household must agree to the statements or an AR*\n*EUSP Only\n:  It is strong preferred that the primary account holder or spouse living in the same household agrees to the EUSP R&Rs.  In the case that the primary applicant /spouse is not able to do this, any adult (18+) may act as a proxy for EUSP and agree to the R&Rs. If a proxy is listed, they must fill out and submit a Proxy Authorization form\nExtra Help/LIS\nPA, MD, NY\nClient, spouse, POA, family member, PA Medi (f. apprise) counselor\nCCIS\nPA\nParent/Caretaker or spouse\nPACE\nPA\nClient, Spouse, AR, or family member can complete a PACE application",
+                "summary": "Anyone can complete a screening on behalf of a client, but there are restrictions on who can complete an application for a client depending on the benefit and state, with some benefits allowing anyone to complete the application while others require the client, spouse, or designated proxy to complete it."
+            },
+            "What if a client cannot apply for benefits by phone?": {
+                "score_sum": 0.35378496249326374,
+                "derived_questions": [
+                    "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?"
+                ],
+                "entire_card": "What if a client cannot apply for benefits by phone?\nIf we receive a notification from a client that they are unable to complete a screening by phone due to a disability, but still indicate an interest to apply, please alert your supervisor.\nThis will only occur if the client sends us a correspondence based on our outreach letter or insists while speaking with us that they are unable to complete the screening by phone and require a paper application or alternative means of applying.\nCCS should print a paper application and include it with the following letter template. State specific information should be filled out on the letter.\nClient Response Letter_Alternative Application Request _Final.docx\nThis letter and application response should only be used for clients who required an alternative accommodation versus expressing a preference. If the client indicates a preference for a paper application, BOS should still explain the benefits of completing a screening/application over the phone.",
+                "summary": "If a client is unable to complete a screening by phone due to a disability and requests a paper application or alternative means of applying, CCS should print a paper application and include it with a letter template, but BOS should still explain the benefits of completing a screening/application over the phone if the client expresses a preference for a paper application."
+            },
+            "If a client's spouse lives in a nursing home and has Medicaid, but some or all of their income goes to the client. Does this count as income for SNAP?": {
+                "score_sum": 0.33505794313700643,
+                "derived_questions": [
+                    "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?"
+                ],
+                "entire_card": "If a client's spouse lives in a nursing home and has Medicaid, but some or all of their income goes to the client. Does this count as income for SNAP?\nYes. There are special provisions which allow income from Nursing-home Medicaid recipients to go to their spouse living in the community. Therefore, this counts as the client's income, even though it is from their spouse residing in the nursing home;",
+                "summary": "The client's income from her spouse residing in a nursing home and receiving Medicaid counts towards her eligibility for SNAP benefits."
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.2955065989885244,
+                "derived_questions": [
+                    "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?"
+                ]
+            },
+            "If a client receives less child support than what is reported, what should be entered?": {
+                "score_sum": 0.2829566778085242,
+                "derived_questions": [
+                    "Is there any way to adjust the application process to include only the client and her child?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 10,
+        "question": "The client lives with his girlfriend in her parent's basement. He's 24 and she's 21. She's pregnant.  Can he apply with his girlfriend and not include her parents?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 0.0,
+        "extra_cards": 6,
+        "derived_questions": [
+            "Can the client apply for a mortgage with his girlfriend without including her parents?",
+            "What is the age of the client and his girlfriend?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.6468850551534787,
+                "derived_questions": [
+                    "Can the client apply for a mortgage with his girlfriend without including her parents?",
+                    "What is the age of the client and his girlfriend?"
+                ],
+                "entire_card": "What if a client does not want to provide information about other household members?\nWe always want to try and collect as much information about everyone living in the household, but sometimes clients are not comfortable disclosing information about people living there who are non-applicants.\nIf a client is living with non-mandatory household members, it is helpful to include basic information. When other household members are not included, it can pose delays down the line when caseworkers uncover other household members. When we have an idea of the composition of the household, it allows for faster troubleshooting.\nFOR FOOD STAMP BENEFITS\nIn scenarios where there are people who are\nNOT in the client's SNAP household\n(roommates/boarders/family members who share less than 50% of the grocery budget) ideally, you will want to collect full name, birth date, gender and marital status for everyone not applying.  You will\nat least\nneed to collect names and approximate ages of other people in the household.\nWe can proceed with the application if the client is insistent about not including them. We should still leave a portfolio note explaining that other household members reside with the client, but the client requested they not be included.\nFor example: Client has 3 additional roommates, but requested they not be listed on the application. Client does not share a food budget with the other members and they are not mandatory household members.",
+                "summary": "It is recommended to collect basic information about non-applicants living in the household, even if the client is not comfortable disclosing it, as it can help with faster troubleshooting and avoid delays in the future."
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.3509040160705782,
+                "derived_questions": [
+                    "Can the client apply for a mortgage with his girlfriend without including her parents?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "Children under 18 years of age can be certified as a separate household from other adults living in the home if the adults do not exercise parental control or offer financial support, such as in the case of emancipated minors."
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.20780861837639808,
+                "derived_questions": [
+                    "Can the client apply for a mortgage with his girlfriend without including her parents?"
+                ],
+                "entire_card": "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?\nAnswer:\n(a) When the custody arrangement between parents is uneven, the child would be included in the household that provides the child with the majority of his or her meals.\n(b) When there is an equal custody arrangement and the children eat 50 percent of their meals with each parent, the case manager must decide which household should include the child. If both parents apply and cannot agree on which household will include the child, the case manager will resolve the issue by including the child in the household that applied first.\nNote: The case manager must insure that the child is included in only one household.\nFood Stamps only",
+                "summary": "A parent with a joint custody arrangement can include a child on a food stamp application if they provide the majority of the child's meals or if there is an equal custody arrangement and the child is included in the household that applied first."
+            },
+            "When should a screening be started for a client who we have screened in the past?": {
+                "score_sum": 0.15417976387548915,
+                "derived_questions": [
+                    "What is the age of the client and his girlfriend?"
+                ],
+                "entire_card": "When should a screening be started for a client who we have screened in the past?\nOur standard is that a new screening should be started if:\nwe have not spoken to the client in the current calendar year\nthere are new/seasonal benefits that were not offered the last time we spoke to the client\nIf we are screening them for just new/seasonal benefits it's encouraged to do a full screening but bare minimum the new/seasonal benefits must be opened for a screening.\nExample:\nClient calls in July, we screened them in December the previous year. A new screening should be started.\nScreenings should be started regardless if the client was previously closed out as a\nhard or soft determination\n. The reasoning is that eligibility guidelines tend to change in January so clients who were formally ineligible may be eligible at this time.\nNote: If the client does not fall within these guidelines, but does indicate a need, they should be re-screened regardless of when we talked to them previously.",
+                "summary": "A new screening should be started for a client if we have not spoken to them in the current calendar year or if there are new/seasonal benefits that were not offered the last time we spoke to them, regardless of their previous eligibility status."
+            },
+            "What are the steps if the client is in a violent situation?": {
+                "score_sum": 0.14000561013388146,
+                "derived_questions": [
+                    "What is the age of the client and his girlfriend?"
+                ]
+            },
+            "What do I do if a client\u2019s name or gender is different than what is listed on some of their documents? Do clients need to report it?": {
+                "score_sum": 0.06268232750621905,
+                "derived_questions": [
+                    "What is the age of the client and his girlfriend?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 11,
+        "question": "This client is 21 so I'm including his mother on the application. We managed to get by the income and resources on best estimations but now we're on the expenses step and the client is unsure if his mother pays mortgage and is really at loss on how much anything in the household costs. Are we able to continue without this information or should the client call back when he does have it? The household is likely eligible based on what we have so far.",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 0.0,
+        "extra_cards": 6,
+        "derived_questions": [
+            "Does the client need to provide his mother's mortgage payment information to continue with the application?",
+            "Is the household likely eligible based on the current information provided?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 1.0587119007565216,
+                "derived_questions": [
+                    "Does the client need to provide his mother's mortgage payment information to continue with the application?",
+                    "Is the household likely eligible based on the current information provided?"
+                ],
+                "entire_card": "What if a client does not want to provide information about other household members?\nWe always want to try and collect as much information about everyone living in the household, but sometimes clients are not comfortable disclosing information about people living there who are non-applicants.\nIf a client is living with non-mandatory household members, it is helpful to include basic information. When other household members are not included, it can pose delays down the line when caseworkers uncover other household members. When we have an idea of the composition of the household, it allows for faster troubleshooting.\nFOR FOOD STAMP BENEFITS\nIn scenarios where there are people who are\nNOT in the client's SNAP household\n(roommates/boarders/family members who share less than 50% of the grocery budget) ideally, you will want to collect full name, birth date, gender and marital status for everyone not applying.  You will\nat least\nneed to collect names and approximate ages of other people in the household.\nWe can proceed with the application if the client is insistent about not including them. We should still leave a portfolio note explaining that other household members reside with the client, but the client requested they not be included.\nFor example: Client has 3 additional roommates, but requested they not be listed on the application. Client does not share a food budget with the other members and they are not mandatory household members.",
+                "summary": "It is important to collect information about all household members, even if they are not mandatory, in order to avoid delays in the application process. However, if a client is insistent on not including them, we can proceed with the application and make a note explaining the situation."
+            },
+            "What if the only eligible household members are children under 18?": {
+                "score_sum": 0.5421970961114546,
+                "derived_questions": [
+                    "Is the household likely eligible based on the current information provided?"
+                ],
+                "entire_card": "What if the only eligible household members are children under 18?\nIf all adults in the SNAP household are ineligible non-citizens, but have children who are eligible, the adult will still need to be listed as the head of household. Minors can not be listed as head of household.\nThe income/resources of the adult is still counted in these situations. The system will know how to count it to accurately determine eligibility.",
+                "summary": "The eligibility of the household will still be determined based on the income and resources of the adult head of household, even if all other household members are ineligible non-citizens."
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.4092537580988782,
+                "derived_questions": [
+                    "Is the household likely eligible based on the current information provided?"
+                ],
+                "entire_card": "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?\nAnswer:\nYes, if the adults with whom they are living do not exercise parental control or offer financial support. Clients who are officially emancipated usually fall under this category. If the client not entirely certain or it's close but messy we can error on the side of applying and inform the client the county will help them figure out the household if need be.\nExample: Ms. G is 17 years old. She lives with her aunt. Ms. G works and purchases and prepares her own meals. When questioned about household composition she stated that her aunt does not exercise parental control over her. The case manager certifies Ms. G as a one-person household.\nFood stamps only",
+                "summary": "Yes, the household is likely eligible based on the current information provided, as the client is 21 and including his mother on the application, and they have managed to estimate income and resources. However, the client is unsure about expenses and may need to call back with more information."
+            },
+            "If a person is living in a household temporarily, do they need to be included on the application?": {
+                "score_sum": 0.40678572031377425,
+                "derived_questions": [
+                    "Is the household likely eligible based on the current information provided?"
+                ],
+                "entire_card": "If a person is living in a household temporarily, do they need to be included on the application?\nIn general, we should include everyone who is currently living with the household and will remain there during the duration of the application processing period (30 days from submission for SNAP/Medicaid).\nIf the client does not want to include the person, we can submit without them, but should leave a PRISM/TERRI AND submission note (if applicable) explaining that there is another individual temporarily living the house, but is not a countable applicant. This way if the administering agencies has questions about that individual, the case resolution team can troubleshoot more effectively.\nOnly pertains to non-mandatory household members.",
+                "summary": "The household is likely eligible for assistance, but if there are any non-mandatory household members, they should be included on the application and noted as non-countable applicants."
+            },
+            "Who can complete an application on a client's behalf?": {
+                "score_sum": 0.3360695040992251,
+                "derived_questions": [
+                    "Does the client need to provide his mother's mortgage payment information to continue with the application?"
+                ],
+                "entire_card": "Who can complete an application on a client's behalf?\nAnyone can complete a SCREENING on behalf of a client, but there are restrictions on who can complete an application for a client.\nBenefit\nStates Affected\nRule\nSNAP\nPA, MD, NC, SC, MI, NY\nTechnically anyone calling in can complete an application for a client, but they must be listed as an AR so that they can then provide a telephonic signature.\nMedicaid\nPA, MD, NY\nPerson applying for Medicaid needs to agree to the R&Rs before application is submitted or an AR\nPaper applications\nPA, MD, NY\nAnyone can go through the full application over the phone for paper application benefits since the actual application will be signed . (PTRR, HTC/RTC, SCRIE, DRIE, HEAP, HEAP Cooling)\nEnergy Assistance\nPA, MD, NY\nPerson in the heating household must agree to the statements or an AR*\n*EUSP Only\n:  It is strong preferred that the primary account holder or spouse living in the same household agrees to the EUSP R&Rs.  In the case that the primary applicant /spouse is not able to do this, any adult (18+) may act as a proxy for EUSP and agree to the R&Rs. If a proxy is listed, they must fill out and submit a Proxy Authorization form\nExtra Help/LIS\nPA, MD, NY\nClient, spouse, POA, family member, PA Medi (f. apprise) counselor\nCCIS\nPA\nParent/Caretaker or spouse\nPACE\nPA\nClient, Spouse, AR, or family member can complete a PACE application",
+                "summary": "Anyone can complete an application for a client, but they must be listed as an AR and have the client's permission to do so."
+            },
+            "If a client receives less child support than what is reported, what should be entered?": {
+                "score_sum": 0.2969024799248998,
+                "derived_questions": [
+                    "Does the client need to provide his mother's mortgage payment information to continue with the application?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 12,
+        "question": "This household has everything! I can't keep everything straight and I don't remember who needs to be included. The client is married and they have two adult kids and then two foster kids. The client's mother lives with them and they have a live in attendant who takes care of her. One of the kids is 20 and in college full time. He's not working and comes home on summer and winter breaks. I think he's an ineligible student, but does he still need to be listed on the application, would he be included in the summer? Their other child is 23 and buys some of his own food, but will eat when his mother cooks a big dinner. The foster kids are 11 and 12. They eat with them, so I think they need to be included? The client's mother has special food needs so her live in attendant cooks for her separately and they eat together. She also wants to apply. How do I enter this?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?",
+            "Can students be part of a SNAP household?",
+            "Do students qualify during summer break when they are not taking classes?",
+            "Do we include ineligible students in the food stamp household?",
+            "What if my client shares meals but wants to apply for food stamps on their own?",
+            "Does an applicant with foster children (or adults) need to include them on the food stamp application?"
+        ],
+        "recall": 0.6666666666666666,
+        "extra_cards": 8,
+        "derived_questions": [
+            "What is the situation with the client's 20-year-old child who is in college full time?",
+            "Are the foster kids included in family meals and should be listed on the application?",
+            "How should the client's mother, who has special food needs, be entered into the application?",
+            "What about the live-in attendant who takes care of the client's mother?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 1.0494497685888868,
+                "derived_questions": [
+                    "How should the client's mother, who has special food needs, be entered into the application?",
+                    "What about the live-in attendant who takes care of the client's mother?",
+                    "What is the situation with the client's 20-year-old child who is in college full time?"
+                ],
+                "entire_card": "What if a client does not want to provide information about other household members?\nWe always want to try and collect as much information about everyone living in the household, but sometimes clients are not comfortable disclosing information about people living there who are non-applicants.\nIf a client is living with non-mandatory household members, it is helpful to include basic information. When other household members are not included, it can pose delays down the line when caseworkers uncover other household members. When we have an idea of the composition of the household, it allows for faster troubleshooting.\nFOR FOOD STAMP BENEFITS\nIn scenarios where there are people who are\nNOT in the client's SNAP household\n(roommates/boarders/family members who share less than 50% of the grocery budget) ideally, you will want to collect full name, birth date, gender and marital status for everyone not applying.  You will\nat least\nneed to collect names and approximate ages of other people in the household.\nWe can proceed with the application if the client is insistent about not including them. We should still leave a portfolio note explaining that other household members reside with the client, but the client requested they not be included.\nFor example: Client has 3 additional roommates, but requested they not be listed on the application. Client does not share a food budget with the other members and they are not mandatory household members.",
+                "summary": "It is important to collect information about all household members, even if they are not mandatory, as it can help with troubleshooting and avoiding delays in the future."
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.7178965921385819,
+                "derived_questions": [
+                    "How should the client's mother, who has special food needs, be entered into the application?",
+                    "Are the foster kids included in family meals and should be listed on the application?"
+                ],
+                "entire_card": "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?\nAnswer:\n(a) When the custody arrangement between parents is uneven, the child would be included in the household that provides the child with the majority of his or her meals.\n(b) When there is an equal custody arrangement and the children eat 50 percent of their meals with each parent, the case manager must decide which household should include the child. If both parents apply and cannot agree on which household will include the child, the case manager will resolve the issue by including the child in the household that applied first.\nNote: The case manager must insure that the child is included in only one household.\nFood Stamps only",
+                "summary": "When there is an equal custody arrangement and the children eat 50 percent of their meals with each parent, the case manager must decide which household should include the child, and if both parents apply, the child will be included in the household that applied first."
+            },
+            "Does an applicant with foster children (or adults) need to include them on the food stamp application?": {
+                "score_sum": 0.6719498833096211,
+                "derived_questions": [
+                    "Are the foster kids included in family meals and should be listed on the application?"
+                ],
+                "entire_card": "Does an applicant with foster children (or adults) need to include them on the food stamp application?\nNo, but they can choose to do so. If they choose to include foster children in the HH they may qualify for a larger benefit amount but must include the foster care payments they receive on behalf of the children as income.",
+                "summary": "The client has a complex household with a married couple, two adult children, two foster children, and a live-in attendant, and the question is whether the foster children should be included on the food stamp application."
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.49967228409077213,
+                "derived_questions": [
+                    "Are the foster kids included in family meals and should be listed on the application?"
+                ],
+                "entire_card": "Who are mandatory HH members for food stamps?\nAnswer:\nThe following household members are ALWAYS included, even if they report that they do not share/prepare meals together. (see text only below, see flow chart further down)\nSpouses:\nIf living in the same residence\nChildren:\nIf age 17 or younger, the child is mandatory with legal guardian\nIf age 18-21, the child is mandatory if natural, adopted, or step child*\nA mandatory child's own child or spouse would need to be included on the application as well\n*Ex. If a 20 year old child resides with their parent, they would be mandatory.\n*Ex. If a 20 year old child resides with their grandparent, they would NOT be mandatory. They would likely be sharing/preparing meals together, but are not required to be listed on the same SNAP application.\n\ufeff\n\ufeff",
+                "summary": "The mandatory household members for food stamps include the client, their spouse, their two adult children, and their two foster children, as well as the client's mother and her live-in attendant who cooks separately for her."
+            },
+            "Do foster care payments count as income for food stamps?": {
+                "score_sum": 0.40977988856125036,
+                "derived_questions": [
+                    "Are the foster kids included in family meals and should be listed on the application?"
+                ],
+                "entire_card": "Do foster care payments count as income for food stamps?\nFoster care payments count as unearned income if the household chooses to include the foster child/adult as a food stamp household member.",
+                "summary": "Foster care payments count as unearned income if the household chooses to include the foster child/adult as a food stamp household member."
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.39315908669061006,
+                "derived_questions": [
+                    "How should the client's mother, who has special food needs, be entered into the application?"
+                ],
+                "entire_card": "What if my client shares meals but wants to apply for food stamps on their own?\nIf a client expresses a desire to apply for SNAP separately from those they live and currently eat with, consider the following:\nIs the client sharing meals only temporarily? (due to immediate necessity or a temporary living situation)\nIs the client expressing a desire to use SNAP benefits only for themselves? (not other people they live with)\nIs the client/their household willing to provide a signed statement to the county office that their intention is to eat/prepare meals separately from others that they live with?\nIf any of the above are answered\nYES\nand the other household members are\nnot mandatory\nSNAP HH members, then the client can apply on their own. (Find the mandatory HH members here:\nWho are mandatory HH members for food stamps?\n)\nPLEASE NOTE\nWe should never lead or encourage a client to apply themselves disingenuously, nor should we suggest to a client that defining their SNAP household in one way versus another would be better for them. The purpose of this clarification is to acknowledge that SNAP applicants who actively express a desire to receive and use SNAP for themselves only can be applied in this manner. We should explain the rule and allow the client to apply how they desire.\nIf the processing office has concerns or uncertainties about the SNAP household, they may ask the applicant(s) to supply verification (like a signed statement).",
+                "summary": "If a client expresses a desire to apply for SNAP separately from those they live and currently eat with, they can apply on their own if they are sharing meals only temporarily, want to use SNAP benefits only for themselves, and are willing to provide a signed statement to the county office stating their intention to eat/prepare meals separately from others they live with."
+            },
+            "If a non-mandatory household (HH) member already receives SNAP, and the client says they share & prepare meals, what steps should be taken?": {
+                "score_sum": 0.3168374420028156,
+                "derived_questions": [
+                    "How should the client's mother, who has special food needs, be entered into the application?"
+                ],
+                "entire_card": "If a non-mandatory household (HH) member already receives SNAP, and the client says they share & prepare meals, what steps should be taken?\nProvide guidance and ask the following:\nDo you know if you're included on that household member's SNAP application?\nThe SNAP benefit typically includes people who live in the same household and share/prepare meals together on the same application. Is there a reason that you were not included on the same case?\nYou can either have (household member) add you to the existing SNAP case or you can apply on your own. If you apply on your own, you would only be able to use the SNAP benefit for yourself and you would likely have to provide a written statement from (household member) stating that the two SNAP benefits would be used separately.\nPlease note that the above does NOT apply to mandatory HH members (spouses residing together, etc.)",
+                "summary": "Guidance should be provided to the client on how to include their mother, who has special food needs and lives with them, in the SNAP application and whether or not other household members, such as the client's adult children and foster children, should also be included."
+            },
+            "Can students be part of a SNAP household?": {
+                "score_sum": 0.22169117587611842,
+                "derived_questions": [
+                    "What is the situation with the client's 20-year-old child who is in college full time?"
+                ]
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.21608394076035842,
+                "derived_questions": [
+                    "What is the situation with the client's 20-year-old child who is in college full time?"
+                ]
+            },
+            "Are live-in attendants included in food stamp households?": {
+                "score_sum": 0.2139482901766192,
+                "derived_questions": [
+                    "What about the live-in attendant who takes care of the client's mother?"
+                ]
+            },
+            "If a person is living in a household temporarily, do they need to be included on the application?": {
+                "score_sum": 0.20751912947693618,
+                "derived_questions": [
+                    "What about the live-in attendant who takes care of the client's mother?"
+                ]
+            },
+            "What are the steps if the client is in a violent situation?": {
+                "score_sum": 0.18756799150363723,
+                "derived_questions": [
+                    "What is the situation with the client's 20-year-old child who is in college full time?"
+                ]
+            }
+        }
+    }
+]

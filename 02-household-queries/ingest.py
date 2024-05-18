@@ -122,20 +122,16 @@ def add_json_html_data_to_vector_db(
     chunk_overlap=300,
     silent=False,
 ):
-    data_file = open(file_path, encoding="utf-8")
-    json_data = json.load(data_file)
+    question_answers = extract_qa_text_from_guru(file_path, content_key, index_key)
+
     if embedding_name:
         check_embedding(chunk_size, get_embeddings().get(embedding_name, ""))
-    for content in json_data:
-        if not content[index_key].strip().endswith("?"):
-            continue
-        soup = BeautifulSoup(content[content_key], "html.parser")
-        text = soup.get_text(separator="\n", strip=True)
+    for question, answer in question_answers.items():
         if not silent:
-            print("Processing document:", content[index_key])
+            print("Processing document:", question)
         chunks = get_text_chunks_langchain(
-            text,
-            content[index_key],
+            answer,
+            question,
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
             token_limit=token_limit,
@@ -143,6 +139,30 @@ def add_json_html_data_to_vector_db(
             silent=silent,
         )
         vectordb.add_documents(documents=chunks)
+
+
+def extract_qa_text_from_guru(
+    file_path="./guru_cards_for_nava.json", content_key="content", index_key="preferredPhrase"
+):
+    json_data = load_guru_cards(file_path)
+    question_answers = extract_question_answers(index_key, content_key, json_data)
+    return question_answers
+
+
+def extract_question_answers(question_key, answer_key, json_data):
+    question_answers = {}
+    for content in json_data:
+        if not content[question_key].strip().endswith("?"):
+            continue
+        soup = BeautifulSoup(content[answer_key], "html.parser")
+        answer = soup.get_text(separator="\n", strip=True)
+        question_answers[content[question_key].strip()] = answer
+    return question_answers
+
+
+def load_guru_cards(file_path):
+    data_file = open(file_path, encoding="utf-8")
+    return json.load(data_file)
 
 
 def ingest_call(
@@ -174,3 +194,25 @@ def check_embedding(chunk_size, embedding):
     token_limit = embedding.get("token_limit", 0)
     if token_limit != 0 and chunk_size > token_limit:
         print(f"You've defined the chunk size as {chunk_size}, the token limit for this embedding is {token_limit}")
+
+
+def save_simplified_json(file_path="./guru_cards_for_nava.json", content_key="content", index_key="preferredPhrase"):
+    json_data = load_guru_cards(file_path)
+
+    name, ext = os.path.splitext(file_path)
+    # Save simplified json
+    with open(f"{name}_simplified{ext}", "w", encoding="utf-8") as f:
+        simplified_json = []
+        for card in json_data:
+            tags = [tagsItem.get("value") for tagsItem in card.get("tags", [])]
+            soup = BeautifulSoup(card[content_key], "html.parser")
+            content = soup.get_text(separator="\n", strip=True)
+            simplified_json.append({index_key: card[index_key], "tags": ",".join(tags), content_key: content})
+        json.dump(simplified_json, f, indent=4)
+
+
+if __name__ == "__main__":
+    import sys
+
+    if args := sys.argv[1:]:
+        save_simplified_json(args[0])
