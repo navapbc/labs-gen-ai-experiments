@@ -17,23 +17,12 @@ from decompose_and_summarize import on_question
 @cl.on_chat_start
 async def init_chat():
     # settings = das.init()
-    html = """
-Derived Questions
-<details>
-  <summary>Epcot Center</summary>
-  <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
-</details>
-Derived Questions"""
-    await cl.Message(
-        content=f"## Some content\n{html}",
-        elements=[cl.Text(name="Derived Questions", content="## SIDE", display="side")],
-    ).send()
 
-    elements = [
-        cl.Text(name="side-text", display="side", content="Side Text"),
-        cl.Text(name="page-text", display="page", content="Page Text"),
-    ]
-    await cl.Message("hello side-text and page-text", elements=elements).send()
+    # elements = [
+    #     cl.Text(name="side-text", display="side", content="Side Text"),
+    #     cl.Text(name="page-text", display="page", content="Page Text"),
+    # ]
+    # await cl.Message("hello side-text and page-text", elements=elements).send()
 
     pass
 
