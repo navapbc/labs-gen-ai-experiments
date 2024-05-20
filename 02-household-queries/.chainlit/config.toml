@@ -1,7 +1,6 @@
 [project]
 # Whether to enable telemetry (default: true). No personal data is collected.
-enable_telemetry = true
-
+enable_telemetry = false
 
 # List of environment variables to be provided by each user to use the app.
 user_env = []
@@ -23,7 +22,7 @@ allow_origins = ["*"]
 prompt_playground = true
 
 # Process and display HTML in messages. This can be a security risk (see https://stackoverflow.com/questions/19603097/why-is-it-dangerous-to-render-user-generated-html-or-javascript)
-unsafe_allow_html = false
+unsafe_allow_html = true
 
 # Process and display mathematical expressions. This can clash with "$" characters in messages.
 latex = false
@@ -46,22 +45,22 @@ latex = false
 name = "Household Chatbot"
 
 # Show the readme while the thread is empty.
-show_readme_as_default = true
+show_readme_as_default = false
 
 # Description of the app and chatbot. This is used for HTML tags.
 # description = ""
 
 # Large size content are by default collapsed for a cleaner ui
-default_collapse_content = true
+default_collapse_content = false
 
 # The default value for the expand messages settings.
-default_expand_messages = false
+default_expand_messages = true
 
 # Hide the chain of thought details from the user in the UI.
 hide_cot = false
 
 # Link to your github repo. This will add a github button in the UI's header.
-# github = ""
+github = "https://github.com/navapbc/labs-gen-ai-experiments/tree/main/02-household-queries"
 
 # Specify a CSS file that can be used to customize the user interface.
 # The CSS file can be served from the public directory or via an external link.
