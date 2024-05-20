@@ -179,6 +179,7 @@ def collect_retrieved_cards(derived_qs, gen_results):
     gen_results.derived_questions = retrieve_cards(derived_qs, get_vectordb(), retrieve_k)
     gen_results.cards = collate_by_card_score_sum(gen_results.derived_questions)
 
+
 @debugging.timer
 def collate_by_card_score_sum(derived_question_entries):
     all_retrieved_cards = dict()
