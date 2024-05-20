@@ -180,6 +180,7 @@ def collect_retrieved_cards(derived_qs, gen_results):
     gen_results.cards = collate_by_card_score_sum(gen_results.derived_questions)
 
 
+@debugging.timer
 def collate_by_card_score_sum(derived_question_entries):
     all_retrieved_cards = dict()
     for dq_entry in derived_question_entries:
@@ -230,6 +231,7 @@ def retrieve_cards(derived_qs, vectordb, retrieve_k=5):
     return results
 
 
+@debugging.timer
 def create_summaries(gen_results, summarizer, guru_card_texts):
     print(f"Summarizing {len(gen_results.cards)} retrieved cards...")
     for i, card_entry in enumerate(gen_results.cards):
@@ -246,6 +248,7 @@ def create_summaries(gen_results, summarizer, guru_card_texts):
         card_entry.summary = prediction.answer
 
 
+@debugging.timer
 def format_response(gen_results):
     resp = ["==="]
     resp.append("Q: {gen_results.question}")
