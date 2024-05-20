@@ -66,7 +66,7 @@ def init():
 def get_guru_card_texts():
     if settings["guru_card_texts"] is None:
         # Extract Guru card texts so it can be summarized
-        settings["guru_card_texts"] = ingest.extract_qa_text_from_guru("./guru_cards_for_nava.json")
+        settings["guru_card_texts"] = ingest.extract_qa_text_from_guru()
     return settings["guru_card_texts"]
 
 
@@ -179,9 +179,8 @@ def collect_retrieved_cards(derived_qs, gen_results):
     gen_results.derived_questions = retrieve_cards(derived_qs, get_vectordb(), retrieve_k)
     gen_results.cards = collate_by_card_score_sum(gen_results.derived_questions)
 
-
+@debugging.timer
 def collate_by_card_score_sum(derived_question_entries):
-    print("collate_by_card_score_sum")
     all_retrieved_cards = dict()
     for dq_entry in derived_question_entries:
         scores = dq_entry.retrieval_scores
@@ -231,6 +230,7 @@ def retrieve_cards(derived_qs, vectordb, retrieve_k=5):
     return results
 
 
+@debugging.timer
 def create_summaries(gen_results, summarizer, guru_card_texts):
     print(f"Summarizing {len(gen_results.cards)} retrieved cards...")
     for i, card_entry in enumerate(gen_results.cards):
@@ -247,6 +247,7 @@ def create_summaries(gen_results, summarizer, guru_card_texts):
         card_entry.summary = prediction.answer
 
 
+@debugging.timer
 def format_response(gen_results):
     resp = ["==="]
     resp.append("Q: {gen_results.question}")

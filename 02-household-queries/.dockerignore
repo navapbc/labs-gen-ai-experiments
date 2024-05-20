@@ -3,7 +3,6 @@ chroma_db/
 *cache/
 *.log
 log/
-.yoom/
 compiled_module-*.json
 
 *.DS_STORE
