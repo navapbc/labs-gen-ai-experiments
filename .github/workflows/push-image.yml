@@ -62,6 +62,7 @@ jobs:
       if: inputs.build_image
       run: |
         cd ${{ inputs.dockerfile_folder }}
+        echo "${{secrets.DOT_ENV_FILE_CONTENTS}}" > .env
         docker build -t "${{ inputs.image_name }}:${{ inputs.image_tag }}" --build-arg GURU_CARDS_URL="https://docs.google.com/uc?export=download&id=${{ secrets.GURU_CARDS_URL_ID }}" .
 
     - name: "Publish image to AWS ECR'"
