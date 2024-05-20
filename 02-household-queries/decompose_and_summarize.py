@@ -66,7 +66,7 @@ def init():
 def get_guru_card_texts():
     if settings["guru_card_texts"] is None:
         # Extract Guru card texts so it can be summarized
-        settings["guru_card_texts"] = ingest.extract_qa_text_from_guru()
+        settings["guru_card_texts"] = ingest.extract_qa_text_from_guru("./guru_cards_for_nava.json")
     return settings["guru_card_texts"]
 
 
@@ -181,6 +181,7 @@ def collect_retrieved_cards(derived_qs, gen_results):
 
 
 def collate_by_card_score_sum(derived_question_entries):
+    print("collate_by_card_score_sum")
     all_retrieved_cards = dict()
     for dq_entry in derived_question_entries:
         scores = dq_entry.retrieval_scores
