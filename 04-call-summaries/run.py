@@ -53,14 +53,12 @@ def stuffing_summary(prompt=None):
     llm = input() or "1"
 
     if llm == "2":
-        ollama = LLM(client_name="ollama", model_name="dolphin-mistral")
-        response = ollama.generate_text(prompt=prompt)
+        client = LLM(client_name="ollama", model_name="dolphin-mistral")
         print("""----------
             Dolphin
             """)
     elif llm == "3":
-        gemini = LLM(client_name="gemini")
-        response = gemini.generate_text(prompt=prompt)
+        client = LLM(client_name="gemini")
         print("""----------
             Gemini Flash 1.5
             """)
@@ -68,25 +66,23 @@ def stuffing_summary(prompt=None):
         print("""----------
         GPT 4
         """)
-        gpt = LLM(client_name="gpt", model_name="gpt4")
-        response = gpt.generate_text(prompt=prompt)
+        client = LLM(client_name="gpt", model_name="gpt4")
     elif llm == "5":
         print("""----------
         GPT 4o
         """)
-        gpt = LLM(client_name="gpt", model_name="gpt4o")
-        response = gpt.generate_text(prompt=prompt)
+        client = LLM(client_name="gpt", model_name="gpt4o")
     elif llm == "6":
         print("""----------
             Claude 3
             """)
-        claude = LLM(client_name="claude")
-        response = claude.generate_text(prompt=prompt)
+        client = LLM(client_name="claude")
     elif llm == "7":
         print("""
             Openhermes
             """)
         ollama_openhermes = LLM(client_name="ollama", model_name="openhermes")
+        ollama_openhermes.get_client()
         ollama_openhermes_response = ollama_openhermes.generate_text(prompt=prompt)
         print(ollama_openhermes_response)
 
@@ -94,6 +90,7 @@ def stuffing_summary(prompt=None):
             Dolphin
             """)
         ollama_dolphin = LLM(client_name="ollama", model_name="dolphin-mistral")
+        ollama_dolphin.get_client()
         dolphin_response = ollama_dolphin.generate_text(prompt=prompt)
         print(dolphin_response)
 
@@ -101,6 +98,7 @@ def stuffing_summary(prompt=None):
             Gemini Flash 1.5
             """)
         gemini = LLM(client_name="gemini")
+        gemini.get_client()
         gemini_response = gemini.generate_text(prompt=prompt)
         print(gemini_response)
 
@@ -108,6 +106,7 @@ def stuffing_summary(prompt=None):
         GPT 4
         """)
         gpt_4 = LLM(client_name="gpt", model_name="gpt4")
+        gpt_4.get_client()
         gpt_4_response = gpt_4.generate_text(prompt=prompt)
         print(gpt_4_response)
 
@@ -115,6 +114,7 @@ def stuffing_summary(prompt=None):
         GPT 4o
         """)
         gpt_4o = LLM(client_name="_4o", model_name="gpt4o")
+        gpt_4o.get_client()
         gpt_4o_response = gpt_4o.generate_text(prompt=prompt)
         print(gpt_4o_response)
 
@@ -122,13 +122,18 @@ def stuffing_summary(prompt=None):
             Claude 3
             """)
         claude = LLM(client_name="claude")
+        claude.get_client()
         claude_response = claude.generate_text(prompt=prompt)
         print(claude_response)
     else:
-        ollama = LLM(client_name="ollama", model_name="openhermes")
-        response = ollama.generate_text(prompt=prompt)
+        client = LLM(client_name="ollama", model_name="openhermes")
         print("""
             Openhermes
             """)
+    client.get_client()
+    response = client.generate_text(prompt=prompt)
     if response:
         print(response)
+
+if __name__ == "__main__":
+    stuffing_summary(prompt=formatted_prompt)

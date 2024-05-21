@@ -5,7 +5,7 @@ from langchain_text_splitters import (
 )
 from langchain_core.prompts import PromptTemplate
 from langchain.docstore.document import Document
-from llm import google_gemini_client, claude_client, gpt_client, ollama_client
+from llm import LLM
 from run import get_transcript
 
 
@@ -78,81 +78,46 @@ def chunking_ingest(transcript, prompt):
     llm = input() or "1"
 
     if llm == "2":
-        client = ollama_client(model_name="dolphin-mistral")
+        client = LLM(client_name="ollama", model_name="dolphin-mistral")
         print("""----------
             Dolphin
             """)
-        for text in text_chunks:
-            formatted_prompt = prompt_template.format(
-                text=text.page_content, template=template
-            )
-            print("----------------------")
-            template = ollama_client(client=client, prompt=formatted_prompt)
-        return template
+
     elif llm == "3":
-        gemini = google_gemini_client()
+        client = LLM(client_name="gemini")
         print("""----------
             Gemini Flash 1.5
             """)
-        for text in text_chunks:
-            formatted_prompt = prompt_template.format(
-                text=text.page_content, template=template
-            )
-            print("----------------------")
-            template = google_gemini_client(client=gemini, prompt=formatted_prompt)
-        return template
     elif llm == "4":
         print("""----------
         GPT 4
         """)
-        gpt = gpt_client()
-        for text in text_chunks:
-            formatted_prompt = prompt_template.format(
-                text=text.page_content, template=template
-            )
-            print("----------------------")
-            template = gpt_client(
-                client=gpt, model_choice="gpt4", prompt=formatted_prompt
-            )
-        return template
+        client = LLM(client_name="gpt", model_name="gpt4")
     elif llm == "5":
         print("""----------
         GPT 4o
         """)
-        gpt = gpt_client()
-        for text in text_chunks:
-            formatted_prompt = prompt_template.format(
-                text=text.page_content, template=template
-            )
-            print("----------------------")
-            template = gpt_client(
-                client=gpt, model_choice="gpt-4o", prompt=formatted_prompt
-            )
-        return template
+        client = LLM(client_name="gpt", model_name="gpt-4o")
     elif llm == "6":
         print("""----------
             Claude 3
             """)
-        claude = claude_client()
-        for text in text_chunks:
-            formatted_prompt = prompt_template.format(
-                text=text.page_content, template=template
-            )
-            print("----------------------")
-            template = claude_client(client=claude, prompt=formatted_prompt)
-        return template
+        client = LLM(client_name="claude")
     else:
         print("""
             Openhermes
             """)
-        ollama = ollama_client(model_name="openhermes")
-        for text in text_chunks:
-            formatted_prompt = prompt_template.format(
-                text=text.page_content, template=template
-            )
-            print("----------------------")
-            template = ollama_client(client=ollama, prompt=formatted_prompt)
-        return template
+        client = LLM(client_name="ollama", model_name="openhermes")
 
+    client.get_client()
+    for text in text_chunks:
+        formatted_prompt = prompt_template.format(
+            text=text.page_content, template=template
+        )
+        print("Processing Text Chunk")
+        template = client.generate_text(prompt=formatted_prompt)
+    print("Complete")
+    return template
 
-print(chunking_ingest(transcript=get_transcript(), prompt=CHUNKING_PROMPT))
+if __name__ == "__main__":
+    print(chunking_ingest(transcript=get_transcript(), prompt=CHUNKING_PROMPT))

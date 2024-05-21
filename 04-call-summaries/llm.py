@@ -30,8 +30,8 @@ class LLM:
     def get_client(self):
         """Retrieves the llm client"""
         if self.client_name == "ollama":
-            if not settings:
-                settings = {
+            if self.settings is None:
+                self.settings = {
                     # "temperature": 0.1,
                     # "system": "",
                     # "template": "",
@@ -47,25 +47,23 @@ class LLM:
             # Get a Google API key by following the steps after clicking on Get an API key button
             # at https://ai.google.dev/tutorials/setup
             GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
-            print("LLM settings:", self.model_name, settings)
-
             if self.model_version is None:
                 self.model_version = "gemini-1.5-flash-latest"
             elif self.model_name == "gemini-pro":
                 self.model_version = "gemini-1.5-pro-latest"
 
             genai.configure(api_key=GOOGLE_API_KEY)
-            if settings:
+            if self.settings is not None:
                 genai.GenerationConfig(**self.settings)
             self.client = genai.GenerativeModel(self.model_name)
 
         elif self.client_name == "gpt":
-            if self.model_name is None:
-                self.model_version = "gpt-4o"
-            elif self.model_name == "gpt3":
+            if self.model_name == "gpt3":
                 self.model_version = "gpt-3.5-turbo"
             elif self.model_name == "gpt4":
                 self.model_version = "gpt-4-turbo"
+            else:
+                self.model_version = "gpt-4o"
 
             # Get API key from https://platform.openai.com/api-keys
             OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
