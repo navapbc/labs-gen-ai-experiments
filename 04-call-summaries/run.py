@@ -1,6 +1,6 @@
 from langchain_core.prompts import PromptTemplate
 
-from llm import claude_client, google_gemini_client, gpt_client, ollama_client
+from llm import LLM
 
 
 # download transcripts from https://drive.google.com/drive/folders/19r6x3Zep4N9Rl_x4n4H6RpWkXviwbxyw?usp=sharing
@@ -53,14 +53,14 @@ def stuffing_summary(prompt=None):
     llm = input() or "1"
 
     if llm == "2":
-        ollama = ollama_client(model_name="dolphin-mistral")
-        response = ollama_client(client=ollama, prompt=prompt)
+        ollama = LLM(client_name="ollama", model_name="dolphin-mistral")
+        response = ollama.generate_text(prompt=prompt)
         print("""----------
             Dolphin
             """)
     elif llm == "3":
-        gemini = google_gemini_client()
-        response = google_gemini_client(client=gemini, prompt=prompt)
+        gemini = LLM(client_name="gemini")
+        response = gemini.generate_text(prompt=prompt)
         print("""----------
             Gemini Flash 1.5
             """)
@@ -68,66 +68,65 @@ def stuffing_summary(prompt=None):
         print("""----------
         GPT 4
         """)
-        gpt = gpt_client()
-        response = gpt_client(client=gpt, model_choice="gpt4", prompt=prompt)
+        gpt = LLM(client_name="gpt", model_name="gpt4")
+        response = gpt.generate_text(prompt=prompt)
     elif llm == "5":
         print("""----------
         GPT 4o
         """)
-        gpt = gpt_client()
-        response = gpt_client(client=gpt, model_choice="gpt4o", prompt=prompt)
+        gpt = LLM(client_name="gpt", model_name="gpt4o")
+        response = gpt.generate_text(prompt=prompt)
     elif llm == "6":
         print("""----------
             Claude 3
             """)
-        claude = claude_client()
-        response = claude_client(client=claude, prompt=prompt)
+        claude = LLM(client_name="claude")
+        response = claude.generate_text(prompt=prompt)
     elif llm == "7":
         print("""
             Openhermes
             """)
-        ollama_openhermes = ollama_client(model_name="openhermes")
-        ollama_openhermes_response = ollama_client(
-            client=ollama_openhermes, prompt=prompt
-        )
+        ollama_openhermes = LLM(client_name="ollama", model_name="openhermes")
+        ollama_openhermes_response = ollama_openhermes.generate_text(prompt=prompt)
         print(ollama_openhermes_response)
 
         print("""----------
             Dolphin
             """)
-        ollama_dolphin = ollama_client(model_name="dolphin-mistral")
-        dolphin_response = ollama_client(client=ollama_dolphin, prompt=prompt)
+        ollama_dolphin = LLM(client_name="ollama", model_name="dolphin-mistral")
+        dolphin_response = ollama_dolphin.generate_text(prompt=prompt)
         print(dolphin_response)
 
         print("""----------
             Gemini Flash 1.5
             """)
-        gemini = google_gemini_client()
-        gemini_response = google_gemini_client(client=gemini, prompt=prompt)
+        gemini = LLM(client_name="gemini")
+        gemini_response = gemini.generate_text(prompt=prompt)
         print(gemini_response)
 
-        gpt = gpt_client()
         print("""----------
         GPT 4
         """)
-        gpt_4_response = gpt_client(client=gpt, model_choice="gpt4", prompt=prompt)
+        gpt_4 = LLM(client_name="gpt", model_name="gpt4")
+        gpt_4_response = gpt_4.generate_text(prompt=prompt)
         print(gpt_4_response)
 
         print("""----------
         GPT 4o
         """)
-        gpt_4o_response = gpt_client(client=gpt, model_choice="gpt-4o", prompt=prompt)
+        gpt_4o = LLM(client_name="_4o", model_name="gpt4o")
+        gpt_4o_response = gpt_4o.generate_text(prompt=prompt)
         print(gpt_4o_response)
 
         print("""----------
             Claude 3
             """)
-        claude = claude_client()
-        claude_response = claude_client(client=claude, prompt=prompt)
+        claude = LLM(client_name="claude")
+        claude_response = claude.generate_text(prompt=prompt)
         print(claude_response)
     else:
-        ollama = ollama_client(model_name="openhermes")
-        response = ollama_client(client=ollama, prompt=prompt)
+        ollama = LLM(client_name="ollama", model_name="openhermes")
+        response = ollama.generate_text(prompt=prompt)
         print("""
             Openhermes
             """)
