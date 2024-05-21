@@ -119,5 +119,6 @@ def chunking_ingest(transcript, prompt):
     print("Complete")
     return template
 
+
 if __name__ == "__main__":
     print(chunking_ingest(transcript=get_transcript(), prompt=CHUNKING_PROMPT))

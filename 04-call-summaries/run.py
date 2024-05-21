@@ -135,5 +135,6 @@ def stuffing_summary(prompt=None):
     if response:
         print(response)
 
+
 if __name__ == "__main__":
     stuffing_summary(prompt=formatted_prompt)
