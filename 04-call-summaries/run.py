@@ -82,7 +82,7 @@ def stuffing_summary(prompt=None):
             Openhermes
             """)
         ollama_openhermes = LLM(client_name="ollama", model_name="openhermes")
-        ollama_openhermes.get_client()
+        ollama_openhermes.init_client()
         ollama_openhermes_response = ollama_openhermes.generate_text(prompt=prompt)
         print(ollama_openhermes_response)
 
@@ -90,7 +90,7 @@ def stuffing_summary(prompt=None):
             Dolphin
             """)
         ollama_dolphin = LLM(client_name="ollama", model_name="dolphin-mistral")
-        ollama_dolphin.get_client()
+        ollama_dolphin.init_client()
         dolphin_response = ollama_dolphin.generate_text(prompt=prompt)
         print(dolphin_response)
 
@@ -98,7 +98,7 @@ def stuffing_summary(prompt=None):
             Gemini Flash 1.5
             """)
         gemini = LLM(client_name="gemini")
-        gemini.get_client()
+        gemini.init_client()
         gemini_response = gemini.generate_text(prompt=prompt)
         print(gemini_response)
 
@@ -106,7 +106,7 @@ def stuffing_summary(prompt=None):
         GPT 4
         """)
         gpt_4 = LLM(client_name="gpt", model_name="gpt4")
-        gpt_4.get_client()
+        gpt_4.init_client()
         gpt_4_response = gpt_4.generate_text(prompt=prompt)
         print(gpt_4_response)
 
@@ -114,7 +114,7 @@ def stuffing_summary(prompt=None):
         GPT 4o
         """)
         gpt_4o = LLM(client_name="_4o", model_name="gpt4o")
-        gpt_4o.get_client()
+        gpt_4o.init_client()
         gpt_4o_response = gpt_4o.generate_text(prompt=prompt)
         print(gpt_4o_response)
 
@@ -122,7 +122,7 @@ def stuffing_summary(prompt=None):
             Claude 3
             """)
         claude = LLM(client_name="claude")
-        claude.get_client()
+        claude.init_client()
         claude_response = claude.generate_text(prompt=prompt)
         print(claude_response)
     else:
@@ -130,7 +130,7 @@ def stuffing_summary(prompt=None):
         print("""
             Openhermes
             """)
-    client.get_client()
+    client.init_client()
     response = client.generate_text(prompt=prompt)
     if response:
         print(response)

@@ -1,3 +1,4 @@
+import datetime
 from langchain_text_splitters import (
     RecursiveCharacterTextSplitter,
     NLTKTextSplitter,
@@ -34,8 +35,8 @@ def get_text_chunks(text, chunk_size, chunk_overlap, text_splitter_choice):
 
 CHUNKING_PROMPT = """
 You are a helpful AI assistant tasked with summarizing transcripts, however we can only process the transcripts in pieces.
-Fill out the fields with the text given {text}. If the following template already has the field filled out, do not overwrite this information.
-Please fill out the data with the following template: {template}
+Please fill out and return the following template: {template} with data in the text: {text}
+If the following template already has the field filled out, do not overwrite this information.
 """
 
 initial_temp = """
@@ -109,7 +110,9 @@ def chunking_ingest(transcript, prompt):
             """)
         client = LLM(client_name="ollama", model_name="openhermes")
 
-    client.get_client()
+    client.init_client()
+    ct = datetime.datetime.now()
+    print("current time:-", ct)
     for text in text_chunks:
         formatted_prompt = prompt_template.format(
             text=text.page_content, template=template
@@ -121,4 +124,11 @@ def chunking_ingest(transcript, prompt):
 
 
 if __name__ == "__main__":
-    print(chunking_ingest(transcript=get_transcript(), prompt=CHUNKING_PROMPT))
+    print(
+        chunking_ingest(
+            transcript=get_transcript("./son_calling_behalf_mother_transcript.txt"),
+            prompt=CHUNKING_PROMPT,
+        )
+    )
+    ct = datetime.datetime.now()
+    print(ct)

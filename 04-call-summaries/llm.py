@@ -27,7 +27,7 @@ class LLM:
         self.client = None
         self.settings = settings
 
-    def get_client(self):
+    def init_client(self):
         """Retrieves the llm client"""
         if self.client_name == "ollama":
             if self.settings is None:
