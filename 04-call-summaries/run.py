@@ -1,6 +1,6 @@
 from langchain_core.prompts import PromptTemplate
 
-from llm import claude, google_gemini_client, gpt3_5, gpt_4_turbo, ollama_client
+from llm import LLM
 
 
 # download transcripts from https://drive.google.com/drive/folders/19r6x3Zep4N9Rl_x4n4H6RpWkXviwbxyw?usp=sharing
@@ -32,88 +32,109 @@ Please summarize the transcript, {transcript}, with the following template:
 8. Next Steps for Agent
 """
 
-print("""
-      Select an llm
-      1. openhermes (default)
-      2. dolphin
-      3. gemini
-      4. gpt 3.5
-      5. gpt 4
-      6. claude 3
-      7. all
-      """)
-
 
 transcript = get_transcript()
-llm = input() or "1"
 prompt_template = PromptTemplate.from_template(PROMPT)
 formatted_prompt = prompt_template.format(transcript=transcript)
 
-if llm == "2":
-    test = ollama_client(model_name="dolphin-mistral", prompt=formatted_prompt)
-    print("""----------
-        Dolphin
+
+def stuffing_summary(prompt=None):
+    print("""
+        Select an llm
+        1. openhermes (default)
+        2. dolphin
+        3. gemini
+        4. gpt 4
+        5. gpt 4o
+        6. claude 3
+        7. all
         """)
-elif llm == "3":
-    test = google_gemini_client(prompt=formatted_prompt).text
-    print("""----------
-        Gemini
-        """)
-elif llm == "4":
-    print("""----------
-      GPT 3.5
-      """)
-    test = gpt3_5(prompt=formatted_prompt)
-elif llm == "5":
-    print("""----------
+
+    llm = input() or "1"
+
+    if llm == "2":
+        client = LLM(client_name="ollama", model_name="dolphin-mistral")
+        print("""----------
+            Dolphin
+            """)
+    elif llm == "3":
+        client = LLM(client_name="gemini")
+        print("""----------
+            Gemini Flash 1.5
+            """)
+    elif llm == "4":
+        print("""----------
         GPT 4
         """)
-    test = gpt_4_turbo(prompt=formatted_prompt)
-elif llm == "6":
-    print("""----------
-        Claude 3
+        client = LLM(client_name="gpt", model_name="gpt4")
+    elif llm == "5":
+        print("""----------
+        GPT 4o
         """)
-    test = claude(prompt=formatted_prompt)
-elif llm == "7":
-    test_open_hermes = ollama_client(model_name="openhermes", prompt=formatted_prompt)
-    print("""
-        Openhermes
-        """)
-    print(test_open_hermes)
+        client = LLM(client_name="gpt", model_name="gpt4o")
+    elif llm == "6":
+        print("""----------
+            Claude 3
+            """)
+        client = LLM(client_name="claude")
+    elif llm == "7":
+        print("""
+            Openhermes
+            """)
+        ollama_openhermes = LLM(client_name="ollama", model_name="openhermes")
+        ollama_openhermes.init_client()
+        ollama_openhermes_response = ollama_openhermes.generate_text(prompt=prompt)
+        print(ollama_openhermes_response)
 
-    test_dolphin = ollama_client(model_name="dolphin-mistral", prompt=formatted_prompt)
-    print("""----------
-        Dolphin
-        """)
-    print(test_dolphin)
+        print("""----------
+            Dolphin
+            """)
+        ollama_dolphin = LLM(client_name="ollama", model_name="dolphin-mistral")
+        ollama_dolphin.init_client()
+        dolphin_response = ollama_dolphin.generate_text(prompt=prompt)
+        print(dolphin_response)
 
-    test_gemini = google_gemini_client(prompt=formatted_prompt).text
-    print("""----------
-        Gemini
-        """)
-    print(test_gemini)
+        print("""----------
+            Gemini Flash 1.5
+            """)
+        gemini = LLM(client_name="gemini")
+        gemini.init_client()
+        gemini_response = gemini.generate_text(prompt=prompt)
+        print(gemini_response)
 
-    print("""----------
-      GPT 3.5
-      """)
-    test_gpt3_5 = gpt3_5(prompt=formatted_prompt)
-    print(test_gpt3_5)
-
-    print("""----------
+        print("""----------
         GPT 4
         """)
-    test_gpt4 = gpt_4_turbo(prompt=formatted_prompt)
-    print(test_gpt4)
+        gpt_4 = LLM(client_name="gpt", model_name="gpt4")
+        gpt_4.init_client()
+        gpt_4_response = gpt_4.generate_text(prompt=prompt)
+        print(gpt_4_response)
 
-    print("""----------
-        Claude 3
+        print("""----------
+        GPT 4o
         """)
-    test_claude = claude(prompt=formatted_prompt)
-    print(test_claude)
-else:
-    test = ollama_client(model_name="openhermes", prompt=formatted_prompt)
-    print("""
-        Openhermes
-        """)
-if test:
-    print(test)
+        gpt_4o = LLM(client_name="_4o", model_name="gpt4o")
+        gpt_4o.init_client()
+        gpt_4o_response = gpt_4o.generate_text(prompt=prompt)
+        print(gpt_4o_response)
+
+        print("""----------
+            Claude 3
+            """)
+        claude = LLM(client_name="claude")
+        claude.init_client()
+        claude_response = claude.generate_text(prompt=prompt)
+        print(claude_response)
+    else:
+        client = LLM(client_name="ollama", model_name="openhermes")
+        print("""
+            Openhermes
+            """)
+    client.init_client()
+    response = client.generate_text(prompt=prompt)
+    if response:
+        print(response)
+
+
+if __name__ == "__main__":
+    stuffing_summary(prompt=formatted_prompt)
