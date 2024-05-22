@@ -47,15 +47,15 @@ class LLM:
             # Get a Google API key by following the steps after clicking on Get an API key button
             # at https://ai.google.dev/tutorials/setup
             GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
-            if self.model_version is None:
-                self.model_version = "gemini-1.5-flash-latest"
-            elif self.model_name == "gemini-pro":
+            if self.model_name == "gemini-pro":
                 self.model_version = "gemini-1.5-pro-latest"
+            else:
+                self.model_version = "gemini-1.5-flash-latest"
 
             genai.configure(api_key=GOOGLE_API_KEY)
             if self.settings is not None:
                 genai.GenerationConfig(**self.settings)
-            self.client = genai.GenerativeModel(self.model_name)
+            self.client = genai.GenerativeModel(self.model_version)
 
         elif self.client_name == "gpt":
             if self.model_name == "gpt3":
@@ -81,7 +81,7 @@ class LLM:
         if self.client_name == "ollama":
             return self.client.invoke(prompt)
         elif self.client_name == "gemini":
-            return self.client.generate(prompt).text
+            return self.client.generate_content(prompt).text
         elif self.client_name == "gpt":
             return (
                 self.client.chat.completions.create(
