@@ -1,0 +1,9 @@
+__pycache__
+chroma_db/
+*cache/
+*.log
+log/
+compiled_module-*.json
+
+*.DS_STORE
+

@@ -1,0 +1,743 @@
+[
+    {
+        "id": 1,
+        "question": "The client has her 19 year old grandchild living with her. She says she does her own thing and they don't really share food. Does the grandchild need to be included?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 1.0,
+        "extra_cards": 3,
+        "derived_questions": [
+            "Does the grandchild live with you?",
+            "Is the grandchild financially dependent on you?",
+            "Do you provide regular support for the grandchild?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.7314764598621692,
+                "derived_questions": [
+                    "Does the grandchild live with you?",
+                    "Do you provide regular support for the grandchild?",
+                    "Is the grandchild financially dependent on you?"
+                ]
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.6699078276008735,
+                "derived_questions": [
+                    "Does the grandchild live with you?",
+                    "Do you provide regular support for the grandchild?",
+                    "Is the grandchild financially dependent on you?"
+                ]
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.5218728563128504,
+                "derived_questions": [
+                    "Does the grandchild live with you?",
+                    "Do you provide regular support for the grandchild?",
+                    "Is the grandchild financially dependent on you?"
+                ]
+            },
+            "Can students be part of a SNAP household?": {
+                "score_sum": 0.2095682249578389,
+                "derived_questions": [
+                    "Do you provide regular support for the grandchild?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 2,
+        "question": "The client's son is 20 and is still living with them, but has his own job and buys his own food. The client doesn't want to list him on the application, do they have to? If so, do we need to include the son's income?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?",
+            "How is the income of a dependent counted for SNAP?"
+        ],
+        "recall": 0.5,
+        "extra_cards": 4,
+        "derived_questions": [
+            "Do clients have to list their adult children living with them if they have jobs and buy their own food?",
+            "If they do have to list them, do we need to include the adult child's income?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.8556045602793476,
+                "derived_questions": [
+                    "Do clients have to list their adult children living with them if they have jobs and buy their own food?",
+                    "If they do have to list them, do we need to include the adult child's income?"
+                ]
+            },
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.8257677270622369,
+                "derived_questions": [
+                    "Do clients have to list their adult children living with them if they have jobs and buy their own food?"
+                ]
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.7800342323376975,
+                "derived_questions": [
+                    "If they do have to list them, do we need to include the adult child's income?"
+                ]
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.40027020679409053,
+                "derived_questions": [
+                    "Do clients have to list their adult children living with them if they have jobs and buy their own food?"
+                ]
+            },
+            "What if the only eligible household members are children under 18?": {
+                "score_sum": 0.3784036110580531,
+                "derived_questions": [
+                    "If they do have to list them, do we need to include the adult child's income?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 3,
+        "question": "The client rents a room in a house. He said he wants to apply on his own, but then he admitted he shares a kitchen with his roommates and they often cook and eat together. Do the roommates need to be included?",
+        "guru_cards": [
+            "What if my client shares meals but wants to apply for food stamps on their own?"
+        ],
+        "recall": 1.0,
+        "extra_cards": 5,
+        "derived_questions": [
+            "Does the client share a kitchen with his roommates?",
+            "Do the roommates often cook and eat together in the shared kitchen?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.5376032753254323,
+                "derived_questions": [
+                    "Does the client share a kitchen with his roommates?"
+                ]
+            },
+            "If a non-mandatory household (HH) member already receives SNAP, and the client says they share & prepare meals, what steps should be taken?": {
+                "score_sum": 0.3842315979369787,
+                "derived_questions": [
+                    "Does the client share a kitchen with his roommates?",
+                    "Do the roommates often cook and eat together in the shared kitchen?"
+                ]
+            },
+            "Are live-in attendants included in food stamp households?": {
+                "score_sum": 0.194722245249761,
+                "derived_questions": [
+                    "Do the roommates often cook and eat together in the shared kitchen?"
+                ]
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.18720370925870566,
+                "derived_questions": [
+                    "Does the client share a kitchen with his roommates?"
+                ]
+            },
+            "Should all household members be listed even if they are not in the food stamp household?": {
+                "score_sum": 0.1247161281025545,
+                "derived_questions": [
+                    "Do the roommates often cook and eat together in the shared kitchen?"
+                ]
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.1190879140473805,
+                "derived_questions": [
+                    "Do the roommates often cook and eat together in the shared kitchen?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 4,
+        "question": "Husband and wife consider themselves separated, but they still live in the same house. The husband lives on the 2nd floor and the wife lives on the first. They do not speak or share any food. Can the wife apply on her own?",
+        "guru_cards": [
+            "How is \"spouse\" defined for food stamp applications?"
+        ],
+        "recall": 1.0,
+        "extra_cards": 13,
+        "derived_questions": [
+            "What is the situation between the husband and wife?",
+            "Can they still be considered separated if they live in the same house?",
+            "Do they have any communication with each other?",
+            "Do they share any food or resources?",
+            "Is the wife able to apply for something on her own?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.5970122321883444,
+                "derived_questions": [
+                    "Is the wife able to apply for something on her own?",
+                    "Can they still be considered separated if they live in the same house?"
+                ]
+            },
+            "How is \"spouse\" defined for food stamp applications?": {
+                "score_sum": 0.5276235971132459,
+                "derived_questions": [
+                    "What is the situation between the husband and wife?",
+                    "Is the wife able to apply for something on her own?"
+                ]
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.4915337942298562,
+                "derived_questions": [
+                    "Is the wife able to apply for something on her own?"
+                ]
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.48289715515813214,
+                "derived_questions": [
+                    "Can they still be considered separated if they live in the same house?",
+                    "Do they share any food or resources?"
+                ]
+            },
+            "If a person is living in a household temporarily, do they need to be included on the application?": {
+                "score_sum": 0.2072755206925433,
+                "derived_questions": [
+                    "Can they still be considered separated if they live in the same house?"
+                ]
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.06650213232266033,
+                "derived_questions": [
+                    "What is the situation between the husband and wife?",
+                    "Do they share any food or resources?"
+                ]
+            },
+            "What is an \"institution of higher education\" for food stamp purposes?": {
+                "score_sum": 0.06203233880848413,
+                "derived_questions": [
+                    "Do they share any food or resources?"
+                ]
+            },
+            "Are live-in attendants included in food stamp households?": {
+                "score_sum": 0.054871407656272075,
+                "derived_questions": [
+                    "Do they share any food or resources?"
+                ]
+            },
+            "What are the steps if the client is in a violent situation?": {
+                "score_sum": 0.026024178783201735,
+                "derived_questions": [
+                    "What is the situation between the husband and wife?"
+                ]
+            },
+            "If a client's spouse lives in a nursing home and has Medicaid, but some or all of their income goes to the client. Does this count as income for SNAP?": {
+                "score_sum": 0.005686777499324114,
+                "derived_questions": [
+                    "What is the situation between the husband and wife?"
+                ]
+            },
+            "What is the procedure if the client asks to speak to a specific BOS?": {
+                "score_sum": -0.027987934814176052,
+                "derived_questions": [
+                    "Do they have any communication with each other?"
+                ]
+            },
+            "What is queue bumping?": {
+                "score_sum": -0.08312874101467593,
+                "derived_questions": [
+                    "Do they have any communication with each other?"
+                ]
+            },
+            "What are best practices when using Transperfect services?": {
+                "score_sum": -0.08516822701411808,
+                "derived_questions": [
+                    "Do they have any communication with each other?"
+                ]
+            },
+            "What are the best practices for communicating with clients in a mental health crisis?": {
+                "score_sum": -0.08595325421448186,
+                "derived_questions": [
+                    "Do they have any communication with each other?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 5,
+        "question": "Client lives in assisted living , but doesn't go to the cafeteria. She tends to cook all her food in her kitchen because she doesn't like the facilities food. Can she apply for food stamps?",
+        "guru_cards": [
+            ""
+        ],
+        "recall": 0.0,
+        "extra_cards": 7,
+        "derived_questions": [
+            "Does the client live in an assisted living facility?",
+            "Is the client able to cook her own food in her kitchen?",
+            "Does the client have a valid reason for not using the cafeteria facilities?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.6137923256613056,
+                "derived_questions": [
+                    "Is the client able to cook her own food in her kitchen?",
+                    "Does the client live in an assisted living facility?"
+                ]
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.4512543061061163,
+                "derived_questions": [
+                    "Is the client able to cook her own food in her kitchen?",
+                    "Does the client have a valid reason for not using the cafeteria facilities?"
+                ]
+            },
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.3524766571360596,
+                "derived_questions": [
+                    "Does the client have a valid reason for not using the cafeteria facilities?"
+                ]
+            },
+            "If a person is living in a household temporarily, do they need to be included on the application?": {
+                "score_sum": 0.28904554871919597,
+                "derived_questions": [
+                    "Does the client live in an assisted living facility?"
+                ]
+            },
+            "If a non-mandatory household (HH) member already receives SNAP, and the client says they share & prepare meals, what steps should be taken?": {
+                "score_sum": 0.276052717012954,
+                "derived_questions": [
+                    "Is the client able to cook her own food in her kitchen?",
+                    "Does the client have a valid reason for not using the cafeteria facilities?"
+                ]
+            },
+            "What is good scripting if the client states they are Already Enrolled?": {
+                "score_sum": 0.23248245496884767,
+                "derived_questions": [
+                    "Does the client live in an assisted living facility?"
+                ]
+            },
+            "Are live-in attendants included in food stamp households?": {
+                "score_sum": 0.14449834163597297,
+                "derived_questions": [
+                    "Is the client able to cook her own food in her kitchen?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 6,
+        "question": "The client's kid used to live with his mom more, but now mainly stays with him. His ex has food stamps, but he's not sure whether his kid is on her case or not because they don't really talk. Should we list the kid on the application?",
+        "guru_cards": [
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?"
+        ],
+        "recall": 1.0,
+        "extra_cards": 4,
+        "derived_questions": [
+            "Does the client have custody of the child?",
+            "Is the child currently receiving food stamps through the ex-partner's case?",
+            "What is the current living arrangement of the child?"
+        ],
+        "all_retrieved_cards": {
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 1.8096245199025371,
+                "derived_questions": [
+                    "What is the current living arrangement of the child?",
+                    "Does the client have custody of the child?",
+                    "Is the child currently receiving food stamps through the ex-partner's case?"
+                ]
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.8608839455883729,
+                "derived_questions": [
+                    "What is the current living arrangement of the child?",
+                    "Does the client have custody of the child?",
+                    "Is the child currently receiving food stamps through the ex-partner's case?"
+                ]
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.41630145816067,
+                "derived_questions": [
+                    "Is the child currently receiving food stamps through the ex-partner's case?"
+                ]
+            },
+            "If a client receives less child support than what is reported, what should be entered?": {
+                "score_sum": 0.31712082891775784,
+                "derived_questions": [
+                    "Does the client have custody of the child?"
+                ]
+            },
+            "Can students be part of a SNAP household?": {
+                "score_sum": 0.13284022441854437,
+                "derived_questions": [
+                    "What is the current living arrangement of the child?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 7,
+        "question": "The client and her husband live with her parents. She is 20, but her husband is 23. They buy their own groceries. Can they apply by themselves?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 0.0,
+        "extra_cards": 5,
+        "derived_questions": [
+            "Can the client and her husband apply for benefits without her parents' information?",
+            "What is the age difference between the client and her husband?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.49369919825957354,
+                "derived_questions": [
+                    "Can the client and her husband apply for benefits without her parents' information?",
+                    "What is the age difference between the client and her husband?"
+                ]
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.4617722456441862,
+                "derived_questions": [
+                    "Can the client and her husband apply for benefits without her parents' information?",
+                    "What is the age difference between the client and her husband?"
+                ]
+            },
+            "What if a client cannot apply for benefits by phone?": {
+                "score_sum": 0.4225079699480355,
+                "derived_questions": [
+                    "Can the client and her husband apply for benefits without her parents' information?"
+                ]
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.2584667946078757,
+                "derived_questions": [
+                    "Can the client and her husband apply for benefits without her parents' information?"
+                ]
+            },
+            "What do I do if a client\u2019s name or gender is different than what is listed on some of their documents? Do clients need to report it?": {
+                "score_sum": 0.2392751110702256,
+                "derived_questions": [
+                    "What is the age difference between the client and her husband?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 8,
+        "question": "This client and her husband are ineligible (LPR but only for 2 years), they have three kids. One 16, one 14 and one is 20. I just apply the kids right?",
+        "guru_cards": [
+            "Does a qualified non-citizen under 18 have to reside in the US for five years before they can receive SNAP benefits?",
+            "If a non-citizen child receiving SNAP turns 18 years of age during a certification period and has been living in the US for under 5 years, is the child still eligible to receive SNAP?",
+            "What if the only eligible household members are children under 18?"
+        ],
+        "recall": 0.3333333333333333,
+        "extra_cards": 8,
+        "derived_questions": [
+            "Are all three children LPRs?",
+            "How long has the client been an LPR herself?",
+            "What is the age of the youngest child?"
+        ],
+        "all_retrieved_cards": {
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.22303255416754109,
+                "derived_questions": [
+                    "What is the age of the youngest child?",
+                    "Are all three children LPRs?"
+                ]
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.14924671056763184,
+                "derived_questions": [
+                    "Are all three children LPRs?"
+                ]
+            },
+            "What are the steps if the client is in a violent situation?": {
+                "score_sum": 0.12959483278950845,
+                "derived_questions": [
+                    "How long has the client been an LPR herself?"
+                ]
+            },
+            "When should a screening be started for a client who we have screened in the past?": {
+                "score_sum": 0.12845838516626074,
+                "derived_questions": [
+                    "How long has the client been an LPR herself?"
+                ]
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.10969071316658174,
+                "derived_questions": [
+                    "What is the age of the youngest child?",
+                    "Are all three children LPRs?"
+                ]
+            },
+            "What are the steps if a client indicates they intend to harm themselves or others?": {
+                "score_sum": 0.10435569832094171,
+                "derived_questions": [
+                    "How long has the client been an LPR herself?"
+                ]
+            },
+            "How should I enter both the client's legal information and correct information into the portfolio/profile if they do not match?": {
+                "score_sum": 0.10144866159175137,
+                "derived_questions": [
+                    "How long has the client been an LPR herself?"
+                ]
+            },
+            "If a non-citizen child receiving SNAP turns 18 years of age during a certification period and has been living in the US for under 5 years, is the child still eligible to receive SNAP?": {
+                "score_sum": 0.0772746622787519,
+                "derived_questions": [
+                    "What is the age of the youngest child?"
+                ]
+            },
+            "Can students be part of a SNAP household?": {
+                "score_sum": 0.03503913679859094,
+                "derived_questions": [
+                    "What is the age of the youngest child?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 9,
+        "question": "The client lives with her boyfriend and they have a kid together. With the boyfriend's income, they are ineligible. Can I just apply the client with her kid since they aren't married?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 0.0,
+        "extra_cards": 7,
+        "derived_questions": [
+            "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?",
+            "Is there any way to adjust the application process to include only the client and her child?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.6513941186271457,
+                "derived_questions": [
+                    "Is there any way to adjust the application process to include only the client and her child?"
+                ]
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.39329474263882747,
+                "derived_questions": [
+                    "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?"
+                ]
+            },
+            "Who can complete an application on a client's behalf?": {
+                "score_sum": 0.35603745866507996,
+                "derived_questions": [
+                    "Is there any way to adjust the application process to include only the client and her child?"
+                ]
+            },
+            "What if a client cannot apply for benefits by phone?": {
+                "score_sum": 0.35378496249326374,
+                "derived_questions": [
+                    "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?"
+                ]
+            },
+            "If a client's spouse lives in a nursing home and has Medicaid, but some or all of their income goes to the client. Does this count as income for SNAP?": {
+                "score_sum": 0.33505794313700643,
+                "derived_questions": [
+                    "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?"
+                ]
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.2955065989885244,
+                "derived_questions": [
+                    "Can the client apply for benefits without her boyfriend's income being considered if they live together and have a child together?"
+                ]
+            },
+            "If a client receives less child support than what is reported, what should be entered?": {
+                "score_sum": 0.2829566778085242,
+                "derived_questions": [
+                    "Is there any way to adjust the application process to include only the client and her child?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 10,
+        "question": "The client lives with his girlfriend in her parent's basement. He's 24 and she's 21. She's pregnant.  Can he apply with his girlfriend and not include her parents?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 0.0,
+        "extra_cards": 6,
+        "derived_questions": [
+            "Can the client apply for a mortgage with his girlfriend without including her parents?",
+            "What is the age of the client and his girlfriend?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 0.6468850551534787,
+                "derived_questions": [
+                    "Can the client apply for a mortgage with his girlfriend without including her parents?",
+                    "What is the age of the client and his girlfriend?"
+                ]
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.3509040160705782,
+                "derived_questions": [
+                    "Can the client apply for a mortgage with his girlfriend without including her parents?"
+                ]
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.20780861837639808,
+                "derived_questions": [
+                    "Can the client apply for a mortgage with his girlfriend without including her parents?"
+                ]
+            },
+            "When should a screening be started for a client who we have screened in the past?": {
+                "score_sum": 0.15417976387548915,
+                "derived_questions": [
+                    "What is the age of the client and his girlfriend?"
+                ]
+            },
+            "What are the steps if the client is in a violent situation?": {
+                "score_sum": 0.14000561013388146,
+                "derived_questions": [
+                    "What is the age of the client and his girlfriend?"
+                ]
+            },
+            "What do I do if a client\u2019s name or gender is different than what is listed on some of their documents? Do clients need to report it?": {
+                "score_sum": 0.06268232750621905,
+                "derived_questions": [
+                    "What is the age of the client and his girlfriend?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 11,
+        "question": "This client is 21 so I'm including his mother on the application. We managed to get by the income and resources on best estimations but now we're on the expenses step and the client is unsure if his mother pays mortgage and is really at loss on how much anything in the household costs. Are we able to continue without this information or should the client call back when he does have it? The household is likely eligible based on what we have so far.",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?"
+        ],
+        "recall": 0.0,
+        "extra_cards": 6,
+        "derived_questions": [
+            "Does the client need to provide his mother's mortgage payment information to continue with the application?",
+            "Is the household likely eligible based on the current information provided?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 1.0587119007565216,
+                "derived_questions": [
+                    "Does the client need to provide his mother's mortgage payment information to continue with the application?",
+                    "Is the household likely eligible based on the current information provided?"
+                ]
+            },
+            "What if the only eligible household members are children under 18?": {
+                "score_sum": 0.5421970961114546,
+                "derived_questions": [
+                    "Is the household likely eligible based on the current information provided?"
+                ]
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.4092537580988782,
+                "derived_questions": [
+                    "Is the household likely eligible based on the current information provided?"
+                ]
+            },
+            "If a person is living in a household temporarily, do they need to be included on the application?": {
+                "score_sum": 0.40678572031377425,
+                "derived_questions": [
+                    "Is the household likely eligible based on the current information provided?"
+                ]
+            },
+            "Who can complete an application on a client's behalf?": {
+                "score_sum": 0.3360695040992251,
+                "derived_questions": [
+                    "Does the client need to provide his mother's mortgage payment information to continue with the application?"
+                ]
+            },
+            "If a client receives less child support than what is reported, what should be entered?": {
+                "score_sum": 0.2969024799248998,
+                "derived_questions": [
+                    "Does the client need to provide his mother's mortgage payment information to continue with the application?"
+                ]
+            }
+        }
+    },
+    {
+        "id": 12,
+        "question": "This household has everything! I can't keep everything straight and I don't remember who needs to be included. The client is married and they have two adult kids and then two foster kids. The client's mother lives with them and they have a live in attendant who takes care of her. One of the kids is 20 and in college full time. He's not working and comes home on summer and winter breaks. I think he's an ineligible student, but does he still need to be listed on the application, would he be included in the summer? Their other child is 23 and buys some of his own food, but will eat when his mother cooks a big dinner. The foster kids are 11 and 12. They eat with them, so I think they need to be included? The client's mother has special food needs so her live in attendant cooks for her separately and they eat together. She also wants to apply. How do I enter this?",
+        "guru_cards": [
+            "Who are mandatory HH members for food stamps?",
+            "Can students be part of a SNAP household?",
+            "Do students qualify during summer break when they are not taking classes?",
+            "Do we include ineligible students in the food stamp household?",
+            "What if my client shares meals but wants to apply for food stamps on their own?",
+            "Does an applicant with foster children (or adults) need to include them on the food stamp application?"
+        ],
+        "recall": 0.6666666666666666,
+        "extra_cards": 8,
+        "derived_questions": [
+            "What is the situation with the client's 20-year-old child who is in college full time?",
+            "Are the foster kids included in family meals and should be listed on the application?",
+            "How should the client's mother, who has special food needs, be entered into the application?",
+            "What about the live-in attendant who takes care of the client's mother?"
+        ],
+        "all_retrieved_cards": {
+            "What if a client does not want to provide information about other household members?": {
+                "score_sum": 1.0494497685888868,
+                "derived_questions": [
+                    "How should the client's mother, who has special food needs, be entered into the application?",
+                    "What about the live-in attendant who takes care of the client's mother?",
+                    "What is the situation with the client's 20-year-old child who is in college full time?"
+                ]
+            },
+            "In what cases can a parent who has a joint custody arrangement include a child on a food stamp application?": {
+                "score_sum": 0.7178965921385819,
+                "derived_questions": [
+                    "How should the client's mother, who has special food needs, be entered into the application?",
+                    "Are the foster kids included in family meals and should be listed on the application?"
+                ]
+            },
+            "Does an applicant with foster children (or adults) need to include them on the food stamp application?": {
+                "score_sum": 0.6719498833096211,
+                "derived_questions": [
+                    "Are the foster kids included in family meals and should be listed on the application?"
+                ]
+            },
+            "Who are mandatory HH members for food stamps?": {
+                "score_sum": 0.49967228409077213,
+                "derived_questions": [
+                    "Are the foster kids included in family meals and should be listed on the application?"
+                ]
+            },
+            "Do foster care payments count as income for food stamps?": {
+                "score_sum": 0.40977988856125036,
+                "derived_questions": [
+                    "Are the foster kids included in family meals and should be listed on the application?"
+                ]
+            },
+            "What if my client shares meals but wants to apply for food stamps on their own?": {
+                "score_sum": 0.39315908669061006,
+                "derived_questions": [
+                    "How should the client's mother, who has special food needs, be entered into the application?"
+                ]
+            },
+            "If a non-mandatory household (HH) member already receives SNAP, and the client says they share & prepare meals, what steps should be taken?": {
+                "score_sum": 0.3168374420028156,
+                "derived_questions": [
+                    "How should the client's mother, who has special food needs, be entered into the application?"
+                ]
+            },
+            "Can students be part of a SNAP household?": {
+                "score_sum": 0.22169117587611842,
+                "derived_questions": [
+                    "What is the situation with the client's 20-year-old child who is in college full time?"
+                ]
+            },
+            "Can children under 18 years of age ever be certified as a separate household from other adults living in the home?": {
+                "score_sum": 0.21608394076035842,
+                "derived_questions": [
+                    "What is the situation with the client's 20-year-old child who is in college full time?"
+                ]
+            },
+            "Are live-in attendants included in food stamp households?": {
+                "score_sum": 0.2139482901766192,
+                "derived_questions": [
+                    "What about the live-in attendant who takes care of the client's mother?"
+                ]
+            },
+            "If a person is living in a household temporarily, do they need to be included on the application?": {
+                "score_sum": 0.20751912947693618,
+                "derived_questions": [
+                    "What about the live-in attendant who takes care of the client's mother?"
+                ]
+            },
+            "What are the steps if the client is in a violent situation?": {
+                "score_sum": 0.18756799150363723,
+                "derived_questions": [
+                    "What is the situation with the client's 20-year-old child who is in college full time?"
+                ]
+            }
+        }
+    }
+]

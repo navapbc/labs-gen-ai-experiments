@@ -1,0 +1,84 @@
+name: "Build and push Docker image"
+run-name: "Publish image: ${{inputs.image_name}} ${{inputs.image_tag}}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      dockerfile_folder:
+        description: 'Folder containing Dockerfile to build'
+        required: true
+        type: string
+        default: '02-household-queries'
+      image_name:
+        description: 'Name of the image and prefix of service'
+        required: true
+        type: choice
+        options:
+        - 'chainlit-chatbot'
+      image_tag:
+        description: 'Tag/Version of the image to push'
+        required: true
+        type: string
+        default: '0.01'
+      build_image:
+        description: "Build and push image"
+        required: true
+        type: boolean
+        default: 'true'
+      deploy_image:
+        description: "Deploy image"
+        required: true
+        type: boolean
+        default: 'false'
+
+jobs:
+  publish-image:
+    env:
+      # Target path where the image will be pushed, i.e., to GHCR for the current repo
+      GHCR_PATH: "ghcr.io/${{ github.repository_owner }}/${{ inputs.image_name }}:${{ inputs.image_tag }}"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: us-east-1
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        mask-aws-account-id: true
+      # TODO: secure credentials: https://github.com/aws-actions/amazon-ecr-login?tab=readme-ov-file#ecr-private
+      # https://github.com/docker/login-action?tab=readme-ov-file#aws-elastic-container-registry-ecr
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+      with:
+        mask-password: true
+
+    - name: "Checkout source code"
+      if: inputs.build_image
+      uses: actions/checkout@v4
+
+    - name: "Build image ${{ inputs.image_name }} with tag '${{ inputs.image_tag }}'"
+      if: inputs.build_image
+      run: |
+        cd ${{ inputs.dockerfile_folder }}
+        echo "${{secrets.DOT_ENV_FILE_CONTENTS}}" > .env
+        docker build -t "${{ inputs.image_name }}:${{ inputs.image_tag }}" --build-arg GURU_CARDS_URL="https://docs.google.com/uc?export=download&id=${{ secrets.GURU_CARDS_URL_ID }}" .
+
+    - name: "Publish image to AWS ECR'"
+      if: inputs.build_image
+      env:
+          ECR_PATH: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}
+      run: |
+        echo "# Publishing image ${{ inputs.image_name }}:${{ inputs.image_tag }} to $ECR_PATH"
+
+        docker tag "${{ inputs.image_name }}:${{ inputs.image_tag }}" "$ECR_PATH:${{ inputs.image_tag }}"
+        docker push "$ECR_PATH:${{ inputs.image_tag }}"
+
+    - name: "Update AWS Service"
+      if: inputs.deploy_image
+      env:
+        CLUSTER_NAME: genai-experiments
+        SERVICE_NAME: ${{ inputs.image_name }}-service
+      run: |
+        aws ecs update-service --force-new-deployment --cluster "$CLUSTER_NAME" --service "$SERVICE_NAME"

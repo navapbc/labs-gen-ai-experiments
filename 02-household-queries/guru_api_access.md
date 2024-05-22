@@ -65,3 +65,5 @@ zip guru_cards_for_nava.json.zip guru_cards_for_nava_?.json
 ## Extract all HTML content
 
 `cat guru_cards_for_nava.json | jq '.[] | .content' > guru_cards.html`
+
+`jq -r '.[] | .preferredPhrase + "\n  tags: " + ( [.tags[]?.value] | join(",") ) +"\n  content: " + .content' guru_cards_for_nava--Multi-benefit.json`
