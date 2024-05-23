@@ -179,9 +179,14 @@ def create_retriever_model():
 @debugging.timer
 def create_llm_model(llm_name="openhermes", respond_with_json=False):
     # print("LLM model name:", llm_name)
+    dspy_llm_kwargs = {
+        "temperature": 0.1,
+        # The default DSPy max_tokens is only 150, which caused issues due to incomplete JSON string output
+        "max_tokens": 1000,
+    }
     if llm_name in ["openhermes", "llama2", "llama2:chat", "llama3", "mistral", "mistral:instruct"]:
         # Alternative using OpenAI-compatible API: https://gist.github.com/jrknox1977/78c17e492b5a75ee5bbaf9673aee4641
-        return dspy.OllamaLocal(model=llm_name, temperature=0.1)
+        return dspy.OllamaLocal(model=llm_name, **dspy_llm_kwargs)
     elif llm_name in [
         "gpt-3.5-turbo",
         "gpt-3.5-turbo-instruct",
@@ -189,14 +194,14 @@ def create_llm_model(llm_name="openhermes", respond_with_json=False):
         "gpt-4-turbo",
     ]:
         if respond_with_json:
-            return dspy.OpenAI(model=llm_name, temperature=0.1, response_format={"type": "json_object"})
+            return dspy.OpenAI(model=llm_name, **dspy_llm_kwargs, response_format={"type": "json_object"})
         else:
-            return dspy.OpenAI(model=llm_name, temperature=0.1)
+            return dspy.OpenAI(model=llm_name, **dspy_llm_kwargs)
     elif llm_name in ["gemini-1.0-pro"]:
-        return dspy.Google(model=f"models/{llm_name}", temperature=0.1)
+        return dspy.Google(model=f"models/{llm_name}", **dspy_llm_kwargs)
     elif llm_name in ["llama3-70b-8192", "mixtral-8x7b-32768"]:
         api_key = os.environ.get("GROQ_API_KEY")
-        return dspy.GROQ(api_key, model=llm_name, temperature=0.1)
+        return dspy.GROQ(api_key, model=llm_name, **dspy_llm_kwargs)
     else:
         assert False, f"Unknown LLM model: {llm_name}"
 

@@ -12,6 +12,8 @@ import dspy
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
 
+from openai import OpenAI
+
 import dspy_engine
 import ingest
 import debugging
@@ -102,7 +104,7 @@ def get_summarizer_predictor():
 @debugging.timer
 def create_predictor():
     class DecomposeQuestion(dspy.Signature):
-        """Decompose into multiple questions so that we can search for relevant SNAP and food assistance eligibility rules. \
+        """Rephrase and decompose into multiple questions so that we can search for relevant public benefits eligibility requirements. \
 Be concise -- only respond with JSON. Only output the questions as a JSON list: ["question1", "question2", ...]. \
 The question is: {question}"""
 
@@ -161,9 +163,44 @@ def on_question(question):
     return gen_results
 
 
+CALL_OPENAI_DIRECTLY = False
+
+
+def call_openai_directly(question, model="gpt-3.5-turbo"):
+    prompt = f"""Rephrase and decompose into multiple questions so that we can search for relevant public benefits eligibility requirements. \
+Be concise -- only respond with JSON. Only output the questions as a JSON list: ["question1", "question2", ...]. \
+The question is: {question}"""
+    dspy_prompt = (
+        prompt
+        + """
+
+---
+
+Follow the following format.
+
+Question: ${question}
+Answer: ["question1", "question2", ...]
+
+---
+
+Question: """
+        + question
+        + """
+Answer:"""
+    )
+    openai_client = OpenAI()
+    response = openai_client.chat.completions.create(model=model, messages=[{"role": "user", "content": dspy_prompt}])
+    print(response)
+    debugging.debug_here(locals())
+    return response.choices[0].message.content
+
+
 @debugging.timer
 def generate_derived_questions(predictor, question):
     pred = predictor(question=question)
+    if CALL_OPENAI_DIRECTLY:  # debugging difference between using OpenAI via DSPy
+        # print("pred", pred)
+        call_openai_directly(question)
     print("Answer:", pred.answer)
     derived_questions = json.loads(pred.answer)
     if "Answer" in derived_questions:
