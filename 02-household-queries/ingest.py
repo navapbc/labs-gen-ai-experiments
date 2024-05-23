@@ -205,9 +205,12 @@ def save_simplified_json(file_path="./guru_cards_for_nava.json", content_key="co
         simplified_json = []
         for card in json_data:
             tags = [tagsItem.get("value") for tagsItem in card.get("tags", [])]
+            boards = [boardsItem.get("title") for boardsItem in card.get("boards", [])]
             soup = BeautifulSoup(card[content_key], "html.parser")
             content = soup.get_text(separator="\n", strip=True)
-            simplified_json.append({index_key: card[index_key], "tags": ",".join(tags), content_key: content})
+            simplified_json.append(
+                {index_key: card[index_key], "tags": ",".join(tags), "boards": ",".join(boards), content_key: content}
+            )
         json.dump(simplified_json, f, indent=4)
 
 

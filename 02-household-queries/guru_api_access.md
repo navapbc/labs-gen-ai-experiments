@@ -56,11 +56,19 @@ do
 done
 
 # Merge files each containing a JSON list
-jq -n '[inputs] | add' guru_cards_for_nava_?.json > guru_cards_for_nava.json
+jq -n '[inputs] | add' guru_cards_for_nava_?.json guru_cards_for_nava_??.json > guru_cards_for_nava.json
+
+# Create simplified JSON for readability
+python ingest.py guru_cards_for_nava.json
+
+# Count cards
+jq length guru_cards_for_nava.json
 
 # Zip
-zip guru_cards_for_nava.json.zip guru_cards_for_nava_?.json
+zip guru_cards_for_nava.zip guru_cards_for_nava.json guru_cards_for_nava_simplified.json
 ```
+
+Share zip file via Google Drive.
 
 ## Extract all HTML content
 
