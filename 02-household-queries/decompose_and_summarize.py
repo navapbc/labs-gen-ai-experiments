@@ -1,5 +1,6 @@
 import os
 import sys
+import traceback
 import json
 import dotenv
 
@@ -190,8 +191,8 @@ Answer:"""
     )
     openai_client = OpenAI()
     response = openai_client.chat.completions.create(model=model, messages=[{"role": "user", "content": dspy_prompt}])
-    print(response)
-    debugging.debug_here(locals())
+    print("OpenAI response object:", response)
+    # debugging.debug_here(locals())
     return response.choices[0].message.content
 
 
@@ -202,7 +203,23 @@ def generate_derived_questions(predictor, question):
         # print("pred", pred)
         call_openai_directly(question)
     print("Answer:", pred.answer)
-    derived_questions = json.loads(pred.answer)
+    try:
+        derived_questions = json.loads(pred.answer)
+    except Exception as e:  # in case LLM doesn't generate valid JSON
+        print("!!! Error:", e)
+        traceback.print_exc()
+        # retry using direct call to OpenAI since DSPy caches responses and hence will return the same response
+        for i in range(3):
+            print("Retrying by calling OpenAI directly")
+            # TODO: also send notification to UI by adding a message to GenerationResults
+            response = call_openai_directly(question)
+            try:
+                derived_questions = json.loads(response)
+                break  # out of for-loop
+            except Exception as e2:
+                print("!!!! Error:", e2)
+                traceback.print_exc()
+
     if "Answer" in derived_questions:
         # For OpenAI 'gpt-4-turbo' in json mode
         derived_questions = derived_questions["Answer"]
