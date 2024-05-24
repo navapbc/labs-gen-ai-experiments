@@ -10,6 +10,7 @@ import pprint
 
 import chainlit as cl
 from chainlit.input_widget import Select, Slider  # , Switch
+from chainlit.types import ThreadDict
 
 # import decompose_and_summarize as das
 # from decompose_and_summarize import on_question
@@ -17,21 +18,16 @@ from chainlit.input_widget import Select, Slider  # , Switch
 import core
 import llms
 
-import chatbot_api
+if core.initial_settings["enable_api"]:
+    import chatbot_api
 
-print("Chatbot API loaded", chatbot_api)
+    print("Chatbot API loaded", chatbot_api)
 
 # TODO
 # - set up Chainlit Settings
 # - allow user to choose LLM
 # - add exception handling
 # - add unit tests
-
-
-# TODO: Add a reset button
-async def reset():
-    llms.llm_modules.clear()
-    # cl.user_session.clear()
 
 
 @cl.on_chat_start
@@ -55,7 +51,7 @@ async def init_chat():
             Slider(
                 id="temperature",
                 label="LLM Temperature",
-                initial=0.1,
+                initial=core.initial_settings["temperature"],
                 min=0,
                 max=2,
                 step=0.1,
@@ -92,17 +88,12 @@ async def apply_settings():
 
 
 async def create_llm_client(settings):
-    llm_name = settings["model"]
-    llm_settings = dict((k, settings[k]) for k in ["temperature"] if k in settings)
-    msg = cl.Message(
-        author="backend",
-        content=f"Setting up LLM: {llm_name} with `{llm_settings}`...\n",
-    )
+    msg = cl.Message(author="backend", content=f"Setting up LLM: {settings['model']} ...\n")
 
     client = core.create_llm_client(settings)
 
     cl.user_session.set("client", client)
-    await msg.stream_token(f"Done setting up {llm_name} LLM")
+    await msg.stream_token("Done setting up LLM")
     await msg.send()
 
 
@@ -124,3 +115,20 @@ async def message_submitted(message: cl.Message):
 
     # message_args = format_as_markdown(generated_results)
     await cl.Message(message.content).send()
+
+
+@cl.on_stop
+def on_stop():
+    print("The user wants to stop the task!")
+
+
+# When a user resumes a chat session that was previously disconnected.
+# This can only happen if authentication and data persistence are enabled.
+@cl.on_chat_resume
+async def on_chat_resume(thread: ThreadDict):
+    print("The user resumed a previous chat session!", thread.keys())
+
+
+@cl.on_chat_end
+def on_chat_end():
+    print("The user disconnected!")
