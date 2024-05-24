@@ -1,8 +1,6 @@
 #!/usr/bin/env chainlit run -h
 
-import os
 import pprint
-import dotenv
 # import json
 
 # import dotenv
@@ -38,7 +36,6 @@ async def reset():
 
 @cl.on_chat_start
 async def init_chat():
-    dotenv.load_dotenv()
     # settings = das.init()
 
     elements = [
@@ -53,7 +50,7 @@ async def init_chat():
                 id="model",
                 label="LLM Model",
                 values=llms.available_llms(),
-                initial_value=os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
+                initial_value=core.initial_settings["model"],
             ),
             Slider(
                 id="temperature",
@@ -69,12 +66,9 @@ async def init_chat():
     )
     settings = await chat_settings.send()
     cl.user_session.set("settings", settings)
-    check_initial_settings(chat_settings)
-
-
-def check_initial_settings(chat_settings):
-    model_setting = next(input for input in chat_settings.inputs if input.id == "model")
-    assert model_setting.initial_value in model_setting.values, f"Unknown model: '{model_setting.initial_value}'"
+    error = core.validate_settings(settings)
+    if error:
+        assert False, f"Validation error: {error}"
 
 
 @cl.on_settings_update
@@ -87,13 +81,12 @@ async def update_settings(settings):
 async def apply_settings():
     settings = cl.user_session.get("settings")
     await create_llm_client(settings)
+
     # PLACEHOLDER: Apply other settings
+
     error = core.validate_settings(settings)
     if error:
-        await cl.Message(
-            author="backend",
-            content=f"! Validation error: {error}",
-        ).send()
+        await cl.Message(author="backend", content=f"! Validation error: {error}").send()
     else:
         cl.user_session.set("settings_applied", True)
 
@@ -105,7 +98,8 @@ async def create_llm_client(settings):
         author="backend",
         content=f"Setting up LLM: {llm_name} with `{llm_settings}`...\n",
     )
-    client = llms.init_client(llm_name, llm_settings)
+
+    client = core.create_llm_client(settings)
 
     cl.user_session.set("client", client)
     await msg.stream_token(f"Done setting up {llm_name} LLM")
