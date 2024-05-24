@@ -1,5 +1,6 @@
 #!/usr/bin/env chainlit run -h
 
+import os
 import pprint
 import dotenv
 # import json
@@ -15,7 +16,12 @@ from chainlit.input_widget import Select, Slider  # , Switch
 # import decompose_and_summarize as das
 # from decompose_and_summarize import on_question
 
+import core
 import llms
+
+import chatbot_api
+
+print("Chatbot API loaded", chatbot_api)
 
 # TODO
 # - set up Chainlit Settings
@@ -40,13 +46,14 @@ async def init_chat():
     ]
     await cl.Message("Example of side-text", elements=elements).send()
 
-    settings = await cl.ChatSettings(
+    # https://docs.chainlit.io/api-reference/chat-settings
+    chat_settings = cl.ChatSettings(
         [
             Select(
                 id="model",
                 label="LLM Model",
                 values=llms.available_llms(),
-                initial_index=0,
+                initial_value=os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
             ),
             Slider(
                 id="temperature",
@@ -56,22 +63,42 @@ async def init_chat():
                 max=2,
                 step=0.1,
             ),
-            # TODO: Add streaming capability
+            # TODO: Add LLM response streaming capability
             # Switch(id="streaming", label="Stream response tokens", initial=True),
         ]
-    ).send()
+    )
+    settings = await chat_settings.send()
     cl.user_session.set("settings", settings)
+    check_initial_settings(chat_settings)
+
+
+def check_initial_settings(chat_settings):
+    model_setting = next(input for input in chat_settings.inputs if input.id == "model")
+    assert model_setting.initial_value in model_setting.values, f"Unknown model: '{model_setting.initial_value}'"
 
 
 @cl.on_settings_update
 async def update_settings(settings):
     print("Settings updated:", pprint.pformat(settings, indent=4))
     cl.user_session.set("settings", settings)
-    await set_llm_model()
+    await apply_settings()
 
 
-async def set_llm_model():
+async def apply_settings():
     settings = cl.user_session.get("settings")
+    await create_llm_client(settings)
+    # PLACEHOLDER: Apply other settings
+    error = core.validate_settings(settings)
+    if error:
+        await cl.Message(
+            author="backend",
+            content=f"! Validation error: {error}",
+        ).send()
+    else:
+        cl.user_session.set("settings_applied", True)
+
+
+async def create_llm_client(settings):
     llm_name = settings["model"]
     llm_settings = dict((k, settings[k]) for k in ["temperature"] if k in settings)
     msg = cl.Message(
@@ -85,15 +112,13 @@ async def set_llm_model():
     await msg.send()
 
 
-async def init_llm_client_if_needed():
-    client = cl.user_session.get("client")
-    if not client:
-        await set_llm_model()
-
-
 @cl.on_message
 async def message_submitted(message: cl.Message):
-    await init_llm_client_if_needed()
+    if not cl.user_session.get("settings_applied", False):
+        await apply_settings()
+        if not cl.user_session.get("settings_applied", False):
+            return
+
     # settings = cl.user_session.get("settings")
     client = cl.user_session.get("client")
 

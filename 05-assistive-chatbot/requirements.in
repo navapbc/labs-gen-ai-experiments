@@ -7,7 +7,7 @@ chainlit==1.1
 
 ## LangChain
 # langchain
-# langchain_community
+langchain_community
 # langchain-google-genai
 # langchain-text-splitters
 # sentence-transformers
