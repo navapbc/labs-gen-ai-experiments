@@ -8,7 +8,7 @@
 ### (Optional) Enable Chatbot feedback
 To enable the [feedback mechanism](https://docs.chainlit.io/data-persistence/feedback):
 * Get an API key: https://docs.chainlit.io/data-persistence/overview
-* Create `.env` with the API key
+* Create or update `.env` with `LITERAL_API_KEY` set to the API key
 
 After running the chatbot and providing feedback in the UI, review the feedback at https://cloud.getliteral.ai/projects/YOUR_PROJECT_NAME/feedback.
 
