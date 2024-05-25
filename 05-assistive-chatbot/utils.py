@@ -1,8 +1,10 @@
-import pprint
 import functools
-import time
-import textwrap
+import importlib
 import logging
+import pkgutil
+import pprint
+import textwrap
+import time
 
 
 def timer(func):
@@ -14,7 +16,7 @@ def timer(func):
         value = func(*args, **kwargs)
         toc = time.perf_counter()
         elapsed_time = toc - tic
-        logger.info("ran in %.4f seconds", elapsed_time)
+        logger.info("%s ran in %.4f seconds", func.__name__, elapsed_time)
         return value
 
     return wrapper_timer
@@ -36,3 +38,10 @@ def verbose_timer(logger):
         return wrapper_timer
 
     return timer_decorator
+
+
+@timer
+def scan_modules(ns_pkg):
+    # From https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/#using-namespace-packages
+    itr = pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + ".")
+    return {name: importlib.import_module(name) for _, name, _ in itr}

@@ -1,8 +1,6 @@
 from chainlit.server import app
 from fastapi import Request
-from fastapi.responses import (
-    HTMLResponse,
-)
+from fastapi.responses import HTMLResponse
 
 
 # See https://docs.chainlit.io/deploy/api#how-it-works

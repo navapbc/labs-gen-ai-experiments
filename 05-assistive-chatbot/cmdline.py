@@ -4,8 +4,8 @@ import core
 settings = core.initial_settings
 core.validate_settings(settings)
 
-client = core.create_llm_client(settings)
+chat_engine = core.create_chat_engine(settings)
 
 message = "Hello, world!"
-response = client.submit(message)
+response = chat_engine.get_response(message)
 print(response)

@@ -1,19 +1,10 @@
 #!/usr/bin/env chainlit run -h
 
 import pprint
-# import json
-
-# import dotenv
-# import dataclasses
-# from datetime import date
-# import pprint
 
 import chainlit as cl
 from chainlit.input_widget import Select, Slider  # , Switch
 from chainlit.types import ThreadDict
-
-# import decompose_and_summarize as das
-# from decompose_and_summarize import on_question
 
 import core
 import llms
@@ -29,11 +20,11 @@ if core.initial_settings["enable_api"]:
 # - add exception handling
 # - add unit tests
 
+CHAT_ENGINES = ["Direct", "Summaries"]
+
 
 @cl.on_chat_start
 async def init_chat():
-    # settings = das.init()
-
     elements = [
         cl.Text(name="side-text", display="side", content="Side Text"),
     ]
@@ -42,6 +33,12 @@ async def init_chat():
     # https://docs.chainlit.io/api-reference/chat-settings
     chat_settings = cl.ChatSettings(
         [
+            Select(
+                id="chat_engine",
+                label="Chat Mode",
+                values=CHAT_ENGINES,
+                initial_value=core.initial_settings["chat_engine"],
+            ),
             Select(
                 id="model",
                 label="LLM Model",
@@ -90,9 +87,7 @@ async def apply_settings():
 async def create_llm_client(settings):
     msg = cl.Message(author="backend", content=f"Setting up LLM: {settings['model']} ...\n")
 
-    client = core.create_llm_client(settings)
-
-    cl.user_session.set("client", client)
+    cl.user_session.set("chat_engine", core.create_chat_engine(settings))
     await msg.stream_token("Done setting up LLM")
     await msg.send()
 
@@ -105,9 +100,10 @@ async def message_submitted(message: cl.Message):
             return
 
     # settings = cl.user_session.get("settings")
-    client = cl.user_session.get("client")
 
-    response = client.submit(message.content)
+    chat_engine = cl.user_session.get("chat_engine")
+    response = chat_engine.get_response(message.content)
+
     await cl.Message(content=f"*Response*: {response}").send()
 
     # generated_results = on_question(message.content)

@@ -1,12 +1,14 @@
+import logging
 import os
+
 import dotenv
 
+import chat_engines
 import llms
 import utils
 
-import logging
-
-logging.basicConfig(level=logging.WARN, format="%(name)s - %(levelname)s - %(message)s")
+log_format = os.environ.get("LOG_FORMAT", "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.DEBUG, format=log_format)
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +25,7 @@ dotenv.load_dotenv()
 def init_settings():
     return {
         "enable_api": is_true(os.environ.get("ENABLE_CHATBOT_API", "False")),
+        "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
         "temperature": float(os.environ.get("LLM_TEMPERATURE", 0.1)),
     }
@@ -31,7 +34,7 @@ def init_settings():
 initial_settings = init_settings()
 
 
-@utils.timer
+@utils.verbose_timer(logger)
 def validate_settings(settings):
     model_name = settings["model"]
     if model_name not in llms.available_llms():
@@ -43,8 +46,5 @@ def validate_settings(settings):
 
 
 @utils.timer
-def create_llm_client(settings):
-    llm_name = settings["model"]
-    llm_settings = dict((k, settings[k]) for k in ["temperature"] if k in settings)
-    client = llms.init_client(llm_name, llm_settings)
-    return client
+def create_chat_engine(settings):
+    return chat_engines.create(settings["chat_engine"], settings)
