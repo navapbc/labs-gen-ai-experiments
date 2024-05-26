@@ -1,8 +1,6 @@
 import logging
 
-import utils
-
-from . import _common
+from chatbot import engines, utils
 
 ENGINE_NAME = "Direct"
 
@@ -12,7 +10,7 @@ logger = logging.getLogger(__name__)
 class DirectChatEngine:
     def __init__(self, settings):
         self.settings = settings
-        self.client = _common.create_llm_client(settings)
+        self.client = engines.create_llm_client(settings)
 
     @utils.timer
     def get_response(self, query):

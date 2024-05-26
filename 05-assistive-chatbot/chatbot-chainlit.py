@@ -1,26 +1,21 @@
 #!/usr/bin/env chainlit run -h
 
+import logging
 import pprint
 
 import chainlit as cl
 from chainlit.input_widget import Select, Slider  # , Switch
 from chainlit.types import ThreadDict
 
-import core
-import llms
+import chatbot
+from chatbot import engines, llms, utils
 
-if core.initial_settings["enable_api"]:
+logger = logging.getLogger(f"chatbot.{__name__}")
+
+if chatbot.initial_settings["enable_api"]:
     import chatbot_api
 
-    print("Chatbot API loaded", chatbot_api)
-
-# TODO
-# - set up Chainlit Settings
-# - allow user to choose LLM
-# - add exception handling
-# - add unit tests
-
-CHAT_ENGINES = ["Direct", "Summaries"]
+    logger.info("Chatbot API loaded: %s", chatbot_api.__name__)
 
 
 @cl.on_chat_start
@@ -36,19 +31,19 @@ async def init_chat():
             Select(
                 id="chat_engine",
                 label="Chat Mode",
-                values=CHAT_ENGINES,
-                initial_value=core.initial_settings["chat_engine"],
+                values=engines.available_engines(),
+                initial_value=chatbot.initial_settings["chat_engine"],
             ),
             Select(
                 id="model",
                 label="LLM Model",
                 values=llms.available_llms(),
-                initial_value=core.initial_settings["model"],
+                initial_value=chatbot.initial_settings["model"],
             ),
             Slider(
                 id="temperature",
                 label="LLM Temperature",
-                initial=core.initial_settings["temperature"],
+                initial=chatbot.initial_settings["temperature"],
                 min=0,
                 max=2,
                 step=0.1,
@@ -59,35 +54,37 @@ async def init_chat():
     )
     settings = await chat_settings.send()
     cl.user_session.set("settings", settings)
-    error = core.validate_settings(settings)
+    error = chatbot.validate_settings(settings)
     if error:
         assert False, f"Validation error: {error}"
 
 
 @cl.on_settings_update
 async def update_settings(settings):
-    print("Settings updated:", pprint.pformat(settings, indent=4))
+    logger.info("Settings updated: %s", pprint.pformat(settings, indent=4))
     cl.user_session.set("settings", settings)
     await apply_settings()
 
 
+@utils.timer
 async def apply_settings():
     settings = cl.user_session.get("settings")
     await create_llm_client(settings)
 
     # PLACEHOLDER: Apply other settings
 
-    error = core.validate_settings(settings)
+    error = chatbot.validate_settings(settings)
     if error:
         await cl.Message(author="backend", content=f"! Validation error: {error}").send()
     else:
         cl.user_session.set("settings_applied", True)
+    return settings
 
 
 async def create_llm_client(settings):
     msg = cl.Message(author="backend", content=f"Setting up LLM: {settings['model']} ...\n")
 
-    cl.user_session.set("chat_engine", core.create_chat_engine(settings))
+    cl.user_session.set("chat_engine", chatbot.create_chat_engine(settings))
     await msg.stream_token("Done setting up LLM")
     await msg.send()
 
@@ -115,16 +112,16 @@ async def message_submitted(message: cl.Message):
 
 @cl.on_stop
 def on_stop():
-    print("The user wants to stop the task!")
+    logger.debug("The user wants to stop the task!")
 
 
 # When a user resumes a chat session that was previously disconnected.
 # This can only happen if authentication and data persistence are enabled.
 @cl.on_chat_resume
 async def on_chat_resume(thread: ThreadDict):
-    print("The user resumed a previous chat session!", thread.keys())
+    logger.debug("The user resumed a previous chat session! %s", thread.keys())
 
 
 @cl.on_chat_end
 def on_chat_end():
-    print("The user disconnected!")
+    logger.debug("The user disconnected!")

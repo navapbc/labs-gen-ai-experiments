@@ -1,12 +1,16 @@
+import logging
+
 from chainlit.server import app
 from fastapi import Request
 from fastapi.responses import HTMLResponse
+
+logger = logging.getLogger(f"chatbot.{__name__}")
 
 
 # See https://docs.chainlit.io/deploy/api#how-it-works
 @app.get("/hello")
 def hello(request: Request):
-    print(request.headers)
+    logger.info(request.headers)
     return HTMLResponse("Hello World")
 
 

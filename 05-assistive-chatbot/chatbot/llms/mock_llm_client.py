@@ -14,4 +14,4 @@ class MockLlmClient:
         self.mock_responses = settings
 
     def submit(self, message):
-        return self.mock_responses.get(message, message)
+        return self.mock_responses.get(message, f"Mock LLM> Your query was: {message}")

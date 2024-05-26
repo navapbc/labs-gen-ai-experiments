@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
-import core
 
-settings = core.initial_settings
-core.validate_settings(settings)
+import logging
 
-chat_engine = core.create_chat_engine(settings)
+import chatbot
 
-message = "Hello, world!"
+logger = logging.getLogger(f"chatbot.{__name__}")
+
+
+settings = chatbot.initial_settings
+chatbot.validate_settings(settings)
+
+chat_engine = chatbot.create_chat_engine(settings)
+
+message = "Hello, what's your name?"
 response = chat_engine.get_response(message)
+if not isinstance(response, str):
+    logger.error("Unexpected type: %s", type(response))
+
 print(response)

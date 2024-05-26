@@ -1,6 +1,4 @@
-import utils
-
-from . import _common
+from chatbot import engines, utils
 
 ENGINE_NAME = "Summaries"
 
@@ -8,7 +6,7 @@ ENGINE_NAME = "Summaries"
 class SummariesChatEngine:
     def __init__(self, settings):
         self.settings = settings
-        self.client = _common.create_llm_client(settings)
+        self.client = engines.create_llm_client(settings)
 
     @utils.timer
     def get_response(self, query):
