@@ -2,8 +2,8 @@
 
 """
 This is a sample API file that demonstrates how to create an API using FastAPI,
-which is compatible with ChainLit. This file is a starting point for creating
-an API that can be deployed with the ChainLit chatbot.
+which is compatible with Chainlit. This file is a starting point for creating
+an API that can be deployed with the Chainlit chatbot.
 """
 
 import logging
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # If running directly, define the FastAPI app
     app = FastAPI()
 else:
-    # Otherwise use ChainLit's app
+    # Otherwise use Chainlit's app
     from chainlit.server import app
 
 logger = logging.getLogger(f"chatbot.{__name__}")

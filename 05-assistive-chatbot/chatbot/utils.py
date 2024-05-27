@@ -50,6 +50,8 @@ def verbose_timer(logger):
 
 def scan_modules(ns_pkg):
     "Return a dictionary of Python modules found in the given namespace package"
+    if isinstance(ns_pkg, str):
+        ns_pkg = importlib.import_module(ns_pkg)
     # From https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/#using-namespace-packages
     itr = pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + ".")
     return {name: _import_module_if_possible(name) for _, name, _ in itr}

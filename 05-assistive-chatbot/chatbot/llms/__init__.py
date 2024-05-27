@@ -1,4 +1,3 @@
-import importlib
 import logging
 from types import ModuleType
 from typing import Dict, Tuple
@@ -18,21 +17,25 @@ def available_llms():
 def _discover_llms(force=False):
     if not _llms or force:
         _llms.clear()
-        namespace = importlib.import_module(__package__)
-        found_modules = utils.scan_modules(namespace)
+        found_modules = utils.scan_modules(__package__)
         for module_name, module in found_modules.items():
             if not module or ignore(module_name):
                 logger.debug("Skipping module: %s", module_name)
                 continue
             client_name = module.CLIENT_NAME or module_name
             for llm_name in module.MODEL_NAMES or []:
-                qualified_llm_name = f"{client_name} :: {llm_name}"
-                _llms[qualified_llm_name] = (module, llm_name)
+                qualified_name = qualified_llm_name(client_name, llm_name)
+                _llms[qualified_name] = (module, llm_name)
     return _llms
+
+
+def qualified_llm_name(client_name, model_name):
+    return f"{client_name} :: {model_name}"
 
 
 def ignore(module_name):
     if module_name.startswith("dspy ::"):
+        # DSPy client code is not yet ready for use
         return True
     return False
 
@@ -40,7 +43,12 @@ def ignore(module_name):
 ## Factory functions
 
 
-def init_client(model_name, settings=None):
+def init_client(qualified_name, settings=None):
+    """Initialize a specific LLM client based on the qualified_name.
+    :param qualified_name: str or Tuple[client_name, model_name]
+    """
     _discover_llms()
-    module, llm_name = _llms[model_name]
-    return module.init_client(llm_name, settings)
+    if isinstance(qualified_name, Tuple):
+        qualified_name = qualified_llm_name(qualified_name[0], qualified_name[1])
+    module, llm_name = _llms[qualified_name]
+    return module.init_client(llm_name, settings or {})

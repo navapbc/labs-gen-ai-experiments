@@ -9,12 +9,13 @@ chainlit==1.1
 # langchain
 langchain_community
 langchain-google-genai
-# langchain-text-splitters
-# sentence-transformers
 
 ## Vector DB
-# chromadb
-# beautifulsoup4
+langchain-text-splitters
+sentence-transformers
+chromadb
+beautifulsoup4
+types-beautifulsoup4
 
 ## OpenAI LLM
 openai

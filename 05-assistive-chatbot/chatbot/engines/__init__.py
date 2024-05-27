@@ -1,4 +1,3 @@
-import importlib
 import logging
 from types import ModuleType
 from typing import Dict
@@ -18,8 +17,7 @@ def available_engines():
 def _discover_chat_engines(force=False):
     if not _engines or force:
         _engines.clear()
-        namespace = importlib.import_module(__package__)
-        found_llm_modules = utils.scan_modules(namespace)
+        found_llm_modules = utils.scan_modules(__package__)
         for _module_name, module in found_llm_modules.items():
             if not hasattr(module, "ENGINE_NAME"):
                 continue

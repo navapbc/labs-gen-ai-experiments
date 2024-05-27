@@ -4,6 +4,8 @@ chroma_db/
 *.log
 log/
 
+# MacOS files
 *.DS_STORE
 
+# .env contains secret API keys
 .env

@@ -13,7 +13,7 @@ from chatbot import engines, llms, utils
 ## Initialize logging
 
 
-def _configure_logging():
+def configure_logging():
     log_format = os.environ.get("LOG_FORMAT", "%(relativeCreated)6d - %(name)-24s - %(levelname)-5s - %(message)s")
     logging.basicConfig(format=log_format)
 
@@ -23,7 +23,7 @@ def _configure_logging():
 
 
 dotenv.load_dotenv()
-_configure_logging()
+configure_logging()
 
 logger = logging.getLogger(__name__)
 

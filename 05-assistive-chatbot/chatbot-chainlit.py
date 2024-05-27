@@ -1,7 +1,7 @@
 #!/usr/bin/env chainlit run -h
 
 """
-ChainLit-based chatbot, providing a web user interface for the selected chat engine and settings.
+Chainlit-based chatbot, providing a web user interface for the selected chat engine and settings.
 See README.md for instructions to enable user feedback.
 """
 
