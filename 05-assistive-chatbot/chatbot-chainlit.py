@@ -1,5 +1,10 @@
 #!/usr/bin/env chainlit run -h
 
+"""
+ChainLit-based chatbot, providing a web user interface for the selected chat engine and settings.
+See README.md for instructions to enable user feedback.
+"""
+
 import logging
 import pprint
 
@@ -99,7 +104,7 @@ async def message_submitted(message: cl.Message):
     # settings = cl.user_session.get("settings")
 
     chat_engine = cl.user_session.get("chat_engine")
-    response = chat_engine.get_response(message.content)
+    response = chat_engine.gen_response(message.content)
 
     await cl.Message(content=f"*Response*: {response}").send()
 

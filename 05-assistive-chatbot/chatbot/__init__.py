@@ -10,7 +10,7 @@ from chatbot import engines, llms, utils
 # - add unit tests
 
 
-## Logging
+## Initialize logging
 
 
 def _configure_logging():
@@ -28,7 +28,7 @@ _configure_logging()
 logger = logging.getLogger(__name__)
 
 
-## Settings
+## Initialize settings
 
 
 @utils.verbose_timer(logger)

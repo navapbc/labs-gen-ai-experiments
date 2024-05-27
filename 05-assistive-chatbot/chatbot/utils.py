@@ -9,6 +9,7 @@ import time
 
 
 def timer(func):
+    "A decorator that logs the time it takes for the decorated function to run"
     module = inspect.getmodule(func)
     if module:
         logger = logging.getLogger(module.__name__)
@@ -29,6 +30,8 @@ def timer(func):
 
 # https://stackoverflow.com/a/10176276/23458508
 def verbose_timer(logger):
+    "A decorator that logs the time it takes for the decorated function to run and the return value"
+
     def timer_decorator(func):
         @functools.wraps(func)
         def wrapper_timer(*args, **kwargs):
@@ -46,14 +49,15 @@ def verbose_timer(logger):
 
 
 def scan_modules(ns_pkg):
+    "Return a dictionary of Python modules found in the given namespace package"
     # From https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/#using-namespace-packages
     itr = pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + ".")
-    return {name: import_module_if_possible(name) for _, name, _ in itr}
+    return {name: _import_module_if_possible(name) for _, name, _ in itr}
 
 
-def import_module_if_possible(name):
+def _import_module_if_possible(name):
     try:
         return importlib.import_module(name)
     except ImportError:
-        # logging.warning("Could not import module: %s", name)
+        # logger.warn("Could not import module: %s", name)
         return None

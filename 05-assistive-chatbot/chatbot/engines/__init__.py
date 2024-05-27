@@ -28,7 +28,7 @@ def _discover_chat_engines(force=False):
     return _engines
 
 
-## Factory methods
+## Factory functions
 
 
 @utils.timer
