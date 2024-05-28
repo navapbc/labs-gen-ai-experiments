@@ -47,8 +47,7 @@ Running the chatbot app will also run the API (described in the next section), w
 This application runs the chatbot API for other applications to make requests to the chatbot.
 
 1. Run `./chatbot_api.py`
-1. Open a browser to the `/query` endpoint followed by a question, such as `http://localhost:8001/query/tell me a joke`
-
+1. Test a query: `curl -X POST "http://localhost:8001/query" -d 'message="tell me a joke"'`
 
 ## Development Notes
 

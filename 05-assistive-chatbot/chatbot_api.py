@@ -8,6 +8,7 @@ an API that can be deployed with the Chainlit chatbot.
 
 import logging
 
+from typing import Dict
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 
@@ -40,10 +41,10 @@ def chat_engine():
 
 
 # See https://docs.chainlit.io/deploy/api#how-it-works
-@app.get("/query/{message}")
-def query(message: str):
+@app.post("/query")
+def query(message: str | Dict):
     response = chat_engine().gen_response(message)
-    return HTMLResponse(response)
+    return response
 
 
 @app.get("/healthcheck")
