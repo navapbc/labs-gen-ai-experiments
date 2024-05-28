@@ -22,6 +22,9 @@ def _discover_llms(force=False):
             if not module or ignore(module_name):
                 logger.debug("Skipping module: %s", module_name)
                 continue
+            if hasattr(module, "requirements_satisfied") and not module.requirements_satisfied():
+                logger.debug("Module requirements not satisfied; skipping: %s", module_name)
+                continue
             client_name = module.CLIENT_NAME or module_name
             for llm_name in module.MODEL_NAMES or []:
                 qualified_name = qualified_llm_name(client_name, llm_name)

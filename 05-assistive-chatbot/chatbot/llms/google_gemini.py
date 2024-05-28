@@ -1,7 +1,15 @@
+import os
+
 import google.generativeai as genai
 
 CLIENT_NAME = "google"
 MODEL_NAMES = ["gemini-pro", "gemini-1.5-pro", "gemini-1.5-flash"]
+
+
+def requirements_satisfied():
+    if not os.environ.get("GOOGLE_API_KEY"):
+        return False
+    return True
 
 
 def init_client(model_name, settings):

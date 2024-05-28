@@ -18,8 +18,12 @@ def _discover_chat_engines(force=False):
     if not _engines or force:
         _engines.clear()
         found_llm_modules = utils.scan_modules(__package__)
-        for _module_name, module in found_llm_modules.items():
+        for module_name, module in found_llm_modules.items():
             if not hasattr(module, "ENGINE_NAME"):
+                logger.debug("Skipping module without an ENGINE_NAME: %s", module_name)
+                continue
+            if hasattr(module, "requirements_satisfied") and not module.requirements_satisfied():
+                logger.debug("Engine requirements not satisfied; skipping: %s", module_name)
                 continue
             engine_name = module.ENGINE_NAME
             _engines[engine_name] = module

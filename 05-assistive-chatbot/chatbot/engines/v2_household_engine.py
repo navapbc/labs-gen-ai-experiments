@@ -1,6 +1,14 @@
+import os
+
 from chatbot import engines, utils
 
 ENGINE_NAME = "Summaries"
+
+
+def requirements_satisfied():
+    if not os.environ.get("SUMMARIZER_LLM_MODEL_NAME"):
+        return False
+    return True
 
 
 def init_engine(settings):

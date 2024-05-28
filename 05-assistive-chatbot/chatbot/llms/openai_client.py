@@ -1,8 +1,16 @@
+import os
+
 from openai import OpenAI
 
 CLIENT_NAME = "openai"
 # These names will be associated with this Python module
 MODEL_NAMES = ["gpt-3.5-turbo", "gpt-3.5-turbo-instruct", "gpt-4", "gpt-4-turbo", "gpt-4o"]
+
+
+def requirements_satisfied():
+    if not os.environ.get("OPENAI_API_KEY"):
+        return False
+    return True
 
 
 def init_client(model_name, settings):
