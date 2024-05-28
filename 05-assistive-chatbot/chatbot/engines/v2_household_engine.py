@@ -1,5 +1,6 @@
-import os
 import logging
+import os
+
 import dspy
 
 from chatbot import engines, utils
@@ -53,4 +54,3 @@ def create_summarizer():
         answer = dspy.OutputField()
 
     return dspy.Predict(SummarizeCardGivenQuestion)
-

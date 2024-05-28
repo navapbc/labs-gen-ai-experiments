@@ -1,6 +1,7 @@
-import os
 import logging
-import dspy # type: ignore[import-untyped]
+import os
+
+import dspy  # type: ignore[import-untyped]
 
 CLIENT_NAME = "dspy"
 
@@ -12,6 +13,7 @@ MODEL_NAMES = _OLLAMA_LLMS + _OPENAI_LLMS + _GOOGLE_LLMS + _GROQ_LLMS
 
 
 logger = logging.getLogger(__name__)
+
 
 def init_client(model_name, settings):
     return DspyLlmClient(model_name, settings)
