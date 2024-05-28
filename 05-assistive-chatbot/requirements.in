@@ -1,0 +1,29 @@
+# To update requirements.txt:
+# > pip install pip-tools
+# > pip-compile requirements.in
+
+## UI
+chainlit==1.1
+
+## LangChain
+langchain_community
+langchain-google-genai
+
+## Vector DB
+langchain-text-splitters
+sentence-transformers
+chromadb
+beautifulsoup4
+types-beautifulsoup4
+
+## OpenAI LLM
+openai
+
+## Anthropic LLM
+# anthropic
+
+## Groq LLM
+groq
+
+## DSPy-wrapped LLMs
+dspy-ai
