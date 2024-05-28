@@ -13,14 +13,14 @@ def requirements_satisfied():
 
 
 def init_client(model_name, settings):
-    return GoogleGeminiClient(model_name, settings)
+    return GeminiLlmClient(model_name, settings)
 
 
-class GoogleGeminiClient:
+class GeminiLlmClient:
     def __init__(self, model_name, settings):
         if settings is not None:
             genai.GenerationConfig(**settings)
         self.client = genai.GenerativeModel(model_name)
 
-    def submit(self, message):
+    def generate_reponse(self, message):
         return self.client.generate_content(message).text

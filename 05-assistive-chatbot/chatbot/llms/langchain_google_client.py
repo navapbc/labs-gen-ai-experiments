@@ -12,6 +12,6 @@ class LangchainGoogleClient:
     def __init__(self, model_name, settings):
         self.client = ChatGoogleGenerativeAI(model=model_name, **settings)
 
-    def submit(self, message):
+    def generate_reponse(self, message):
         # invoke() returns langchain_core.messages.ai.AIMessage
         return self.client.invoke(message).content

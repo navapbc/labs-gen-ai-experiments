@@ -23,7 +23,7 @@ class OpenaiLlmClient:
         self.settings = settings
         self.client = OpenAI()
 
-    def submit(self, message):
+    def generate_reponse(self, message):
         response = self.client.chat.completions.create(
             model=self.model_name,
             messages=[{"role": "user", "content": message}],

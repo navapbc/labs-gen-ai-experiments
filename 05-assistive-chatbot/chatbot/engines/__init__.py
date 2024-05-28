@@ -42,10 +42,12 @@ def create(engine_name, settings=None):
 
 ## Utility functions
 
+CHATBOT_SETTING_KEYS = ["enable_api", "chat_engine", "model"]
 
 @utils.timer
 def create_llm_client(settings):
     llm_name = settings["model"]
-    llm_settings = dict((k, settings[k]) for k in ["temperature"] if k in settings)
-    client = llms.init_client(llm_name, llm_settings)
+    # llm_settings = dict((k, settings[k]) for k in ["temperature"] if k in settings)
+    remaining_settings = { k: settings[k] for k in settings if k not in CHATBOT_SETTING_KEYS }
+    client = llms.init_client(llm_name, remaining_settings)
     return client

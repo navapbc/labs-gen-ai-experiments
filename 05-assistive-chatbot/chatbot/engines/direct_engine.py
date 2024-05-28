@@ -19,5 +19,5 @@ class DirectChatEngine:
     @utils.timer
     def gen_response(self, query):
         logger.debug("Query: %s", query)
-        response = self.client.submit(query)
+        response = self.client.generate_reponse(query)
         return response

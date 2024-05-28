@@ -6,10 +6,10 @@ MODEL_NAMES = ["claude-3-opus-20240229"]
 
 
 def init_client(model_name, settings):
-    return OpenaiLlmClient(model_name, settings)
+    return AnthropicLlmClient(model_name, settings)
 
 
-class OpenaiLlmClient:
+class AnthropicLlmClient:
     def __init__(self, model_name, settings):
         self.model_name = model_name
         self.settings = settings
@@ -20,7 +20,7 @@ class OpenaiLlmClient:
             # api_key=ANTHROPIC_API_KEY,
         )
 
-    def submit(self, message):
+    def generate_reponse(self, message):
         generated_response = self.client.messages.create(
             model=self.model_name,
             max_tokens=self.max_tokens,

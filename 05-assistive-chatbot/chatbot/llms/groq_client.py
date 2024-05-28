@@ -21,7 +21,7 @@ class GroqClient:
         self.model_name = model_name
         self.client = Groq()
 
-    def submit(self, message):
+    def generate_reponse(self, message):
         chat_completion = self.client.chat.completions.create(
             messages=[{"role": "user", "content": message}],
             model=self.model_name,

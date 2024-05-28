@@ -13,7 +13,7 @@ class MockLlmClient:
         self.model_name = model_name
         self.mock_responses = settings
 
-    def submit(self, message):
+    def generate_reponse(self, message):
         return self.mock_responses.get(message, f"Mock LLM> Your query was: {message}")
 
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         client = init_client("llm", settings)
         while True:
             message = input("You> ")
-            response = client.submit(message)
+            response = client.generate_reponse(message)
             print(f"Mock LLM> {response}")
 
     client_example_usage()

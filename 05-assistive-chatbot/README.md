@@ -79,13 +79,13 @@ To create a new LLM client, add a new Python file under `chatbot/llms` with:
 - an `init_client(model_name, settings)` function to instantiate an LLM client class;
 - an LLM client class that:
     - sets `self.client` based on the provided `settings`, and
-    - implements a `submit(self, message)` function that uses `self.client` to generate a response, which may need to be parsed so that a string is returned to `chat_engine.gen_response(self, query)`.
+    - implements a `generate_reponse(self, message)` function that uses `self.client` to generate a response, which may need to be parsed so that a string is returned to `chat_engine.gen_response(self, query)`.
 - (optional) a `requirements_satisfied()` function that checks if necessary environment variable(s) and other LLM client preconditions are satisfied;
 The new Python file will be automatically discovered and registered for display in the Chainlit settings web UI.
 
 An LLM client can be used in any arbitrary program by:
 - setting `client = init_client(model_name, settings)`
-- then calling `client.submit(message)`
+- then calling `client.generate_reponse(message)`
 See `client_example_usage()` in `chatbot/llms/mock_llm_client.py`.
 
 ### Python formatting

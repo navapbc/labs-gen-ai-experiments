@@ -5,10 +5,10 @@ MODEL_NAMES = ["openhermes", "llama2", "mistral"]
 
 
 def init_client(model_name, settings):
-    return LangchainClient(model_name, settings)
+    return LangchainOllamaClient(model_name, settings)
 
 
-class LangchainClient:
+class LangchainOllamaClient:
     def __init__(self, model_name, settings):
         # if not settings:
         #     settings = {
@@ -19,5 +19,5 @@ class LangchainClient:
         #     }
         self.client = Ollama(model=model_name, **settings)
 
-    def submit(self, message):
+    def generate_reponse(self, message):
         return self.client.invoke(message)
