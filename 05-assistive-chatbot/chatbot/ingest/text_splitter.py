@@ -1,9 +1,7 @@
 import logging
 
 from langchain.docstore.document import Document
-from langchain_text_splitters import (NLTKTextSplitter,
-                                      RecursiveCharacterTextSplitter,
-                                      SpacyTextSplitter)
+from langchain_text_splitters import NLTKTextSplitter, RecursiveCharacterTextSplitter, SpacyTextSplitter
 
 logger = logging.getLogger(__name__)
 

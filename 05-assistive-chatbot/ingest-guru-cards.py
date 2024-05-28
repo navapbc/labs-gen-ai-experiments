@@ -5,8 +5,7 @@ from functools import cached_property
 from typing import Callable
 
 import dotenv
-from langchain_community.embeddings import (HuggingFaceEmbeddings,
-                                            SentenceTransformerEmbeddings)
+from langchain_community.embeddings import HuggingFaceEmbeddings, SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
 
 import chatbot
