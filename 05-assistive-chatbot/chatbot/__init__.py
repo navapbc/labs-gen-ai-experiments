@@ -68,4 +68,4 @@ def validate_settings(settings):
 
 @utils.timer
 def create_chat_engine(settings):
-    return engines.create(settings["chat_engine"], settings)
+    return engines.create_engine(settings["chat_engine"], settings)

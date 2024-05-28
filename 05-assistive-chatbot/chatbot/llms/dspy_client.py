@@ -23,10 +23,10 @@ class DspyLlmClient:
     def __init__(self, model_name, settings):
         self.model_name = model_name
         self.predictor = settings.pop("predictor")
-        self.llm = self._create_llm_model(model_name, **settings)
+        self.llm = self._create_llm_model(settings)
         logger.info("DspyLlmClient: %s", settings)
 
-    def _create_llm_model(self, respond_with_json=False, **settings):
+    def _create_llm_model(self, settings):
         dspy_llm_kwargs = {
             # The default DSPy max_tokens is only 150, which caused issues due to incomplete JSON string output
             "max_tokens": 1000,
@@ -36,7 +36,8 @@ class DspyLlmClient:
             return dspy.OllamaLocal(model=self.model_name, **dspy_llm_kwargs)
             # Alternative is using OpenAI-compatible API: https://gist.github.com/jrknox1977/78c17e492b5a75ee5bbaf9673aee4641
         elif self.model_name in _OPENAI_LLMS:
-            if respond_with_json:
+            if settings.get("respond_with_json", False):
+                assert False
                 return dspy.OpenAI(model=self.model_name, **dspy_llm_kwargs, response_format={"type": "json_object"})
             else:
                 return dspy.OpenAI(model=self.model_name, **dspy_llm_kwargs)

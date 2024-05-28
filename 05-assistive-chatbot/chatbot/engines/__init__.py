@@ -35,7 +35,7 @@ def _discover_chat_engines(force=False):
 
 
 @utils.timer
-def create(engine_name, settings=None):
+def create_engine(engine_name, settings=None):
     _discover_chat_engines()
     return _engines[engine_name].init_engine(settings)
 
