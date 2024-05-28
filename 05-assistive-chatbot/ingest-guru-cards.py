@@ -5,11 +5,12 @@ from functools import cached_property
 from typing import Callable
 
 import dotenv
+from langchain.docstore.document import Document
 from langchain_community.embeddings import HuggingFaceEmbeddings, SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Chroma
 
 import chatbot
-from chatbot import guru_cards, llms, utils
+from chatbot import guru_cards, utils
 from chatbot.ingest.text_splitter import TextSplitter
 
 logger = logging.getLogger(f"chatbot.{__name__}")
@@ -41,24 +42,17 @@ EMBEDDING_MODELS = {model.name: model for model in _EMBEDDINGS_MODEL_LIST}
 
 
 class AppState:
-    def __init__(self, llm_model, embedding_name):
-        self.llm_model = llm_model
+    def __init__(self, embedding_name):
         self.embedding_name = embedding_name
-
-    @cached_property
-    @utils.timer
-    def llm(self):
-        logger.info("Creating LLM")
-        return llms.init_client(("langchain.ollama", self.llm_model))
+        self.embeddings_model = EMBEDDING_MODELS[self.embedding_name].create()
+        logger.info("Embeddings model created: %s", self.embeddings_model)
 
     @cached_property
     @utils.timer
     def vectordb(self):
         logger.info("Creating Vector DB")
-        embeddings_model = EMBEDDING_MODELS[self.embedding_name].create()
-        logger.info("Embeddings model created: %s", embeddings_model)
         return Chroma(
-            embedding_function=embeddings_model,
+            embedding_function=self.embeddings_model,
             # Must use collection_name="langchain" -- https://github.com/langchain-ai/langchain/issues/10864#issuecomment-1730303411
             collection_name="langchain",
             persist_directory="./chroma_db",
@@ -69,10 +63,10 @@ if __name__ == "__main__":
     dotenv.load_dotenv()
     chatbot.configure_logging()
 
-    app_state = AppState("mistral", "all-MiniLM-L6-v2")
+    app_state = AppState("all-MiniLM-L6-v2")
 
     text_splitter = TextSplitter(
-        llm_client=app_state.llm.client,
+        embeddings_model=app_state.embeddings_model,
         token_limit=EMBEDDING_MODELS[app_state.embedding_name].token_limit,
         text_splitter_name="RecursiveCharacterTextSplitter",
         # Use smaller chunks for shorter-length quotes
@@ -80,9 +74,14 @@ if __name__ == "__main__":
         chunk_overlap=100,
     )
 
-    guru_question_answers = guru_cards.GuruCardsProcessor().extract_qa_text_from_guru()
+    guru_cards_processor = guru_cards.GuruCardsProcessor()
+    guru_question_answers = guru_cards_processor.extract_qa_text_from_guru()
     # Chunk the json data and load into vector db
     for question, answer in guru_question_answers.items():
         logger.info("Processing document: %s", question)
-        chunks = text_splitter.split_into_chunks(question, answer)
-        app_state.vectordb.add_documents(documents=chunks)
+        entire_text = question + "\n\n" + answer
+        chunks = text_splitter.split_into_chunks(entire_text)
+        docs = [
+            Document(page_content=t, metadata={"source": question.strip(), "entire_card": entire_text}) for t in chunks
+        ]
+        app_state.vectordb.add_documents(documents=docs)
