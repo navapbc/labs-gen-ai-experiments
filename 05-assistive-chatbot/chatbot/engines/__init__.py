@@ -15,8 +15,9 @@ def available_engines():
 
 
 def _discover_chat_engines(force=False):
-    if not _engines or force:
+    if force:
         _engines.clear()
+    if not _engines:
         found_llm_modules = utils.scan_modules(__package__)
         for module_name, module in found_llm_modules.items():
             if not hasattr(module, "ENGINE_NAME"):

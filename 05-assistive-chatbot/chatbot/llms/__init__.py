@@ -15,8 +15,9 @@ def available_llms():
 
 
 def _discover_llms(force=False):
-    if not _llms or force:
+    if force:
         _llms.clear()
+    if not _llms:
         found_modules = utils.scan_modules(__package__)
         for module_name, module in found_modules.items():
             if not module or ignore(module_name):

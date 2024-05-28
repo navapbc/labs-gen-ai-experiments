@@ -6,7 +6,6 @@
 chainlit==1.1
 
 ## LangChain
-# langchain
 langchain_community
 langchain-google-genai
 
@@ -26,5 +25,5 @@ openai
 ## Groq LLM
 groq
 
-## DSPy
-# dspy
+## DSPy-wrapped LLMs
+dspy-ai

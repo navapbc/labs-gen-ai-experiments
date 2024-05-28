@@ -18,8 +18,7 @@ def init_client(model_name, settings):
 class DspyLlmClient:
     def __init__(self, model_name, settings):
         self.llm = self._create_llm_model(model_name, **settings)
-        # dspy.settings.configure(lm=self.llm)
-        self.predictor = BasicQA()
+        self.predictor = settings["predictor"]
 
     def _create_llm_model(self, llm_name="openhermes", respond_with_json=False):
         dspy_llm_kwargs = {
@@ -45,10 +44,3 @@ class DspyLlmClient:
     def submit(self, message):
         with dspy.context(lm=self.llm):
             return self.predictor(message)
-
-
-class BasicQA(dspy.Signature):
-    """Answer questions with short answers."""
-
-    question = dspy.InputField()
-    answer = dspy.OutputField(desc="Respond with only one of these words: Yes, No, Maybe")

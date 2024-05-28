@@ -8,11 +8,15 @@ aiofiles==23.2.1
     # via chainlit
 aiohttp==3.9.5
     # via
+    #   datasets
+    #   fsspec
     #   langchain
     #   langchain-community
 aiosignal==1.3.1
     # via aiohttp
-annotated-types==0.6.0
+alembic==1.13.1
+    # via optuna
+annotated-types==0.7.0
     # via pydantic
 anyio==3.7.1
     # via
@@ -33,7 +37,9 @@ asyncer==0.0.2
 attrs==23.2.0
     # via aiohttp
 backoff==2.2.1
-    # via posthog
+    # via
+    #   dspy-ai
+    #   posthog
 bcrypt==4.1.3
     # via chromadb
 beautifulsoup4==4.12.3
@@ -67,19 +73,29 @@ click==8.1.7
     #   uvicorn
 coloredlogs==15.0.1
     # via onnxruntime
+colorlog==6.8.2
+    # via optuna
 dataclasses-json==0.5.14
     # via
     #   chainlit
     #   langchain-community
+datasets==2.14.7
+    # via dspy-ai
 deprecated==1.2.14
     # via
     #   opentelemetry-api
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
+dill==0.3.7
+    # via
+    #   datasets
+    #   multiprocess
 distro==1.9.0
     # via
     #   groq
     #   openai
+dspy-ai==2.4.9
+    # via -r requirements.in
 exceptiongroup==1.2.1
     # via anyio
 fastapi==0.110.3
@@ -102,8 +118,9 @@ frozenlist==1.4.1
     # via
     #   aiohttp
     #   aiosignal
-fsspec==2024.5.0
+fsspec[http]==2023.10.0
     # via
+    #   datasets
     #   huggingface-hub
     #   torch
 google-ai-generativelanguage==0.6.4
@@ -113,7 +130,7 @@ google-api-core[grpc]==2.19.0
     #   google-ai-generativelanguage
     #   google-api-python-client
     #   google-generativeai
-google-api-python-client==2.130.0
+google-api-python-client==2.131.0
     # via google-generativeai
 google-auth==2.29.0
     # via
@@ -135,13 +152,13 @@ googleapis-common-protos==1.63.0
     #   opentelemetry-exporter-otlp-proto-http
 groq==0.8.0
     # via -r requirements.in
-grpcio==1.62.1
+grpcio==1.64.0
     # via
     #   chromadb
     #   google-api-core
     #   grpcio-status
     #   opentelemetry-exporter-otlp-proto-grpc
-grpcio-status==1.62.1
+grpcio-status==1.62.2
     # via google-api-core
 h11==0.14.0
     # via
@@ -162,27 +179,30 @@ httpx==0.27.0
     #   groq
     #   literalai
     #   openai
-huggingface-hub==0.23.1
+huggingface-hub==0.23.2
     # via
+    #   datasets
     #   sentence-transformers
     #   tokenizers
     #   transformers
 humanfriendly==10.0
     # via coloredlogs
-idna==3.6
+idna==3.7
     # via
     #   anyio
     #   httpx
     #   requests
     #   yarl
-importlib-metadata==6.11.0
+importlib-metadata==7.0.0
     # via opentelemetry-api
 importlib-resources==6.4.0
     # via chromadb
 jinja2==3.1.4
     # via torch
-joblib==1.4.2
-    # via scikit-learn
+joblib==1.3.2
+    # via
+    #   dspy-ai
+    #   scikit-learn
 jsonpatch==1.33
     # via langchain-core
 jsonpointer==2.4
@@ -214,11 +234,15 @@ lazify==0.4.0
     # via chainlit
 literalai==0.0.601
     # via chainlit
+mako==1.3.5
+    # via alembic
 markdown-it-py==3.0.0
     # via rich
 markupsafe==2.1.5
-    # via jinja2
-marshmallow==3.21.1
+    # via
+    #   jinja2
+    #   mako
+marshmallow==3.21.2
     # via dataclasses-json
 mdurl==0.1.2
     # via markdown-it-py
@@ -232,6 +256,8 @@ multidict==6.0.5
     # via
     #   aiohttp
     #   yarl
+multiprocess==0.70.15
+    # via datasets
 mypy-extensions==1.0.0
     # via typing-inspect
 nest-asyncio==1.6.0
@@ -242,9 +268,13 @@ numpy==1.26.4
     # via
     #   chroma-hnswlib
     #   chromadb
+    #   datasets
     #   langchain
     #   langchain-community
     #   onnxruntime
+    #   optuna
+    #   pandas
+    #   pyarrow
     #   scikit-learn
     #   scipy
     #   sentence-transformers
@@ -255,8 +285,10 @@ oauthlib==3.2.2
     #   requests-oauthlib
 onnxruntime==1.18.0
     # via chromadb
-openai==1.30.2
-    # via -r requirements.in
+openai==1.30.4
+    # via
+    #   -r requirements.in
+    #   dspy-ai
 opentelemetry-api==1.24.0
     # via
     #   chromadb
@@ -308,6 +340,8 @@ opentelemetry-util-http==0.45b0
     # via
     #   opentelemetry-instrumentation-asgi
     #   opentelemetry-instrumentation-fastapi
+optuna==3.6.1
+    # via dspy-ai
 orjson==3.10.3
     # via
     #   chromadb
@@ -318,12 +352,18 @@ packaging==23.2
     # via
     #   build
     #   chainlit
+    #   datasets
     #   huggingface-hub
     #   langchain-core
     #   literalai
     #   marshmallow
     #   onnxruntime
+    #   optuna
     #   transformers
+pandas==2.2.2
+    # via
+    #   datasets
+    #   dspy-ai
 pillow==10.3.0
     # via sentence-transformers
 posthog==3.5.0
@@ -342,16 +382,21 @@ protobuf==4.25.3
     #   onnxruntime
     #   opentelemetry-proto
     #   proto-plus
+pyarrow==16.1.0
+    # via datasets
+pyarrow-hotfix==0.6
+    # via datasets
 pyasn1==0.6.0
     # via
     #   pyasn1-modules
     #   rsa
 pyasn1-modules==0.4.0
     # via google-auth
-pydantic==2.5.0
+pydantic==2.7.2
     # via
     #   chainlit
     #   chromadb
+    #   dspy-ai
     #   fastapi
     #   google-generativeai
     #   groq
@@ -360,7 +405,7 @@ pydantic==2.5.0
     #   langsmith
     #   literalai
     #   openai
-pydantic-core==2.14.1
+pydantic-core==2.18.3
     # via pydantic
 pygments==2.18.0
     # via rich
@@ -375,32 +420,42 @@ pyproject-hooks==1.1.0
 python-dateutil==2.9.0.post0
     # via
     #   kubernetes
+    #   pandas
     #   posthog
 python-dotenv==1.0.1
     # via
     #   chainlit
     #   uvicorn
-python-engineio==4.9.0
+python-engineio==4.9.1
     # via python-socketio
 python-multipart==0.0.9
     # via chainlit
 python-socketio==5.11.2
     # via fastapi-socketio
+pytz==2024.1
+    # via pandas
 pyyaml==6.0.1
     # via
     #   chromadb
+    #   datasets
     #   huggingface-hub
     #   kubernetes
     #   langchain
     #   langchain-community
     #   langchain-core
+    #   optuna
     #   transformers
     #   uvicorn
 regex==2024.5.15
-    # via transformers
-requests==2.31.0
+    # via
+    #   dspy-ai
+    #   transformers
+requests==2.32.2
     # via
     #   chromadb
+    #   datasets
+    #   dspy-ai
+    #   fsspec
     #   google-api-core
     #   huggingface-hub
     #   kubernetes
@@ -425,7 +480,7 @@ scipy==1.13.1
     # via
     #   scikit-learn
     #   sentence-transformers
-sentence-transformers==2.7.0
+sentence-transformers==3.0.0
     # via -r requirements.in
 shellingham==1.5.4
     # via typer
@@ -446,12 +501,16 @@ soupsieve==2.5
     # via beautifulsoup4
 sqlalchemy==2.0.30
     # via
+    #   alembic
     #   langchain
     #   langchain-community
+    #   optuna
 starlette==0.37.2
     # via
     #   chainlit
     #   fastapi
+structlog==24.2.0
+    # via dspy-ai
 sympy==1.12
     # via
     #   onnxruntime
@@ -479,9 +538,12 @@ torch==2.3.0
 tqdm==4.66.4
     # via
     #   chromadb
+    #   datasets
+    #   dspy-ai
     #   google-generativeai
     #   huggingface-hub
     #   openai
+    #   optuna
     #   sentence-transformers
     #   transformers
 transformers==4.41.1
@@ -492,8 +554,9 @@ types-beautifulsoup4==4.12.0.20240511
     # via -r requirements.in
 types-html5lib==1.1.11.20240228
     # via types-beautifulsoup4
-typing-extensions==4.10.0
+typing-extensions==4.12.0
     # via
+    #   alembic
     #   asgiref
     #   chromadb
     #   fastapi
@@ -511,7 +574,11 @@ typing-extensions==4.10.0
     #   uvicorn
 typing-inspect==0.9.0
     # via dataclasses-json
-uptrace==1.22.0
+tzdata==2024.1
+    # via pandas
+ujson==5.10.0
+    # via dspy-ai
+uptrace==1.24.0
     # via chainlit
 uritemplate==4.1.1
     # via google-api-python-client
@@ -539,9 +606,11 @@ wrapt==1.16.0
     #   opentelemetry-instrumentation
 wsproto==1.2.0
     # via simple-websocket
+xxhash==3.4.1
+    # via datasets
 yarl==1.9.4
     # via aiohttp
-zipp==3.18.1
+zipp==3.19.0
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
