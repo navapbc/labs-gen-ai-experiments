@@ -31,12 +31,14 @@ class OpenaiLlmClient:
             response = self.client.chat.completions.create(
                 model=self.model_name,
                 messages=[{"role": "user", "content": message}],
+                **self.settings
             )
             return response.choices[0].message.content
         elif self.model_name in _LEGACY_MODELS:
             response = self.client.completions.create(
                 model=self.model_name,
                 prompt=message,
+                **self.settings
             )
             return response.choices[0].text
         else:

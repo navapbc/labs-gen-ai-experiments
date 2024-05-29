@@ -37,18 +37,22 @@ os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
 os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", "./.sentence-transformers-cache")
 
 # Disable DSPy cache to get different responses for retry attempts
+# Set to true to enable caching for faster responses and optimizing prompts using DSPy
 os.environ.setdefault("DSP_CACHEBOOL", "false")
 
 
 @utils.verbose_timer(logger)
 def _init_settings():
     # Remember to update ChatSettings in chatbot-chainlit.py when adding new settings
+    # and update chatbot/engines/__init.py:CHATBOT_SETTING_KEYS
     return {
         "enable_api": is_true(os.environ.get("ENABLE_CHATBOT_API", "False")),
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
         "temperature": float(os.environ.get("LLM_TEMPERATURE", 0.1)),
         "retrieve_k": int(os.environ.get("RETRIEVE_K", 4)),
+        # Used by SummariesChatEngine
+        "model2": os.environ.get("LLM_MODEL_NAME_2", os.environ.get("LLM_MODEL_NAME", "mock :: llm")),
     }
 
 
