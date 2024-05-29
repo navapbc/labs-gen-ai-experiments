@@ -1,11 +1,13 @@
 import datetime
+
+from langchain.docstore.document import Document
+from langchain_core.prompts import PromptTemplate
 from langchain_text_splitters import (
     RecursiveCharacterTextSplitter,
     NLTKTextSplitter,
     SpacyTextSplitter,
 )
-from langchain_core.prompts import PromptTemplate
-from langchain.docstore.document import Document
+
 from llm import LLM
 from run import get_transcript
 
@@ -33,13 +35,15 @@ def get_text_chunks(text, chunk_size, chunk_overlap, text_splitter_choice):
     return docs
 
 
-CHUNKING_PROMPT = """
-You are a helpful AI assistant tasked with summarizing transcripts, however we can only process the transcripts in pieces.
-Please fill out and return the following template: {template} with data in the text: {text}
-If the following template already has the field filled out, do not overwrite this information.
+MAP_TEMPLATE = """
+You are a helpful AI assistant tasked with summarizing transcripts. The following is a set of transcript pieces:
+{transcript_chunk}
+Please summarize the sections, include key details.
 """
 
-initial_temp = """
+REDUCE_TEMPLATE = """The following is set of summaries:
+{summaries}
+Take these fill out this template:
 1. Caller Information:
 - Name
 - Contact Information
@@ -59,22 +63,16 @@ initial_temp = """
 """
 
 
-def chunking_ingest(transcript, prompt):
-    text_chunks = get_text_chunks(
-        transcript, chunk_size=750, chunk_overlap=300, text_splitter_choice="2"
-    )
-    prompt_template = PromptTemplate.from_template(prompt)
-    template = initial_temp
-
+def select_client():
     print("""
-        Select an llm
-        1. openhermes (default)
-        2. dolphin
-        3. gemini
-        4. gpt 4
-        5. gpt 4o
-        6. claude 3
-        """)
+    Select an llm
+    1. openhermes (default)
+    2. dolphin
+    3. gemini
+    4. gpt 4
+    5. gpt 4o
+    6. claude 3
+    """)
 
     llm = input() or "1"
 
@@ -109,25 +107,40 @@ def chunking_ingest(transcript, prompt):
             Openhermes
             """)
         client = LLM(client_name="ollama", model_name="openhermes")
+    return client
 
+
+def chunking_ingest(transcript):
+    text_chunks = get_text_chunks(
+        transcript, chunk_size=750, chunk_overlap=300, text_splitter_choice="2"
+    )
+    client = select_client()
     client.init_client()
     ct = datetime.datetime.now()
-    print("current time:-", ct)
-    for text in text_chunks:
-        formatted_prompt = prompt_template.format(
-            text=text.page_content, template=template
-        )
-        print("Processing Text Chunk")
-        template = client.generate_text(prompt=formatted_prompt)
-    print("Complete")
-    return template
+    print(ct)
+    summaries = []
+    for text_chunk in text_chunks:
+        summary_template = PromptTemplate.from_template(template=MAP_TEMPLATE)
+        formatted_prompt = summary_template.format(transcript_chunk=text_chunk)
+        summary = client.generate_text(formatted_prompt)
+        summaries.append(summary)
+
+    collected_summaries_template = PromptTemplate.from_template(
+        template=REDUCE_TEMPLATE
+    )
+
+    text_summary = "\n".join(summaries)
+    prompt_with_all_summaries = collected_summaries_template.format(
+        summaries=text_summary
+    )
+    filled_out_template = client.generate_text(prompt_with_all_summaries)
+    print(filled_out_template)
 
 
 if __name__ == "__main__":
     print(
         chunking_ingest(
-            transcript=get_transcript("./son_calling_behalf_mother_transcript.txt"),
-            prompt=CHUNKING_PROMPT,
+            transcript=get_transcript("./multi_benefit_transcript.txt"),
         )
     )
     ct = datetime.datetime.now()
