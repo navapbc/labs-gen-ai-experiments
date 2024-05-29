@@ -109,12 +109,12 @@ def process_file(file):
     response_string = response.choices[0].message.content
     try:
         response_content = json.loads(response_string)
-    except Exception as e:
+    except Exception:
         # GPT4-turbo sometimes likes to wrap it with ```json {content here}```
         if response_string.startswith("```json"):
             try:
                 response_content = json.loads(response_string[7:-3])
-            except Exception as e:
+            except Exception:
                 st.write("Error processing response:")
                 st.code(response_string)
                 st.stop()
