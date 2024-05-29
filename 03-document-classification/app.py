@@ -1,5 +1,4 @@
 import base64
-import hmac
 import json
 import time
 from functools import wraps
@@ -110,12 +109,12 @@ def process_file(file):
     response_string = response.choices[0].message.content
     try:
         response_content = json.loads(response_string)
-    except:
+    except Exception as e:
         # GPT4-turbo sometimes likes to wrap it with ```json {content here}```
         if response_string.startswith("```json"):
             try:
                 response_content = json.loads(response_string[7:-3])
-            except:
+            except Exception as e:
                 st.write("Error processing response:")
                 st.code(response_string)
                 st.stop()
