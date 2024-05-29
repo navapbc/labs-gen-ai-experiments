@@ -5,9 +5,6 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import List, Optional
 
-import dspy  # type: ignore[import-untyped]
-from dspy.signatures.signature import signature_to_template  # type: ignore[import-untyped]
-
 from chatbot import engines, guru_cards, utils, vector_db
 
 logger = logging.getLogger(__name__)
@@ -44,106 +41,25 @@ class GenerationResults:
     cards: Optional[List[CardResponseEntry]] = None
 
 
-class DspyClients:
-    def __init__(self, settings):
-        self.prompts = Prompts()
-
-        if os.environ.get("DSP_CACHEBOOL").lower() != "false":
-            logger.warning("DSP_CACHEBOOL should be set to True to get different responses for retry attempts")
-
-        if "predictor" not in settings:
-            settings["predictor"] = self.decomposer_predictor
-        logger.info("Creating DecomposeQuestion LLM client with %s", settings)
-        self.decomposer_client = engines.create_llm_client(settings)
-
-        if "model2" in settings:
-            settings["model"] = settings.pop("model2")
-        settings["predictor"] = None
-        logger.info("Creating Summarize LLM client with %s", settings)
-        self.summarizer_client = engines.create_llm_client(settings)
-
-    def decomposer_predictor(self, message):
-        logger.info("Decomposing: %s", message)
-        prediction = self.prompts.decomposer(question=message)
-        derived_questions = json.loads(prediction.answer)
-        if "Answer" in derived_questions:
-            # For OpenAI 'gpt-4-turbo' in json mode
-            derived_questions = derived_questions["Answer"]
-        return derived_questions
-
-    def generate_derived_questions(self, query):
-        return self.decomposer_client.generate_reponse(query)
-
-    def generate_summaries(self, gen_results, guru_card_texts):
-        with dspy.context(lm=self.summarizer_client.llm):
-            create_summaries(gen_results, guru_card_texts, lambda **kwargs: self.prompts.summarizer(**kwargs).answer)
-        return gen_results
-
-
-class LlmClients:
-    def __init__(self, settings):
-        self.prompts = Prompts()
-        logger.info("Creating DecomposeQuestion LLM client with %s", settings)
-        self.decomposer_client = engines.create_llm_client(settings)
-
-        if "model2" in settings:
-            settings["model"] = settings.pop("model2")
-        logger.info("Creating Summarize LLM client with %s", settings)
-        self.summarizer_client = engines.create_llm_client(settings)
-
-    def generate_derived_questions(self, query):
-        response = self.call_llm(self.decomposer_client, self.prompts.decomposer, question=query)
-        return json.loads(response)
-
-    def generate_summaries(self, gen_results, guru_card_texts):
-        create_summaries(
-            gen_results,
-            guru_card_texts,
-            lambda **kwargs: self.call_llm(self.summarizer_client, self.prompts.summarizer, **kwargs),
-        )
-
-    def call_llm(self, llm_client, dspy_predict_obj: dspy.Predict, **template_inputs):
-        template = signature_to_template(dspy_predict_obj.signature)
-        # demos are for in-context learning
-        dspy_prompt = template({"demos": []} | template_inputs)
-        logger.info("Prompt: %s", dspy_prompt)
-        response = llm_client.generate_reponse(dspy_prompt)
-        logger.info("Response object: %s", response)
-        return response
-
-
 class Prompts:
-    @cached_property
-    def decomposer(self):
-        class DecomposeQuestion(dspy.Signature):
-            """Rephrase and decompose into multiple questions so that we can search for relevant public benefits eligibility requirements. \
+    decomposer = """Rephrase and decompose into multiple questions so that we can search for relevant public benefits eligibility requirements. \
     Be concise -- only respond with JSON. Only output the questions as a JSON list: ["question1", "question2", ...]. \
     The question is: {question}"""
 
-            # TODO: Incorporate https://gist.github.com/hugodutka/6ef19e197feec9e4ce42c3b6994a919d
-
-            question = dspy.InputField()
-            answer = dspy.OutputField(desc='["question1", "question2", ...]')
-
-        return dspy.Predict(DecomposeQuestion)
-
-    @cached_property
-    def summarizer(self):
-        class SummarizeCardGivenQuestion(dspy.Signature):
-            """Summarize the following context into 1 sentence without explicitly answering the question(s): {context_question}
+    summarizer = """Summarize the following context into 1 sentence without explicitly answering the question(s): {context_question}
 
             Context: {context}
             """
 
-            context_question = dspy.InputField()
-            context = dspy.InputField()
-            answer = dspy.OutputField()
 
-        return dspy.Predict(SummarizeCardGivenQuestion)
+## Summaries Chat Engine
 
 
 class SummariesChatEngine:
     def __init__(self, orig_settings):
+        if orig_settings["model"].startswith("dspy ::") or orig_settings["model2"].startswith("dspy ::"):
+            assert False, "Summaries chat engine does not support DSPy models -- use Summaries-DSPy instead."
+
         # Make a copy of the settings so that we can modify them
         self.settings = orig_settings.copy()
 
@@ -154,10 +70,14 @@ class SummariesChatEngine:
         # TODO: ingestigate if this should be set to true
         os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
-        if self.settings["model"].startswith("dspy ::"):
-            self.llms = DspyClients(self.settings.copy())
-        else:
-            self.llms = LlmClients(self.settings.copy())
+        self.prompts = Prompts()
+        self.decomposer_client = engines.create_llm_client(self.settings.copy())
+
+        if "model2" in self.settings:
+            self.settings["model"] = self.settings.pop("model2")
+        if "temperature2" in self.settings:
+            self.settings["temperature"] = self.settings.pop("temperature2")
+        self.summarizer_client = engines.create_llm_client(self.settings.copy())
 
         # TODO for scalability: replace with DB lookup
         self.guru_card_texts = guru_cards.GuruCardsProcessor().extract_qa_text_from_guru()
@@ -166,12 +86,14 @@ class SummariesChatEngine:
     def gen_response(self, query):
         gen_results = GenerationResults(query)
 
-        for i in range(3):  # retry loop
-            if i > 0:
+        for i in range(1, 4):  # retry loop
+            if i > 1:
                 logger.warning("Retrying to get parsable JSON response -- attempt %i", i)
                 # TODO: also send notification to UI by adding a message to GenerationResults
             try:
-                derived_questions = self.llms.generate_derived_questions(query)
+                response = self.call_llm(self.decomposer_client, self.prompts.decomposer, question=query)
+                derived_questions = json.loads(response)
+
                 logger.info("Derived questions: %s", derived_questions)
                 break  # exit retry loop
             except json.JSONDecodeError as e:
@@ -179,10 +101,23 @@ class SummariesChatEngine:
                 derived_questions = []
 
         collect_retrieved_cards(derived_questions, self.vectordb_wrapper.vectordb, self.retrieve_k, gen_results)
-        logger.info("gen_results: %s", gen_results)
+        logger.debug("gen_results: %s", gen_results)
 
-        self.llms.generate_summaries(gen_results, self.guru_card_texts)
+        populate_summaries(gen_results, self.guru_card_texts, self.summarizer)
         return gen_results
+
+    def summarizer(self, **kwargs):
+        return self.call_llm(self.summarizer_client, self.prompts.summarizer, **kwargs)
+
+    def call_llm(self, llm_client, prompt_template: str, **template_inputs):
+        prompt = prompt_template.format(**template_inputs)
+        logger.debug("Prompt: %s", prompt)
+        response = llm_client.generate_reponse(prompt)
+        logger.debug("Response object: %s", response)
+        return response
+
+
+## Non-LLM Helper functions
 
 
 def collect_retrieved_cards(derived_qs, vectordb, retrieve_k, gen_results):
@@ -228,8 +163,7 @@ def collate_by_card_score_sum(derived_question_entries):
 
 
 def retrieve_cards(derived_qs, vectordb, retrieve_k=5):
-    results = []  # list of DerivedQuestionEntry
-    # print(f"Processing user question {qa_dict['id']}: with {len(derived_qs)} derived questions")
+    results = []
     for q in derived_qs:
         retrieval_tups = vectordb.similarity_search_with_relevance_scores(q, k=retrieve_k)
         retrieval = [tup[0] for tup in retrieval_tups]
@@ -240,7 +174,7 @@ def retrieve_cards(derived_qs, vectordb, retrieve_k=5):
     return results
 
 
-def create_summaries(gen_results, guru_card_texts, summarizer):
+def populate_summaries(gen_results, guru_card_texts, summarizer):
     logger.info("Summarizing %i retrieved cards...", len(gen_results.cards))
     for i, card_entry in enumerate(gen_results.cards):
         # Limit summarizing of Guru cards based on score and card count

@@ -53,6 +53,7 @@ def _init_settings():
         "retrieve_k": int(os.environ.get("RETRIEVE_K", 4)),
         # Used by SummariesChatEngine
         "model2": os.environ.get("LLM_MODEL_NAME_2", os.environ.get("LLM_MODEL_NAME", "mock :: llm")),
+        "temperature2": float(os.environ.get("LLM_TEMPERATURE2", 0.1)),
     }
 
 
@@ -69,9 +70,13 @@ def validate_settings(settings):
     if chat_engine not in engines._discover_chat_engines():
         return f"Unknown chat_engine: '{chat_engine}'"
 
-    model_name = settings["model"]
-    if model_name not in llms._discover_llms():
-        return f"Unknown model: '{model_name}'"
+    for setting_name in ["model", "model2"]:
+        model_name = settings[setting_name]
+        if model_name not in llms._discover_llms():
+            return f"Unknown {setting_name}: '{model_name}'"
+
+        if chat_engine.startswith("Summaries") and not model_name.contains("instruct"):
+            logger.warning("For the %s chat engine, an `*instruct` model is recommended", chat_engine)
 
     # PLACEHOLDER: Validate other settings
 

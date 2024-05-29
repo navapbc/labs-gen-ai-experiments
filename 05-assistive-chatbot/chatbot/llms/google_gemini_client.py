@@ -1,6 +1,9 @@
+import logging
 import os
 
 import google.generativeai as genai
+
+logger = logging.getLogger(__name__)
 
 CLIENT_NAME = "google"
 MODEL_NAMES = ["gemini-pro", "gemini-1.5-pro", "gemini-1.5-flash"]
@@ -18,6 +21,7 @@ def init_client(model_name, settings):
 
 class GeminiLlmClient:
     def __init__(self, model_name, settings):
+        logger.info("Creating LLM client '%s' with %s", model_name, settings)
         if settings is not None:
             genai.GenerationConfig(**settings)
         self.client = genai.GenerativeModel(model_name)

@@ -43,13 +43,12 @@ def create_engine(engine_name, settings=None):
 ## Utility functions
 
 # Settings that are specific to our chatbot and shouldn't be passed onto the LLM client
-CHATBOT_SETTING_KEYS = ["enable_api", "chat_engine", "model", "model2"]
+CHATBOT_SETTING_KEYS = ["enable_api", "chat_engine", "model", "model2", "temperature2", "retrieve_k"]
 
 
 @utils.timer
 def create_llm_client(settings):
     llm_name = settings["model"]
-    # llm_settings = dict((k, settings[k]) for k in ["temperature"] if k in settings)
     remaining_settings = {k: settings[k] for k in settings if k not in CHATBOT_SETTING_KEYS}
     client = llms.init_client(llm_name, remaining_settings)
     return client

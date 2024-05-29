@@ -1,4 +1,8 @@
+import logging
+
 from langchain_community.llms.ollama import Ollama
+
+logger = logging.getLogger(__name__)
 
 CLIENT_NAME = "langchain.ollama"
 MODEL_NAMES = ["openhermes", "llama2", "mistral"]
@@ -10,6 +14,7 @@ def init_client(model_name, settings):
 
 class LangchainOllamaClient:
     def __init__(self, model_name, settings):
+        self.settings = settings
         # if not settings:
         #     settings = {
         #         # "system": "",
@@ -17,7 +22,8 @@ class LangchainOllamaClient:
         #         # See https://github.com/langchain-ai/langchain/blob/master/libs/community/langchain_community/llms/ollama.py
         #         "stop": None
         #     }
-        self.client = Ollama(model=model_name, **settings)
+        logger.info("Creating LLM client '%s' with %s", model_name, self.settings)
+        self.client = Ollama(model=model_name, **self.settings)
 
     def generate_reponse(self, message):
         return self.client.invoke(message)

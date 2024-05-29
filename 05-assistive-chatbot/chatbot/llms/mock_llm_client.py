@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 CLIENT_NAME = "mock"
 MODEL_NAMES = ["llm"]
 
@@ -10,7 +14,7 @@ class MockLlmClient:
     "Mock client that returns the mock_responses or the message itself."
 
     def __init__(self, model_name, settings):
-        self.model_name = model_name
+        logger.info("Creating Mock LLM client '%s' with %s", model_name, settings)
         self.mock_responses = settings
 
     def generate_reponse(self, message):

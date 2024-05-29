@@ -42,13 +42,13 @@ async def init_chat():
             ),
             Select(
                 id="model",
-                label="LLM Model",
+                label="Primary LLM Model",
                 values=llms.available_llms(),
                 initial_value=chatbot.initial_settings["model"],
             ),
             Slider(
                 id="temperature",
-                label="LLM Temperature",
+                label="Temperature for primary LLM",
                 initial=chatbot.initial_settings["temperature"],
                 min=0,
                 max=2,
@@ -61,6 +61,20 @@ async def init_chat():
                 min=1,
                 max=10,
                 step=1,
+            ),
+            Select(
+                id="model2",
+                label="LLM Model for summarizer",
+                values=llms.available_llms(),
+                initial_value=chatbot.initial_settings["model2"],
+            ),
+            Slider(
+                id="temperature2",
+                label="Temperature for summarizer",
+                initial=chatbot.initial_settings["temperature2"],
+                min=0,
+                max=2,
+                step=0.1,
             ),
             # TODO: Add LLM response streaming capability
             # Switch(id="streaming", label="Stream response tokens", initial=True),
@@ -83,7 +97,7 @@ async def update_settings(settings):
 @utils.timer
 async def apply_settings():
     settings = cl.user_session.get("settings")
-    await create_llm_client(settings)
+    await create_chat_engine(settings)
 
     # PLACEHOLDER: Apply other settings
 
@@ -95,11 +109,11 @@ async def apply_settings():
     return settings
 
 
-async def create_llm_client(settings):
-    msg = cl.Message(author="backend", content=f"Setting up LLM: {settings['model']} ...\n")
+async def create_chat_engine(settings):
+    msg = cl.Message(author="backend", content=f"Setting up chat engine: {settings['chat_engine']} ...\n")
 
     cl.user_session.set("chat_engine", chatbot.create_chat_engine(settings))
-    await msg.stream_token("Done setting up LLM")
+    await msg.stream_token("Done setting up chat engine")
     await msg.send()
 
 
