@@ -30,14 +30,22 @@ logger = logging.getLogger(__name__)
 
 ## Initialize settings
 
+# Opt out of telemetry -- https://docs.trychroma.com/telemetry
+os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
+
+# Used by SentenceTransformerEmbeddings and HuggingFaceEmbeddings
+os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", "./.sentence-transformers-cache")
+
 
 @utils.verbose_timer(logger)
 def _init_settings():
+    # Remember to update ChatSettings in chatbot-chainlit.py when adding new settings
     return {
         "enable_api": is_true(os.environ.get("ENABLE_CHATBOT_API", "False")),
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
         "temperature": float(os.environ.get("LLM_TEMPERATURE", 0.1)),
+        "retrieve_k": int(os.environ.get("RETRIEVE_K", 4)),
     }
 
 

@@ -14,6 +14,7 @@ from chainlit.types import ThreadDict
 
 import chatbot
 from chatbot import engines, llms, utils
+from chatbot.engines import v2_household_engine
 
 logger = logging.getLogger(f"chatbot.{__name__}")
 
@@ -52,6 +53,14 @@ async def init_chat():
                 min=0,
                 max=2,
                 step=0.1,
+            ),
+            Slider(
+                id="retrieve_k",
+                label="Guru cards to retrieve",
+                initial=chatbot.initial_settings["retrieve_k"],
+                min=1,
+                max=10,
+                step=1,
             ),
             # TODO: Add LLM response streaming capability
             # Switch(id="streaming", label="Stream response tokens", initial=True),
@@ -101,18 +110,44 @@ async def message_submitted(message: cl.Message):
         if not cl.user_session.get("settings_applied", False):
             return
 
-    # settings = cl.user_session.get("settings")
-
     chat_engine = cl.user_session.get("chat_engine")
     response = chat_engine.gen_response(message.content)
 
-    await cl.Message(content=f"*Response*: {response}").send()
+    if isinstance(response, v2_household_engine.GenerationResults):
+        message_args = format_v2_results_as_markdown(response)
+        await cl.Message(content=message_args["content"], elements=message_args["elements"]).send()
+    else:
+        await cl.Message(content=f"*Response*: {response}").send()
 
-    # generated_results = on_question(message.content)
-    # print(json.dumps(dataclasses.asdict(generated_results), indent=2))
 
-    # message_args = format_as_markdown(generated_results)
-    await cl.Message(message.content).send()
+def format_v2_results_as_markdown(gen_results):
+    resp = ["", f"## Q: {gen_results.question}"]
+
+    dq_resp = ["<details><summary>Derived Questions</summary>", ""]
+    for dq in gen_results.derived_questions:
+        dq_resp.append(f"- {dq.derived_question}")
+    dq_resp += ["</details>", ""]
+
+    cards_resp = []
+    for i, card in enumerate(gen_results.cards, 1):
+        if card.summary:
+            cards_resp += [
+                f"<details><summary>{i}. <a href='https://link/to/guru_card'>{card.card_title}</a></summary>",
+                "",
+                f"   Summary: {card.summary}",
+                "",
+            ]
+            indented_quotes = [q.strip().replace("\n", "\n   ") for q in card.quotes]
+            cards_resp += [f"\n   Quote:\n   ```\n   {q}\n   ```" for q in indented_quotes]
+            cards_resp += ["</details>", ""]
+
+    return {
+        "content": "\n".join(resp + dq_resp + cards_resp),
+        "elements": [
+            # cl.Text(name="Derived Questions", content="\n".join(dq_resp), display="side"),
+            # cl.Text(name="Guru Cards", content="\n".join(cards_resp), display="inline")
+        ],
+    }
 
 
 @cl.on_stop

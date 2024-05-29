@@ -37,10 +37,7 @@ def qualified_llm_name(client_name, model_name):
     return f"{client_name} :: {model_name}"
 
 
-def ignore(module_name):
-    # if module_name.startswith("dspy ::"):
-    #     # DSPy client code is not yet ready for use
-    #     return True
+def ignore(_module_name):
     return False
 
 

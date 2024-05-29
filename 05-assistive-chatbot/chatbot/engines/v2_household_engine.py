@@ -1,13 +1,12 @@
-import dataclasses
 import json
 import logging
 import os
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 import dspy  # type: ignore[import-untyped]
 
-from chatbot import engines, utils
+from chatbot import engines, guru_cards, utils, vector_db
 
 logger = logging.getLogger(__name__)
 
@@ -30,39 +29,51 @@ class CardResponseEntry:
     associated_derived_qs: List[str]
     score_sum: float
     quotes: List[str]
-    summary: str = None
-    entire_text: str = None
+    summary: Optional[str] = None
+    entire_text: Optional[str] = None
 
 
 @dataclass
 class DerivedQuestionEntry:
     derived_question: str
-    retrieved_cards: List[str] = None
-    retrieved_chunks: List[str] = None
-    retrieval_scores: List[float] = None
+    retrieved_cards: Optional[List[str]] = None
+    retrieved_chunks: Optional[List[str]] = None
+    retrieval_scores: Optional[List[float]] = None
 
 
 @dataclass
 class GenerationResults:
     question: str
-    derived_questions: List[DerivedQuestionEntry] = None
-    cards: List[CardResponseEntry] = None
+    derived_questions: Optional[List[DerivedQuestionEntry]] = None
+    cards: Optional[List[CardResponseEntry]] = None
 
 
 class SummariesChatEngine:
-    def __init__(self, settings):
-        self.settings = settings
+    def __init__(self, orig_settings):
+        # Make a copy of the settings so that we can modify them
+        self.settings = orig_settings.copy()
+
+        assert self.settings["model"].startswith("dspy ::"), f"Expecting DSPy LLM but got: {self.settings['model']}"
+
+        # Use the same vector DB configuration as ingest-guru-cards.py
+        self.vectordb_wrapper = vector_db.ingest_vectordb_wrapper
+        self.retrieve_k = int(self.settings.pop("retrieve_k"))
 
         self.decomposer = create_question_decomposer()
-        if "predictor" not in settings:
-            settings["predictor"] = self.decomposer_predictor
-        logger.info("Creating DecomposeQuestion LLM client with %s", settings)
-        self.decomposer_client = engines.create_llm_client(settings)
+        if "predictor" not in self.settings:
+            self.settings["predictor"] = self.decomposer_predictor
+        logger.info("Creating DecomposeQuestion LLM client with %s", self.settings)
+        self.decomposer_client = engines.create_llm_client(self.settings)
 
         self.summarizer = create_summarizer()
-        settings["predictor"] = None
-        logger.info("Creating Summarize LLM client with %s", settings)
-        self.summarizer_client = engines.create_llm_client(settings)
+        self.settings["predictor"] = None
+        logger.info("Creating Summarize LLM client with %s", self.settings)
+        self.summarizer_client = engines.create_llm_client(self.settings)
+
+        # TODO: ingestigate if this should be set to true
+        os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+
+        self.guru_card_texts = guru_cards.GuruCardsProcessor().extract_qa_text_from_guru()
 
     def decomposer_predictor(self, message):
         logger.info("Decomposing: %s", message)
@@ -82,9 +93,9 @@ class SummariesChatEngine:
         logger.info("gen_results: %s", gen_results)
 
         with dspy.context(lm=self.summarizer_client.llm):
-            self.create_summaries(gen_results, self.summarizer, self.get_guru_card_texts())
+            self.create_summaries(gen_results, self.summarizer, self.guru_card_texts)
 
-        return json.dumps(dataclasses.asdict(gen_results), indent=2)
+        return gen_results
 
     def generate_derived_questions(self, question):
         logger.info("Decomposing: %s", question)
@@ -117,18 +128,56 @@ class SummariesChatEngine:
         return derived_questions
 
     def collect_retrieved_cards(self, derived_qs, gen_results):
-        # retrieve_k = settings["retrieve_k"]
-        # print("RETRIEVE_K:", retrieve_k)
-        # gen_results.derived_questions = retrieve_cards(derived_qs, get_vectordb(), retrieve_k)
-        # gen_results.cards = collate_by_card_score_sum(gen_results.derived_questions)
-        gen_results.cards = [CardResponseEntry("A", ["B"], 0.5, ["C"])]
+        logger.debug("RETRIEVE_K: %i", self.retrieve_k)
+        gen_results.derived_questions = self.retrieve_cards(derived_qs, self.vectordb_wrapper.vectordb, self.retrieve_k)
+        gen_results.cards = self.collate_by_card_score_sum(gen_results.derived_questions)
 
-    def get_guru_card_texts(self):
-        # if settings["guru_card_texts"] is None:
-        #     # Extract Guru card texts so it can be summarized
-        #     settings["guru_card_texts"] = ingest.extract_qa_text_from_guru()
-        # return settings["guru_card_texts"]
-        return {"A": "B", "C": "D"}
+    def retrieve_cards(self, derived_qs, vectordb, retrieve_k=5):
+        results = []  # list of DerivedQuestionEntry
+        # print(f"Processing user question {qa_dict['id']}: with {len(derived_qs)} derived questions")
+        for q in derived_qs:
+            retrieval_tups = vectordb.similarity_search_with_relevance_scores(q, k=retrieve_k)
+            retrieval = [tup[0] for tup in retrieval_tups]
+            retrieved_cards = [doc.metadata["source"] for doc in retrieval]
+            retrieved_chunks = [doc.page_content for doc in retrieval]
+            scores = [tup[1] for tup in retrieval_tups]
+            results.append(DerivedQuestionEntry(q, retrieved_cards, retrieved_chunks, scores))
+        return results
+
+    def collate_by_card_score_sum(self, derived_question_entries):
+        all_retrieved_cards = dict()
+        for dq_entry in derived_question_entries:
+            scores = dq_entry.retrieval_scores
+            for i, card in enumerate(dq_entry.retrieved_cards):
+                all_retrieved_cards[card] = all_retrieved_cards.get(card, 0) + scores[i]
+
+        card_to_dqs = {}
+        card_to_quotes = {}
+        for dq_entry in derived_question_entries:
+            derived_question = dq_entry.derived_question
+            for card in dq_entry.retrieved_cards:
+                if card not in card_to_dqs:
+                    card_to_dqs[card] = set()
+                card_to_dqs[card].add(derived_question)
+
+            for card, quote in zip(dq_entry.retrieved_cards, dq_entry.retrieved_chunks):
+                if card not in card_to_quotes:
+                    card_to_quotes[card] = set()
+                if quote != card:
+                    card_to_quotes[card].add(quote)
+
+        all_retrieved_cards = dict(
+            sorted(
+                all_retrieved_cards.items(),
+                key=lambda item: item[1],
+                reverse=True,
+            )
+        )
+
+        return [
+            CardResponseEntry(card, list(card_to_dqs[card]), score, list(card_to_quotes[card]))
+            for card, score in all_retrieved_cards.items()
+        ]
 
     def create_summaries(self, gen_results, summarizer, guru_card_texts):
         logger.info("Summarizing %i retrieved cards...", len(gen_results.cards))
