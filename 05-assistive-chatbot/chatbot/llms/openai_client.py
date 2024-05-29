@@ -3,8 +3,11 @@ import os
 from openai import OpenAI
 
 CLIENT_NAME = "openai"
-# These names will be associated with this Python module
-MODEL_NAMES = ["gpt-3.5-turbo", "gpt-3.5-turbo-instruct", "gpt-4", "gpt-4-turbo", "gpt-4o"]
+
+# Model types: https://platform.openai.com/docs/models/model-endpoint-compatibility
+_CHAT_MODELS = ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo", "gpt-4o"]
+_LEGACY_MODELS = ["gpt-3.5-turbo-instruct"]
+MODEL_NAMES = _CHAT_MODELS + _LEGACY_MODELS
 
 
 def requirements_satisfied():
@@ -24,8 +27,17 @@ class OpenaiLlmClient:
         self.client = OpenAI()
 
     def generate_reponse(self, message):
-        response = self.client.chat.completions.create(
-            model=self.model_name,
-            messages=[{"role": "user", "content": message}],
-        )
-        return response.choices[0].message.content
+        if self.model_name in _CHAT_MODELS:
+            response = self.client.chat.completions.create(
+                model=self.model_name,
+                messages=[{"role": "user", "content": message}],
+            )
+            return response.choices[0].message.content
+        elif self.model_name in _LEGACY_MODELS:
+            response = self.client.completions.create(
+                model=self.model_name,
+                prompt=message,
+            )
+            return response.choices[0].text
+        else:
+            assert False, f"Unhandled LLM model: {self.model_name}"

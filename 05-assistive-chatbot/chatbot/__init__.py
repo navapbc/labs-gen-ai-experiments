@@ -36,6 +36,9 @@ os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
 # Used by SentenceTransformerEmbeddings and HuggingFaceEmbeddings
 os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", "./.sentence-transformers-cache")
 
+# Disable DSPy cache to get different responses for retry attempts
+os.environ.setdefault("DSP_CACHEBOOL", "false")
+
 
 @utils.verbose_timer(logger)
 def _init_settings():
