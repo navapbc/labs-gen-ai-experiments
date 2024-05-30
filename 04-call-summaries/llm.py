@@ -102,3 +102,37 @@ class LLM:
             )
 
             return text_response
+
+
+def select_client():
+    print("""
+    Select an llm
+    1. openhermes (default)
+    2. dolphin
+    3. gemini
+    4. gpt 4
+    5. gpt 4o
+    6. claude 3
+    """)
+
+    choice = input()
+
+    choices_to_llms = {
+        "1": ("ollama", "openhermes", "Openhermes"),
+        "2": ("ollama", "dolphin-mistral", "Dolphin"),
+        "3": ("gemini", None, "Gemini Flash 1.5"),
+        "4": ("gpt", "gpt4", "GPT 4"),
+        "5": ("gpt", "gpt-4o", "GPT 4o"),
+        "6": ("claude", None, "Claude 3"),
+    }
+
+    if choice not in choices_to_llms:
+        choice = "1"
+
+    client_name = choices_to_llms[choice][0]
+    model_name = choices_to_llms[choice][1]
+    pretty_name = choices_to_llms[choice][2]
+
+    client = LLM(client_name=client_name, model_name=model_name)
+    print(f"----------\n{pretty_name}\n")
+    return client
