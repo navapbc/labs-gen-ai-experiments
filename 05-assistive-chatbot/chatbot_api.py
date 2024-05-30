@@ -7,8 +7,8 @@ an API that can be deployed with the Chainlit chatbot.
 """
 
 import logging
-
 from typing import Dict
+
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 

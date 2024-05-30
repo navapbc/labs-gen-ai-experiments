@@ -7,7 +7,7 @@ CLIENT_NAME = "openai"
 MODEL_NAMES = ["gpt-3.5-turbo", "gpt-3.5-turbo-instruct", "gpt-4", "gpt-4-turbo", "gpt-4o"]
 
 
-def requirements_satisfied():
+def requirements_satisfied(_settings):
     if not os.environ.get("OPENAI_API_KEY"):
         return False
     return True

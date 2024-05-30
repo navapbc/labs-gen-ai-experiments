@@ -8,12 +8,16 @@ Useful for development, debugging, and testing.
 import logging
 
 import chatbot
+from chatbot import llms
 
 logger = logging.getLogger(f"chatbot.{__name__}")
 
 # Load the initial settings
 settings = chatbot.initial_settings
 chatbot.validate_settings(settings)
+
+# List LLMs, when CHATBOT_LOG_LEVEL=DEBUG
+llms.available_llms()
 
 # Create the chat engine
 chat_engine = chatbot.create_chat_engine(settings)

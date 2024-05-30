@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 @utils.verbose_timer(logger)
 def _init_settings():
     return {
+        "env": os.environ.get("ENV", "DEV"),
         "enable_api": is_true(os.environ.get("ENABLE_CHATBOT_API", "False")),
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
