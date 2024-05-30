@@ -1,7 +1,9 @@
 import datetime
 
 from langchain_core.prompts import PromptTemplate
-from chunking import select_client, get_text_chunks
+
+from chunking import get_text_chunks
+from llm import select_client
 from run import get_transcript
 
 

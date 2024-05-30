@@ -8,7 +8,7 @@ from langchain_text_splitters import (
     SpacyTextSplitter,
 )
 
-from llm import LLM
+from llm import select_client
 from run import get_transcript
 
 
@@ -61,53 +61,6 @@ Take these fill out this template:
 7. Next Steps for Client
 8. Next Steps for Agent
 """
-
-
-def select_client():
-    print("""
-    Select an llm
-    1. openhermes (default)
-    2. dolphin
-    3. gemini
-    4. gpt 4
-    5. gpt 4o
-    6. claude 3
-    """)
-
-    llm = input() or "1"
-
-    if llm == "2":
-        client = LLM(client_name="ollama", model_name="dolphin-mistral")
-        print("""----------
-            Dolphin
-            """)
-
-    elif llm == "3":
-        client = LLM(client_name="gemini")
-        print("""----------
-            Gemini Flash 1.5
-            """)
-    elif llm == "4":
-        print("""----------
-        GPT 4
-        """)
-        client = LLM(client_name="gpt", model_name="gpt4")
-    elif llm == "5":
-        print("""----------
-        GPT 4o
-        """)
-        client = LLM(client_name="gpt", model_name="gpt-4o")
-    elif llm == "6":
-        print("""----------
-            Claude 3
-            """)
-        client = LLM(client_name="claude")
-    else:
-        print("""
-            Openhermes
-            """)
-        client = LLM(client_name="ollama", model_name="openhermes")
-    return client
 
 
 def chunking_ingest(transcript):
