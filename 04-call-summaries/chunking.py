@@ -63,12 +63,10 @@ Take these fill out this template:
 """
 
 
-def chunking_ingest(transcript):
+def chunking_ingest(transcript, client):
     text_chunks = get_text_chunks(
         transcript, chunk_size=750, chunk_overlap=300, text_splitter_choice="2"
     )
-    client = select_client()
-    client.init_client()
     ct = datetime.datetime.now()
     print(ct)
     summaries = []
@@ -87,14 +85,13 @@ def chunking_ingest(transcript):
         summaries=text_summary
     )
     filled_out_template = client.generate_text(prompt_with_all_summaries)
-    print(filled_out_template)
+    return filled_out_template
 
 
 if __name__ == "__main__":
-    print(
-        chunking_ingest(
-            transcript=get_transcript("./multi_benefit_transcript.txt"),
-        )
-    )
+    client = select_client()
+    client.init_client()
+    transcript = get_transcript("./multi_benefit_transcript.txt")
+    print(chunking_ingest(transcript=transcript, client=client))
     ct = datetime.datetime.now()
     print(ct)
