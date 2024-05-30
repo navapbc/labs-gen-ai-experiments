@@ -115,37 +115,24 @@ def select_client():
     6. claude 3
     """)
 
-    llm = input() or "1"
+    choice = input()
 
-    if llm == "2":
-        client = LLM(client_name="ollama", model_name="dolphin-mistral")
-        print("""----------
-            Dolphin
-            """)
+    choices_to_llms = {
+        "1": ("ollama", "openhermes", "Openhermes"),
+        "2": ("ollama", "dolphin-mistral", "Dolphin"),
+        "3": ("gemini", None, "Gemini Flash 1.5"),
+        "4": ("gpt", "gpt4", "GPT 4"),
+        "5": ("gpt", "gpt-4o", "GPT 4o"),
+        "6": ("claude", None, "Claude 3"),
+    }
 
-    elif llm == "3":
-        client = LLM(client_name="gemini")
-        print("""----------
-            Gemini Flash 1.5
-            """)
-    elif llm == "4":
-        print("""----------
-        GPT 4
-        """)
-        client = LLM(client_name="gpt", model_name="gpt4")
-    elif llm == "5":
-        print("""----------
-        GPT 4o
-        """)
-        client = LLM(client_name="gpt", model_name="gpt-4o")
-    elif llm == "6":
-        print("""----------
-            Claude 3
-            """)
-        client = LLM(client_name="claude")
-    else:
-        print("""
-            Openhermes
-            """)
-        client = LLM(client_name="ollama", model_name="openhermes")
+    if choice not in choices_to_llms:
+        choice = "1"
+
+    client_name = choices_to_llms[choice][0]
+    model_name = choices_to_llms[choice][1]
+    pretty_name = choices_to_llms[choice][2]
+
+    client = LLM(client_name=client_name, model_name=model_name)
+    print(f"----------\n{pretty_name}\n")
     return client

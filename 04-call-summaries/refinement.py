@@ -13,7 +13,7 @@ Please fill out and return the following template: {template} with data in the t
 If the following template already has the field filled out, do not overwrite this information.
 """
 
-initial_temp = """
+initial_template = """
 1. Caller Information:
 - Name
 - Contact Information
@@ -38,7 +38,7 @@ def refinement_ingest(transcript, prompt):
         transcript, chunk_size=750, chunk_overlap=300, text_splitter_choice="2"
     )
     prompt_template = PromptTemplate.from_template(prompt)
-    template = initial_temp
+    template = initial_template
 
     client = select_client()
     client.init_client()
