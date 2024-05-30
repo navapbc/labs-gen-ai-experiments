@@ -75,7 +75,7 @@ def validate_settings(settings):
         if model_name not in llms._discover_llms():
             return f"Unknown {setting_name}: '{model_name}'"
 
-        if chat_engine.startswith("Summaries") and not model_name.contains("instruct"):
+        if chat_engine.startswith("Summaries") and "instruct" not in model_name:
             logger.warning("For the %s chat engine, an `*instruct` model is recommended", chat_engine)
 
     # PLACEHOLDER: Validate other settings
