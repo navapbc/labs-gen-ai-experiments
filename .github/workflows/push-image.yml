@@ -1,5 +1,5 @@
 name: "Build and push Docker image"
-run-name: "Publish image ${{inputs.image_tag}} for ${{inputs.service_name}}"
+run-name: "Publish image for ${{inputs.dockerfile_folder}}"
 
 on:
   workflow_dispatch:
@@ -7,18 +7,16 @@ on:
       dockerfile_folder:
         description: 'Folder containing Dockerfile to build'
         required: true
-        type: string
-        default: '02-household-queries'
-      image_tag:
-        description: 'Tag/Version of the image to push'
-        required: true
-        type: string
-        default: '0.01'
-      service_name:
-        description: 'Name of target AWS service'
-        required: true
         type: choice
         options:
+        - '05-assistive-chatbot'
+        - '02-household-queries'
+      service_name:
+        description: 'Name of target AWS service. Leave blank if unsure.'
+        type: choice
+        options:
+        - ''
+        - 'chatbot-chainlit-svc'
         - 'secure-chatbot-svc'
       build_image:
         description: "Build and push image"
@@ -32,12 +30,33 @@ on:
         default: 'false'
 
 env:
-  IMAGE_NAME: ${{ inputs.service_name }}
+  IMAGE_NAME: localimage
 
 jobs:
   publish-image:
     runs-on: ubuntu-latest
     steps:
+    - name: Check inputs
+      id: check_inputs
+      run: |
+        service_name="${{ inputs.service_name }}"
+        if [ "${service_name}" = "" ]; then
+            case "${{ inputs.dockerfile_folder }}" in
+                '02-household-queries') service_name='secure-chatbot-svc';;
+                '05-assistive-chatbot') service_name='chatbot-chainlit-svc';;
+                *) echo "Unknown dockerfile_folder: '${dockerfile_folder}'"; exit 2;;
+            esac
+        fi
+        echo "service_name=$service_name" >> $GITHUB_OUTPUT
+
+        case "${service_name}" in
+            # The image_tag is specific to the `*-svc` service
+            'secure-chatbot-svc')   image_tag='0.01';;
+            'chatbot-chainlit-svc') image_tag='chatbot-chainlit';;
+            *) echo "Unknown service_name: '${service_name}'"; exit 3;;
+        esac
+        echo "image_tag=$image_tag" >> $GITHUB_OUTPUT
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -58,28 +77,30 @@ jobs:
       if: inputs.build_image
       uses: actions/checkout@v4
 
-    - name: "Build image with tag '${{ inputs.image_tag }}'"
+    - name: "Build image"
       if: inputs.build_image
       run: |
         cd ${{ inputs.dockerfile_folder }}
         # TODO: make this more easily editable and secure
         # The DOT_ENV_FILE_CONTENTS contains LITERAL_API_KEY, OPENAI_API_KEY, RETRIEVE_K, LLM_MODEL_NAME, SUMMARIZER_LLM_MODEL_NAME
         echo "${{secrets.DOT_ENV_FILE_CONTENTS}}" > .env
-        docker build -t "$IMAGE_NAME:${{ inputs.image_tag }}" --build-arg GURU_CARDS_URL="https://docs.google.com/uc?export=download&id=${{ secrets.GURU_CARDS_URL_ID }}" .
+        docker build -t "$IMAGE_NAME" --build-arg GURU_CARDS_URL="https://docs.google.com/uc?export=download&id=${{ secrets.GURU_CARDS_URL_ID }}" .
 
     - name: "Publish image to AWS ECR'"
+      id: publish_image
       if: inputs.build_image
       env:
           ECR_PATH: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}
       run: |
-        echo "# Publishing image ${{ inputs.image_tag }} to $ECR_PATH"
+        image_tag="${{ steps.check_inputs.outputs.image_tag }}"
+        echo "# Publishing image ${image_tag} to $ECR_PATH"
 
-        docker tag "$IMAGE_NAME:${{ inputs.image_tag }}" "$ECR_PATH:${{ inputs.image_tag }}"
-        docker push "$ECR_PATH:${{ inputs.image_tag }}"
+        docker tag "$IMAGE_NAME" "$ECR_PATH:${image_tag}"
+        docker push "$ECR_PATH:${image_tag}"
 
     - name: "Update AWS Service"
       if: inputs.deploy_image
       env:
         CLUSTER_NAME: genai-experiments
       run: |
-        aws ecs update-service --force-new-deployment --cluster "$CLUSTER_NAME" --service "${{ inputs.service_name }}"
+        aws ecs update-service --force-new-deployment --cluster "$CLUSTER_NAME" --service "${{ steps.check_inputs.outputs.service_name }}"
