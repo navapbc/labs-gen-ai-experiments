@@ -12,6 +12,24 @@ _GROQ_LLMS = ["llama3-70b-8192", "mixtral-8x7b-32768"]
 MODEL_NAMES = _OLLAMA_LLMS + _OPENAI_LLMS + _GOOGLE_LLMS + _GROQ_LLMS
 
 
+def model_names(settings):
+    available_models = []
+    if settings["env"] != "PROD":
+        # Include Ollama models if not in production b/c it requires a local Ollama installation
+        available_models += _OLLAMA_LLMS
+
+    if os.environ.get("OPENAI_API_KEY"):
+        available_models += _OPENAI_LLMS
+
+    if os.environ.get("GOOGLE_API_KEY"):
+        available_models += _GOOGLE_LLMS
+
+    if os.environ.get("GROQ_API_KEY"):
+        available_models += _GROQ_LLMS
+
+    return available_models
+
+
 logger = logging.getLogger(__name__)
 
 

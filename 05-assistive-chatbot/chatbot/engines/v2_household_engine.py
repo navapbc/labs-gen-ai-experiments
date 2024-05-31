@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 ENGINE_NAME = "Summaries"
 
 
-def requirements_satisfied():
+def requirements_satisfied(_settings):
     if not os.environ.get("SUMMARIZER_LLM_MODEL_NAME"):
         return False
     return True

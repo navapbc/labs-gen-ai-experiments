@@ -2,6 +2,7 @@ import logging
 from types import ModuleType
 from typing import Dict, Tuple
 
+import chatbot
 from chatbot import utils
 
 logger = logging.getLogger(__name__)
@@ -18,16 +19,22 @@ def _discover_llms(force=False):
     if force:
         _llms.clear()
     if not _llms:
+        settings = chatbot.initial_settings
         found_modules = utils.scan_modules(__package__)
         for module_name, module in found_modules.items():
             if not module or ignore(module_name):
                 logger.debug("Skipping module: %s", module_name)
                 continue
-            if hasattr(module, "requirements_satisfied") and not module.requirements_satisfied():
+            if hasattr(module, "requirements_satisfied") and not module.requirements_satisfied(settings):
                 logger.debug("Module requirements not satisfied; skipping: %s", module_name)
                 continue
             client_name = module.CLIENT_NAME or module_name
-            for llm_name in module.MODEL_NAMES or []:
+            if hasattr(module, "model_names"):
+                model_names = module.model_names(settings)
+            else:
+                model_names = module.MODEL_NAMES
+
+            for llm_name in model_names:
                 qualified_name = qualified_llm_name(client_name, llm_name)
                 _llms[qualified_name] = (module, llm_name)
     return _llms
@@ -37,7 +44,7 @@ def qualified_llm_name(client_name, model_name):
     return f"{client_name} :: {model_name}"
 
 
-def ignore(module_name):
+def ignore(_module_name):
     # if module_name.startswith("dspy ::"):
     #     # DSPy client code is not yet ready for use
     #     return True
