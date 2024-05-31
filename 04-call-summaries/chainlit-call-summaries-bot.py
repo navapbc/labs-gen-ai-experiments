@@ -125,7 +125,7 @@ async def on_click_upload_file_query(action: cl.Action):
         await msg.send()
         msg.content = f"Processing `{file.name}` completed."
         await msg.update()
-        msg.content = f"Generating transcript..."
+        msg.content = "Generating transcript..."
         await msg.update()
         response = await run_summarization_technique(
             technique=settings["summarization_technique"], transcript=transcript
