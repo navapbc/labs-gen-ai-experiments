@@ -9,7 +9,7 @@ CLIENT_NAME = "google"
 MODEL_NAMES = ["gemini-pro", "gemini-1.5-pro", "gemini-1.5-flash"]
 
 
-def requirements_satisfied():
+def requirements_satisfied(_settings):
     if not os.environ.get("GOOGLE_API_KEY"):
         return False
     return True

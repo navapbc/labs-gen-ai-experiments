@@ -2,6 +2,7 @@ import logging
 from types import ModuleType
 from typing import Dict
 
+import chatbot
 from chatbot import llms, utils
 
 logger = logging.getLogger(__name__)
@@ -18,12 +19,13 @@ def _discover_chat_engines(force=False):
     if force:
         _engines.clear()
     if not _engines:
+        settings = chatbot.initial_settings
         found_llm_modules = utils.scan_modules(__package__)
         for module_name, module in found_llm_modules.items():
             if not hasattr(module, "ENGINE_NAME"):
                 logger.debug("Skipping module without an ENGINE_NAME: %s", module_name)
                 continue
-            if hasattr(module, "requirements_satisfied") and not module.requirements_satisfied():
+            if hasattr(module, "requirements_satisfied") and not module.requirements_satisfied(settings):
                 logger.debug("Engine requirements not satisfied; skipping: %s", module_name)
                 continue
             engine_name = module.ENGINE_NAME

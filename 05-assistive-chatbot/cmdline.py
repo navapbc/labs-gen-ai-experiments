@@ -9,6 +9,7 @@ import json
 import logging
 
 import chatbot
+from chatbot import llms
 from chatbot.engines import v2_household_engine
 
 logger = logging.getLogger(f"chatbot.{__name__}")
@@ -16,6 +17,9 @@ logger = logging.getLogger(f"chatbot.{__name__}")
 # Load the initial settings
 settings = chatbot.initial_settings
 chatbot.validate_settings(settings)
+
+# List LLMs, when CHATBOT_LOG_LEVEL=DEBUG
+llms.available_llms()
 
 # Create the chat engine
 chat_engine = chatbot.create_chat_engine(settings)

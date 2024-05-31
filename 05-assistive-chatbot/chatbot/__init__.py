@@ -46,6 +46,7 @@ def _init_settings():
     # Remember to update ChatSettings in chatbot-chainlit.py when adding new settings
     # and update chatbot/engines/__init.py:CHATBOT_SETTING_KEYS
     return {
+        "env": os.environ.get("ENV", "DEV"),
         "enable_api": is_true(os.environ.get("ENABLE_CHATBOT_API", "False")),
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
