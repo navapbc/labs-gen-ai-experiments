@@ -9,3 +9,4 @@ nltk
 spacy==3.7.4
 langchain-text-splitters
 langchain_openai
+chainlit
