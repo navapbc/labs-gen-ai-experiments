@@ -30,15 +30,31 @@ logger = logging.getLogger(__name__)
 
 ## Initialize settings
 
+# Opt out of telemetry -- https://docs.trychroma.com/telemetry
+os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
+
+# Used by SentenceTransformerEmbeddings and HuggingFaceEmbeddings
+os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", "./.sentence-transformers-cache")
+
+# Disable DSPy cache to get different responses for retry attempts
+# Set to true to enable caching for faster responses and optimizing prompts using DSPy
+os.environ.setdefault("DSP_CACHEBOOL", "false")
+
 
 @utils.verbose_timer(logger)
 def _init_settings():
+    # Remember to update ChatSettings in chatbot-chainlit.py when adding new settings
+    # and update chatbot/engines/__init.py:CHATBOT_SETTING_KEYS
     return {
         "env": os.environ.get("ENV", "DEV"),
         "enable_api": is_true(os.environ.get("ENABLE_CHATBOT_API", "False")),
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
         "temperature": float(os.environ.get("LLM_TEMPERATURE", 0.1)),
+        "retrieve_k": int(os.environ.get("RETRIEVE_K", 4)),
+        # Used by SummariesChatEngine
+        "model2": os.environ.get("LLM_MODEL_NAME_2", os.environ.get("LLM_MODEL_NAME", "mock :: llm")),
+        "temperature2": float(os.environ.get("LLM_TEMPERATURE2", 0.1)),
     }
 
 
@@ -55,9 +71,13 @@ def validate_settings(settings):
     if chat_engine not in engines._discover_chat_engines():
         return f"Unknown chat_engine: '{chat_engine}'"
 
-    model_name = settings["model"]
-    if model_name not in llms._discover_llms():
-        return f"Unknown model: '{model_name}'"
+    for setting_name in ["model", "model2"]:
+        model_name = settings[setting_name]
+        if model_name not in llms._discover_llms():
+            return f"Unknown {setting_name}: '{model_name}'"
+
+        if chat_engine.startswith("Summaries") and "instruct" not in model_name:
+            logger.warning("For the %s chat engine, an `*instruct` model is recommended", chat_engine)
 
     # PLACEHOLDER: Validate other settings
 
@@ -69,4 +89,4 @@ def validate_settings(settings):
 
 @utils.timer
 def create_chat_engine(settings):
-    return engines.create(settings["chat_engine"], settings)
+    return engines.create_engine(settings["chat_engine"], settings)

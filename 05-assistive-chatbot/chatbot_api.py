@@ -7,6 +7,7 @@ an API that can be deployed with the Chainlit chatbot.
 """
 
 import logging
+from functools import cached_property
 from typing import Dict
 
 from fastapi import FastAPI, Request
@@ -23,27 +24,26 @@ else:
 
 logger = logging.getLogger(f"chatbot.{__name__}")
 
-_chat_engine = None
 
-
-def chat_engine():
-    # pylint: disable=global-statement
-    global _chat_engine
-    if not _chat_engine:
+# TODO Ensure this is thread safe when run by via chalint. Check if the chainlit command might handle threading/multiple requests for us.
+class ApiState:
+    @cached_property
+    def chat_engine(self):
         # Load the initial settings
         settings = chatbot.initial_settings
         chatbot.validate_settings(settings)
 
         # Create the chat engine
-        _chat_engine = chatbot.create_chat_engine(settings)
+        return chatbot.create_chat_engine(settings)
 
-    return _chat_engine
+
+app_state = ApiState()
 
 
 # See https://docs.chainlit.io/deploy/api#how-it-works
 @app.post("/query")
 def query(message: str | Dict):
-    response = chat_engine().gen_response(message)
+    response = app_state.chat_engine().gen_response(message)
     return response
 
 

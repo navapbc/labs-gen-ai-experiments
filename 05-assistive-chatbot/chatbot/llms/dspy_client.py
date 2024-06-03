@@ -40,31 +40,31 @@ def init_client(model_name, settings):
 class DspyLlmClient:
     def __init__(self, model_name, settings):
         self.model_name = model_name
-        self.predictor = settings.pop("predictor")
-        self.llm = self._create_llm_model(model_name, **settings)
-        logger.info("DspyLlmClient: %s", settings)
-
-    def _create_llm_model(self, respond_with_json=False, **settings):
         dspy_llm_kwargs = {
             # The default DSPy max_tokens is only 150, which caused issues due to incomplete JSON string output
-            "max_tokens": 1000,
+            "max_tokens": int(os.environ.get("MAX_TOKENS", 1000)),
         } | settings
-        logger.debug("Creating LLM model: %s with args: %s", self.model_name, dspy_llm_kwargs)
+        logger.info("Creating LLM client '%s' with: %s", self.model_name, dspy_llm_kwargs)
+
+        self.predictor = settings.pop("predictor")
+        self.llm = self._create_llm_model(settings)
+
+    def _create_llm_model(self, settings):
         if self.model_name in _OLLAMA_LLMS:
-            return dspy.OllamaLocal(model=self.model_name, **dspy_llm_kwargs)
+            return dspy.OllamaLocal(model=self.model_name, **settings)
             # Alternative is using OpenAI-compatible API: https://gist.github.com/jrknox1977/78c17e492b5a75ee5bbaf9673aee4641
-        elif self.model_name in _OPENAI_LLMS:
-            if respond_with_json:
-                return dspy.OpenAI(model=self.model_name, **dspy_llm_kwargs, response_format={"type": "json_object"})
-            else:
-                return dspy.OpenAI(model=self.model_name, **dspy_llm_kwargs)
-        elif self.model_name in _GOOGLE_LLMS:
-            return dspy.Google(model=f"models/{self.model_name}", **dspy_llm_kwargs)
-        elif self.model_name in _GROQ_LLMS:
+        if self.model_name in _OPENAI_LLMS:
+            if settings.get("respond_with_json", False):
+                return dspy.OpenAI(model=self.model_name, **settings, response_format={"type": "json_object"})
+
+            return dspy.OpenAI(model=self.model_name, **settings)
+        if self.model_name in _GOOGLE_LLMS:
+            return dspy.Google(model=f"models/{self.model_name}", **settings)
+        if self.model_name in _GROQ_LLMS:
             api_key = os.environ.get("GROQ_API_KEY")
-            return dspy.GROQ(api_key, model=self.model_name, **dspy_llm_kwargs)
-        else:
-            assert False, f"Unknown LLM model: {self.model_name}"
+            return dspy.GROQ(api_key, model=self.model_name, **settings)
+
+        assert False, f"Unknown LLM model: {self.model_name}"
 
     def generate_reponse(self, message):
         with dspy.context(lm=self.llm):
