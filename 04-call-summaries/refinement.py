@@ -33,15 +33,13 @@ initial_template = """
 """
 
 
-def refinement_ingest(transcript, prompt):
+def refinement_ingest(transcript, client):
     text_chunks = get_text_chunks(
         transcript, chunk_size=750, chunk_overlap=300, text_splitter_choice="2"
     )
-    prompt_template = PromptTemplate.from_template(prompt)
+    prompt_template = PromptTemplate.from_template(CHUNKING_PROMPT)
     template = initial_template
 
-    client = select_client()
-    client.init_client()
     ct = datetime.datetime.now()
     print("current time:-", ct)
     for text in text_chunks:
@@ -55,11 +53,10 @@ def refinement_ingest(transcript, prompt):
 
 
 if __name__ == "__main__":
-    print(
-        refinement_ingest(
-            transcript=get_transcript("./multi_benefit_transcript.txt"),
-            prompt=CHUNKING_PROMPT,
-        )
-    )
+    client = select_client()
+    client.init_client()
+    transcript = (get_transcript("./multi_benefit_transcript.txt"),)
+
+    print(refinement_ingest(transcript=transcript, client=client))
     ct = datetime.datetime.now()
     print(ct)
