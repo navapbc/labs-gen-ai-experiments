@@ -63,7 +63,7 @@ class SummariesChatEngine:
         self.vectordb_wrapper = vector_db.ingest_vectordb_wrapper
         self.retrieve_k = int(settings.pop("retrieve_k"))
 
-        # TODO: ingestigate if this should be set to true
+        # TODO: investigate if this should be set to true
         os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
         self._init_llms(settings.copy())

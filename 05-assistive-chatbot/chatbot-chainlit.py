@@ -158,6 +158,8 @@ def format_v2_results_as_markdown(gen_results):
     return {
         "content": "\n".join(resp + dq_resp + cards_resp),
         "elements": [
+            # Example of how to use cl.Text with different display parameters -- it's not intuitive
+            # The name argument must exist in the message content so that a link can be created.
             # cl.Text(name="Derived Questions", content="\n".join(dq_resp), display="side"),
             # cl.Text(name="Guru Cards", content="\n".join(cards_resp), display="inline")
         ],

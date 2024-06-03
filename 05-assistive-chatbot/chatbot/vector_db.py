@@ -50,7 +50,7 @@ class LocalLangchainChromaVectorDb:
     @cached_property
     @utils.timer
     def vectordb(self):
-        logger.info("Creating Vector DB: %s", self.folder)
+        logger.info("Creating Vector DB client: %s", self.folder)
         return Chroma(
             embedding_function=self.embeddings_model,
             persist_directory=self.folder,

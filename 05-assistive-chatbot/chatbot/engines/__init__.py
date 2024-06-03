@@ -45,7 +45,7 @@ def create_engine(engine_name, settings=None):
 ## Utility functions
 
 # Settings that are specific to our chatbot and shouldn't be passed onto the LLM client
-CHATBOT_SETTING_KEYS = ["enable_api", "chat_engine", "model", "model2", "temperature2", "retrieve_k"]
+CHATBOT_SETTING_KEYS = ["env", "enable_api", "chat_engine", "model", "model2", "temperature2", "retrieve_k"]
 
 
 @utils.timer
