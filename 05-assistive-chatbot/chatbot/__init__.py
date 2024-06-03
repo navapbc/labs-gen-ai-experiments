@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import date
 
 import dotenv
 
@@ -22,9 +23,11 @@ def configure_logging():
     logging.info("Configured logging level: %s", log_level)
 
 
+env = os.environ.get("ENV", "DEV")
+print(f"Loading .env-{env}")
+dotenv.load_dotenv(f".env-{env}")
 dotenv.load_dotenv()
 configure_logging()
-
 logger = logging.getLogger(__name__)
 
 
@@ -40,13 +43,15 @@ os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", "./.sentence-transformers-ca
 # Set to true to enable caching for faster responses and optimizing prompts using DSPy
 os.environ.setdefault("DSP_CACHEBOOL", "false")
 
+os.environ.setdefault("BUILD_DATE", str(date.today()))
+
 
 @utils.verbose_timer(logger)
 def _init_settings():
     # Remember to update ChatSettings in chatbot-chainlit.py when adding new settings
     # and update chatbot/engines/__init.py:CHATBOT_SETTING_KEYS
     return {
-        "env": os.environ.get("ENV", "DEV"),
+        "env": env,
         "enable_api": is_true(os.environ.get("ENABLE_CHATBOT_API", "False")),
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
