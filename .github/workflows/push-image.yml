@@ -1,5 +1,5 @@
-name: "Build and push Docker image"
-run-name: "Publish image for ${{inputs.dockerfile_folder}}"
+name: "Build and deploy Docker image"
+run-name: "Push image for ${{inputs.dockerfile_folder}} to ${{ inputs.subdomain }}.navalabs.co"
 
 on:
   workflow_dispatch:
@@ -13,9 +13,9 @@ on:
         - '02-household-queries'
       subdomain:
         description: 'Subdomain of navalabs.co'
-        type: choice
         required: true
         default: 'chat'
+        type: choice
         options:
         - 'chat'
         - 'chatbot'
@@ -27,208 +27,103 @@ on:
         - 'bdt-chatbot'
         - 'chatbot-prototype'
         - 'chat.zone'
-      service_name:
-        description: 'Name of target service. Leave blank if unsure'
-        type: choice
-        default: ''
-        options:
-        - ''
-        - 'container-service-3'
-        - 'container-service-2'
-        - 'chatbot-chainlit-svc'
-        - 'secure-chatbot-svc'
       build_image:
         description: "Build and push image"
         required: true
         type: boolean
-        default: 'true'
+        default: true
       deploy_image:
         description: "Deploy image"
         required: true
         type: boolean
-        default: 'true'
-      # image_tag:
-      #   description: 'Tag/Version of the image to push'
-      #   required: true
-      #   type: string
-      #   default: '0.06'
-      create_new_svc:
-        description: "Create new Lightsail service"
-        required: true
-        type: boolean
-        default: 'false'
-      delete_images:
-        description: 'Delete previous images associated with service'
-        required: true
-        type: boolean
-        default: 'false'
+        default: true
+
+permissions:
+  id-token: write # This is required for requesting the JWT from GitHub's OIDC provider for AWS authentication
 
 env:
   AWS_REGION: us-east-1
-  IMAGE_NAME: localimage
+  SERVICE_NAME: ${{ inputs.subdomain }}-svc
 
 jobs:
   publish-image:
     runs-on: ubuntu-latest
     steps:
-    - name: Configure AWS credentials
+    - name: "Configure AWS credentials"
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ env.AWS_REGION }}
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        mask-aws-account-id: true
-      # TODO: secure credentials: https://github.com/aws-actions/amazon-ecr-login?tab=readme-ov-file#ecr-private
-      # https://github.com/docker/login-action?tab=readme-ov-file#aws-elastic-container-registry-ecr
-      # https://medium.com/@lukhee/automating-aws-lightsail-deployments-with-github-actions-53c73c9a1c1f
+        role-to-assume: arn:aws:iam::654654379445:role/Lightsail_Mgmt_role
+        role-session-name: GitHub_to_AWS_via_FederatedOIDC
 
-
-    - name: "Upgrade AWS CLI version and setup lightsailctl"
+    - name: "Setup AWS lightsail command"
       run: |
-        # aws --version
-        # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        # unzip awscliv2.zip
-        # sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
-        # which aws
         aws --version
+        aws sts get-caller-identity
+
         sudo curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "/usr/local/bin/lightsailctl"
         sudo chmod +x /usr/local/bin/lightsailctl
-        aws lightsail push-container-image help
 
+        echo "Services:"
+        aws lightsail get-container-services | jq -r '.containerServices[] | "\(.containerServiceName): \tstate=\(.state) \tisDisabled=\(.isDisabled)"'
 
-    - name: Check inputs
-      id: check_inputs
+    - name: "Check preconditions"
       run: |
-        service_name="${{ inputs.subdomain }}-svc"
-        # if [ "${service_name}" = "" ]; then
-        #     case "${{ inputs.dockerfile_folder }}" in
-        #         '02-household-queries') service_name='secure-chatbot-svc';;
-        #         '05-assistive-chatbot') service_name='chatbot-chainlit-svc';;
-        #         *) exit 1;;
-        #     esac
-        # fi
-        echo "service_name=$service_name" >> $GITHUB_OUTPUT
+        echo "Checking if service '$SERVICE_NAME' exists"
+        aws lightsail get-container-services --service-name "$SERVICE_NAME"
 
-        if [ ${{ inputs.create_new_svc }} == 'false' ]; then
-          echo "Since not creating new service, checking if service '$service_name' exists"
-          aws lightsail get-container-services --service-name "$service_name"
-        fi
-
-        # image_tag="${{ inputs.image_tag }}"
-        # if [ "${image_tag}" = "" ]; then
-        #   case "${service_name}" in
-        #       # The image_tag is specific to the `*-svc` service
-        #       'secure-chatbot-svc')   image_tag='0.01';;
-        #       'chatbot-chainlit-svc') image_tag='chatbot-chainlit';;
-        #       container-service-*) image_tag='not-used';;
-        #       *) echo "Unknown service_name: '${service_name}'"; exit 3;;
-        #   esac
-        # fi
-        # echo "image_tag=$image_tag" >> $GITHUB_OUTPUT
-
-    - name: "Create new Lightsail container service"
-      if: inputs.create_new_svc
-      env:
-        DOMAIN_NAME: navalabs.co
-        FULL_DOMAIN: ${{ inputs.subdomain }}.navalabs.co
-        SERVICE_NAME: ${{ steps.check_inputs.outputs.service_name }}
-      run: |
-        # check if service already exists
-        if aws lightsail get-container-services --service-name "$SERVICE_NAME" > /dev/null; then
-          echo "Already exists: $SERVICE_NAME!"
-        else
-          # `micro` power is needed for it's memory capacity; 60%+ memory is needed for the vector DB
-          aws lightsail create-container-service --service-name $SERVICE_NAME --power micro --scale 1 --public-domain-names navalabs-cert=$FULL_DOMAIN
-
-          echo "Waiting for service to be ready before updating container service"
-          while true; do
-            sleep 15
-            SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
-            echo "service state: $SVC_STATE"
-            if [ "$SVC_STATE" == "READY" ]; then
-                break
-            fi
-          done
-
-          SVC_URL=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].url')
-          # Remove 'https://' prefix
-          URL_DOMAIN=${SVC_URL#https://}
-          # Remove '/' suffix
-          TARGET_DOMAIN=${URL_DOMAIN%/}
-
-          # If domain entry exists, delete it
-          OLD_TARGET=$(aws lightsail get-domain --domain-name $DOMAIN_NAME | jq -r ".domain.domainEntries[] | select( .name == \"$FULL_DOMAIN\" ) | .target")
-          if [ "$OLD_TARGET" ] ; then
-            echo "Deleting existing '$FULL_DOMAIN' entry with target '$OLD_TARGET'"
-            aws lightsail delete-domain-entry --domain-name $DOMAIN_NAME --domain-entry "type=A,isAlias=true,name=$FULL_DOMAIN,target=$OLD_TARGET"
-          fi
-
-          echo "Creating DNS assignment by adding a domain entry $FULL_DOMAIN to target $TARGET_DOMAIN"
-          aws lightsail create-domain-entry --domain-name $DOMAIN_NAME --domain-entry "type=A,isAlias=true,name=$FULL_DOMAIN,target=$TARGET_DOMAIN"
-        fi
-
-    - name: "Delete previous container images"
-      if: inputs.delete_images
-      env:
-        SERVICE_NAME: ${{ steps.check_inputs.outputs.service_name }}
-      run: |
-        AWS_IMAGES=$(aws lightsail get-container-images --region "$AWS_REGION" --service-name "$SERVICE_NAME" --output text)
-        IMAGE_NAMES=$(echo $AWS_IMAGES | grep -Eo ':"$SERVICE_NAME"\.${{ inputs.image-name }}\.[0-9]+')
-        echo $IMAGE_NAMES
-        FIRST=0
-        while read LINE; do
-          if [ "$FIRST" -ne 0 ]; then
-            aws lightsail delete-container-image --region "$AWS_REGION" --service-name "$SERVICE_NAME" --image $LINE;
-          fi
-        FIRST=1;
-        done <<< $IMAGE_NAMES
-
-    # - name: "Login to Amazon ECR"
-    #   id: login-ecr
-    #   uses: aws-actions/amazon-ecr-login@v2
-    #   with:
-    #     mask-password: true
 
     - name: "Checkout source code"
       if: inputs.build_image
       uses: actions/checkout@v4
 
-    - name: "Build image"
+    - name: "Populate folder with input files"
+      if: inputs.build_image && ${{ inputs.dockerfile_folder }} == '05-assistive-chatbot'
+      env:
+        GURU_CARDS_URL: https://docs.google.com/uc?export=download&id=${{ secrets.GURU_CARDS_URL_ID }}
+      run: |
+        echo "Downloading from ${GURU_CARDS_URL}"
+        curl -L "${GURU_CARDS_URL}" > download.zip
+        unzip -o download.zip
+        rm download.zip
+        mv guru_cards_for_nava--Multi-benefit.json guru_cards_for_nava.json
+
+        cd ${{ inputs.dockerfile_folder }}
+        mv ../guru_cards_for_nava.json .
+
+        # The DOT_ENV_FILE_CONTENTS contains API keys, like LITERAL_API_KEY and OPENAI_API_KEY
+        # As such, make sure the built image is not publicly accessible
+        echo "${{ secrets.DOT_ENV_FILE_CONTENTS }}" > .env
+
+    - name: "Build image: ${{ github.sha }}"
       if: inputs.build_image
       run: |
         cd ${{ inputs.dockerfile_folder }}
-        # TODO: make this more easily editable and secure
-        # The DOT_ENV_FILE_CONTENTS contains LITERAL_API_KEY, OPENAI_API_KEY, RETRIEVE_K, LLM_MODEL_NAME, SUMMARIZER_LLM_MODEL_NAME
-        echo "${{secrets.DOT_ENV_FILE_CONTENTS}}" > .env
-        echo "BUILD_DATE=$(date +%Y-%m-%d-%T)" >> .env
-        echo "GIT_SHA=${{ github.sha }}" >> .env
-        docker build -t "$IMAGE_NAME" --build-arg GURU_CARDS_URL="https://docs.google.com/uc?export=download&id=${{ secrets.GURU_CARDS_URL_ID }}" .
 
+        # Add extra environment variables to facilitate traceability of an image back to the source code
+        echo "
+        BUILD_DATE=$(date +%Y-%m-%d-%T)
+        GIT_SHA=${{ github.sha }}
+        " >> .env
+        docker build -t mylocalimage .
 
-    - name: "Publish image to Lightsail"
+    - name: "Push image to Lightsail"
       if: inputs.build_image
-      id: pub_image_to_ls
+      id: push_image
       env:
-        ECR_PATH: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}
-        SERVICE_NAME: ${{ steps.check_inputs.outputs.service_name }}
-        # IMAGE_TAG: ${{ steps.check_inputs.outputs.image_tag }}
-        # LABEL must match regex ^(?:[a-z0-9]{1,2}|[a-z0-9][a-z0-9-]+[a-z0-9])$
+        # Lightsail requires that LABEL match regex ^(?:[a-z0-9]{1,2}|[a-z0-9][a-z0-9-]+[a-z0-9])$
         LABEL: git-push
-        IMAGE_SHA_TAG: ${{ github.sha }}
       run: |
-        echo "# Publishing image for $SERVICE_NAME"
-        aws lightsail push-container-image --region $AWS_REGION --service-name "$SERVICE_NAME" --label "$LABEL" --image "$IMAGE_NAME"
+        aws lightsail push-container-image --region $AWS_REGION --service-name "$SERVICE_NAME" --label "$LABEL" --image mylocalimage
 
         LS_DOCKER_IMAGE=$(aws lightsail get-container-images --service-name "$SERVICE_NAME" | jq -r .containerImages[0].image)
-        echo "Image name: '$LS_DOCKER_IMAGE'"
+        echo "Lightsail assigned image name: '$LS_DOCKER_IMAGE'"
         echo "LS_DOCKER_IMAGE=$LS_DOCKER_IMAGE" >> $GITHUB_ENV
 
-    - name: Deploy container on AWS Lightsail
+    - name: "Create new deployment"
       if: inputs.deploy_image
-      env:
-        SERVICE_NAME: ${{ steps.check_inputs.outputs.service_name }}
       run: |
-        TEMPLATE='{
+        CONFIG_TEMPLATE='{
             "serviceName": "$SERVICE_NAME",
             "containers": {
                 "chatbot": {
@@ -236,7 +131,8 @@ jobs:
                     "command": [],
                     "environment": {
                         "ENV": "PROD",
-                        "BUILD_DATE": "$BUILD_DATE"
+                        "BUILD_DATE": "$BUILD_DATE",
+                        "GIT_SHA": "${{ github.sha }}"
                     },
                     "ports": {
                         "8000": "HTTP"
@@ -256,19 +152,33 @@ jobs:
                 }
             }
         }'
-        echo "$TEMPLATE" | BUILD_DATE=$(date +%Y-%m-%d-%T%z) envsubst > config.json
+        echo "$CONFIG_TEMPLATE" | BUILD_DATE=$(date +%Y-%m-%d-%T%z) envsubst > config.json
         cat config.json
+
+        echo "Creating new deployment"
         aws lightsail create-container-service-deployment --cli-input-json file://config.json
 
-        # aws lightsail create-container-service-deployment --region ${{ inputs.aws-region }} --cli-input-json '${{ inputs.aws-lightsail-service-config }}' > /dev/null
-        # aws lightsail update-container-service --service-name "$SERVICE_NAME" --no-is-disabled
+        sleep 10
+        echo "Waiting for service to be Deploying"
+        while true; do
+          sleep 5
+          SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
+          echo "service state: $SVC_STATE"
+          if [ "$SVC_STATE" == "DEPLOYING" ]; then
+              break
+          fi
+        done
 
-        # TODO: Wait for deployment to complete
+        echo "Waiting for container ${{ github.sha }} to be Active"
+        while true; do
+          sleep 30
+          CURR_DEPLOYMENT=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].currentDeployment')
+          GIT_SHA=$(echo "$CURR_DEPLOYMENT" | jq -r '.containers.chatbot.environment.GIT_SHA')
+          DEPLOYMENT_STATE=$(echo "$CURR_DEPLOYMENT" | jq -r '.state')
+          echo "current container state: $GIT_SHA $DEPLOYMENT_STATE"
+          if [ "$GIT_SHA" == "${{ github.sha }}" ] && [ "$DEPLOYMENT_STATE" == "ACTIVE" ]; then
+              break
+          fi
+        done
+
         # TODO: warm up vector DB on startup
-
-    # - name: "Update AWS Service"
-    #   if: inputs.deploy_image
-    #   env:
-    #     CLUSTER_NAME: genai-experiments
-    #   run: |
-    #     aws ecs update-service --force-new-deployment --cluster "$CLUSTER_NAME" --service "${{ steps.check_inputs.outputs.service_name }}"

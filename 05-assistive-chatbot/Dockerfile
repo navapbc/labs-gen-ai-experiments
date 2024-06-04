@@ -1,22 +1,35 @@
-FROM python:3.11-slim
+# syntax=docker/dockerfile:1.2
 
-WORKDIR /app
+#====== Create builder image
+FROM python:3.11-slim as builder
+
+# create and activate virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Use external cache to avoid fetching packages from the internet each time -- https://docs.docker.com/build/cache/#use-the-dedicated-run-cache
+RUN --mount=type=cache,mode=0755,target=/root/.cache pip3 install -r requirements.txt
 
-RUN apt-get update && apt-get install -y \
-    curl unzip \
-    && rm -rf /var/lib/apt/lists/*
+#====== Create final image
+FROM python:3.11-slim as runner
 
-ARG GURU_CARDS_URL
-RUN echo "Downloading from ${GURU_CARDS_URL}" \
-    && curl -L "${GURU_CARDS_URL}" > download.zip \
-    && unzip -o download.zip \
-    && rm download.zip \
-    && mv guru_cards_for_nava--Multi-benefit.json guru_cards_for_nava.json
+# Set up a new user so we don't run as root
+RUN useradd --create-home -u 1000 tron
+RUN chown -R tron:tron /home/tron
 
-# Update .dockerignore to prevent files from being copied into the image
+USER tron
+ENV HOME=/home/tron
+WORKDIR $HOME/app
+
+COPY --chown=tron --from=builder /opt/venv /opt/venv
+# Activate virtual environment
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+# Ensure all messages always reach console
+ENV PYTHONUNBUFFERED=1
+
+# To prevent files from being copied into the image, update .dockerignore
 COPY . .
 
 RUN ./ingest-guru-cards.py

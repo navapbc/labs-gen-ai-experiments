@@ -1,0 +1,225 @@
+name: "Lightsail service management"
+run-name: "For subdomain ${{inputs.subdomain}}: ${{inputs.command}}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      subdomain:
+        description: 'Subdomain of navalabs.co on which to run command'
+        type: choice
+        default: ''
+        options:
+        - ''
+        - 'chat'
+        - 'chatbot'
+        - 'chatbdt'
+        - 'chat-bdt'
+        - 'bdtbot'
+        - 'bdt-bot'
+        - 'bdt-chat'
+        - 'bdt-chatbot'
+        - 'chatbot-prototype'
+        - 'chat.zone'
+      command:
+        description: "Command to perform on Lightsail service"
+        required: true
+        type: choice
+        default: 'status'
+        options:
+        - 'status'
+        - 'list_images'
+        - 'delete_old_images'
+        - 'enable'
+        - 'disable'
+        - 'disable_all'
+        - 'update_power'
+        - 'create_new'
+        - 'delete_service'
+      power:
+        description: "Only used for update_power and create_new commands: power of service (useful for deployment failures)"
+        type: choice
+        options:
+        # - ''
+        # - nano
+        - micro
+        - small
+        - medium
+        - large
+        - xlarge
+
+permissions:
+  id-token: write # This is required for requesting the JWT from GitHub's OIDC provider for AWS authentication
+
+env:
+  AWS_REGION: us-east-1
+  SERVICE_NAME: ${{ inputs.subdomain }}-svc
+  DOMAIN_NAME: navalabs.co
+  FULL_DOMAIN: ${{ inputs.subdomain }}.navalabs.co
+
+jobs:
+  lightsail:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Configure AWS credentials"
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::654654379445:role/Lightsail_Mgmt_role
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+
+      - name: "Setup AWS lightsail command"
+        run: |
+          # Uncomment the following lines if you need to upgrade the AWS CLI version
+          # aws --version
+          # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          # unzip awscliv2.zip
+          # sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+          # which aws
+          aws --version
+          aws sts get-caller-identity
+
+          sudo curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "/usr/local/bin/lightsailctl"
+          sudo chmod +x /usr/local/bin/lightsailctl
+
+
+      - name: "Enable service"
+        if: inputs.command == 'enable'
+        run: |
+          aws lightsail update-container-service --service-name "$SERVICE_NAME" --no-is-disabled
+
+          echo "Waiting for service to be ready"
+          while true; do
+            sleep 5
+            SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
+            echo "service state: $SVC_STATE"
+            if [ "$SVC_STATE" == "READY" ] || [ "$SVC_STATE" == "RUNNING" ]; then
+                break
+            fi
+          done
+
+      - name: "Disable service"
+        if: inputs.command == 'disable'
+        run: |
+          aws lightsail update-container-service --service-name "$SERVICE_NAME" --is-disabled
+
+          echo "Waiting for service to be disabled"
+          while true; do
+            sleep 10
+            SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
+            echo "service state: $SVC_STATE"
+            if [ "$SVC_STATE" == "DISABLED" ]; then
+                break
+            fi
+          done
+
+      - name: "Disable all services"
+        if: inputs.command == 'disable_all'
+        run: |
+          SERVICES=$(aws lightsail get-container-services | jq -r '.containerServices[].containerServiceName')
+
+          echo "$SERVICES" | while read SVC_NAME; do
+            if [ "$SVC_NAME" == "" ]; then
+              continue
+            fi
+            echo "Disabling service $SVC_NAME"
+            aws lightsail update-container-service --service-name "$SVC_NAME" --is-disabled
+            sleep 10
+          done
+            
+      - name: "Update the power of the service to ${{inputs.power}}"
+        if: inputs.command == 'update_power'
+        run: |
+          aws lightsail update-container-service --service-name "$SERVICE_NAME" --power ${{inputs.power}}
+
+          echo "Waiting for service to be ready"
+          while true; do
+            sleep 5
+            SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
+            echo "service state: $SVC_STATE"
+            if [ "$SVC_STATE" == "READY" ]; then
+                break
+            fi
+          done
+
+          
+      - name: "List images associated with service"
+        if: inputs.command == 'list_images'
+        run: |
+          aws lightsail get-container-images --service-name "$SERVICE_NAME"
+
+      - name: "Delete previous images"
+        if: inputs.command == 'delete_old_images'
+        run: |
+          IMAGE_NAMES=$(aws lightsail get-container-images --service-name "$SERVICE_NAME" | jq -r '.containerImages[].image')
+          # Skip the first image, which is the current image
+          OLD_IMAGE_NAMES=$(echo $IMAGE_NAMES | tail -n +2)
+          echo "$OLD_IMAGE_NAMES" | while read IMG_NAME; do
+            if [ "$IMG_NAME" == "" ]; then
+              continue
+            fi
+            echo "Deleting image $IMG_NAME"
+            echo aws lightsail delete-container-image --service-name "$SERVICE_NAME" --image $IMG_NAME;
+          done
+
+          echo "Images:"
+          aws lightsail get-container-images --service-name "$SERVICE_NAME"
+
+          
+      - name: "Create new container service"
+        if: inputs.command == 'create_new'
+        run: |
+          # check if service already exists
+          if aws lightsail get-container-services --service-name "$SERVICE_NAME" > /dev/null; then
+            echo "Already exists: $SERVICE_NAME"
+            exit 0
+          fi
+
+          # `micro` power is needed for it's memory capacity; 60%+ memory is needed for the vector DB
+          aws lightsail create-container-service --service-name $SERVICE_NAME --power ${{inputs.power}} --scale 1 --public-domain-names navalabs-cert=$FULL_DOMAIN
+
+          echo "Waiting for service to be ready to get URL for next step"
+          while true; do
+            sleep 15
+            SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
+            echo "service state: $SVC_STATE"
+            if [ "$SVC_STATE" == "READY" ]; then
+                break
+            fi
+          done
+
+          SVC_URL=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].url')
+          # Remove 'https://' prefix
+          URL_DOMAIN=${SVC_URL#https://}
+          # Remove '/' suffix
+          TARGET_DOMAIN=${URL_DOMAIN%/}
+
+          # If domain entry exists, delete it
+          OLD_TARGET=$(aws lightsail get-domain --domain-name $DOMAIN_NAME | jq -r ".domain.domainEntries[] | select( .name == \"$FULL_DOMAIN\" ) | .target")
+          if [ "$OLD_TARGET" ] ; then
+            echo "Deleting existing '$FULL_DOMAIN' entry with target '$OLD_TARGET'"
+            aws lightsail delete-domain-entry --domain-name $DOMAIN_NAME --domain-entry "type=A,isAlias=true,name=$FULL_DOMAIN,target=$OLD_TARGET"
+          fi
+
+          echo "Creating DNS assignment by adding a domain entry $FULL_DOMAIN to target $TARGET_DOMAIN"
+          aws lightsail create-domain-entry --domain-name $DOMAIN_NAME --domain-entry "type=A,isAlias=true,name=$FULL_DOMAIN,target=$TARGET_DOMAIN"
+
+      - name: "Delete container service"
+        if: inputs.command == 'delete_service'
+        run: |
+          # check if service exists
+          if ! aws lightsail get-container-services --service-name "$SERVICE_NAME"; then
+            echo "Service does not exist: $SERVICE_NAME"
+            exit 0
+          fi
+
+          aws lightsail delete-container-service --service-name "$SERVICE_NAME"
+
+      - name: "Print status"
+        run: |
+          aws lightsail get-container-services | jq '.containerServices[] | { containerServiceName, createdAt, state, isDisabled, power,
+            "deployment_state": .currentDeployment.state,
+            "container_image": .currentDeployment.containers.chatbot.image,
+            "container_BUILD_DATE": .currentDeployment.containers.chatbot.environment.BUILD_DATE,
+            "container_GIT_SHA": .currentDeployment.containers.chatbot.environment.GIT_SHA,
+            "publicDomainNames": .publicDomainNames["navalabs-cert"] }'
+    

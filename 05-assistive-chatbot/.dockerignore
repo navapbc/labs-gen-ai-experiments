@@ -5,3 +5,5 @@ chroma_db/
 log/
 
 *.DS_STORE
+
+.git
