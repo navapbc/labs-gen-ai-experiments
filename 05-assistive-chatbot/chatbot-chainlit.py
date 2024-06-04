@@ -6,6 +6,7 @@ See README.md for instructions to enable user feedback.
 """
 
 import logging
+import os
 import pprint
 
 import chainlit as cl
@@ -23,13 +24,13 @@ if chatbot.initial_settings["enable_api"]:
 
     logger.info("Chatbot API loaded: %s", chatbot_api.__name__)
 
+## TODO: Enable users to log in so that they can be distinguished in GetLiteralAI feedback logs
+
 
 @cl.on_chat_start
 async def init_chat():
-    elements = [
-        cl.Text(name="side-text", display="side", content="Side Text"),
-    ]
-    await cl.Message("Example of side-text", elements=elements).send()
+    build_date = os.environ.get("BUILD_DATE", "unknown")
+    await cl.Message(f"Welcome to the Assistive Chat prototype (built {build_date})").send()
 
     # https://docs.chainlit.io/api-reference/chat-settings
     chat_settings = cl.ChatSettings(
@@ -123,6 +124,9 @@ async def message_submitted(message: cl.Message):
         await apply_settings()
         if not cl.user_session.get("settings_applied", False):
             return
+
+    # TODO: Provide visual feedback that chatbot is working, e.g., add Chainlit spinner
+    # TODO: Send results as they are generated
 
     chat_engine = cl.user_session.get("chat_engine")
     response = chat_engine.gen_response(message.content)

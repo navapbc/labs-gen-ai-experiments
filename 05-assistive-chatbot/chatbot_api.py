@@ -7,6 +7,7 @@ an API that can be deployed with the Chainlit chatbot.
 """
 
 import logging
+import os
 from functools import cached_property
 from typing import Dict
 
@@ -51,7 +52,12 @@ def query(message: str | Dict):
 def healthcheck(request: Request):
     logger.info(request.headers)
     # TODO: Add a health check - https://pypi.org/project/fastapi-healthchecks/
-    return HTMLResponse("Healthy")
+
+    git_sha = os.environ.get("GIT_SHA", "")
+    build_date = os.environ.get("BUILD_DATE", "")
+
+    logger.info("Returning: Healthy %s %s", build_date, git_sha)
+    return HTMLResponse(f"Healthy {build_date} {git_sha}")
 
 
 if __name__ == "__main__":
