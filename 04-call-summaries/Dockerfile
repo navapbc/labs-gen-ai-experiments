@@ -29,7 +29,9 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Ensure all messages always reach console
 ENV PYTHONUNBUFFERED=1
 
-COPY . .
+
+# To prevent files from being copied into the image, update .dockerignore
+COPY --chown=tron . .
 
 EXPOSE 8000
 HEALTHCHECK CMD curl http://localhost:8000 || exit 1
