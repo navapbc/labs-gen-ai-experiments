@@ -67,7 +67,7 @@ jobs:
           role-to-assume: arn:aws:iam::654654379445:role/Lightsail_Mgmt_role
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
 
-      - name: "Setup AWS lightsail command"
+      - name: "Install AWS lightsail command"
         run: |
           # Uncomment the following lines if you need to upgrade the AWS CLI version
           # aws --version
@@ -81,65 +81,51 @@ jobs:
           sudo curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "/usr/local/bin/lightsailctl"
           sudo chmod +x /usr/local/bin/lightsailctl
 
+      - name: "Extract branch name"
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      - name: "Install waitForLightsail.sh"
+        run: |
+          echo "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/${{ steps.extract_branch.outputs.branch }}/.github/workflows/waitForLightsail.sh"
+          curl https://raw.githubusercontent.com/$GITHUB_REPOSITORY/${{ steps.extract_branch.outputs.branch }}/.github/workflows/waitForLightsail.sh -o waitForLightsail.sh
+          chmod +x waitForLightsail.sh
 
       - name: "Enable service"
         if: inputs.command == 'enable'
         run: |
           aws lightsail update-container-service --service-name "$SERVICE_NAME" --no-is-disabled
 
-          echo "Waiting for service to be ready"
-          while true; do
-            sleep 5
-            SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
-            echo "service state: $SVC_STATE"
-            if [ "$SVC_STATE" == "READY" ] || [ "$SVC_STATE" == "RUNNING" ]; then
-                break
-            fi
-          done
+          SLEEP_INTERVAL=5 ./waitForLightsail.sh service READY RUNNING
 
       - name: "Disable service"
         if: inputs.command == 'disable'
         run: |
           aws lightsail update-container-service --service-name "$SERVICE_NAME" --is-disabled
-
-          echo "Waiting for service to be disabled"
-          while true; do
-            sleep 10
-            SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
-            echo "service state: $SVC_STATE"
-            if [ "$SVC_STATE" == "DISABLED" ]; then
-                break
-            fi
-          done
+          SLEEP_INTERVAL=10 ./waitForLightsail.sh service DISABLED
 
       - name: "Disable all services"
         if: inputs.command == 'disable_all'
         run: |
           SERVICES=$(aws lightsail get-container-services | jq -r '.containerServices[].containerServiceName')
 
-          echo "$SERVICES" | while read SVC_NAME; do
-            if [ "$SVC_NAME" == "" ]; then
+          while read SERVICE_NAME; do
+            if [ "$SERVICE_NAME" == "" ]; then
               continue
             fi
-            echo "Disabling service $SVC_NAME"
-            aws lightsail update-container-service --service-name "$SVC_NAME" --is-disabled
-            sleep 10
-          done
+            echo "Disabling service $SERVICE_NAME"
+            aws lightsail update-container-service --service-name "$SERVICE_NAME" --is-disabled
+            SLEEP_INTERVAL=5 ./waitForLightsail.sh service UPDATING
+          done <<< "$SERVICES"
+
+          while read SERVICE_NAME; do
+            SLEEP_INTERVAL=10 ./waitForLightsail.sh service DISABLED
+          done <<< "$SERVICES"
             
       - name: "Update the power of the service to ${{inputs.power}}"
         if: inputs.command == 'update_power'
         run: |
           aws lightsail update-container-service --service-name "$SERVICE_NAME" --power ${{inputs.power}}
-
-          echo "Waiting for service to be ready"
-          while true; do
-            sleep 5
-            SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
-            echo "service state: $SVC_STATE"
-            if [ "$SVC_STATE" == "READY" ]; then
-                break
-            fi
-          done
+          SLEEP_INTERVAL=5 ./waitForLightsail.sh service READY RUNNING
 
           
       - name: "List images associated with service"
@@ -153,13 +139,13 @@ jobs:
           IMAGE_NAMES=$(aws lightsail get-container-images --service-name "$SERVICE_NAME" | jq -r '.containerImages[].image')
           # Skip the first image, which is the current image
           OLD_IMAGE_NAMES=$(echo $IMAGE_NAMES | tail -n +2)
-          echo "$OLD_IMAGE_NAMES" | while read IMG_NAME; do
+          while read IMG_NAME; do
             if [ "$IMG_NAME" == "" ]; then
               continue
             fi
             echo "Deleting image $IMG_NAME"
             echo aws lightsail delete-container-image --service-name "$SERVICE_NAME" --image $IMG_NAME;
-          done
+          done <<< "$OLD_IMAGE_NAMES"
 
           echo "Images:"
           aws lightsail get-container-images --service-name "$SERVICE_NAME"
@@ -177,15 +163,7 @@ jobs:
           # `micro` power is needed for it's memory capacity; 60%+ memory is needed for the vector DB
           aws lightsail create-container-service --service-name $SERVICE_NAME --power ${{inputs.power}} --scale 1 --public-domain-names navalabs-cert=$FULL_DOMAIN
 
-          echo "Waiting for service to be ready to get URL for next step"
-          while true; do
-            sleep 15
-            SVC_STATE=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].state')
-            echo "service state: $SVC_STATE"
-            if [ "$SVC_STATE" == "READY" ]; then
-                break
-            fi
-          done
+          SLEEP_INTERVAL=15 ./waitForLightsail.sh service READY
 
           SVC_URL=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].url')
           # Remove 'https://' prefix

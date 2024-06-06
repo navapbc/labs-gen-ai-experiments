@@ -30,7 +30,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 
 # To prevent files from being copied into the image, update .dockerignore
-COPY . .
+COPY --chown=tron . .
 
 RUN ./ingest-guru-cards.py
 
