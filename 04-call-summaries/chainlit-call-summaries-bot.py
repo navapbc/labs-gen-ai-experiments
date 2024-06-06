@@ -130,7 +130,8 @@ async def on_click_upload_file_query(action: cl.Action):
         response = await run_summarization_technique(
             technique=settings["summarization_technique"], transcript=transcript
         )
-        print(response)
+        if settings["summarization_technique"] != "stuffing":
+            cl.sleep(1)
         answer = f"Result:\n{response}"
         await cl.Message(content=answer).send()
 
