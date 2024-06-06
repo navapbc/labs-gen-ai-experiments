@@ -172,11 +172,17 @@ jobs:
         echo "Waiting for container ${{ github.sha }} to be Active"
         while true; do
           sleep 30
+          NEXT_DEPLOYMENT=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].nextDeployment')
           CURR_DEPLOYMENT=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].currentDeployment')
           GIT_SHA=$(echo "$CURR_DEPLOYMENT" | jq -r '.containers.chatbot.environment.GIT_SHA')
           DEPLOYMENT_STATE=$(echo "$CURR_DEPLOYMENT" | jq -r '.state')
           echo "current container state: $GIT_SHA $DEPLOYMENT_STATE"
           if [ "$GIT_SHA" == "${{ github.sha }}" ] && [ "$DEPLOYMENT_STATE" == "ACTIVE" ]; then
+              break
+          fi
+          if [ "$NEXT_DEPLOYMENT" == "null" ]; then
+              echo "Deployment failed! Increase the power of the service or check logs at https://lightsail.aws.amazon.com/ls/webapp/home/containers"
+              aws lightsail get-container-services --service-name "$SERVICE_NAME"
               break
           fi
         done
