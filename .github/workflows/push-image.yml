@@ -181,9 +181,9 @@ jobs:
               break
           fi
           if [ "$NEXT_DEPLOYMENT" == "null" ]; then
-              echo "Deployment failed! Increase the power of the service or check logs at https://lightsail.aws.amazon.com/ls/webapp/home/containers"
+              echo "Deployment failed! Increase the power of the service or check logs at https://lightsail.aws.amazon.com/ls/webapp/us-east-1/container-services/$SERVICE_NAME/deployments"
               aws lightsail get-container-services --service-name "$SERVICE_NAME"
-              break
+              exit 9
           fi
         done
 
