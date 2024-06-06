@@ -29,6 +29,8 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Ensure all messages always reach console
 ENV PYTHONUNBUFFERED=1
 
+COPY . .
+
 EXPOSE 8000
 HEALTHCHECK CMD curl http://localhost:8000 || exit 1
 ENTRYPOINT ["chainlit", "run", "--port", "8000", "-h", "chainlit-call-summaries-bot.py"]
