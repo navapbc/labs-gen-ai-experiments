@@ -79,14 +79,14 @@ jobs:
       uses: actions/checkout@v4
 
     - name: "Populate 05-assistive-chatbot folder with input files"
-      if: inputs.build_image && ${{ inputs.dockerfile_folder }} == '05-assistive-chatbot'
+      if: inputs.build_image && inputs.dockerfile_folder == '05-assistive-chatbot'
       run: |
         # The DOT_ENV_FILE_CONTENTS contains API keys, like LITERAL_API_KEY and OPENAI_API_KEY
         # As such, make sure the built image is not publicly accessible
         echo "${{ secrets.DOT_ENV_FILE_CONTENTS }}" > .env
 
     - name: "Populate 04-call-summaries folder with input files"
-      if: inputs.build_image && ${{ inputs.dockerfile_folder }} == '04-call-summaries'
+      if: inputs.build_image && inputs.dockerfile_folder == '04-call-summaries'
       run: |
         # The DOT_ENV_FILE_CONTENTS_04 contains API keys, like LITERAL_API_KEY and OPENAI_API_KEY
         # As such, make sure the built image is not publicly accessible
