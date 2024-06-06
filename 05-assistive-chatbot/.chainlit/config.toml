@@ -42,7 +42,7 @@ latex = false
 
 [UI]
 # Name of the app and chatbot.
-name = "Chatbot"
+name = "Assistive Chatbot"
 
 # Show the readme while the thread is empty.
 show_readme_as_default = false
@@ -60,7 +60,7 @@ default_expand_messages = true
 hide_cot = false
 
 # Link to your github repo. This will add a github button in the UI's header.
-github = "https://github.com/navapbc/labs-gen-ai-experiments/tree/main/02-household-queries"
+github = "https://github.com/navapbc/labs-gen-ai-experiments/tree/main/05-assistive-chatbot"
 
 # Specify a CSS file that can be used to customize the user interface.
 # The CSS file can be served from the public directory or via an external link.

@@ -78,28 +78,27 @@ jobs:
       if: inputs.build_image
       uses: actions/checkout@v4
 
-    - name: "Populate folder with input files"
-      if: inputs.build_image && ${{ inputs.dockerfile_folder }} == '05-assistive-chatbot'
-      env:
-        GURU_CARDS_URL: https://docs.google.com/uc?export=download&id=${{ secrets.GURU_CARDS_URL_ID }}
+    - name: "Populate 05-assistive-chatbot folder with input files"
+      if: inputs.build_image && inputs.dockerfile_folder == '05-assistive-chatbot'
       run: |
-        echo "Downloading from ${GURU_CARDS_URL}"
-        curl -L "${GURU_CARDS_URL}" > download.zip
-        unzip -o download.zip
-        rm download.zip
-        mv guru_cards_for_nava--Multi-benefit.json guru_cards_for_nava.json
-
-        cd ${{ inputs.dockerfile_folder }}
-        mv ../guru_cards_for_nava.json .
-
         # The DOT_ENV_FILE_CONTENTS contains API keys, like LITERAL_API_KEY and OPENAI_API_KEY
         # As such, make sure the built image is not publicly accessible
         echo "${{ secrets.DOT_ENV_FILE_CONTENTS }}" > .env
 
+    - name: "Populate 04-call-summaries folder with input files"
+      if: inputs.build_image && inputs.dockerfile_folder == '04-call-summaries'
+      run: |
+        # The DOT_ENV_FILE_CONTENTS_04 contains API keys, like LITERAL_API_KEY and OPENAI_API_KEY
+        # As such, make sure the built image is not publicly accessible
+        echo "${{ secrets.DOT_ENV_FILE_CONTENTS_04 }}" > .env
+
     - name: "Build image: ${{ github.sha }}"
       if: inputs.build_image
+      env:
+        GURU_CARDS_URL_ID: ${{ secrets.GURU_CARDS_URL_ID }}
       run: |
         cd ${{ inputs.dockerfile_folder }}
+        [ -f ./get_input_files.sh ] && ./get_input_files.sh
 
         # Add extra environment variables to facilitate traceability of an image back to the source code
         echo "
@@ -173,12 +172,18 @@ jobs:
         echo "Waiting for container ${{ github.sha }} to be Active"
         while true; do
           sleep 30
+          NEXT_DEPLOYMENT=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].nextDeployment')
           CURR_DEPLOYMENT=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].currentDeployment')
           GIT_SHA=$(echo "$CURR_DEPLOYMENT" | jq -r '.containers.chatbot.environment.GIT_SHA')
           DEPLOYMENT_STATE=$(echo "$CURR_DEPLOYMENT" | jq -r '.state')
           echo "current container state: $GIT_SHA $DEPLOYMENT_STATE"
           if [ "$GIT_SHA" == "${{ github.sha }}" ] && [ "$DEPLOYMENT_STATE" == "ACTIVE" ]; then
               break
+          fi
+          if [ "$NEXT_DEPLOYMENT" == "null" ]; then
+              echo "Deployment failed! Increase the power of the service or check logs at https://lightsail.aws.amazon.com/ls/webapp/us-east-1/container-services/$SERVICE_NAME/deployments"
+              aws lightsail get-container-services --service-name "$SERVICE_NAME"
+              exit 9
           fi
         done
 
