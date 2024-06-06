@@ -10,6 +10,7 @@ on:
         type: choice
         options:
         - '05-assistive-chatbot'
+        - '04-call-summaries'
         - '02-household-queries'
       subdomain:
         description: 'Subdomain of navalabs.co'
