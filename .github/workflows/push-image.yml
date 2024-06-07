@@ -125,6 +125,12 @@ jobs:
         echo "Lightsail assigned image name: '$LS_DOCKER_IMAGE'"
         echo "LS_DOCKER_IMAGE=$LS_DOCKER_IMAGE" >> $GITHUB_ENV
 
+    - name: "Get last deployment"
+      if: inputs.deploy_image && ! inputs.build_image
+      run: |
+        LAST_DEPLOYMENT_IMAGE=$(aws lightsail get-container-service-deployments --service-name "$SERVICE_NAME" | jq -r ".deployments[0].containers.chatbot.image")
+        echo "LS_DOCKER_IMAGE=$LAST_DEPLOYMENT_IMAGE" >> $GITHUB_ENV
+
     - name: "Create new deployment"
       if: inputs.deploy_image
       run: |
@@ -149,9 +155,9 @@ jobs:
                 "containerPort": 8000,
                 "healthCheck": {
                     "healthyThreshold": 2,
-                    "unhealthyThreshold": 4,
-                    "timeoutSeconds": 20,
-                    "intervalSeconds": 60,
+                    "unhealthyThreshold": 10,
+                    "timeoutSeconds": 60,
+                    "intervalSeconds": 300,
                     "path": "/healthcheck",
                     "successCodes": "200-499"
                 }
