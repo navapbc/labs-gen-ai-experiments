@@ -11,6 +11,22 @@ from chatbot import engines, llms, utils
 # - add unit tests
 
 
+## Set default environment variables
+
+
+# Opt out of telemetry -- https://docs.trychroma.com/telemetry
+os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
+
+# Used by SentenceTransformerEmbeddings and HuggingFaceEmbeddings
+os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", "./.sentence-transformers-cache")
+
+# Disable DSPy cache to get different responses for retry attempts
+# Set to true to enable caching for faster responses and optimizing prompts using DSPy
+os.environ.setdefault("DSP_CACHEBOOL", "false")
+
+os.environ.setdefault("BUILD_DATE", str(date.today()))
+
+
 ## Initialize logging
 
 
@@ -29,21 +45,10 @@ dotenv.load_dotenv(f".env-{env}")
 dotenv.load_dotenv()
 configure_logging()
 logger = logging.getLogger(__name__)
+logger.info("Build date: %s", os.environ.get("BUILD_DATE"))
 
 
 ## Initialize settings
-
-# Opt out of telemetry -- https://docs.trychroma.com/telemetry
-os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
-
-# Used by SentenceTransformerEmbeddings and HuggingFaceEmbeddings
-os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", "./.sentence-transformers-cache")
-
-# Disable DSPy cache to get different responses for retry attempts
-# Set to true to enable caching for faster responses and optimizing prompts using DSPy
-os.environ.setdefault("DSP_CACHEBOOL", "false")
-
-os.environ.setdefault("BUILD_DATE", str(date.today()))
 
 
 @utils.verbose_timer(logger)
@@ -68,6 +73,14 @@ def is_true(string):
 
 
 initial_settings = _init_settings()
+
+
+def reset():
+    configure_logging()
+    engines._engines.clear()
+    llms._llms.clear()
+    global initial_settings
+    initial_settings = _init_settings()
 
 
 @utils.verbose_timer(logger)
