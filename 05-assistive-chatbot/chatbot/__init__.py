@@ -82,6 +82,7 @@ def validate_settings(settings):
             return f"Unknown {setting_name}: '{model_name}'"
 
         if chat_engine.startswith("Summaries") and "instruct" not in model_name:
+            # TODO: also send to user
             logger.warning("For the %s chat engine, an `*instruct` model is recommended", chat_engine)
 
     # PLACEHOLDER: Validate other settings

@@ -14,4 +14,4 @@ echo "Downloading from ${GURU_CARDS_URL}"
 curl -f -L "${GURU_CARDS_URL}" -o /tmp/download.zip
 unzip -o /tmp/download.zip
 rm -v /tmp/download.zip
-mv -v guru_cards_for_nava--Multi-benefit.json guru_cards_for_nava.json
+mv -v guru_cards_setB_plus_setA.json guru_cards_for_nava.json
