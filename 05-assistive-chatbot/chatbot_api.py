@@ -70,18 +70,17 @@ ALLOWED_ENV_VARS = ["CHATBOT_LOG_LEVEL"]
 
 @app.post("/initenvs")
 def initenvs(env_file_contents: str = Body()):
-    print(f"{type(env_file_contents)}: {env_file_contents}")
     env_values = dotenv.dotenv_values(stream=StringIO(env_file_contents))
-    values_changed = []
+    vars_updated = []
     for name, value in env_values.items():
         if name.endswith("_API_KEY") or name.endswith("_API_TOKEN") or name in ALLOWED_ENV_VARS:
             logger.info("Setting environment variable %s", name)
             os.environ[name] = value or ""
-            values_changed.append(name)
+            vars_updated.append(name)
         else:
             logger.warning("Setting environment variable %s is not allowed!", name)
     chatbot.reset()
-    return str(values_changed)
+    return str(vars_updated)
 
 
 if __name__ == "__main__":
