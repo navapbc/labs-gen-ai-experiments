@@ -143,6 +143,7 @@ jobs:
                     "environment": {
                         "ENV": "PROD",
                         "BUILD_DATE": "$BUILD_DATE",
+                        "BUILD_FOLDER": "${{ inputs.dockerfile_folder }}",
                         "GIT_SHA": "${{ github.sha }}"
                     },
                     "ports": {
