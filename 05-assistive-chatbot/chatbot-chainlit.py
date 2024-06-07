@@ -8,6 +8,7 @@ See README.md for instructions to enable user feedback.
 import logging
 import os
 import pprint
+import socket
 
 import chainlit as cl
 from chainlit.input_widget import Select, Slider  # , Switch
@@ -29,9 +30,17 @@ if chatbot.initial_settings["enable_api"]:
 
 @cl.on_chat_start
 async def init_chat():
+    git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "unknown")
-    await cl.Message(f"Welcome to the Assistive Chat prototype (built {build_date})").send()
+    metadata = {
+        **chatbot.initial_settings,
+        "build_date": build_date,
+        "git_sha": git_sha,
+        "hostname": socket.gethostname(),
+    }
+    await cl.Message(metadata=metadata, content=f"Welcome to the Assistive Chat prototype (built {build_date})").send()
 
+    available_llms = llms.available_llms()
     # https://docs.chainlit.io/api-reference/chat-settings
     chat_settings = cl.ChatSettings(
         [
@@ -44,7 +53,7 @@ async def init_chat():
             Select(
                 id="model",
                 label="Primary LLM Model",
-                values=llms.available_llms(),
+                values=available_llms,
                 initial_value=chatbot.initial_settings["model"],
             ),
             Slider(
@@ -66,7 +75,7 @@ async def init_chat():
             Select(
                 id="model2",
                 label="LLM Model for summarizer",
-                values=llms.available_llms(),
+                values=available_llms,
                 initial_value=chatbot.initial_settings["model2"],
             ),
             Slider(
@@ -104,14 +113,20 @@ async def apply_settings():
 
     error = chatbot.validate_settings(settings)
     if error:
-        await cl.Message(author="backend", content=f"! Validation error: {error}").send()
+        await cl.Message(author="backend", metadata=settings, content=f"! Validation error: {error}").send()
     else:
         cl.user_session.set("settings_applied", True)
     return settings
 
 
 async def create_chat_engine(settings):
-    msg = cl.Message(author="backend", content=f"Setting up chat engine: {settings['chat_engine']} ...\n")
+    msg = cl.Message(
+        author="backend",
+        type="system_message",
+        metadata=settings,
+        disable_feedback=True,
+        content=f"Setting up chat engine: {settings['chat_engine']} ...\n",
+    )
 
     cl.user_session.set("chat_engine", chatbot.create_chat_engine(settings))
     await msg.stream_token("Done setting up chat engine")
