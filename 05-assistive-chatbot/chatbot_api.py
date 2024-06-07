@@ -70,6 +70,7 @@ ALLOWED_ENV_VARS = ["CHATBOT_LOG_LEVEL"]
 
 @app.post("/initenvs")
 def initenvs(env_file_contents: str = Body()):
+    "Set environment variables for API keys and log level. See usage in push_image.yml"
     env_values = dotenv.dotenv_values(stream=StringIO(env_file_contents))
     vars_updated = []
     for name, value in env_values.items():
