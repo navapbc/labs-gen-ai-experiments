@@ -32,8 +32,8 @@ ENV PYTHONUNBUFFERED=1
 # To prevent files from being copied into the image, update .dockerignore
 COPY --chown=tron . .
 
-RUN ./ingest-guru-cards.py
+# RUN ./ingest-guru-cards.py
 
 EXPOSE 8000
 HEALTHCHECK CMD curl http://localhost:8000 || exit 1
-ENTRYPOINT ["chainlit", "run", "--port", "8000", "-h", "chatbot-chainlit.py"]
+ENTRYPOINT ["chainlit", "run", "--port", "8000", "-h", "chatbot_api.py"]
