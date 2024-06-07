@@ -8,6 +8,8 @@ an API that can be deployed with the Chainlit chatbot.
 
 import logging
 import os
+import platform
+import socket
 from functools import cached_property
 from io import StringIO
 from typing import Dict
@@ -57,9 +59,10 @@ def healthcheck(request: Request):
 
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "")
+    hostname = f"{platform.node()} {socket.gethostname()}"
 
     logger.info("Returning: Healthy %s %s", build_date, git_sha)
-    return HTMLResponse(f"Healthy {git_sha} built at {build_date}")
+    return HTMLResponse(f"Healthy {git_sha} built at {build_date}<br/>{hostname}")
 
 
 ALLOWED_ENV_VARS = ["CHATBOT_LOG_LEVEL"]
