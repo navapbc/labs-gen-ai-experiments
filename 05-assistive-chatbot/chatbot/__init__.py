@@ -66,9 +66,8 @@ if env == "PROD":
 
 @utils.verbose_timer(logger)
 def _init_settings():
-    # Remember to update ChatSettings in chatbot-chainlit.py when adding new settings
-    # and update chatbot/engines/__init.py:CHATBOT_SETTING_KEYS
-    preload_chat_engine_default = "ENGINE_MODULES" in os.environ and "LLM_MODULES" in os.environ
+    # REMINDER: when adding new settings, update ChatSettings in chatbot-chainlit.py
+    # and chatbot/engines/__init.py:LLM_SETTING_KEYS, if applicable
     return {
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
