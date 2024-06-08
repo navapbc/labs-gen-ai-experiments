@@ -47,6 +47,12 @@ configure_logging()
 logger = logging.getLogger(__name__)
 logger.info("Build date: %s", os.environ.get("BUILD_DATE"))
 
+if env == "PROD":
+    # https://www.uvicorn.org/settings/#production
+    # https://sentry.io/answers/number-of-uvicorn-workers-needed-in-production/
+    # Too many workers will use more resources, which slows down all operations
+    os.environ.setdefault("WEB_CONCURRENCY", "2")
+
 
 ## Initialize settings
 

@@ -32,7 +32,9 @@ ENV PYTHONUNBUFFERED=1
 # To prevent files from being copied into the image, update .dockerignore
 COPY --chown=tron . .
 
-RUN ./ingest-guru-cards.py
+# Only run the ingest script when the chroma_db directory does not exist.
+# This saves time when building the image locally.
+RUN [ -d "chroma_db" ] || ./ingest-guru-cards.py
 
 EXPOSE 8000
 HEALTHCHECK CMD curl http://localhost:8000 || exit 1

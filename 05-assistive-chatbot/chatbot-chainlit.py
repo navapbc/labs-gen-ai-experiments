@@ -30,6 +30,7 @@ if chatbot.initial_settings["enable_api"]:
 
 @cl.on_chat_start
 async def init_chat():
+    logger.debug("init_chat")
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "unknown")
     metadata = {

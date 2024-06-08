@@ -1,8 +1,10 @@
 __pycache__
-chroma_db/
 *cache/
 *.log
 log/
+
+# Allow the database to be copied to save time building the Docker image locally
+# chroma_db/
 
 *.DS_STORE
 

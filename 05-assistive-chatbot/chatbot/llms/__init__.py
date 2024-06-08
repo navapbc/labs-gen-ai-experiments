@@ -1,4 +1,6 @@
+import importlib
 import logging
+import os
 from types import ModuleType
 from typing import Dict, Tuple
 
@@ -19,9 +21,13 @@ def _discover_llms(force=False):
     if force:
         _llms.clear()
     if not _llms:
+        LLM_MODULES = os.environ.get("LLM_MODULES", "").split(",")
+        llm_modules = {name: importlib.import_module(f"chatbot.llms.{name}") for name in LLM_MODULES if name}
+        if not llm_modules:
+            llm_modules = utils.scan_modules(__package__)
+
         settings = chatbot.initial_settings
-        found_modules = utils.scan_modules(__package__)
-        for module_name, module in found_modules.items():
+        for module_name, module in llm_modules.items():
             if not module or ignore(module_name):
                 logger.debug("Skipping module: %s", module_name)
                 continue

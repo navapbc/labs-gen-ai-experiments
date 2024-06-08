@@ -1,4 +1,6 @@
+import importlib
 import logging
+import os
 from types import ModuleType
 from typing import Dict
 
@@ -19,9 +21,13 @@ def _discover_chat_engines(force=False):
     if force:
         _engines.clear()
     if not _engines:
+        ENGINE_MODULES = os.environ.get("ENGINE_MODULES", "").split(",")
+        engine_modules = {name: importlib.import_module(f"chatbot.engines.{name}") for name in ENGINE_MODULES if name}
+        if not engine_modules:
+            engine_modules = utils.scan_modules(__package__)
+
         settings = chatbot.initial_settings
-        found_llm_modules = utils.scan_modules(__package__)
-        for module_name, module in found_llm_modules.items():
+        for module_name, module in engine_modules.items():
             if not hasattr(module, "ENGINE_NAME"):
                 logger.debug("Skipping module without an ENGINE_NAME: %s", module_name)
                 continue

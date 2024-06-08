@@ -25,12 +25,12 @@ if __name__ == "__main__":
     app = FastAPI()
 else:
     # Otherwise use Chainlit's app
+    # See https://docs.chainlit.io/deploy/api#how-it-works
     from chainlit.server import app
 
 logger = logging.getLogger(f"chatbot.{__name__}")
 
 
-# TODO Ensure this is thread safe when run by via chalint. Check if the chainlit command might handle threading/multiple requests for us.
 class ApiState:
     @cached_property
     def chat_engine(self):
@@ -45,7 +45,7 @@ class ApiState:
 app_state = ApiState()
 
 
-# See https://docs.chainlit.io/deploy/api#how-it-works
+# This function cannot be async because it uses a single non-thread-safe app_state
 @app.post("/query")
 def query(message: str | Dict):
     response = app_state.chat_engine().gen_response(message)
