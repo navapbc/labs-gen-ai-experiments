@@ -34,7 +34,7 @@ on:
         type: boolean
         default: true
       deploy_image:
-        description: "Deploy image"
+        description: "Deploy built image or last deployment"
         required: true
         type: boolean
         default: true
@@ -144,6 +144,7 @@ jobs:
                         "ENV": "PROD",
                         "BUILD_DATE": "$BUILD_DATE",
                         "BUILD_FOLDER": "${{ inputs.dockerfile_folder }}",
+                        "GIT_BRANCH": "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}",
                         "GIT_SHA": "${{ github.sha }}"
                     },
                     "ports": {
@@ -167,10 +168,18 @@ jobs:
         echo "$CONFIG_TEMPLATE" | BUILD_DATE=$(date +%Y-%m-%d-%T%z) envsubst > config.json
         cat config.json
 
-        echo "Creating new deployment"
-        aws lightsail create-container-service-deployment --cli-input-json file://config.json
+        for ((i = 0 ; i < ${DEPLOY_RETRIES:=3} ; i++ )); do
+            echo "## Deploy attempt $((i+1)) of $DEPLOY_RETRIES"
+            date
+            echo "Creating new deployment"
+            aws lightsail create-container-service-deployment --cli-input-json file://config.json
 
-        sleep 10
-        ./.github/workflows/waitForLightsail.sh deployment
+            sleep 10
+            if ./.github/workflows/waitForLightsail.sh deployment; then
+                echo "Success"
+                break;
+            fi
+        done
+        date
 
         # TODO: warm up vector DB on startup

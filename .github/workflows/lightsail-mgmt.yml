@@ -82,8 +82,8 @@ jobs:
           sudo chmod +x /usr/local/bin/lightsailctl
 
       - name: "Extract branch name"
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract_branch
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       - name: "Install waitForLightsail.sh"
         run: |
           echo "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/${{ steps.extract_branch.outputs.branch }}/.github/workflows/waitForLightsail.sh"
