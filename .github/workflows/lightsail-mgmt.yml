@@ -36,16 +36,17 @@ on:
         - 'chatbot-prototype'
         - 'chat.zone'
       power:
-        description: "Only used for update_power and create_new commands: power of service (useful for deployment failures)"
+        description: "(Only for update_power and create_new commands) power of service"
         type: choice
+        default: ''
         options:
-        # - ''
+        - ''
         # - nano
         - micro
         - small
         - medium
         - large
-        - xlarge
+        # - xlarge
 
 permissions:
   id-token: write # This is required for requesting the JWT from GitHub's OIDC provider for AWS authentication
