@@ -4,6 +4,21 @@ run-name: "For subdomain ${{inputs.subdomain}}: ${{inputs.command}}"
 on:
   workflow_dispatch:
     inputs:
+      command:
+        description: "Command to perform on Lightsail service"
+        required: true
+        type: choice
+        default: 'status'
+        options:
+        - 'status'
+        - 'list_images'
+        - 'delete_old_images'
+        - 'enable'
+        - 'disable'
+        - 'disable_all'
+        - 'update_power'
+        - 'create_new'
+        - 'delete_service'
       subdomain:
         description: 'Subdomain of navalabs.co on which to run command'
         type: choice
@@ -20,21 +35,6 @@ on:
         - 'bdt-chatbot'
         - 'chatbot-prototype'
         - 'chat.zone'
-      command:
-        description: "Command to perform on Lightsail service"
-        required: true
-        type: choice
-        default: 'status'
-        options:
-        - 'status'
-        - 'list_images'
-        - 'delete_old_images'
-        - 'enable'
-        - 'disable'
-        - 'disable_all'
-        - 'update_power'
-        - 'create_new'
-        - 'delete_service'
       power:
         description: "Only used for update_power and create_new commands: power of service (useful for deployment failures)"
         type: choice
@@ -193,6 +193,7 @@ jobs:
           aws lightsail delete-container-service --service-name "$SERVICE_NAME"
 
       - name: "Print status"
+        if: always()
         run: |
           aws lightsail get-container-services | jq '.containerServices[] | { containerServiceName, createdAt, state, isDisabled, power,
             "deployment_state": .currentDeployment.state,
