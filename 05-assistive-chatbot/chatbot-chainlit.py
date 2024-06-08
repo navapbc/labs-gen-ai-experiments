@@ -39,6 +39,7 @@ async def init_chat():
         "git_sha": git_sha,
         "hostname": socket.gethostname(),
     }
+
     await cl.Message(metadata=metadata, content=f"Welcome to the Assistive Chat prototype (built {build_date})").send()
 
     available_llms = llms.available_llms()
@@ -97,6 +98,10 @@ async def init_chat():
     if error:
         assert False, f"Validation error: {error}"
 
+    if chatbot.initial_settings["preload_chat_engine"]:
+        logger.info("Preloading chat engine")
+        await apply_settings()
+
 
 @cl.on_settings_update
 async def update_settings(settings):
@@ -107,10 +112,11 @@ async def update_settings(settings):
 
 @utils.timer
 async def apply_settings():
+    # reset settings_applied flag in case of failure during apply_settings
+    cl.user_session.set("settings_applied", False)
+
     settings = cl.user_session.get("settings")
     await create_chat_engine(settings)
-
-    # PLACEHOLDER: Apply other settings
 
     error = chatbot.validate_settings(settings)
     if error:
@@ -121,40 +127,77 @@ async def apply_settings():
 
 
 async def create_chat_engine(settings):
-    msg = cl.Message(
-        author="backend",
-        type="system_message",
-        metadata=settings,
-        disable_feedback=True,
-        content=f"Setting up chat engine: {settings['chat_engine']} ...\n",
-    )
+    async with cl.Step(name="system") as step:
+        step.streaming = True
+        step.metadata = settings
+        step.output = f"Setting up chat engine: {settings['chat_engine']} ...\n"
 
-    cl.user_session.set("chat_engine", chatbot.create_chat_engine(settings))
-    await msg.stream_token("Done setting up chat engine")
-    await msg.send()
+        cl.user_session.set("chat_engine", chatbot.create_chat_engine(settings))
+        await step.stream_token("Done setting up chat engine")
+        await step.send()
 
 
 @cl.on_message
 async def message_submitted(message: cl.Message):
     if not cl.user_session.get("settings_applied", False):
         await apply_settings()
+        # If settings not applied successfully, don't proceed
         if not cl.user_session.get("settings_applied", False):
             return
 
-    # TODO: Provide visual feedback that chatbot is working, e.g., add Chainlit spinner
-    # TODO: Send results as they are generated
+    # If the latest message content is empty, Chainlit will display a loader while the content remains empty.
+    # https://docs.chainlit.io/concepts/message#trick-display-a-loader-while-waiting-for-a-response
+    response_msg = cl.Message(content="")
+    await response_msg.send()
 
     chat_engine = cl.user_session.get("chat_engine")
     response = chat_engine.gen_response(message.content)
 
     if isinstance(response, v2_household_engine.GenerationResults):
-        message_args = format_v2_results_as_markdown(response)
-        await cl.Message(content=message_args["content"], elements=message_args["elements"]).send()
+        format_v2_results_as_markdown(response, response_msg)
+    elif isinstance(response, str):
+        response_msg.content = response
+    elif isinstance(response, dict):
+        await handle_response_dict(message, response, response_msg)
     else:
-        await cl.Message(content=f"*Response*: {response}").send()
+        response_msg.content = f"*Response*: {response}"
+
+    await response_msg.update()
 
 
-def format_v2_results_as_markdown(gen_results):
+async def handle_response_dict(message, response, response_msg):
+    error_msg = response.pop("errorMsg", None)
+    system_msg = response.pop("systemMsg", None)
+
+    if "content" in response:
+        response_msg_args = convert_to_message_args(response)
+        response_msg.content = response_msg_args["content"]
+        response_msg.metadata = response_msg_args.get("metadata", {})
+    else:
+        response_msg.content = f"*Response Object*: {response}"
+
+    if error_msg:
+        async with cl.Step(name="error", parent_id=message.id) as step:
+            error_msg_args = convert_to_message_args(error_msg)
+            step.is_error = True
+            step.output = error_msg_args["content"]
+
+    if system_msg:
+        async with cl.Step(name="system", parent_id=message.id) as step:
+            system_msg_args = convert_to_message_args(system_msg)
+            step.output = error_msg_args["content"]
+            if "metadata" in system_msg_args:
+                step.metadata = system_msg_args["metadata"]
+
+
+def convert_to_message_args(response_obj: str | dict):
+    if isinstance(response_obj, str):
+        return {"content": response_obj}
+    if isinstance(response_obj, dict):
+        return response_obj
+
+
+def format_v2_results_as_markdown(gen_results, response_msg):
     resp = ["", f"## Q: {gen_results.question}"]
 
     dq_resp = ["<details><summary>Derived Questions</summary>", ""]
@@ -175,15 +218,13 @@ def format_v2_results_as_markdown(gen_results):
             cards_resp += [f"\n   Quote:\n   ```\n   {q}\n   ```" for q in indented_quotes]
             cards_resp += ["</details>", ""]
 
-    return {
-        "content": "\n".join(resp + dq_resp + cards_resp),
-        "elements": [
-            # Example of how to use cl.Text with different display parameters -- it's not intuitive
-            # The name argument must exist in the message content so that a link can be created.
-            # cl.Text(name="Derived Questions", content="\n".join(dq_resp), display="side"),
-            # cl.Text(name="Guru Cards", content="\n".join(cards_resp), display="inline")
-        ],
-    }
+    response_msg.content = "\n".join(resp + dq_resp + cards_resp)
+    response_msg.elements = [
+        # Example of how to use cl.Text with different display parameters -- it's not intuitive
+        # The name argument must exist in the message content so that a link can be created.
+        # cl.Text(name="Derived Questions", content="\n".join(dq_resp), display="side"),
+        # cl.Text(name="Guru Cards", content="\n".join(cards_resp), display="inline")
+    ]
 
 
 @cl.on_stop

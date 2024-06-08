@@ -36,7 +36,12 @@ def configure_logging():
 
     log_level = os.environ.get("CHATBOT_LOG_LEVEL", "WARN")
     logging.getLogger("chatbot").setLevel(getattr(logging, log_level))
-    logging.info("Configured logging level: %s", log_level)
+    logging.info("Configured logging level for 'chatbot.*': %s", log_level)
+
+    root_log_level = os.environ.get("ROOT_LOG_LEVEL", None)
+    if root_log_level:
+        logging.getLogger("").setLevel(getattr(logging, root_log_level))
+        logging.info("Configured logging level for root logger: %s", root_log_level)
 
 
 env = os.environ.get("ENV", "DEV")
@@ -61,9 +66,11 @@ if env == "PROD":
 def _init_settings():
     # Remember to update ChatSettings in chatbot-chainlit.py when adding new settings
     # and update chatbot/engines/__init.py:CHATBOT_SETTING_KEYS
+    preload_chat_engine_default = "ENGINE_MODULES" in os.environ and "LLM_MODULES" in os.environ
     return {
         "env": env,
-        "enable_api": is_true(os.environ.get("ENABLE_CHATBOT_API", "False")),
+        "enable_api": is_env_var_true("ENABLE_CHATBOT_API", False),
+        "preload_chat_engine": is_env_var_true("PRELOAD_CHAT_ENGINE", preload_chat_engine_default),
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
         "temperature": float(os.environ.get("LLM_TEMPERATURE", 0.1)),
@@ -74,8 +81,10 @@ def _init_settings():
     }
 
 
-def is_true(string):
-    return string.lower() not in ["false", "f", "no", "n"]
+def is_env_var_true(var_name, default=False):
+    if value:= os.environ.get(var_name, None):
+        return value.lower() not in ["false", "f", "no", "n"]
+    return default
 
 
 initial_settings = _init_settings()

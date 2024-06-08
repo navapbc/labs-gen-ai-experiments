@@ -66,7 +66,17 @@ async def healthcheck(request: Request):
     return HTMLResponse(f"Healthy {git_sha} built at {build_date}<br/>{hostname}")
 
 
-ALLOWED_ENV_VARS = ["CHATBOT_LOG_LEVEL"]
+ALLOWED_ENV_VARS = [
+    "ROOT_LOG_LEVEL",
+    "CHATBOT_LOG_LEVEL",
+    "ENGINE_MODULES",
+    "LLM_MODULES",
+    "PRELOAD_CHAT_ENGINE",
+    "CHAT_ENGINE",
+    "LLM_MODEL_NAME",
+    "LLM_TEMPERATURE",
+    "RETRIEVE_K",
+]
 
 
 @app.post("/initenvs")
