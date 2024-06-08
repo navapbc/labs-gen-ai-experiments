@@ -9,7 +9,7 @@ CLIENT_NAME = "groq"
 MODEL_NAMES = ["llama3-70b-8192", "mixtral-8x7b-32768"]
 
 
-def requirements_satisfied(_settings):
+def requirements_satisfied():
     if not os.environ.get("GROQ_API_KEY"):
         return False
     return True

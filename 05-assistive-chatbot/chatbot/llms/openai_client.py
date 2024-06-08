@@ -13,7 +13,7 @@ _LEGACY_MODELS = ["gpt-3.5-turbo-instruct"]
 MODEL_NAMES = _CHAT_MODELS + _LEGACY_MODELS
 
 
-def requirements_satisfied(_settings):
+def requirements_satisfied():
     if not os.environ.get("OPENAI_API_KEY"):
         return False
     return True

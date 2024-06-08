@@ -65,7 +65,7 @@ if env == "PROD":
 
 
 @utils.verbose_timer(logger)
-def _init_settings():
+def create_init_settings():
     # REMINDER: when adding new settings, update ChatSettings in chatbot-chainlit.py
     # and chatbot/engines/__init.py:LLM_SETTING_KEYS, if applicable
     return {
@@ -79,15 +79,10 @@ def _init_settings():
     }
 
 
-initial_settings = _init_settings()
-
-
 def reset():
     configure_logging()
     engines._engines.clear()
     llms._llms.clear()
-    global initial_settings
-    initial_settings = _init_settings()
 
 
 @utils.verbose_timer(logger)

@@ -9,7 +9,7 @@ CLIENT_NAME = "langchain.ollama"
 MODEL_NAMES = ["openhermes", "llama2", "mistral"]
 
 
-def requirements_satisfied(_settings):
+def requirements_satisfied():
     if os.environ.get("ENV") != "PROD":
         # Exclude Ollama models in production b/c it requires a local Ollama installation
         return False
