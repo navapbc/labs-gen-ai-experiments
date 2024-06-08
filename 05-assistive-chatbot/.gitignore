@@ -9,5 +9,6 @@ log/
 
 # .env contains secret API keys
 .env
+.secrets-*
 
 guru_cards*.json

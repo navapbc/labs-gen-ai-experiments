@@ -8,10 +8,14 @@ an API that can be deployed with the Chainlit chatbot.
 
 import logging
 import os
+import platform
+import socket
 from functools import cached_property
+from io import StringIO
 from typing import Dict
 
-from fastapi import FastAPI, Request
+import dotenv
+from fastapi import Body, FastAPI, Request
 from fastapi.responses import HTMLResponse
 
 import chatbot
@@ -48,16 +52,37 @@ def query(message: str | Dict):
     return response
 
 
+# Make sure to use async functions for faster responses
 @app.get("/healthcheck")
-def healthcheck(request: Request):
+async def healthcheck(request: Request):
     logger.info(request.headers)
     # TODO: Add a health check - https://pypi.org/project/fastapi-healthchecks/
 
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "")
+    hostname = f"{platform.node()} {socket.gethostname()}"
 
     logger.info("Returning: Healthy %s %s", build_date, git_sha)
-    return HTMLResponse(f"Healthy {git_sha} built at {build_date}")
+    return HTMLResponse(f"Healthy {git_sha} built at {build_date}<br/>{hostname}")
+
+
+ALLOWED_ENV_VARS = ["CHATBOT_LOG_LEVEL"]
+
+
+@app.post("/initenvs")
+def initenvs(env_file_contents: str = Body()):
+    "Set environment variables for API keys and log level. See usage in push_image.yml"
+    env_values = dotenv.dotenv_values(stream=StringIO(env_file_contents))
+    vars_updated = []
+    for name, value in env_values.items():
+        if name.endswith("_API_KEY") or name.endswith("_API_TOKEN") or name in ALLOWED_ENV_VARS:
+            logger.info("Setting environment variable %s", name)
+            os.environ[name] = value or ""
+            vars_updated.append(name)
+        else:
+            logger.warning("Setting environment variable %s is not allowed!", name)
+    chatbot.reset()
+    return str(vars_updated)
 
 
 if __name__ == "__main__":

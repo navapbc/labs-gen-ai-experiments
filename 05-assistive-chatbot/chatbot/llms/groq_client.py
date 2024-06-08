@@ -24,6 +24,7 @@ class GroqClient:
         self.model_name = model_name
         self.settings = settings
         logger.info("Creating LLM client '%s' with %s", model_name, self.settings)
+        # TODO: remove temperature from settings
         self.client = Groq(**self.settings)
 
     def generate_reponse(self, message):
