@@ -14,6 +14,8 @@ from chatbot import engines, llms, utils
 ## Set default environment variables
 
 
+os.environ.setdefault("ENV", "DEV")
+
 # Opt out of telemetry -- https://docs.trychroma.com/telemetry
 os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
 
@@ -44,7 +46,7 @@ def configure_logging():
         logging.info("Configured logging level for root logger: %s", root_log_level)
 
 
-env = os.environ.get("ENV", "DEV")
+env = os.environ.get("ENV")
 print(f"Loading .env-{env}")
 dotenv.load_dotenv(f".env-{env}")
 dotenv.load_dotenv()
@@ -63,14 +65,10 @@ if env == "PROD":
 
 
 @utils.verbose_timer(logger)
-def _init_settings():
-    # Remember to update ChatSettings in chatbot-chainlit.py when adding new settings
-    # and update chatbot/engines/__init.py:CHATBOT_SETTING_KEYS
-    preload_chat_engine_default = "ENGINE_MODULES" in os.environ and "LLM_MODULES" in os.environ
+def create_init_settings():
+    # REMINDER: when adding new settings, update ChatSettings in chatbot-chainlit.py
+    # and chatbot/engines/__init.py:LLM_SETTING_KEYS, if applicable
     return {
-        "env": env,
-        "enable_api": is_env_var_true("ENABLE_CHATBOT_API", False),
-        "preload_chat_engine": is_env_var_true("PRELOAD_CHAT_ENGINE", preload_chat_engine_default),
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
         "temperature": float(os.environ.get("LLM_TEMPERATURE", 0.1)),
@@ -81,21 +79,10 @@ def _init_settings():
     }
 
 
-def is_env_var_true(var_name, default=False):
-    if value:= os.environ.get(var_name, None):
-        return value.lower() not in ["false", "f", "no", "n"]
-    return default
-
-
-initial_settings = _init_settings()
-
-
 def reset():
     configure_logging()
     engines._engines.clear()
     llms._llms.clear()
-    global initial_settings
-    initial_settings = _init_settings()
 
 
 @utils.verbose_timer(logger)

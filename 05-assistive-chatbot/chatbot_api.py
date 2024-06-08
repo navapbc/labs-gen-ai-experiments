@@ -35,7 +35,7 @@ class ApiState:
     @cached_property
     def chat_engine(self):
         # Load the initial settings
-        settings = chatbot.initial_settings
+        settings = chatbot.create_init_settings()
         chatbot.validate_settings(settings)
 
         # Create the chat engine

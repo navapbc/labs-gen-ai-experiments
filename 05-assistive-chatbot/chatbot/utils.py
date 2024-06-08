@@ -2,10 +2,17 @@ import functools
 import importlib
 import inspect
 import logging
+import os
 import pkgutil
 import pprint
 import textwrap
 import time
+
+
+def is_env_var_true(var_name, default=False):
+    if value := os.environ.get(var_name, None):
+        return value.lower() not in ["false", "f", "no", "n"]
+    return default
 
 
 def timer(func):

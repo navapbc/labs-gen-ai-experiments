@@ -18,7 +18,7 @@ After running the chatbot and providing feedback in the UI, review the feedback 
 ## Running an application
 
 There are several ways to run the chatbot application, offering different ways to interact with the chatbot.
-All apps use configurations set in `.env`, which is *not* checked into git. These configurations (like `CHAT_ENGINE` and `LLM_MODEL_NAME`) can be overridden by environment variables set on the commandline.  See `_init_settings()` in `chatbot/__init__.py` for other variables.
+All apps use configurations set in `.env`, which is *not* checked into git. These configurations (like `CHAT_ENGINE` and `LLM_MODEL_NAME`) can be overridden by environment variables set on the commandline.  See `chatbot/__init__.py` for other variables.
 
 ### Run commandline app
 
@@ -53,7 +53,7 @@ This application runs the chatbot API for other applications to make requests to
 
 - Application entrypoints are in the root folder of the repo. Other Python files are under the `chatbot` folder.
 - The chatbot package `chatbot/__init__.py` is run for all apps because they `import chatbot`.
-- It initializes settings (`_init_settings()`) and creates a specified chat engine (`create_chat_engine(settings)`).
+- It initializes settings and creates a specified chat engine (`create_chat_engine(settings)`).
 
 ### Adding a chat engine
 
@@ -79,7 +79,7 @@ To create a new LLM client, add a new Python file under `chatbot/llms` with:
 - an LLM client class that:
     - sets `self.client` based on the provided `settings`, and
     - implements a `generate_reponse(self, message)` function that uses `self.client` to generate a response, which may need to be parsed so that a string is returned to `chat_engine.gen_response(self, query)`.
-- (optional) a `requirements_satisfied(settings)` function that checks if necessary environment variable(s) and other LLM client preconditions are satisfied;
+- (optional) a `requirements_satisfied()` function that checks if necessary environment variable(s) and other LLM client preconditions are satisfied;
 The new Python file will be automatically discovered and registered for display in the Chainlit settings web UI.
 
 An LLM client can be used in any arbitrary program by:

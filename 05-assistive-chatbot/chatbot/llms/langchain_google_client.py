@@ -9,7 +9,7 @@ CLIENT_NAME = "langchain.google"
 MODEL_NAMES = ["gemini-pro", "gemini-1.5-pro", "gemini-1.5-flash"]
 
 
-def requirements_satisfied(_settings):
+def requirements_satisfied():
     if not os.environ.get("GOOGLE_API_KEY"):
         return False
     return True

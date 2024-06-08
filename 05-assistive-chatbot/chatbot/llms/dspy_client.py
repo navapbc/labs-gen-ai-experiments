@@ -12,9 +12,9 @@ _GROQ_LLMS = ["llama3-70b-8192", "mixtral-8x7b-32768"]
 MODEL_NAMES = _OLLAMA_LLMS + _OPENAI_LLMS + _GOOGLE_LLMS + _GROQ_LLMS
 
 
-def model_names(settings):
+def model_names():
     available_models = []
-    if settings["env"] != "PROD":
+    if os.environ.get("ENV") != "PROD":
         # Include Ollama models if not in production b/c it requires a local Ollama installation
         available_models += _OLLAMA_LLMS
 

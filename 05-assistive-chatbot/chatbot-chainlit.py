@@ -20,7 +20,7 @@ from chatbot.engines import v2_household_engine
 
 logger = logging.getLogger(f"chatbot.{__name__}")
 
-if chatbot.initial_settings["enable_api"]:
+if utils.is_env_var_true("ENABLE_CHATBOT_API", False):
     import chatbot_api
 
     logger.info("Chatbot API loaded: %s", chatbot_api.__name__)
@@ -33,8 +33,9 @@ async def init_chat():
     logger.debug("init_chat")
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "unknown")
+    initial_settings = chatbot.create_init_settings()
     metadata = {
-        **chatbot.initial_settings,
+        **initial_settings,
         "build_date": build_date,
         "git_sha": git_sha,
         "hostname": socket.gethostname(),
@@ -50,18 +51,18 @@ async def init_chat():
                 id="chat_engine",
                 label="Chat Mode",
                 values=engines.available_engines(),
-                initial_value=chatbot.initial_settings["chat_engine"],
+                initial_value=initial_settings["chat_engine"],
             ),
             Select(
                 id="model",
                 label="Primary LLM Model",
                 values=available_llms,
-                initial_value=chatbot.initial_settings["model"],
+                initial_value=initial_settings["model"],
             ),
             Slider(
                 id="temperature",
                 label="Temperature for primary LLM",
-                initial=chatbot.initial_settings["temperature"],
+                initial=initial_settings["temperature"],
                 min=0,
                 max=2,
                 step=0.1,
@@ -69,7 +70,7 @@ async def init_chat():
             Slider(
                 id="retrieve_k",
                 label="Guru cards to retrieve",
-                initial=chatbot.initial_settings["retrieve_k"],
+                initial=initial_settings["retrieve_k"],
                 min=1,
                 max=10,
                 step=1,
@@ -78,12 +79,12 @@ async def init_chat():
                 id="model2",
                 label="LLM Model for summarizer",
                 values=available_llms,
-                initial_value=chatbot.initial_settings["model2"],
+                initial_value=initial_settings["model2"],
             ),
             Slider(
                 id="temperature2",
                 label="Temperature for summarizer",
-                initial=chatbot.initial_settings["temperature2"],
+                initial=initial_settings["temperature2"],
                 min=0,
                 max=2,
                 step=0.1,
@@ -98,7 +99,8 @@ async def init_chat():
     if error:
         assert False, f"Validation error: {error}"
 
-    if chatbot.initial_settings["preload_chat_engine"]:
+    preload_chat_engine_default = "ENGINE_MODULES" in os.environ and "LLM_MODULES" in os.environ
+    if utils.is_env_var_true("PRELOAD_CHAT_ENGINE", preload_chat_engine_default):
         logger.info("Preloading chat engine")
         await apply_settings()
 
