@@ -1,4 +1,5 @@
 import logging
+import os
 
 from langchain_community.llms.ollama import Ollama
 
@@ -8,8 +9,8 @@ CLIENT_NAME = "langchain.ollama"
 MODEL_NAMES = ["openhermes", "llama2", "mistral"]
 
 
-def requirements_satisfied(settings):
-    if settings["env"] == "PROD":
+def requirements_satisfied(_settings):
+    if os.environ.get("ENV") != "PROD":
         # Exclude Ollama models in production b/c it requires a local Ollama installation
         return False
     return True

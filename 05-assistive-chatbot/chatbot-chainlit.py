@@ -20,7 +20,7 @@ from chatbot.engines import v2_household_engine
 
 logger = logging.getLogger(f"chatbot.{__name__}")
 
-if chatbot.initial_settings["enable_api"]:
+if utils.is_env_var_true("ENABLE_CHATBOT_API", False):
     import chatbot_api
 
     logger.info("Chatbot API loaded: %s", chatbot_api.__name__)
@@ -98,7 +98,8 @@ async def init_chat():
     if error:
         assert False, f"Validation error: {error}"
 
-    if chatbot.initial_settings["preload_chat_engine"]:
+    preload_chat_engine_default = "ENGINE_MODULES" in os.environ and "LLM_MODULES" in os.environ
+    if utils.is_env_var_true("PRELOAD_CHAT_ENGINE", preload_chat_engine_default):
         logger.info("Preloading chat engine")
         await apply_settings()
 
