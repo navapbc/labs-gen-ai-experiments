@@ -110,9 +110,11 @@ jobs:
         echo "Populating with input files"
         [ -f ./get_input_files.sh ] && ./get_input_files.sh
 
+        BUILD_DATE=$(date +%Y-%m-%d-%T)
+        echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
         # Add extra environment variables to facilitate traceability of an image back to the source code
         echo "
-        BUILD_DATE=$(date +%Y-%m-%d-%T)
+        BUILD_DATE=$BUILD_DATE
         GIT_SHA=${{ github.sha }}
         " >> .env
         wc .env
@@ -150,6 +152,7 @@ jobs:
                     "command": [],
                     "environment": {
                         "ENV": "PROD",
+                        "DEPLOYMENT_DATE": "$DEPLOYMENT_DATE",
                         "BUILD_DATE": "$BUILD_DATE",
                         "BUILD_FOLDER": "${{ inputs.dockerfile_folder }}",
                         "GIT_BRANCH": "$GIT_BRANCH",
@@ -174,7 +177,7 @@ jobs:
             }
         }'
         export GIT_BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
-        export BUILD_DATE=$(date +%Y-%m-%d-%T%z)
+        export DEPLOYMENT_DATE=$(date +%Y-%m-%d-%T%z)
         echo "$CONFIG_TEMPLATE" | envsubst > config.json
         cat config.json
 
