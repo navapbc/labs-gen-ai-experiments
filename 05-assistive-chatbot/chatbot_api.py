@@ -57,7 +57,7 @@ def healthcheck(request: Request):
     build_date = os.environ.get("BUILD_DATE", "")
 
     logger.info("Returning: Healthy %s %s", build_date, git_sha)
-    return HTMLResponse(f"Healthy {build_date} {git_sha}")
+    return HTMLResponse(f"Healthy {git_sha} built at {build_date}")
 
 
 if __name__ == "__main__":
