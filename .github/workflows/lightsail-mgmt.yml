@@ -46,7 +46,7 @@ on:
         - small
         - medium
         - large
-        # - xlarge
+        - xlarge
 
 permissions:
   id-token: write # This is required for requesting the JWT from GitHub's OIDC provider for AWS authentication
