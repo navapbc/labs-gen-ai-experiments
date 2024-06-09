@@ -34,14 +34,20 @@ async def init_chat():
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "unknown")
     initial_settings = chatbot.create_init_settings()
+    service_name = os.environ.get("SERVICE_NAME", "n/a")
     metadata = {
         **initial_settings,
         "build_date": build_date,
         "git_sha": git_sha,
+        "service_name": service_name,
         "hostname": socket.gethostname(),
     }
 
-    await cl.Message(metadata=metadata, content=f"Welcome to the Assistive Chat prototype (built {build_date})").send()
+    await cl.Message(
+        metadata=metadata,
+        disable_feedback=True,
+        content=f"Welcome to the Assistive Chat prototype (built {build_date})",
+    ).send()
 
     available_llms = llms.available_llms()
     # https://docs.chainlit.io/api-reference/chat-settings

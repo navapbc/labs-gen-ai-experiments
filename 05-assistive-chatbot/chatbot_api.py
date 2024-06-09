@@ -60,10 +60,11 @@ async def healthcheck(request: Request):
 
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "")
+    service_name = os.environ.get("SERVICE_NAME", "")
     hostname = f"{platform.node()} {socket.gethostname()}"
 
     logger.info("Returning: Healthy %s %s", build_date, git_sha)
-    return HTMLResponse(f"Healthy {git_sha} built at {build_date}<br/>{hostname}")
+    return HTMLResponse(f"Healthy {git_sha} built at {build_date}<br/>{service_name} {hostname}")
 
 
 ALLOWED_ENV_VARS = [

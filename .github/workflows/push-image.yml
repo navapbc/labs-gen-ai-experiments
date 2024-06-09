@@ -152,6 +152,7 @@ jobs:
                     "command": [],
                     "environment": {
                         "ENV": "PROD",
+                        "SERVICE_NAME": "$SERVICE_NAME",
                         "DEPLOYMENT_DATE": "$DEPLOYMENT_DATE",
                         "BUILD_DATE": "$BUILD_DATE",
                         "BUILD_FOLDER": "${{ inputs.dockerfile_folder }}",
