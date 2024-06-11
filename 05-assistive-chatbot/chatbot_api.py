@@ -80,7 +80,7 @@ async def healthcheck(request: Request) -> HealthCheck:
     service_name = os.environ.get("SERVICE_NAME", "")
     hostname = f"{platform.node()} {socket.gethostname()}"
 
-    logger.info("Healthy {git_sha} built at {build_date}<br/>{service_name} {hostname}")
+    logger.info(f"Healthy {git_sha} built at {build_date}<br/>{service_name} {hostname}")
     return HealthCheck(
         build_date=build_date, git_sha=git_sha, status="OK", service_name=service_name, hostname=hostname
     )
