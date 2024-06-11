@@ -34,10 +34,15 @@ on:
         type: boolean
         default: true
       deploy_image:
-        description: "Deploy image"
+        description: "Deploy built image or last deployment"
         required: true
         type: boolean
         default: true
+      deploy_retries:
+        description: "Number of times to retry deployment"
+        required: true
+        type: number
+        default: 3
 
 permissions:
   id-token: write # This is required for requesting the JWT from GitHub's OIDC provider for AWS authentication
@@ -88,6 +93,7 @@ jobs:
         echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
 
     - name: "Populate .env file"
+      if: inputs.dockerfile_folder != '05-assistive-chatbot'
       run: |
         # The ENV_FILE_CONTENTS contains API keys, like LITERAL_API_KEY and OPENAI_API_KEY
         # As such, make sure the built image is not publicly accessible
@@ -104,9 +110,11 @@ jobs:
         echo "Populating with input files"
         [ -f ./get_input_files.sh ] && ./get_input_files.sh
 
+        BUILD_DATE=$(date +%Y-%m-%d-%T)
+        echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
         # Add extra environment variables to facilitate traceability of an image back to the source code
         echo "
-        BUILD_DATE=$(date +%Y-%m-%d-%T)
+        BUILD_DATE=$BUILD_DATE
         GIT_SHA=${{ github.sha }}
         " >> .env
         wc .env
@@ -125,8 +133,16 @@ jobs:
         echo "Lightsail assigned image name: '$LS_DOCKER_IMAGE'"
         echo "LS_DOCKER_IMAGE=$LS_DOCKER_IMAGE" >> $GITHUB_ENV
 
-    - name: "Create new deployment"
+    - name: "Get last deployment"
+      if: inputs.deploy_image && ! inputs.build_image
+      run: |
+        LAST_DEPLOYMENT_IMAGE=$(aws lightsail get-container-service-deployments --service-name "$SERVICE_NAME" | jq -r ".deployments[0].containers.chatbot.image")
+        echo "LS_DOCKER_IMAGE=$LAST_DEPLOYMENT_IMAGE" >> $GITHUB_ENV
+
+    - name: "Submit deployment"
       if: inputs.deploy_image
+      env:
+        DEPLOY_RETRIES: ${{ inputs.deploy_retries }}
       run: |
         CONFIG_TEMPLATE='{
             "serviceName": "$SERVICE_NAME",
@@ -136,7 +152,11 @@ jobs:
                     "command": [],
                     "environment": {
                         "ENV": "PROD",
+                        "SERVICE_NAME": "$SERVICE_NAME",
+                        "DEPLOYMENT_DATE": "$DEPLOYMENT_DATE",
                         "BUILD_DATE": "$BUILD_DATE",
+                        "BUILD_FOLDER": "${{ inputs.dockerfile_folder }}",
+                        "GIT_BRANCH": "$GIT_BRANCH",
                         "GIT_SHA": "${{ github.sha }}"
                     },
                     "ports": {
@@ -149,21 +169,43 @@ jobs:
                 "containerPort": 8000,
                 "healthCheck": {
                     "healthyThreshold": 2,
-                    "unhealthyThreshold": 4,
-                    "timeoutSeconds": 20,
-                    "intervalSeconds": 60,
+                    "unhealthyThreshold": 10,
+                    "timeoutSeconds": 60,
+                    "intervalSeconds": 300,
                     "path": "/healthcheck",
                     "successCodes": "200-499"
                 }
             }
         }'
-        echo "$CONFIG_TEMPLATE" | BUILD_DATE=$(date +%Y-%m-%d-%T%z) envsubst > config.json
+        export GIT_BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+        export DEPLOYMENT_DATE=$(date +%Y-%m-%d-%T%z)
+        echo "$CONFIG_TEMPLATE" | envsubst > config.json
         cat config.json
 
-        echo "Creating new deployment"
-        aws lightsail create-container-service-deployment --cli-input-json file://config.json
+        for ((i = 0 ; i < ${DEPLOY_RETRIES} ; i++ )); do
+            echo "## Deploy attempt $((i+1)) of $DEPLOY_RETRIES"
+            date
+            echo "Creating new deployment"
+            aws lightsail create-container-service-deployment --cli-input-json file://config.json
 
-        sleep 10
-        ./.github/workflows/waitForLightsail.sh deployment
+            sleep 30
+            if ./.github/workflows/waitForLightsail.sh deployment; then
+                echo "Success on attempt $((i+1))"
+                break;
+            fi
+        done
+        date
+
+
+    - name: "Initialize app"
+      if: inputs.deploy_image && (inputs.dockerfile_folder == '05-assistive-chatbot')
+      run: |
+        # The ENV_FILE_CONTENTS contains API keys, like LITERAL_API_KEY and OPENAI_API_KEY
+        # As such, make sure the built image is not publicly accessible
+        echo "${{ secrets[env.SECRET_NAME] }}" > .env_vars
+
+        SVC_URL=$(aws lightsail get-container-services --service-name "$SERVICE_NAME" | jq -r '.containerServices[0].url')
+        echo "Setting API keys at $SVC_URL"
+        curl --fail -X POST "${SVC_URL}initenvs" --data-binary '@.env_vars'
 
         # TODO: warm up vector DB on startup

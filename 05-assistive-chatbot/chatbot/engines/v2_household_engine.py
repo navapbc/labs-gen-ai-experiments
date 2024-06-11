@@ -185,6 +185,10 @@ def populate_summaries(gen_results, guru_card_texts, summarizer):
         # Limit summarizing of Guru cards based on score and card count
         if i > 2 and card_entry.score_sum < 0.3:
             continue
+        if card_entry.card_title not in guru_card_texts:
+            # TODO: notify admin via Literal?
+            logger.warning("Guru card not found: %s", card_entry.card_title)
+            continue
         card_text = guru_card_texts[card_entry.card_title]
         card_entry.entire_text = "\n".join([card_entry.card_title, card_text])
         # Summarize based on derived question and original question

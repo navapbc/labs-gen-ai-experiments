@@ -11,27 +11,10 @@ from chatbot import engines, llms, utils
 # - add unit tests
 
 
-## Initialize logging
+## Set default environment variables
 
 
-def configure_logging():
-    log_format = os.environ.get("LOG_FORMAT", "%(relativeCreated)6d - %(name)-24s - %(levelname)-5s - %(message)s")
-    logging.basicConfig(format=log_format)
-
-    log_level = os.environ.get("CHATBOT_LOG_LEVEL", "WARN")
-    logging.getLogger("chatbot").setLevel(getattr(logging, log_level))
-    logging.info("Configured logging level: %s", log_level)
-
-
-env = os.environ.get("ENV", "DEV")
-print(f"Loading .env-{env}")
-dotenv.load_dotenv(f".env-{env}")
-dotenv.load_dotenv()
-configure_logging()
-logger = logging.getLogger(__name__)
-
-
-## Initialize settings
+os.environ.setdefault("ENV", "DEV")
 
 # Opt out of telemetry -- https://docs.trychroma.com/telemetry
 os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
@@ -46,13 +29,46 @@ os.environ.setdefault("DSP_CACHEBOOL", "false")
 os.environ.setdefault("BUILD_DATE", str(date.today()))
 
 
+## Initialize logging
+
+
+def configure_logging():
+    log_format = os.environ.get("LOG_FORMAT", "%(relativeCreated)6d - %(name)-24s - %(levelname)-5s - %(message)s")
+    logging.basicConfig(format=log_format)
+
+    log_level = os.environ.get("CHATBOT_LOG_LEVEL", "WARN")
+    logging.getLogger("chatbot").setLevel(getattr(logging, log_level))
+    logging.info("Configured logging level for 'chatbot.*': %s", log_level)
+
+    root_log_level = os.environ.get("ROOT_LOG_LEVEL", None)
+    if root_log_level:
+        logging.getLogger("").setLevel(getattr(logging, root_log_level))
+        logging.info("Configured logging level for root logger: %s", root_log_level)
+
+
+env = os.environ.get("ENV")
+print(f"Loading .env-{env}")
+dotenv.load_dotenv(f".env-{env}")
+dotenv.load_dotenv()
+configure_logging()
+logger = logging.getLogger(__name__)
+logger.info("Build date: %s", os.environ.get("BUILD_DATE"))
+
+if env == "PROD":
+    # https://www.uvicorn.org/settings/#production
+    # https://sentry.io/answers/number-of-uvicorn-workers-needed-in-production/
+    # Too many workers will use more resources, which slows down all operations
+    os.environ.setdefault("WEB_CONCURRENCY", "2")
+
+
+## Initialize settings
+
+
 @utils.verbose_timer(logger)
-def _init_settings():
-    # Remember to update ChatSettings in chatbot-chainlit.py when adding new settings
-    # and update chatbot/engines/__init.py:CHATBOT_SETTING_KEYS
+def create_init_settings():
+    # REMINDER: when adding new settings, update ChatSettings in chatbot-chainlit.py
+    # and chatbot/engines/__init.py:LLM_SETTING_KEYS, if applicable
     return {
-        "env": env,
-        "enable_api": is_true(os.environ.get("ENABLE_CHATBOT_API", "False")),
         "chat_engine": os.environ.get("CHAT_ENGINE", "Direct"),
         "model": os.environ.get("LLM_MODEL_NAME", "mock :: llm"),
         "temperature": float(os.environ.get("LLM_TEMPERATURE", 0.1)),
@@ -63,11 +79,10 @@ def _init_settings():
     }
 
 
-def is_true(string):
-    return string.lower() not in ["false", "f", "no", "n"]
-
-
-initial_settings = _init_settings()
+def reset():
+    configure_logging()
+    engines._engines.clear()
+    llms._llms.clear()
 
 
 @utils.verbose_timer(logger)
@@ -82,6 +97,7 @@ def validate_settings(settings):
             return f"Unknown {setting_name}: '{model_name}'"
 
         if chat_engine.startswith("Summaries") and "instruct" not in model_name:
+            # TODO: also send to user
             logger.warning("For the %s chat engine, an `*instruct` model is recommended", chat_engine)
 
     # PLACEHOLDER: Validate other settings

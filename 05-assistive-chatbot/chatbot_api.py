@@ -8,13 +8,15 @@ an API that can be deployed with the Chainlit chatbot.
 
 import logging
 import os
+import platform
+import socket
 from functools import cached_property
+from io import StringIO
 from typing import Dict
 
-
-from fastapi import FastAPI, Request, status
+import dotenv
+from fastapi import Body, FastAPI, Request, status
 from pydantic import BaseModel
-
 
 import chatbot
 
@@ -23,17 +25,17 @@ if __name__ == "__main__":
     app = FastAPI()
 else:
     # Otherwise use Chainlit's app
+    # See https://docs.chainlit.io/deploy/api#how-it-works
     from chainlit.server import app
 
 logger = logging.getLogger(f"chatbot.{__name__}")
 
 
-# TODO Ensure this is thread safe when run by via chalint. Check if the chainlit command might handle threading/multiple requests for us.
 class ApiState:
     @cached_property
     def chat_engine(self):
         # Load the initial settings
-        settings = chatbot.initial_settings
+        settings = chatbot.create_init_settings()
         chatbot.validate_settings(settings)
 
         # Create the chat engine
@@ -43,7 +45,7 @@ class ApiState:
 app_state = ApiState()
 
 
-# See https://docs.chainlit.io/deploy/api#how-it-works
+# This function cannot be async because it uses a single non-thread-safe app_state
 @app.post("/query")
 def query(message: str | Dict):
     response = app_state.chat_engine().gen_response(message)
@@ -55,6 +57,8 @@ class HealthCheck(BaseModel):
     status: str
     build_date: str
     git_sha: str
+    service_name: str
+    hostname: str
 
 
 @app.get(
@@ -65,14 +69,47 @@ class HealthCheck(BaseModel):
     status_code=status.HTTP_200_OK,
     response_model=HealthCheck,
 )
-def healthcheck(request: Request) -> HealthCheck:
+async def healthcheck(request: Request) -> HealthCheck:
+# Make sure to use async functions for faster responses
     logger.info(request.headers)
 
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "")
     
-    logger.info("Returning: Healthy %s %s", build_date, git_sha)
-    return HealthCheck(build_date=build_date, git_sha=git_sha, status="OK")
+    service_name = os.environ.get("SERVICE_NAME", "")
+    hostname = f"{platform.node()} {socket.gethostname()}"
+
+    logger.info("Healthy {git_sha} built at {build_date}<br/>{service_name} {hostname}")
+    return HealthCheck(build_date=build_date, git_sha=git_sha, status="OK", service_name=service_name, hostname=hostname)
+
+
+ALLOWED_ENV_VARS = [
+    "ROOT_LOG_LEVEL",
+    "CHATBOT_LOG_LEVEL",
+    "ENGINE_MODULES",
+    "LLM_MODULES",
+    "PRELOAD_CHAT_ENGINE",
+    "CHAT_ENGINE",
+    "LLM_MODEL_NAME",
+    "LLM_TEMPERATURE",
+    "RETRIEVE_K",
+]
+
+
+@app.post("/initenvs")
+def initenvs(env_file_contents: str = Body()):
+    "Set environment variables for API keys and log level. See usage in push_image.yml"
+    env_values = dotenv.dotenv_values(stream=StringIO(env_file_contents))
+    vars_updated = []
+    for name, value in env_values.items():
+        if name.endswith("_API_KEY") or name.endswith("_API_TOKEN") or name in ALLOWED_ENV_VARS:
+            logger.info("Setting environment variable %s", name)
+            os.environ[name] = value or ""
+            vars_updated.append(name)
+        else:
+            logger.warning("Setting environment variable %s is not allowed!", name)
+    chatbot.reset()
+    return str(vars_updated)
 
 
 if __name__ == "__main__":

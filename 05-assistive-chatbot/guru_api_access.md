@@ -57,7 +57,7 @@ done
 jq -n '[inputs] | add' guru_cards_for_nava_?.json guru_cards_for_nava_??.json > guru_cards_for_nava.json
 
 # Create simplified JSON for readability
-python ingest.py guru_cards_for_nava.json
+python chatbot/guru_cards.py guru_cards_for_nava.json
 
 # Count cards
 jq length guru_cards_for_nava.json

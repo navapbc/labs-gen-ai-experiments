@@ -26,7 +26,7 @@ wait_for_service_state(){
 wait_for_next_container(){
     echo "Waiting for deployment $TARGET_DEP_VERSION to be Active"
     while true; do
-        sleep 20
+        sleep 30
         local SERVICE_OBJ=$(aws lightsail get-container-services --service-name "$SERVICE_NAME")
         local SVC_STATE=$(echo "$SERVICE_OBJ" | jq -r '.containerServices[0].state')
         local CURR_DEP_VER=$(echo "$SERVICE_OBJ" | jq -r '.containerServices[0].currentDeployment.version')
