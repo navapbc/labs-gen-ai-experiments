@@ -51,9 +51,10 @@ def query(message: str | Dict):
     response = app_state.chat_engine().gen_response(message)
     return response
 
+
 class HealthCheck(BaseModel):
     """Response model to validate and return when performing a health check."""
-    
+
     status: str
     build_date: str
     git_sha: str
@@ -70,17 +71,19 @@ class HealthCheck(BaseModel):
     response_model=HealthCheck,
 )
 async def healthcheck(request: Request) -> HealthCheck:
-# Make sure to use async functions for faster responses
+    # Make sure to use async functions for faster responses
     logger.info(request.headers)
 
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "")
-    
+
     service_name = os.environ.get("SERVICE_NAME", "")
     hostname = f"{platform.node()} {socket.gethostname()}"
 
     logger.info("Healthy {git_sha} built at {build_date}<br/>{service_name} {hostname}")
-    return HealthCheck(build_date=build_date, git_sha=git_sha, status="OK", service_name=service_name, hostname=hostname)
+    return HealthCheck(
+        build_date=build_date, git_sha=git_sha, status="OK", service_name=service_name, hostname=hostname
+    )
 
 
 ALLOWED_ENV_VARS = [
