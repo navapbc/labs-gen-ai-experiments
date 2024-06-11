@@ -7,8 +7,8 @@ from fastapi.testclient import TestClient
 from chatbot_api import app
 
 
-@pytest.fixture()
-def test_client():
+@pytest.fixture(name="test_client")
+def fixture_test_client():
     return TestClient(app)
 
 
