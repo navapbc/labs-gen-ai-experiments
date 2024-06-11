@@ -15,8 +15,8 @@ from io import StringIO
 from typing import Dict
 
 import dotenv
-from fastapi import Body, FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi import Body, FastAPI, Request, status
+from pydantic import BaseModel
 
 import chatbot
 
@@ -52,19 +52,38 @@ def query(message: str | Dict):
     return response
 
 
-# Make sure to use async functions for faster responses
-@app.get("/healthcheck")
-async def healthcheck(request: Request):
+class HealthCheck(BaseModel):
+    """Response model to validate and return when performing a health check."""
+
+    status: str
+    build_date: str
+    git_sha: str
+    service_name: str
+    hostname: str
+
+
+@app.get(
+    "/healthcheck",
+    tags=["healthcheck"],
+    summary="Perform a Health Check",
+    response_description="Return HTTP Status Code 200 (OK)",
+    status_code=status.HTTP_200_OK,
+    response_model=HealthCheck,
+)
+async def healthcheck(request: Request) -> HealthCheck:
+    # Make sure to use async functions for faster responses
     logger.info(request.headers)
-    # TODO: Add a health check - https://pypi.org/project/fastapi-healthchecks/
 
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "")
+
     service_name = os.environ.get("SERVICE_NAME", "")
     hostname = f"{platform.node()} {socket.gethostname()}"
 
-    logger.info("Returning: Healthy %s %s", build_date, git_sha)
-    return HTMLResponse(f"Healthy {git_sha} built at {build_date}<br/>{service_name} {hostname}")
+    logger.info(f"Healthy {git_sha} built at {build_date}<br/>{service_name} {hostname}")
+    return HealthCheck(
+        build_date=build_date, git_sha=git_sha, status="OK", service_name=service_name, hostname=hostname
+    )
 
 
 ALLOWED_ENV_VARS = [
