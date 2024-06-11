@@ -11,8 +11,10 @@ import os
 from functools import cached_property
 from typing import Dict
 
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+
+from fastapi import FastAPI, Request, status
+from pydantic import BaseModel
+
 
 import chatbot
 
@@ -47,17 +49,30 @@ def query(message: str | Dict):
     response = app_state.chat_engine().gen_response(message)
     return response
 
+class HealthCheck(BaseModel):
+    """Response model to validate and return when performing a health check."""
+    
+    status: str
+    build_date: str
+    git_sha: str
 
-@app.get("/healthcheck")
-def healthcheck(request: Request):
+
+@app.get(
+    "/healthcheck",
+    tags=["healthcheck"],
+    summary="Perform a Health Check",
+    response_description="Return HTTP Status Code 200 (OK)",
+    status_code=status.HTTP_200_OK,
+    response_model=HealthCheck,
+)
+def healthcheck(request: Request) -> HealthCheck:
     logger.info(request.headers)
-    # TODO: Add a health check - https://pypi.org/project/fastapi-healthchecks/
 
     git_sha = os.environ.get("GIT_SHA", "")
     build_date = os.environ.get("BUILD_DATE", "")
-
+    
     logger.info("Returning: Healthy %s %s", build_date, git_sha)
-    return HTMLResponse(f"Healthy {build_date} {git_sha}")
+    return HealthCheck(build_date=build_date, git_sha=git_sha, status="OK")
 
 
 if __name__ == "__main__":
