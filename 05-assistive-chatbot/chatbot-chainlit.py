@@ -44,9 +44,9 @@ async def init_chat():
     }
 
     await cl.Message(
-        metadata=metadata,
+        # metadata=metadata,
         disable_feedback=True,
-        content=f"Welcome to the Assistive Chat prototype (built {build_date})",
+        content=f"Welcome to the Assistive Chat prototype (built {build_date}, {metadata})",
     ).send()
 
     available_llms = llms.available_llms()
@@ -128,7 +128,7 @@ async def apply_settings():
 
     error = chatbot.validate_settings(settings)
     if error:
-        await cl.Message(author="backend", metadata=settings, content=f"! Validation error: {error}").send()
+        await cl.Message(author="backend", content=f"! Validation error: {error}").send()
     else:
         cl.user_session.set("settings_applied", True)
     return settings
@@ -208,23 +208,26 @@ def convert_to_message_args(response_obj: str | dict):
 def format_v2_results_as_markdown(gen_results, response_msg):
     resp = ["", f"## Q: {gen_results.question}"]
 
-    dq_resp = ["<details><summary>Derived Questions</summary>", ""]
+    dq_resp = ["<summary>Derived Questions</summary>", ""]
     for dq in gen_results.derived_questions:
         dq_resp.append(f"- {dq.derived_question}")
-    dq_resp += ["</details>", ""]
-
     cards_resp = []
     for i, card in enumerate(gen_results.cards, 1):
         if card.summary:
             cards_resp += [
-                f"<details><summary>{i}. <a href='https://link/to/guru_card'>{card.card_title}</a></summary>",
-                "",
-                f"   Summary: {card.summary}",
-                "",
+                f"""<div class="usa-accordion" id=accordion-{i}>
+                    <h4 class="usa-accordion__heading">
+                    <button
+                    type="button"
+                    class="usa-accordion__button"
+                    aria-expanded="false"
+                    aria-controls="a-{i}"
+                    ><a href='https://link/to/guru_card'>{card.card_title}</a></button></h4>
+                    <div id="a-{i}" class="usa-accordion__content usa-prose" hidden><p>Summary: {card.summary}"""
             ]
             indented_quotes = [q.strip().replace("\n", "\n   ") for q in card.quotes]
             cards_resp += [f"\n   Quote:\n   ```\n   {q}\n   ```" for q in indented_quotes]
-            cards_resp += ["</details>", ""]
+            cards_resp += ["</p></div></div>", ""]
 
     response_msg.content = "\n".join(resp + dq_resp + cards_resp)
     response_msg.elements = [
