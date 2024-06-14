@@ -44,7 +44,6 @@ async def init_chat():
     }
 
     await cl.Message(
-        # metadata=metadata,
         disable_feedback=True,
         content=f"Welcome to the Assistive Chat prototype (built {build_date}, {metadata})",
     ).send()
