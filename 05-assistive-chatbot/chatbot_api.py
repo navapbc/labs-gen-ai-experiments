@@ -12,7 +12,6 @@ import platform
 import socket
 from functools import cached_property
 from io import StringIO
-from typing import Dict
 
 import dotenv
 from fastapi import Body, FastAPI, Request, status
@@ -47,8 +46,8 @@ app_state = ApiState()
 
 # This function cannot be async because it uses a single non-thread-safe app_state
 @app.post("/query")
-def query(message: str | Dict):
-    response = app_state.chat_engine().gen_response(message)
+def query(message: str):
+    response = app_state.chat_engine.gen_response(message)
     return response
 
 
