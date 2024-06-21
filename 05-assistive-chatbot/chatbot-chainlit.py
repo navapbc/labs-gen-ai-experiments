@@ -11,8 +11,9 @@ import pprint
 import socket
 
 import chainlit as cl
-from chainlit.input_widget import Select, Slider  # , Switch
+from chainlit.input_widget import Select, Slider, TextInput  # , Switch
 from chainlit.types import ThreadDict
+from literalai import LiteralClient
 
 import chatbot
 from chatbot import engines, llms, utils
@@ -26,6 +27,8 @@ if utils.is_env_var_true("ENABLE_CHATBOT_API", False):
     logger.info("Chatbot API loaded: %s", chatbot_api.__name__)
 
 ## TODO: Enable users to log in so that they can be distinguished in GetLiteralAI feedback logs
+
+literal_client = LiteralClient(api_key=os.getenv("LITERAL_API_KEY"))
 
 
 @cl.on_chat_start
@@ -44,15 +47,18 @@ async def init_chat():
     }
 
     await cl.Message(
-        metadata=metadata,
-        disable_feedback=True,
-        content=f"Welcome to the Assistive Chat prototype (built {build_date})",
+        content=f"Welcome to the Assistive Chat prototype (built {build_date}) \n {metadata}",
     ).send()
 
     available_llms = llms.available_llms()
     # https://docs.chainlit.io/api-reference/chat-settings
     chat_settings = cl.ChatSettings(
         [
+            TextInput(
+                id="user",
+                label="Email Address",
+                placeholder="Email",
+            ),
             Select(
                 id="chat_engine",
                 label="Chat Mode",
@@ -115,6 +121,8 @@ async def init_chat():
 async def update_settings(settings):
     logger.info("Settings updated: %s", pprint.pformat(settings, indent=4))
     cl.user_session.set("settings", settings)
+    user = set_user(settings)
+    cl.user_session.set("chatbot_user", user)
     await apply_settings()
 
 
@@ -128,7 +136,7 @@ async def apply_settings():
 
     error = chatbot.validate_settings(settings)
     if error:
-        await cl.Message(author="backend", metadata=settings, content=f"! Validation error: {error}").send()
+        await cl.Message(author="backend", content=f"! Validation error: {error} \n {settings}").send()
     else:
         cl.user_session.set("settings_applied", True)
     return settings
@@ -152,25 +160,37 @@ async def message_submitted(message: cl.Message):
         # If settings not applied successfully, don't proceed
         if not cl.user_session.get("settings_applied", False):
             return
+    user = cl.user_session.get("chatbot_user")
+    if user is None:
+        settings = cl.user_session.get("settings")
+        user = set_user(settings)
+        cl.user_session.set("chatbot_user", user)
 
-    # If the latest message content is empty, Chainlit will display a loader while the content remains empty.
-    # https://docs.chainlit.io/concepts/message#trick-display-a-loader-while-waiting-for-a-response
-    response_msg = cl.Message(content="")
-    await response_msg.send()
+    with literal_client.thread(name="Test User", participant_id="abc") as thread:
+        literal_client.message(content=message.content, type="user_message", name="User")
 
-    chat_engine = cl.user_session.get("chat_engine")
-    response = chat_engine.gen_response(message.content)
+        if user:
+            thread.user = user.identifier
 
-    if isinstance(response, v2_household_engine.GenerationResults):
-        format_v2_results_as_markdown(response, response_msg)
-    elif isinstance(response, str):
-        response_msg.content = response
-    elif isinstance(response, dict):
-        await handle_response_dict(message, response, response_msg)
-    else:
-        response_msg.content = f"*Response*: {response}"
+        # If the latest message content is empty, Chainlit will display a loader while the content remains empty.
+        # https://docs.chainlit.io/concepts/message#trick-display-a-loader-while-waiting-for-a-response
+        response_msg = cl.Message(content="")
+        await response_msg.send()
 
-    await response_msg.update()
+        chat_engine = cl.user_session.get("chat_engine")
+        response = chat_engine.gen_response(message.content)
+
+        if isinstance(response, v2_household_engine.GenerationResults):
+            format_v2_results_as_markdown(response, response_msg)
+        elif isinstance(response, str):
+            response_msg.content = response
+        elif isinstance(response, dict):
+            await handle_response_dict(message, response, response_msg)
+        else:
+            response_msg.content = f"*Response*: {response}"
+
+        await response_msg.update()
+        literal_client.message(content=response_msg.content, type="assistant_message", name="Assistant")
 
 
 async def handle_response_dict(message, response, response_msg):
@@ -250,3 +270,11 @@ async def on_chat_resume(thread: ThreadDict):
 @cl.on_chat_end
 def on_chat_end():
     logger.debug("The user disconnected!")
+
+
+async def set_user(settings):
+    if settings["user"]:
+        user = await literal_client.api.get_user(identifier=settings["user"])
+        if user is None:
+            user = await literal_client.api.create_user(identifier=settings["user"], metadata=settings)
+        return user
