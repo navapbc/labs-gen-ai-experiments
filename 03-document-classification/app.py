@@ -20,8 +20,8 @@ Do not mark a document as evidence of identity unless it includes a photo!
 If you can't CLEARLY and ACCURATELY read text from the image, mark the document as not legible.
 
 interface Evidence {
+ reason: string; // the justification for why the document provides this type of evidence
  evidence_type: "residency" | "identity" | "income" | "expenses" | "disability" | "immigration"; // what type of evidence the document corresponds to
- reason: string; // the justification for the document providing this type of evidence
 }
 
 interface KeyValue {
