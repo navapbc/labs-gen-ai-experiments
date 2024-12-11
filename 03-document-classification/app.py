@@ -1,3 +1,10 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "openai==1.52.2",
+#     "streamlit==1.34.0",
+# ]
+# ///
 import base64
 import json
 import time
@@ -5,6 +12,13 @@ from functools import wraps
 
 import openai
 import streamlit as st
+
+if __name__ == "__main__":
+    if "__streamlitmagic__" not in locals():
+        import streamlit.web.bootstrap
+
+        streamlit.web.bootstrap.run(__file__, False, [], {})
+
 
 st.set_page_config(layout="wide")
 
