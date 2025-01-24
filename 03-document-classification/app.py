@@ -9,9 +9,14 @@ import base64
 import json
 import time
 from functools import wraps
+from dotenv import load_dotenv
+import os
 
 import openai
 import streamlit as st
+
+# Load environment variables from .env file
+load_dotenv()
 
 if __name__ == "__main__":
     if "__streamlitmagic__" not in locals():
@@ -25,7 +30,7 @@ st.set_page_config(layout="wide")
 
 @st.cache_resource
 def get_client():
-    return openai.OpenAI()
+    return openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 PROMPT = """Please review the attached document and respond with a JSON object matching the DocumentAnalysis type definition provided below. Do not respond with anything else besides the DocumentAnalysis JSON object.
