@@ -30,7 +30,7 @@ st.set_page_config(layout="wide")
 
 @st.cache_resource
 def get_client():
-    return openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+    return openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 PROMPT = """Please review the attached document and respond with a JSON object matching the DocumentAnalysis type definition provided below. Do not respond with anything else besides the DocumentAnalysis JSON object.
