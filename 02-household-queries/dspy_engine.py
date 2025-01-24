@@ -104,7 +104,7 @@ def run_retrieval(query, retrieve_k):
 
     print(f"Top {retrieve.k} passages for query: {query} \n", "-" * 30, "\n")
     for i, passage in enumerate(topK_passages):
-        print(f"[{i+1}]", passage, "\n")
+        print(f"[{i + 1}]", passage, "\n")
     return retrieval
 
 
@@ -315,7 +315,7 @@ def print_eval_table(eval_score, results):
         print(score, "|", ex.q_id, "|", ex.answer, "|", pred.get("answer", "")[:20])
     print()
     print("score:", eval_score)
-    print(f"{correct_count} ({int(correct_count/len(results)*100)}%) correct")
+    print(f"{correct_count} ({int(correct_count / len(results) * 100)}%) correct")
     print("--------------------------------------")
 
 
