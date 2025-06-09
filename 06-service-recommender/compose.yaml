@@ -1,0 +1,57 @@
+volumes:
+  database_data:
+    driver: local
+
+services:
+  phoenix:
+    image: arizephoenix/phoenix:version-10.9.1-nonroot
+    depends_on:
+      - db
+    ports:
+      - "6006:6006" # UI and OTLP HTTP collector
+      - "4317:4317" # OTLP gRPC collector
+      # - 9090:9090  # [Optional] PROMETHEUS PORT IF ENABLED
+    environment:
+      - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+  backend:
+    profiles: [ "disabled" ]
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        OPENAI_API_KEY: ${OPENAI_API_KEY}
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - COLLECTOR_ENDPOINT=http://phoenix:6006/v1/traces
+      - PROD_CORS_ORIGIN=http://localhost:3000
+      # Set INSTRUMENT_LLAMA_INDEX=false to disable instrumentation
+      - INSTRUMENT_LLAMA_INDEX=true
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "http://0.0.0.0:8000/api/chat/healthcheck" ]
+      interval: 5s
+      timeout: 1s
+      retries: 5
+
+  frontend:
+    # profiles: [ "disabled" ]
+    build: frontend
+    ports:
+      - "8501:8501"
+    # depends_on:
+    #   backend:
+    #     condition: service_healthy
