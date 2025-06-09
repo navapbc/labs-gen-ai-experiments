@@ -27,25 +27,28 @@ services:
       - database_data:/var/lib/postgresql/data
 
   backend:
-    profiles: [ "disabled" ]
+    # profiles: [ "disabled" ]
     build:
       context: ./backend
       dockerfile: Dockerfile
-      args:
-        OPENAI_API_KEY: ${OPENAI_API_KEY}
+      # args:
+      #   OPENAI_API_KEY: ${OPENAI_API_KEY}
+    # depends_on:
+    #   phoenix:
+    #     condition: service_healthy
     ports:
       - "8000:8000"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - COLLECTOR_ENDPOINT=http://phoenix:6006/v1/traces
+      - COLLECTOR_ENDPOINT=http://phoenix:6006
       - PROD_CORS_ORIGIN=http://localhost:3000
       # Set INSTRUMENT_LLAMA_INDEX=false to disable instrumentation
-      - INSTRUMENT_LLAMA_INDEX=true
-    healthcheck:
-      test: [ "CMD", "wget", "--spider", "http://0.0.0.0:8000/api/chat/healthcheck" ]
-      interval: 5s
-      timeout: 1s
-      retries: 5
+      # - INSTRUMENT_LLAMA_INDEX=true
+    # healthcheck:
+    #   test: [ "CMD", "wget", "--spider", "http://0.0.0.0:8000/api/chat/healthcheck" ]
+    #   interval: 5s
+    #   timeout: 1s
+    #   retries: 5
 
   frontend:
     # profiles: [ "disabled" ]
