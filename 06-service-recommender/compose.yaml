@@ -3,17 +3,6 @@ volumes:
     driver: local
 
 services:
-  phoenix:
-    image: arizephoenix/phoenix:version-10.9.1-nonroot
-    depends_on:
-      - db
-    ports:
-      - "6006:6006" # UI and OTLP HTTP collector
-      - "4317:4317" # OTLP gRPC collector
-      # - 9090:9090  # [Optional] PROMETHEUS PORT IF ENABLED
-    environment:
-      - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
-
   db:
     image: postgres:16
     restart: always
@@ -26,22 +15,39 @@ services:
     volumes:
       - database_data:/var/lib/postgresql/data
 
+  phoenix:
+    image: arizephoenix/phoenix:version-10.9.1-nonroot
+    depends_on:
+      - db
+    ports:
+      - "6006:6006" # UI and OTLP HTTP collector
+      - "4317:4317" # OTLP gRPC collector
+    environment:
+      - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+
   backend:
-    # profiles: [ "disabled" ]
     build:
       context: ./backend
       dockerfile: Dockerfile
-      # args:
-      #   OPENAI_API_KEY: ${OPENAI_API_KEY}
-    # depends_on:
-    #   phoenix:
-    #     condition: service_healthy
+    depends_on:
+      - phoenix
     ports:
-      - "8000:8000"
+      # For Hayhooks
+      - "1416:1416"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - COLLECTOR_ENDPOINT=http://phoenix:6006
-      - PROD_CORS_ORIGIN=http://localhost:3000
+      # - PROD_CORS_ORIGIN=http://localhost:3000
+
+      - HAYSTACK_TELEMETRY_ENABLED=False
+      # https://docs.haystack.deepset.ai/docs/hayhooks
+      # Pipelines are copied here by default
+      # - HAYHOOKS_PIPELINES_DIR=./hayhooks_pipelines
+      # For development
+      - HAYHOOKS_SHOW_TRACEBACKS=true
+      # https://github.com/deepset-ai/hayhooks/tree/main/examples/shared_code_between_wrappers#option-3-launch-hayhooks-with-the---additional-python-path-flag
+      # Documentation has a typo: https://github.com/deepset-ai/hayhooks/issues/124
+      - HAYHOOKS_ADDITIONAL_PYTHON_PATH=.
       # Set INSTRUMENT_LLAMA_INDEX=false to disable instrumentation
       # - INSTRUMENT_LLAMA_INDEX=true
     # healthcheck:

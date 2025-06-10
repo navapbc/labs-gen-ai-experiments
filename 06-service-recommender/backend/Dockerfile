@@ -11,5 +11,10 @@ RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked pip install --no-c
     find /usr/local/lib \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf {} \;
 
 COPY *.py .
+COPY common/ ./common/
+COPY hayhooks_pipelines/ ./pipelines/
+COPY entrypoint.sh .
 
-CMD ["python", "/app/haystack_rag.py"]
+# CMD ["python", "/app/haystack_rag.py"]
+# CMD ["/app/entrypoint.sh"]
+CMD ["hayhooks", "run", "--host", "0.0.0.0"]

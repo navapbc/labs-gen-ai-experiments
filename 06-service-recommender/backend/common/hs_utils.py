@@ -1,3 +1,5 @@
+import os
+import logging
 from haystack import Document, Pipeline
 from haystack.components.builders import PromptBuilder
 from haystack.components.builders.chat_prompt_builder import ChatPromptBuilder
@@ -8,6 +10,41 @@ from haystack.dataclasses import ChatMessage
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.utils import Secret
 
+# https://docs.arize.com/phoenix/tracing/integrations-tracing/haystack
+# pip install arize-phoenix-otel openinference-instrumentation-haystack haystack-ai
+import phoenix.otel
+
+from openinference.instrumentation.haystack import HaystackInstrumentor
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+import opentelemetry.sdk.trace
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+
+logger = logging.getLogger(f"haystack.{__name__}")
+
+def configure_phoenix(project_name):
+    endpoint = os.environ.get("COLLECTOR_ENDPOINT", "http://localhost:6006")
+    logger.info("Using Phoenix endpoint: %s", endpoint)
+
+    # Both implementations produce the same traces
+    if not True:
+        logger.info("Haystack doc: Using OpenTelemetry Instrumentation for Haystack")
+        # https://haystack.deepset.ai/integrations/arize-phoenix
+        # Logs to default project
+        endpoint_url = f"{endpoint}/v1/traces"  # The URL to your Phoenix instance
+        tracer_provider = opentelemetry.sdk.trace.TracerProvider()
+        tracer_provider.add_span_processor(
+            SimpleSpanProcessor(OTLPSpanExporter(endpoint_url))
+        )
+        HaystackInstrumentor().instrument(tracer_provider=tracer_provider)
+    else:
+        logger.info("Phoenix doc: Using OpenInference Instrumentation for Haystack")
+        # https://arize.com/docs/phoenix/tracing/integrations-tracing/haystack
+        os.environ["PHOENIX_COLLECTOR_ENDPOINT"] = endpoint
+        # Creates project if it does not exist
+        phoenix.otel.register(
+            project_name=project_name,
+            auto_instrument=True,  # Auto-instrument your app based on installed OI dependencies
+        )
 
 def create_in_memory_doc_store():
     # Write documents to InMemoryDocumentStore
