@@ -1,9 +1,9 @@
 import os
 import logging
 
-from common import hs_utils
 from dotenv import load_dotenv
-from hayhooks_pipelines.first import pipeline_wrapper
+from pipelines.first import pipeline_wrapper
+from common import hs_utils
 
 # logger = logging.getLogger(__name__)
 # logger.setLevel(logging.DEBUG)

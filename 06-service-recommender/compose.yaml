@@ -45,9 +45,6 @@ services:
       # - HAYHOOKS_PIPELINES_DIR=./hayhooks_pipelines
       # For development
       - HAYHOOKS_SHOW_TRACEBACKS=true
-      # https://github.com/deepset-ai/hayhooks/tree/main/examples/shared_code_between_wrappers#option-3-launch-hayhooks-with-the---additional-python-path-flag
-      # Documentation has a typo: https://github.com/deepset-ai/hayhooks/issues/124
-      - HAYHOOKS_ADDITIONAL_PYTHON_PATH=.
       # Set INSTRUMENT_LLAMA_INDEX=false to disable instrumentation
       # - INSTRUMENT_LLAMA_INDEX=true
     # healthcheck:

@@ -6,8 +6,13 @@ import logging
 from haystack import tracing
 from haystack.tracing.logging_tracer import LoggingTracer
 
+# add parent directory to sys.path
+# import sys
+# import os
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# This is needed to import hs_utils from the parent directory
+
 # https://github.com/deepset-ai/hayhooks?tab=readme-ov-file#sharing-code-between-pipeline-wrappers
-# Must use Option 3 https://github.com/deepset-ai/hayhooks/tree/main/examples/shared_code_between_wrappers#option-3-launch-hayhooks-with-the---additional-python-path-flag
 from common import hs_utils
 
 logger = logging.getLogger(f"my_hayhook.{__name__}")
