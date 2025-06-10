@@ -14,7 +14,11 @@ services:
       - 5432
     volumes:
       - database_data:/var/lib/postgresql/data
-
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   phoenix:
     image: arizephoenix/phoenix:version-10.9.1-nonroot
     depends_on:
@@ -36,28 +40,25 @@ services:
       - "1416:1416"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - COLLECTOR_ENDPOINT=http://phoenix:6006
-      # - PROD_CORS_ORIGIN=http://localhost:3000
-
       - HAYSTACK_TELEMETRY_ENABLED=False
-      # https://docs.haystack.deepset.ai/docs/hayhooks
-      # Pipelines are copied here by default
-      # - HAYHOOKS_PIPELINES_DIR=./hayhooks_pipelines
-      # For development
+      # For observability
+      - COLLECTOR_ENDPOINT=http://phoenix:6006
+      ## Configure Hayhooks
+      # Useful for development
       - HAYHOOKS_SHOW_TRACEBACKS=true
-      # Set INSTRUMENT_LLAMA_INDEX=false to disable instrumentation
-      # - INSTRUMENT_LLAMA_INDEX=true
-    # healthcheck:
-    #   test: [ "CMD", "wget", "--spider", "http://0.0.0.0:8000/api/chat/healthcheck" ]
-    #   interval: 5s
-    #   timeout: 1s
-    #   retries: 5
+      # TODO: add CORS settings
+      # https://docs.haystack.deepset.ai/docs/hayhooks#environment-variables
+    healthcheck:
+      test: [ "CMD", "wget", "--tries=1", "http://localhost:1416/status" ]
+      interval: 60s
+      timeout: 1s
+      retries: 5
 
   frontend:
     # profiles: [ "disabled" ]
     build: frontend
     ports:
       - "8501:8501"
-    # depends_on:
-    #   backend:
-    #     condition: service_healthy
+    depends_on:
+      backend:
+        condition: service_healthy
