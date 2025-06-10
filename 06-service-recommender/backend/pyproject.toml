@@ -13,4 +13,5 @@ dependencies = [
     "openai>=1.85.0",
     "python-dotenv>=1.1.0",
     "hayhooks>=0.8.0",
+    "arize-phoenix-client>=1.10.0",
 ]

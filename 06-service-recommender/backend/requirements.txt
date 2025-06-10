@@ -8,6 +8,8 @@ anyio==4.9.0
     #   openai
     #   starlette
     #   watchfiles
+arize-phoenix-client==1.10.0
+    # via backend (pyproject.toml)
 arize-phoenix-otel==0.10.3
     # via backend (pyproject.toml)
 attrs==25.3.0
@@ -69,6 +71,7 @@ httptools==0.6.4
     # via uvicorn
 httpx==0.28.1
     # via
+    #   arize-phoenix-client
     #   fastapi
     #   openai
 idna==3.10
@@ -246,6 +249,7 @@ typer==0.16.0
 typing-extensions==4.14.0
     # via
     #   anyio
+    #   arize-phoenix-client
     #   arize-phoenix-otel
     #   fastapi
     #   haystack-ai

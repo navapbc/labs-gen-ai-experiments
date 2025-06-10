@@ -29,6 +29,19 @@ wheels = [
 ]
 
 [[package]]
+name = "arize-phoenix-client"
+version = "1.10.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d2/57/4a3639f68097ca8f03be1c89aea1a13aef17d1160758fec86e0c54030496/arize_phoenix_client-1.10.0.tar.gz", hash = "sha256:15bf6d0ec62bd298e4abddc2ff61e66c1e3bef8e5bcac7838f5035fade0b237e", size = 49253 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/96/85/afe9d0955201b3b4dac49d421c2a833615f7391e586e31337644cb28b6d5/arize_phoenix_client-1.10.0-py3-none-any.whl", hash = "sha256:8dfd486bc1a84a361b9e4e09569b55c3994c46f1b09e44e48c99a0cf9d0a2a8b", size = 51353 },
+]
+
+[[package]]
 name = "arize-phoenix-otel"
 version = "0.10.3"
 source = { registry = "https://pypi.org/simple" }
@@ -61,6 +74,7 @@ name = "backend"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "arize-phoenix-client" },
     { name = "arize-phoenix-otel" },
     { name = "hayhooks" },
     { name = "haystack-ai" },
@@ -73,6 +87,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "arize-phoenix-client", specifier = ">=1.10.0" },
     { name = "arize-phoenix-otel", specifier = ">=0.10.3" },
     { name = "hayhooks", specifier = ">=0.8.0" },
     { name = "haystack-ai", specifier = ">=2.14.2" },

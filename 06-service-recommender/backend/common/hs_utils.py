@@ -62,26 +62,28 @@ def create_in_memory_doc_store():
 def create_retriever(document_store: InMemoryDocumentStore):
     return InMemoryBM25Retriever(document_store=document_store)
 
-# import phoenix.client.Client
+from pprint import pprint
+from  phoenix.client import Client
+# TODO: Use environment variables
+phoenix_base_url = None # defaults to "http://localhost:6006"
 
 def create_chat_template():
-    # TODO: Get the template from Phoenix
-    # # Initialize a phoenix client with your phoenix endpoint
-    # # By default it will read from your environment variables
-    # client = phoenix.client.Client() # endpoint="https://my-phoenix.com"
+    # Get the template from Phoenix
+    # TODO: connect using API key -- https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-client#authentication-if-applicable
+    client = Client(base_url=phoenix_base_url) # endpoint="https://my-phoenix.com"
     # # Pull a prompt by name
-    # prompt_name = "teacher"
-    # prompt = client.prompts.get(prompt_identifier=prompt_name, tag="staging")
-    # # prompt = Client().prompts.get(prompt_version_id="UHJvbXB0VmVyc2lvbjox")
-    # print("prompt")
-    # prompt_data = prompt._dumps()
-    # pprint(prompt_data)
+    prompt_name = "teacher"
+    prompt = client.prompts.get(prompt_identifier=prompt_name, tag="staging")
+    # prompt = Client().prompts.get(prompt_version_id="UHJvbXB0VmVyc2lvbjox")
+    print("prompt")
+    prompt_data = prompt._dumps()
+    pprint(prompt_data)
     # pprint(prompt_data['template'].get('messages', None))
 
     # # Can format for openai, anthropic, and google_generativeai
-    # formatted_prompt = prompt.format(variables={"grade_level": "middle-school", "question": "What is RAG for AI?"})
-    # print("formatted_prompt")
-    # pprint(formatted_prompt)
+    formatted_prompt = prompt.format(variables={"grade_level": "middle-school", "question": "What is RAG for AI?"})
+    print("formatted_prompt")
+    pprint(formatted_prompt)
 
     return [
         ChatMessage.from_system("You are a helpful assistant."),
