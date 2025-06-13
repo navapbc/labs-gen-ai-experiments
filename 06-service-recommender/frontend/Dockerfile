@@ -9,7 +9,7 @@ RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked pip install --no-c
     find /usr/local/lib \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf {} \;
 
 COPY .env .
-COPY .streamlit /app/.streamlit
+# COPY .streamlit /app/.streamlit
 COPY src /app/src
 
 EXPOSE 8501
