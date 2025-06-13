@@ -1,19 +1,29 @@
 # To run: uv run bootstrap.py
 
-from phoenix.client import Client
 from phoenix.client.types import PromptVersion
 
-content = """You are a {{grade_level}} teacher responding to questions from your student. \
-Answer your student's question below."""
+from common.phoenix_utils import create_client
 
-base_url = None # defaults to "http://localhost:6006"
-client = Client(base_url=base_url)
+client = create_client()
 
+# Use "mustache" syntax for placeholder variables
 prompt = client.prompts.create(
-    name="teacher",
-    prompt_description="Sample teacher-student prompt",
+    name="sample_rag",
+    prompt_description="Sample RAG prompt",
     version=PromptVersion(
-        [{"role": "system", "content": content}],
+        [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {
+                "role": "user",
+                "content": (
+                    "Given these documents, answer the question.\n"
+                    "Documents:\n{% for doc in documents %}{{ doc.content }}{% endfor %}\n"
+                    "Question: {{question}}\n"
+                    "Answer:"
+                ),
+            },
+        ],
+        model_provider="OPENAI",
         model_name="gpt-4o-mini",
     ),
 )
@@ -21,8 +31,8 @@ assert prompt.id is not None, "Prompt creation failed"
 print(prompt.id)
 
 # https://arize.com/docs/phoenix/prompt-engineering/how-to-prompts/tag-a-prompt#creating-and-managing-tags
-Client().prompts.tags.create(
+client.prompts.tags.create(
     prompt_version_id=prompt.id,
     name="staging",
-    description="Ready for staging environment"
+    description="Ready for staging environment",
 )

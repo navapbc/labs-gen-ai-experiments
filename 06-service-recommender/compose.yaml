@@ -29,7 +29,7 @@ services:
       - "4317:4317" # OTLP gRPC collector
     environment:
       - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
-    # TODO: add healthcheck
+    # TODO if needed: add healthcheck
 
   backend:
     build:
@@ -48,12 +48,15 @@ services:
       - HAYSTACK_TELEMETRY_ENABLED=False
 
       # For observability
-      - COLLECTOR_ENDPOINT=http://phoenix:6006
+      - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006
+      - PHOENIX_PROJECT_NAME="local-docker-project"
+      # TODO: connect using API key -- https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-client#authentication-if-applicable
+      # - PHOENIX_API_KEY=...
 
       # Configure Hayhooks
       # HAYHOOKS_SHOW_TRACEBACKS is useful for development
       - HAYHOOKS_SHOW_TRACEBACKS=true
-      # TODO for security: add Hayhooks CORS settings
+      # TODO LATER: for security, add Hayhooks CORS settings
       # https://docs.haystack.deepset.ai/docs/hayhooks#environment-variables
     healthcheck:
       test: [ "CMD", "wget", "--tries=1", "http://localhost:1416/status" ]

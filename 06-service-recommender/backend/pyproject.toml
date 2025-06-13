@@ -1,7 +1,7 @@
 [project]
 name = "backend"
 version = "0.1.0"
-description = "Add your description here"
+description = "Haystack pipelines"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -14,4 +14,5 @@ dependencies = [
     "python-dotenv>=1.1.0",
     "hayhooks>=0.8.0",
     "arize-phoenix-client>=1.10.0",
+    "amazon-bedrock-haystack>=3.7.0",
 ]

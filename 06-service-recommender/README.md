@@ -31,9 +31,11 @@ Build and start all necessary Docker containers: `docker compose up --build`
 
 ### Running outside of Docker containers
 
+The frontend and backend can be run outside of Docker containers if desired.
+
 Install Python and `uv`.
 
-Note the `requirements.txt` file is only for building Docker images. It is created by running `uv pip compile pyproject.toml -o requirements.txt` using dependencies declared in `pyproject.toml`.
+Note the `requirements.txt` files are only for building Docker images. It is created by running `uv pip compile pyproject.toml -o requirements.txt` using dependencies declared in `pyproject.toml`.
 
 Tip: During development, open the `frontend` and `backend` subfolders as different VSCode projects. For each project, have VSCode use the Python interpreter in the respective `.venv` subfolder.
 
@@ -64,3 +66,5 @@ uv run bootstrap.py
 uvx hayhooks run --additional-python-path .
 ```
 
+During pipeline development, test a Haystack pipeline before deploying it to Hayhooks.
+For example: `uv run haystack_rag.py`
