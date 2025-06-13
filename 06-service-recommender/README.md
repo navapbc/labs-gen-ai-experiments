@@ -27,6 +27,15 @@ Copy `.env-template` to a `.env` file and populate with your secrets. These secr
 
 ### Docker Compose
 
+```
+cd backend
+
+# Add a prompt template to Phoenix for Haystack pipeline to use
+uv run src/bootstrap.py
+
+cd ..
+```
+
 Build and start all necessary Docker containers: `docker compose up --build`
 
 ### Running outside of Docker containers
@@ -50,11 +59,11 @@ Optionally, run `source .venv/bin/activate` to avoid having to type `uv run` or 
 
 #### Run API backend
 ```
-cd backend
-
 # Export all variables in .env
 set -o allexport
 source .env
+
+cd backend
 
 # Download Python dependencies
 uv sync
