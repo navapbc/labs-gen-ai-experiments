@@ -12,13 +12,10 @@ COPY requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked pip install --no-cache-dir --no-deps -r requirements.txt; \
     find /usr/local/lib \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf {} \;
 
-COPY *.py .
+COPY src .
 # https://github.com/deepset-ai/hayhooks/tree/main/examples/shared_code_between_wrappers
-COPY common/ ./common/
 ENV HAYHOOKS_ADDITIONAL_PYTHON_PATH=.
 
-# Haystack pipelines defined under this folder is automatically deployed on Hayhooks startup
-COPY pipelines/ ./pipelines/
-
 ENV LOG=DEBUG
+# Haystack pipelines defined under pipelines folder are automatically deployed on Hayhooks startup
 CMD ["hayhooks", "run", "--host", "0.0.0.0"]

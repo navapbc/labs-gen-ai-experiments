@@ -66,7 +66,9 @@ def configure_phoenix(only_if_alive=True):
         logger.info("Using HaystackInstrumentor")
         tracer_provider = otel_sdk_trace.TracerProvider()
         tracer_provider.add_span_processor(
-            otel_sdk_trace.export.SimpleSpanProcessor(otel_trace_exporter.OTLPSpanExporter(f"{endpoint}/v1/traces"))
+            otel_sdk_trace.export.SimpleSpanProcessor(
+                otel_trace_exporter.OTLPSpanExporter(f"{endpoint}/v1/traces")
+            )
         )
         HaystackInstrumentor().instrument(tracer_provider=tracer_provider)
 

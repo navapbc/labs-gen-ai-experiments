@@ -60,11 +60,11 @@ source .env
 uv sync
 
 # Add a prompt template to Phoenix for Haystack pipeline to use
-uv run bootstrap.py
+uv run src/bootstrap.py
 
 # Start Hayhooks service
 uvx hayhooks run --additional-python-path .
 ```
 
 During pipeline development, test a Haystack pipeline before deploying it to Hayhooks.
-For example: `uv run haystack_rag.py`
+For example: `uv run src/haystack_rag.py`

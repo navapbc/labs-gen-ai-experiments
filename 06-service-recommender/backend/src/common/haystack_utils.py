@@ -34,6 +34,7 @@ def set_up_tracing(logger_name: str):
         )
     )
 
+
 def create_rag_pipeline(retriever, llm, prompt_version: PromptVersion) -> Pipeline:
     rag_pipeline = Pipeline()
     rag_pipeline.add_component("retriever", retriever)
@@ -49,10 +50,11 @@ def create_rag_pipeline(retriever, llm, prompt_version: PromptVersion) -> Pipeli
     rag_pipeline.connect("prompt_builder.prompt", "llm.messages")
     return rag_pipeline
 
+
 def to_chat_messages(prompt_version: PromptVersion) -> list[ChatMessage]:
     messages = []
     for msg in prompt_version._template["messages"]:
-        role=msg["role"]
+        role = msg["role"]
         content = msg["content"]
         if role == "system":
             assert isinstance(content, str), f"Expected string, got {type(content)}"
@@ -65,4 +67,3 @@ def to_chat_messages(prompt_version: PromptVersion) -> list[ChatMessage]:
         messages.append(chat_msg)
 
     return messages
-        

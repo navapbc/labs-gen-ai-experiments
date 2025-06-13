@@ -22,7 +22,7 @@ load_dotenv()
 
 # Configure OTEL logging to specific Phoenix project
 print("Configuring Phoenix project")
-os.environ["PHOENIX_PROJECT_NAME"]="my-haystack-rag.py"
+os.environ["PHOENIX_PROJECT_NAME"] = "my-haystack-rag.py"
 
 # Set up pipeline
 pipeline_wrapper = pipeline_wrapper.OpenAiRagPipeline()

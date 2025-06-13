@@ -10,7 +10,6 @@ logger = logging.getLogger(f"my_hayhook.{__name__}")
 
 
 class PipelineWrapper(FirstPipelineWrapper):
-
     def _create_llm_chat_generator(self, prompt_version):
         logger.warning(
             "Ignoring LLM model from prompt_template: %s %r",
