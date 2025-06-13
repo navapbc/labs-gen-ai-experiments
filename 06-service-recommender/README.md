@@ -21,9 +21,9 @@
 
 ## Running
 
-### Create `backend/.env` with API keys
+### Create `.env` with API keys
 
-In the `backend` subfolder, copy `.env-template` to a `.env` file and populate with your secrets. These secrets (e.g., `OPENAI_API_KEY`) are referenced in the `compose.yaml` file and are used by Haystack pipelines to call LLMs.
+Copy `.env-template` to a `.env` file and populate with your secrets. These secrets (e.g., `OPENAI_API_KEY`) are referenced in the `compose.yaml` file and are used by Haystack pipelines to call LLMs.
 
 ### Docker Compose
 
