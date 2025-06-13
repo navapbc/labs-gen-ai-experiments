@@ -4,12 +4,12 @@ from haystack_integrations.components.generators.amazon_bedrock import (
     AmazonBedrockChatGenerator,
 )
 
-from ..first.rag_pipeline_openai import OpenAiRagPipeline
+from pipelines.first.pipeline_wrapper import PipelineWrapper as FirstPipelineWrapper
 
 logger = logging.getLogger(f"my_hayhook.{__name__}")
 
 
-class BedrockRagPipeline(OpenAiRagPipeline):
+class PipelineWrapper(FirstPipelineWrapper):
 
     def _create_llm_chat_generator(self, prompt_version):
         logger.warning(

@@ -4,8 +4,7 @@ import logging
 from pprint import pprint
 from dotenv import load_dotenv
 
-from pipelines.first import rag_pipeline_openai
-from common import phoenix_utils
+from pipelines.first import pipeline_wrapper
 
 logging.basicConfig(
     format="%(levelname)s - %(name)s -  %(message)s", level=logging.INFO
@@ -26,12 +25,12 @@ print("Configuring Phoenix project")
 os.environ["PHOENIX_PROJECT_NAME"]="my-haystack-rag.py"
 
 # Set up pipeline
-rag_pipeline_openai = rag_pipeline_openai.OpenAiRagPipeline()
-rag_pipeline_openai.setup()
+pipeline_wrapper = pipeline_wrapper.OpenAiRagPipeline()
+pipeline_wrapper.setup()
 
 DRAW_PIPELINE = False
 if DRAW_PIPELINE:
-    rag_pipeline_openai.pipeline.draw(os.path.join(os.getcwd(), "pipeline.png"))
+    pipeline_wrapper.pipeline.draw(os.path.join(os.getcwd(), "pipeline.png"))
 
 # Ask a question
 question = "Who lives in Paris?"
@@ -39,11 +38,11 @@ question = "Who lives in Paris?"
 RUN_RETRIEVER_ONLY = False
 if RUN_RETRIEVER_ONLY:
     # Run any pipeline component directly
-    retriever = rag_pipeline_openai.pipeline.get_component("retriever")
+    retriever = pipeline_wrapper.pipeline.get_component("retriever")
     pprint(retriever)
     retriever_output = retriever.run(query=question)
     print("Retriever-only result:")
     pprint(retriever_output)
 else:
-    result = rag_pipeline_openai.run_api(question)
+    result = pipeline_wrapper.run_api(question)
     print("Pipeline result:", result)

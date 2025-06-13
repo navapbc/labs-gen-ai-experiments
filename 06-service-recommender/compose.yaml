@@ -29,20 +29,30 @@ services:
       - "4317:4317" # OTLP gRPC collector
     environment:
       - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
-    # TODO if needed: add healthcheck
+
+  # Since Phoenix doesn't have a status or healthcheck endpoint,
+  # sleep for a while before starting the backend service,
+  # which queries Phoenix for prompt templates during startup.
+  wait_for_phoenix:
+    image: alpine:latest
+    entrypoint: "sleep 5"
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     depends_on:
-      - phoenix
+      wait_for_phoenix:
+        condition: service_completed_successfully
     ports:
       # For Hayhooks
       - "1416:1416"
     environment:
-      # Set API keys for LLM clients
+      # Set API keys for LLM clients from .env file
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 
       # Don't send telemetry to Haystack
       - HAYSTACK_TELEMETRY_ENABLED=False
@@ -70,8 +80,5 @@ services:
     build: frontend
     ports:
       - "8501:8501"
-    depends_on:
-      backend:
-        condition: service_healthy
     environment:
       - HAYHOOKS_URL=http://backend:1416

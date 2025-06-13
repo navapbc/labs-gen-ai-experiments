@@ -35,6 +35,7 @@ def response_generator(question):
     # Send POST request to the backend
     payload = {"question": question}
     pipeline = random.choice(["first", "second"])
+    print(f"Sending request to {HAYHOOKS_URL}/{pipeline}/run for {question!r}")
     resp = requests.post(f"{HAYHOOKS_URL}/{pipeline}/run", data=json.dumps(payload))
     resp_json = resp.json()
     pprint(resp_json)
@@ -47,8 +48,9 @@ def response_generator(question):
         time.sleep(0.05)
 
 
-# Display assistant response in chat message container
-with st.chat_message("assistant"):
-    response = st.write_stream(response_generator(prompt))
-# Add assistant response to chat history
-st.session_state.messages.append({"role": "assistant", "content": response})
+if prompt:
+    # Display assistant response in chat message container
+    with st.chat_message("assistant"):
+        response = st.write_stream(response_generator(prompt))
+    # Add assistant response to chat history
+    st.session_state.messages.append({"role": "assistant", "content": response})
