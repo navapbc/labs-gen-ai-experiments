@@ -1,6 +1,7 @@
 import logging
 from pprint import pformat
 
+import hayhooks
 from hayhooks import BasePipelineWrapper
 from haystack import Document, Pipeline
 from haystack.components.generators.chat import OpenAIChatGenerator
@@ -32,8 +33,7 @@ class PipelineWrapper(BasePipelineWrapper):
     def _create_llm_chat_generator(self, prompt_version):
         return OpenAIChatGenerator()
 
-    # TODO: stream response https://docs.haystack.deepset.ai/docs/hayhooks#streaming-responses
-
+    # Called for the `{pipeline_name}/run` endpoint
     def run_api(self, question: str) -> str:
         results = self.pipeline.run(
             {
@@ -54,6 +54,22 @@ class PipelineWrapper(BasePipelineWrapper):
                 return replies[0].text
             else:
                 return replies[0]
+
+    # Called for the `{pipeline_name}/chat`, `/chat/completions`, or `/v1/chat/completions` streaming endpoint using Server-Sent Events (SSE)
+    # stream response https://docs.haystack.deepset.ai/docs/hayhooks#streaming-responses
+    # https://github.com/deepset-ai/hayhooks?tab=readme-ov-file#streaming-responses-in-openai-compatible-endpoints
+    def run_chat_completion(self, model: str, messages: list, body: dict):
+        print(
+            f"Running chat completion with model: {model}, messages: {messages}, body: {body}"
+        )
+        question = hayhooks.get_last_user_message(messages)
+        return hayhooks.streaming_generator(
+            pipeline=self.pipeline,
+            pipeline_run_args={
+                "retriever": {"query": question},
+                "prompt_builder": {"question": question},
+            },
+        )
 
 
 def create_sample_in_memory_doc_store():

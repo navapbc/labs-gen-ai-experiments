@@ -14,7 +14,7 @@
     * and receives tracing data (i.e., OTLP HTTP data) via `http://localhost:6006/v1/traces` (and OTLP gRPC data via `http://localhost:4317`)
 * A Haystack pipeline can query Phoenix for prompt templates.
     * Non-engineers can conduct prompt engineering in the Phoenix UI and have the changes be immediately reflected in pipelines that use the prompt template.
-* The Hayhooks service listens on port 1416
+* The Hayhooks service listens on port 1416 -- API docs are at http://localhost:1416/docs
     * New pipelines under a folder can be registered dynamically using `hayhooks pipeline deploy-files -n my_pipeline SOME_PIPELINES_FOLDER`
     * Pipelines can be tested using `curl -X 'POST' 'http://localhost:1416/first/run' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{  "question": "Who lives in Paris?" }'` or using the `hayhooks` commandline.
     * The Hayhooks service can be replaced or supplemented with a separate API implementation that [calls the Hayhooks service](https://docs.haystack.deepset.ai/docs/hayhooks#running-programmatically) or runs Haystack pipelines directly.
