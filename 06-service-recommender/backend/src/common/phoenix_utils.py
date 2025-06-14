@@ -37,6 +37,7 @@ def service_alive():
 
 
 USE_PHOENIX_OTEL_REGISTER = True
+BATCH_OTEL = True
 
 
 def configure_phoenix(only_if_alive=True):
@@ -57,7 +58,9 @@ def configure_phoenix(only_if_alive=True):
         # Using Phoenix docs: https://arize.com/docs/phoenix/tracing/integrations-tracing/haystack
         logger.info("Using phoenix.otel.register")
         # This uses PHOENIX_COLLECTOR_ENDPOINT and PHOENIX_PROJECT_NAME env variables
+        # and PHOENIX_API_KEY to handle authentication to Phoenix.
         phoenix.otel.register(
+            batch=BATCH_OTEL,
             # Auto-instrument based on installed OpenInference dependencies
             auto_instrument=True,
         )
@@ -65,21 +68,21 @@ def configure_phoenix(only_if_alive=True):
         # Using Haystack docs: https://haystack.deepset.ai/integrations/arize-phoenix
         logger.info("Using HaystackInstrumentor")
         tracer_provider = otel_sdk_trace.TracerProvider()
-        tracer_provider.add_span_processor(
-            otel_sdk_trace.export.SimpleSpanProcessor(
-                otel_trace_exporter.OTLPSpanExporter(f"{endpoint}/v1/traces")
-            )
-        )
+        span_exporter = otel_trace_exporter.OTLPSpanExporter(f"{endpoint}/v1/traces")
+        if BATCH_OTEL:
+            processor = otel_sdk_trace.export.BatchSpanProcessor(span_exporter)
+        else:
+            # Send traces immediately
+            processor = otel_sdk_trace.export.SimpleSpanProcessor(span_exporter)
+        tracer_provider.add_span_processor(processor)
         HaystackInstrumentor().instrument(tracer_provider=tracer_provider)
 
 
 def get_prompt_template(prompt_name):
     # Get the template from Phoenix
     client = create_client()
-    # # Pull a prompt by name
+    # Pull a prompt by name
     prompt = client.prompts.get(prompt_identifier=prompt_name, tag="staging")
-    # prompt = client.prompts.get(prompt_version_id="UHJvbXB0VmVyc2lvbjox")
     prompt_data = prompt._dumps()
-    logger.info("prompt: %s", pformat(prompt_data))
-    # pprint(prompt_data['template'].get('messages', None))
+    logger.info("Retrieved prompt: %s", pformat(prompt_data))
     return prompt

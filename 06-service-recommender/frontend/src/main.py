@@ -1,13 +1,24 @@
 # https://docs.streamlit.io/develop/tutorials/chat-and-llm-apps/build-conversational-apps#build-a-simple-chatbot-gui-with-streaming
-
+import logging
 import json
 import os
 import re
 import time
-from pprint import pprint
+from pprint import pformat
 
 import requests
+
+# TODO: Try Streamlit alternatives:
+#   https://www.assistant-ui.com/examples
+#   https://docs.nlkit.com/nlux/examples/react-js-ai-assistant
+#   https://fredrikoseberg.github.io/react-chatbot-kit-docs/
 import streamlit as st
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    format="%(levelname)s - %(name)s -  %(message)s", level=logging.INFO
+)
 
 st.title("Simple chat")
 
@@ -24,7 +35,9 @@ if "pipelines" not in st.session_state:
         st.session_state.pipelines = [
             model["name"] for model in models_resp.json()["data"]
         ]
+        logger.info("Available pipelines: %s", st.session_state.pipelines)
     else:
+        logger.error("Failed to fetch models from Hayhooks API: %s", models_resp.text)
         st.session_state.pipelines = []
 
 
@@ -54,10 +67,11 @@ if prompt := st.chat_input("How may I help?"):
 def simulated_response_generator(question):
     # Send POST request to the backend
     payload = {"question": question}
-    print(f"Sending request to {HAYHOOKS_URL}/{pipeline}/run for {question!r}")
-    resp = requests.post(f"{HAYHOOKS_URL}/{pipeline}/run", data=json.dumps(payload))
+    url = f"{HAYHOOKS_URL}/{pipeline}/run"
+    logger.info("Sending request to %s for %r", url, question)
+    resp = requests.post(url, data=json.dumps(payload))
     resp_json = resp.json()
-    pprint(resp_json)
+    logger.info(pformat(resp_json))
     result = resp_json["result"]
     for word in re.split(r"(\W)", result):
         # simulate streaming response
@@ -71,11 +85,10 @@ def decode_chunk(chunk):
     decoded_line = chunk
     if decoded_line.startswith("data: "):
         jchunk = json.loads(decoded_line.removeprefix("data: "))
-        print("Received json chunk:")
-        pprint(jchunk)
+        logger.info("Received json chunk: %s", pformat(jchunk))
         return jchunk["choices"][0]["delta"]["content"]
     else:
-        print("Received non-data chunk:", decoded_line)
+        logger.info("Received non-data chunk: %r", decoded_line)
         return decoded_line
 
 
@@ -83,7 +96,7 @@ def decode_chunk(chunk):
 def create_streaming_response(question):
     payload = {"model": pipeline, "messages": [{"role": "user", "content": question}]}
     url = f"{HAYHOOKS_URL}/chat/completions"
-    print(f"Sending request to {url} for {question!r}")
+    logger.info("Sending request to %s for %r", url, question)
     with requests.post(
         url,
         # headers={"Content-Type": "application/json", "Accept": "application/json"},
@@ -94,7 +107,7 @@ def create_streaming_response(question):
             for chunk in response.iter_content(chunk_size=None, decode_unicode=True):
                 yield decode_chunk(chunk)
         else:
-            print(f"Request failed with status code: {response.status_code}")
+            logger.info(f"Request failed with status code: {response.status_code}")
             response.raise_for_status()
 
 
@@ -107,7 +120,7 @@ if prompt:
         else:
             stream = simulated_response_generator(prompt)
         full_response = st.write_stream(stream)
-        print("Full response:", full_response)
+        logger.info("Full response: %s", full_response)
     with st.expander("Raw response", expanded=False):
         st.code(full_response, language="markdown")
 

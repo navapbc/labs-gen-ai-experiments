@@ -11,13 +11,13 @@ from haystack.document_stores.in_memory import InMemoryDocumentStore
 # https://github.com/deepset-ai/hayhooks?tab=readme-ov-file#sharing-code-between-pipeline-wrappers
 from common import haystack_utils, phoenix_utils
 
-logger = logging.getLogger(f"my_hayhook.{__name__}")
+logger = logging.getLogger(__name__)
 
 
 class PipelineWrapper(BasePipelineWrapper):
     def setup(self) -> None:
         logger.info("Setting up %s", self.__class__.__name__)
-        haystack_utils.set_up_tracing(logger.name)
+
         phoenix_utils.configure_phoenix()
         self.pipeline = self._create_pipeline()
 
@@ -42,8 +42,6 @@ class PipelineWrapper(BasePipelineWrapper):
             }
         )
         logger.info("Results: %s", pformat(results))
-
-        print(results)
         replies = results.get("llm", {}).get("replies", [])
         if not replies:
             logger.warning("No replies found in the results.")
@@ -59,10 +57,11 @@ class PipelineWrapper(BasePipelineWrapper):
     # stream response https://docs.haystack.deepset.ai/docs/hayhooks#streaming-responses
     # https://github.com/deepset-ai/hayhooks?tab=readme-ov-file#streaming-responses-in-openai-compatible-endpoints
     def run_chat_completion(self, model: str, messages: list, body: dict):
-        print(
-            f"Running chat completion with model: {model}, messages: {messages}, body: {body}"
+        logger.info(
+            "Running chat completion with model: %s, messages: %s", model, messages
         )
         question = hayhooks.get_last_user_message(messages)
+        logger.info("Question: %s", question)
         return hayhooks.streaming_generator(
             pipeline=self.pipeline,
             pipeline_run_args={

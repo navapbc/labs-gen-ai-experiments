@@ -28,6 +28,9 @@ services:
       - "6006:6006" # UI and OTLP HTTP collector
       - "4317:4317" # OTLP gRPC collector
     environment:
+      # https://arize.com/docs/phoenix/self-hosting/features/authentication
+      # - PHOENIX_ENABLE_AUTH=True
+      # - PHOENIX_SECRET=${PHOENIX_SECRET}
       - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
 
   # Since Phoenix doesn't have a status or healthcheck endpoint,
@@ -59,9 +62,11 @@ services:
 
       # For observability
       - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006
-      - PHOENIX_PROJECT_NAME="local-docker-project"
-      # TODO: connect using API key -- https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-client#authentication-if-applicable
+      - PHOENIX_PROJECT_NAME=local-docker-project
+
+      # Connect using API key -- https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-client#authentication-if-applicable
       # - PHOENIX_API_KEY=...
+      # - OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer ...
 
       # Configure Hayhooks
       # HAYHOOKS_SHOW_TRACEBACKS is useful for development

@@ -11,13 +11,9 @@ logger = logging.getLogger(f"haystack.{__name__}")
 
 
 # https://docs.haystack.deepset.ai/docs/tracing#real-time-pipeline-logging
-def set_up_tracing(logger_name: str):
-    # logging.basicConfig(
-    #     format="%(levelname)s - %(name)s -  %(message)s", level=logging.WARNING
-    # )
+def set_up_tracing():
     logging.getLogger("haystack").setLevel(logging.DEBUG)
 
-    # TODO: Determine when to enable content tracing
     # https://docs.haystack.deepset.ai/v2.8/docs/tracing#content-tracing
     # By default, this behavior is disabled to prevent sensitive user information
     # from being sent to your tracing backend.
@@ -28,8 +24,9 @@ def set_up_tracing(logger_name: str):
         LoggingTracer(
             tags_color_strings={
                 "haystack.component.input": "\x1b[1;31m",
+                "haystack.component.output": "\x1b[1;32m",
+                "haystack.component.type": "\x1b[1;33m",
                 "haystack.component.name": "\x1b[1;34m",
-                logger_name: "\x1b[1;34m",
             }
         )
     )

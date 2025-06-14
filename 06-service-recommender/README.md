@@ -77,3 +77,18 @@ uvx hayhooks run --additional-python-path .
 
 During pipeline development, test a Haystack pipeline before deploying it to Hayhooks.
 For example: `uv run src/haystack_rag.py`
+
+## Enable Phoenix authentication
+
+Based on [documentation](https://arize.com/docs/phoenix/self-hosting/features/authentication), set `PHOENIX_SECRET` in `.env` and modify `compose.yaml` as follows.
+* Add these environment variables to the `phoenix` service:
+```
+      - PHOENIX_ENABLE_AUTH=True
+      - PHOENIX_SECRET=${PHOENIX_SECRET}
+```
+* Log into the Phoenix UI at http://localhost:6006 and create an API key
+* Add these environment variables to the `backend` service:
+```
+      - PHOENIX_API_KEY=<paste API key>
+      - OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer <paste API key>
+```

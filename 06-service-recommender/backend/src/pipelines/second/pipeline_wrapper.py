@@ -6,7 +6,7 @@ from haystack_integrations.components.generators.amazon_bedrock import (
 
 from pipelines.first.pipeline_wrapper import PipelineWrapper as FirstPipelineWrapper
 
-logger = logging.getLogger(f"my_hayhook.{__name__}")
+logger = logging.getLogger(__name__)
 
 
 class PipelineWrapper(FirstPipelineWrapper):
