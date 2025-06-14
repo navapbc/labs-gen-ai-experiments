@@ -1,18 +1,41 @@
 # https://docs.streamlit.io/develop/tutorials/chat-and-llm-apps/build-conversational-apps#build-a-simple-chatbot-gui-with-streaming
 
-import os
-import random
-import time
 import json
+import os
+import re
+import time
 from pprint import pprint
+
 import requests
 import streamlit as st
 
 st.title("Simple chat")
 
+HAYHOOKS_URL = os.environ.get("HAYHOOKS_URL", "http://localhost:1416")
+
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+# Query available pipelines from the Hayhooks API
+if "pipelines" not in st.session_state:
+    models_resp = requests.get(f"{HAYHOOKS_URL}/models")
+    if models_resp.ok:
+        st.session_state.pipelines = [
+            model["name"] for model in models_resp.json()["data"]
+        ]
+    else:
+        st.session_state.pipelines = []
+
+
+with st.sidebar:
+    st.write("[Phoenix UI](http://localhost:6006)")
+    st.write("[Hayhooks API](http://localhost:1416/docs)")
+    pipeline = st.selectbox(
+        "Hayhook pipeline to use",
+        st.session_state.pipelines,
+    )
+    stream_response = st.checkbox("Stream response?", value=True)
 
 # Display chat messages from history on st.rerun()
 for message in st.session_state.messages:
@@ -27,23 +50,19 @@ if prompt := st.chat_input("How may I help?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-HAYHOOKS_URL = os.environ.get("HAYHOOKS_URL", "http://localhost:1416")
 
-
-# Streamed response emulator
 def simulated_response_generator(question):
     # Send POST request to the backend
     payload = {"question": question}
-    pipeline = random.choice(["first", "second"])
     print(f"Sending request to {HAYHOOKS_URL}/{pipeline}/run for {question!r}")
     resp = requests.post(f"{HAYHOOKS_URL}/{pipeline}/run", data=json.dumps(payload))
     resp_json = resp.json()
     pprint(resp_json)
     result = resp_json["result"]
-    for word in result.split():
+    for word in re.split(r"(\W)", result):
         # simulate streaming response
-        yield word + " "
-        time.sleep(0.05)
+        yield word
+        time.sleep(0.01)
 
 
 def decode_chunk(chunk):
@@ -62,11 +81,9 @@ def decode_chunk(chunk):
 
 # To test, try 'Write a short poem about where Jean lives'
 def create_streaming_response(question):
-    pipeline = random.choice(["first", "second"])
     payload = {"model": pipeline, "messages": [{"role": "user", "content": question}]}
     url = f"{HAYHOOKS_URL}/chat/completions"
     print(f"Sending request to {url} for {question!r}")
-    yield f"{pipeline} model's response:\n"
     with requests.post(
         url,
         # headers={"Content-Type": "application/json", "Accept": "application/json"},
@@ -75,10 +92,7 @@ def create_streaming_response(question):
     ) as response:
         if response.ok:
             for chunk in response.iter_content(chunk_size=None, decode_unicode=True):
-                if chunk:
-                    # Process the chunk of data
-                    # print(f"Received chunk: {chunk}")
-                    yield decode_chunk(chunk)
+                yield decode_chunk(chunk)
         else:
             print(f"Request failed with status code: {response.status_code}")
             response.raise_for_status()
@@ -87,10 +101,15 @@ def create_streaming_response(question):
 if prompt:
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
-        # stream = simulated_response_generator(prompt)
-        stream = create_streaming_response(prompt)
+        st.write(f"({pipeline} model's response)")
+        if stream_response:
+            stream = create_streaming_response(prompt)
+        else:
+            stream = simulated_response_generator(prompt)
         full_response = st.write_stream(stream)
         print("Full response:", full_response)
+    with st.expander("Raw response", expanded=False):
+        st.code(full_response, language="markdown")
 
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": full_response})
