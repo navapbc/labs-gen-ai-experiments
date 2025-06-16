@@ -12,6 +12,9 @@ from haystack.document_stores.in_memory import InMemoryDocumentStore
 from common import haystack_utils, phoenix_utils
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(
+    format="%(levelname)s - %(name)s -  %(message)s", level=logging.INFO
+)
 
 
 class PipelineWrapper(BasePipelineWrapper):

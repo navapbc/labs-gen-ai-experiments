@@ -66,8 +66,11 @@ def configure_phoenix(only_if_alive=True):
         )
     else:
         # Using Haystack docs: https://haystack.deepset.ai/integrations/arize-phoenix
+        # This is a more manual setup that uses HaystackInstrumentor
+        # Since this doesn't use PHOENIX_PROJECT_NAME, it logs to the 'default' Phoenix project
         logger.info("Using HaystackInstrumentor")
         tracer_provider = otel_sdk_trace.TracerProvider()
+        # Set the URL since PHOENIX_COLLECTOR_ENDPOINT is not used by HaystackInstrumentor
         span_exporter = otel_trace_exporter.OTLPSpanExporter(f"{endpoint}/v1/traces")
         if BATCH_OTEL:
             processor = otel_sdk_trace.export.BatchSpanProcessor(span_exporter)
@@ -75,6 +78,7 @@ def configure_phoenix(only_if_alive=True):
             # Send traces immediately
             processor = otel_sdk_trace.export.SimpleSpanProcessor(span_exporter)
         tracer_provider.add_span_processor(processor)
+        # PHOENIX_API_KEY env variable seems to be used by HaystackInstrumentor
         HaystackInstrumentor().instrument(tracer_provider=tracer_provider)
 
 

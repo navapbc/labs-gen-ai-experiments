@@ -65,8 +65,8 @@ services:
       - PHOENIX_PROJECT_NAME=local-docker-project
 
       # Connect using API key -- https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-client#authentication-if-applicable
-      # - PHOENIX_API_KEY=...
-      # - OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer ...
+      # - PHOENIX_API_KEY=${PHOENIX_API_KEY}
+      # - OTEL_EXPORTER_OTLP_HEADERS=${OTEL_EXPORTER_OTLP_HEADERS}
 
       # Configure Hayhooks
       # HAYHOOKS_SHOW_TRACEBACKS is useful for development
