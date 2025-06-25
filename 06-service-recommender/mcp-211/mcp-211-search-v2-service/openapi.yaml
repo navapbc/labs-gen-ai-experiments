@@ -1,0 +1,2703 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@211.org
+    name: Support 211 National Data Platform
+    url: https://register.211.org/home/contact
+  description: "Returns service-at-location search results from the 211 National Data\
+    \ Platform's resource repository search index and values that can be used to filter\
+    \ search results.\n\nA common use case for this API is to return a list of abbeviated\
+    \ service at location resources (i.e. search results) using the '/keyword' endpoint,\
+    \ then use values from within the search results to retrieve the details for a\
+    \ selected service-at-location resource using the 'query/service-at-location-details'\
+    \ endpoint on the Query V2 API.\n\nThe Search V2 API organizes operations into\
+    \ two categories:\n\n* Search: returns a list of abbreviated service-at-location\
+    \ resources (i.e. search results) from a GET or POST request that can be configured\
+    \ to filter results using operation parameters, such as tags, service areas, taxonomy\
+    \ terms, etc. The Search operations can also be configured to return facets for\
+    \ targeting specific resources in downstream searches, selecting fields used for\
+    \ search, and setting the type of geographic search filter (e.g. filter results\
+    \ using the geographic boundary of a location or distance between the target and\
+    \ the service location). The Search operation supports two methods: GET and POST.\
+    \ The GET method is intended as a basic method compared to the POST method, providing\
+    \ a streamlined approach to searching resources. The POST method, although less\
+    \ simple to implement compared to the GET method, provides a more flexible and\
+    \ configurable approach to managing the request to, and response from the Search\
+    \ operation. Both methods include default values on several query string parameters\
+    \ and request body content fields. Refer to the documentation for more details\
+    \ \n\n* Filters: provides values for parameters used in API operations. As an\
+    \ example, use the 'filters/tags' operation to retrieve a list of values that\
+    \ can be passed as an argument to the Tags filter on the 'search/keyword' POST\
+    \ operation.\n\nHINT: Get started quickly... use the GET search/keyword API operation\
+    \ to retrieve search results, then pass the idServiceAtLocation value from a search\
+    \ result to the 'query/service-at-location-details' operation on the Query V2\
+    \ API operation to return details on the service at location resource. \n\nThe\
+    \ Search API is often used with the Query V2 API and Suggest V2 API to implement\
+    \ use cases. The Query V2 API returns details of specific resources from the NDP\
+    \ resource repository, such as a service at location, service, location and organization.\
+    \ As an example, 'search/keyword' operation returns results with the ID for a\
+    \ service-at-location that that can be passed as an argument to the Query V2 API\
+    \ 'query/service-at-location-details' operation to retrieve the details, such\
+    \ as eligibility, hours of operation, etc, of a service-at-location resource.\
+    \ The Suggest V2 API provides type-ahead functionality that returns values for\
+    \ suggested keyword and location terms, scoped to parameter values such as 'dataOwners'\
+    \ and location types to enhance the user search experience and improve/narrow\
+    \ the quality of search results. \n\nSee the Query and Suggest API documentation\
+    \ for more details.\n\n"
+  title: Search V2
+  version: "1.0"
+servers:
+- url: https://api.211.org/resources/v2/search
+security:
+- apiKeyHeader: []
+- apiKeyQuery: []
+paths:
+  /filters/service-area-values:
+    get:
+      description: "Returns a list of service area values for a given geography type\
+        \ (e.g. county). Type values are: locality, postalCode, county, state, country.\r\
+        \n\r\nA service area is the geographic area that a service is available. Returned\
+        \ values can be used in the service areas filter on the Search/Keyword API\
+        \ operation (POST method only).\r\n\r\nEnter the 'scope' value to filter values\
+        \ to the geographic area type (eg. county). Enter the 'dataOwners' value(s)\
+        \ to filter values on the entered 211 data owner(s) (eg. 211ventura or 211ventura,211northcarolina).\
+        \ \r\nRefer to the DataOwners filter for a list of 211 data owner(s) that\
+        \ can be used. \r\n\r\nUse the typeFilter and typeFilterValue to filter a\
+        \ dataOwner(s) service area values on one or more higher geographical types.\
+        \ As an example, 211 North Carolina has service areas outside the state of\
+        \ North Carolina assigned to several of its resources. Without a filter, service\
+        \ areas outside \r\nof North Carolina will be returned. Remove values for\
+        \ service areas outside of North Carolina by setting the 'typeFilter' to 'state'\
+        \ and 'typeFilterValues' to 'North Carolina'. Set multiple values for typeFilterValues\
+        \ by separating values with a comma (e.g. North Carolina,California).\r\n\r\
+        \nExample: enter 'county' as 'type' and '211ventura' as 'dataOwners' to return\
+        \ a complete list of all service area county values. Use the results to create\
+        \ a search filter that can be added to the search filters \r\nin the the Search/Keyword\
+        \ API operation (POST method) to filter service at location resources (eg.\
+        \ {\"field\": \"serviceAreas\", \"value\": [{\"type\": \"county\",\"value\"\
+        : \"Ventura\"},{\"type\": \"county\",\"value\": \"San Luis Obispo\"}]} )."
+      operationId: get-filters-service-area-values-type-type-dataowners-dataowners
+      parameters:
+      - description: "geography type to filter service area values (eg. locality,\
+          \ postalCode, county, state, country). Multiple type values not supported."
+        explode: true
+        in: query
+        name: type
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "211 data owner(s) to filter service area values (e.g. 211ventura\
+          \ OR 211ventura,211northcarolina). See DataOwners API fitler operation for\
+          \ 211 center values."
+        explode: true
+        in: query
+        name: dataOwners
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: geography type to filter type values (e.g. state). Multiple types
+          not supported.
+        explode: true
+        in: query
+        name: typeFilter
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "value(s) used by type filtergeography type to filter location\
+          \ values (eg. North Carolina OR North Carolina, California). Multiple values\
+          \ supported."
+        explode: true
+        in: query
+        name: typeFilterValues
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - string
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: "Filter: Service Area Geographies"
+      tags:
+      - Filters
+  /filters/location-values:
+    get:
+      description: "Returns a list of distinct location values for a given geography\
+        \ type (e.g. county). A location is where a service is delivered. Possible\
+        \ values are: locality, postalCode, county, state, country.\r\n\r\nReturned\
+        \ values can be used in the locationAddresses parameter on the Search/Keyword\
+        \ API operation (POST method method). \r\n\r\nExample: enter 'county' as 'type'\
+        \ and '211ventura' as 'dataOwners' to return a complete list of all counties\
+        \ assigned to 211ventura locations. Use the typeFilter and typeFilterValue\
+        \ to filter a dataOwner(s) \r\nlocation values on one or more higher geographical\
+        \ types. As an example, 211 North Carolina has locations outside the state\
+        \ of North Carolina assigned to several of its resources. Without a filter,\
+        \ locations outside \r\nof North Carolina will be returned. Remove values\
+        \ for locations outside of North Carolina by setting the 'typeFilter' to 'state'\
+        \ and 'typeFilterValues' to 'NC'. Set multiple values for typeFilterValues\
+        \ by separating values with a comma (e.g. NC,CA).\r\n\r\nUse the results to\
+        \ create a search filter for the Search/Keyword API operation (POST method)\
+        \ (eg. {\"field\": \"address/county\", \"value\": [{\"type\": \"county\",\"\
+        value\": \"Ventura\"},{\"type\": \"county\",\"value\": \"San Luis Obispo\"\
+        }]} )."
+      operationId: get-filters-location-values-type-type-dataowners-dataowners
+      parameters:
+      - description: "geography type to filter location values (eg. locality, postalCode,\
+          \ county, state, country). Multiple types not supported."
+        explode: true
+        in: query
+        name: type
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "data owner(s) to filter value (e.g. 211ventura OR 211ventura,211northcarolina).\
+          \ See DataOwners API fitler operation for 211 center values."
+        explode: true
+        in: query
+        name: dataOwners
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: geography type to filter type values (e.g. state). Multiple types
+          not supported.
+        explode: true
+        in: query
+        name: typeFilter
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "value(s) used by type filtergeography type to filter location\
+          \ values (eg. North Carolina OR North Carolina, California). Multiple values\
+          \ supported."
+        explode: true
+        in: query
+        name: typeFilterValues
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - string
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: "Filter: Location Geographies"
+      tags:
+      - Filters
+  /filters/data-owners:
+    get:
+      description: "Returns all 211 center data owners and data owners display name\
+        \ values. A 211 data owner is the creator or steward of the resource data.\
+        \ \r\nReturned values can be used in the 'dataOwners' parameter of the Search/Keyword\
+        \ API operation (GET and POST methods).\r\n\r\nExample 1: Use the results\
+        \ to create a search filter that can be added to the search filters in the\
+        \ of the Search/Keyword API operation (POST method) to filter service at location\
+        \ resources (eg. {\"field\": \"dataOwner\", \"value\": [\"211ventura\",\"\
+        211northcarolina\"]} ).\r\n\r\nExample 2: Use the results to create a search\
+        \ filter that can be added to the search filters in the of the Search/Keyword\
+        \ API operation (POST method) to filter service at location resources (eg.\
+        \ {\"field\": \"dataOwnerDisplayName\", \"value\": [\"211 Ventura\",\"211\
+        \ North Carolina\"]} )."
+      operationId: get-filters-data-owners
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - dataOwner: string
+                dataOwnerDisplayName: string
+              schema:
+                items:
+                  $ref: "#/components/schemas/DataOwnerDto"
+                type: array
+          description: OK
+        "404":
+          description: Not Found
+      summary: "Filter: Data Owners"
+      tags:
+      - Filters
+  /filters/taxonomy-level2-terms:
+    get:
+      description: "Returns all level 2 taxonomy term values, grouped by level 1 term.\
+        \ This API operation can be used to create a list of topics and subtopics.\r\
+        \n\r\nList can be filtered on one or more 211 data owners"
+      operationId: get-filters-taxonomy-level2-terms
+      parameters:
+      - description: "211 data owner(s) to filter values (e.g. 211ventura or 211ventura,211northcarolina).\
+          \ \r\n            See DataOwner API fitler operation for 211 center values.\
+          \ Leave blank if wanting all level 2 terms for all 211s."
+        explode: true
+        in: query
+        name: dataOwners
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  items:
+                    $ref: "#/components/schemas/StringStringValueTuple"
+                  type: array
+                type: object
+          description: OK
+        "404":
+          description: Not Found
+      summary: "Filter: Taxonomy Level 2 Terms with Level 1 Parent"
+      tags:
+      - Filters
+  /filters/taxonomy-terms-by-level:
+    get:
+      description: "Returns all taxonomy term values at selected level of the AIRS\
+        \ taxonomy tree structure for the selected 211 center(s). \r\n\r\nAs an example,\
+        \ enter '2' as 'level' and '211ventura' as 'dataOwners' to return all Level\
+        \ 2 taxonomy terms assigned to 211ventura resources."
+      operationId: get-filters-taxonomy-terms-by-level-level-level
+      parameters:
+      - description: "level of taxonomy to filter values. Accepted values are: 1,\
+          \ 2, 3, 4, 5 or 6. Multiple levels not supported."
+        explode: true
+        in: query
+        name: level
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "211 data owner(s) to filter values (e.g. 211ventura or 211ventura,211northcarolina).\
+          \ See DataOwners API fitler operation for 211 center values."
+        explode: true
+        in: query
+        name: dataOwners
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - string
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: "Filter: Taxonomy Term Values By Level"
+      tags:
+      - Filters
+  /filters/taxonomy-terms-assigned:
+    get:
+      description: "Returns all child service taxonomy terms assigned to a 211 center(s)\
+        \ resource data for a given parent taxonomy term (eg. 'Food' is a child term\
+        \ to parent term 'Basic Needs'). \r\nReturned values can be filtered by selected\
+        \ term and level. This API can be used to return values that can be used to\
+        \ find resources indexed at any level below a selected parent.\r\n\r\nThis\
+        \ API returns values that can be used as 'taxonomyTerm' parameter value inputs\
+        \ on the Search/Keyword API operation. \r\n\r\nAs an example, enter '1' as\
+        \ 'level', 'Basic Needs' as 'levelTerm', and '211ventura' as 'dataOwners'\
+        \ to return all taxonomy \r\nterms (Level2 through Level6 in this example)\
+        \ assigned to 211ventura resources with a Level 1 term of 'Basic Needs' (ie.\
+        \ returns all resources assigned a taxonomy term with parent term equal \r\
+        \nto 'Basic Needs'. \r\n\r\nAs another example, enter '2' as 'level' and 'Food'\
+        \ and 'levelTerm', and '211ventura,211northcarolina' as 'dataOwners' to return\
+        \ all taxonomy terms (Level3 through Level6 in this example) \r\nassigned\
+        \ to 211ventura or 211northcarolina resources with a Level 2 term of 'Food'\
+        \ (ie. returns all resources assigned a taxonomy term with parent Level 2\
+        \ term equal to 'Food'.  To return all terms assigned, \r\nregardless of level,\
+        \ enter '*' for 'level' and 'levelTerm'."
+      operationId: get-filters-taxonomy-terms-assigned-level-level-levelterm-levelterm-dataowne
+      parameters:
+      - description: "level of taxonomy terms to filter values. Accepted values are:\
+          \ 1, 2, 3, 4, 5 or 6. Multiple levels not supported."
+        explode: true
+        in: query
+        name: level
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "level term to filter values, in combination with the entered\
+          \ level (eg. Basic Needs). See Taxonomy Terms by Level API operation for\
+          \ possible level term values. Multiple terms not supported."
+        explode: true
+        in: query
+        name: levelTerm
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "211 data owner(s) to filter values (e.g. 211ventura or 211ventura,211northcarolina).\
+          \ See DataOwners API fitler operation for 211 center values."
+        explode: true
+        in: query
+        name: dataOwners
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - string
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: "Filter: Taxonomy Term Values Assigned"
+      tags:
+      - Filters
+  /filters/taxonomy-terms-and-codes-assigned:
+    get:
+      description: "Returns all service taxonomy terms and codes assigned to a 211\
+        \ center(s) resource data. Returned values can be filtered by selected term\
+        \ and level.\r\n\r\nAs an example, enter '1' as 'level', 'Basic Needs' as\
+        \ 'levelTerm', and '211ventura' as 'dataOwners' to return all taxonomy \r\n\
+        terms (Level2 through Level6 in this example) assigned to 211ventura resources\
+        \ with a Level 1 term of 'Basic Needs' \r\n(ie. returns all resources assigned\
+        \ a taxonomy term with parent term equal to 'Basic Needs'.\r\n\r\nAs another\
+        \ example, enter '2' as 'level' and 'Food' and 'levelTerm', and '211ventura,211northcarolina'\
+        \ as 'dataOwners' to return all taxonomy \r\nterms (Level3 through Level6\
+        \ in this example) assigned to 211ventura or 211northcarolina resources with\
+        \ a Level 2 term of 'Food' (ie. returns all resources assigned a \r\ntaxonomy\
+        \ term with parent Level 2 term equal to 'Food'.\r\n\r\nTo return all terms\
+        \ assigned, regardless of level, enter '*' for 'level' and 'levelTerm'. Note:\
+        \ to return only terms, see Taxonomy Term Values Assigned API operation."
+      operationId: get-filters-taxonomy-terms-and-codes-assigned-level-level-levelterm-levelter
+      parameters:
+      - description: "taxonomy term level to filter values. Accepted values are: 1,\
+          \ 2, 3, 4, 5 or 6. Multiple levels not supported."
+        explode: true
+        in: query
+        name: level
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "filters assigned taxonomy terms by term, in combination with\
+          \ the entered level (eg. Basic Needs). See Taxonomy Terms by Level API operation\
+          \ for possible level term values. Multiple terms not supported."
+        explode: true
+        in: query
+        name: levelTerm
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "211 data owner(s) to filter values(e.g. 211ventura or 211ventura,211northcarolina).\
+          \ See DataOwners API fitler operation for 211 center values."
+        explode: true
+        in: query
+        name: dataOwners
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - string
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: "Filter: Taxonomy Term and Code Values Assigned"
+      tags:
+      - Filters
+  /filters/tags:
+    get:
+      description: "Returns all tags for selected 211 data owner(s).\r\n\r\nThis API\
+        \ provides the caller with values that can be used in the tags parameter of\
+        \ the Search/Keywords API operation."
+      operationId: get-filters-tags-dataowners-dataowners
+      parameters:
+      - description: "211 data owner(s) to filter values (e.g. 211ventura or 211ventura,211northcarolina).\
+          \  See DataOwners API fitler operation for 211 center values."
+        explode: true
+        in: query
+        name: dataOwners
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - string
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: "Filter: Tags"
+      tags:
+      - Filters
+  /keyword:
+    get:
+      description: "Searches an index of NDP service at location records. \r\n\r\n\
+        Records are returned in 'service-at-location' format, with all services and\
+        \ locations of the organization. For more options, use the POST method. \r\
+        \n\r\nThe total number of records in the index matching the request is identified\
+        \ as \"count\" at the top of the response. The values set for each parameter\
+        \ are also returned within the request object at the top of the response,\
+        \ when 'resultsAdvanced' is set to 'true'.\r\n\r\nFilter expressions can be\
+        \ applied to the GET and POST operations using parameters such as data owners,\
+        \ tags, taxonomy codes, service areas, and address. See parameter value descriptions\
+        \ for more information.\r\n\r\nNote: A search that returns no results will\
+        \ have a status code of 204 or 404. A 204 status code is returned when the\
+        \ Advanced Results parameter value is \r\nis to false. When set to true, a\
+        \ 404 NotFound status code is returned with the request input. Note that the\
+        \ request input may be programitically modified in certain scenarios. As an\
+        \ example, \r\nwhen 'searchWithinLocationType' is set to its default value\
+        \ 'unknown', the geocoding service will set the location type based on the\
+        \ location entered. Refer to the field description for more information. \r\
+        \nA 500 ServerError response returns a tracking code that can be used internally\
+        \ to identify undocumented items and/or resolve unmanaged errors."
+      operationId: get-keyword-keywords-keywords-location-location
+      parameters:
+      - description: "One or more keywords to search the repository. Set SearchMode\
+          \ to 'Any' to match on at least one keyword. \r\n           Set SearchMode\
+          \ to 'All' to match on all words. To search on taxonomy term(s), set KeywordIsTaxonomyTerm\
+          \ to true. To search on taxonomy code(s), \r\n           set KeywordIsTaxonomyCode\
+          \ to true. More detail on taxonomy searches: For taxonomy code or taxonomy\
+          \ term searches, set SearchMode to 'All' to require all taxonomy terms be\
+          \ assigned \r\n           to resources returned with search results. Set\
+          \ SearchMode to 'Any' to require a match on at least one taxonomy term/code.\
+          \ Wildcards can be used to \r\n           search resources with a partial\
+          \ taxonomy code (eg. BD\\*). All resources with taxonomy codes matching\
+          \ the characters before * will be returned. \r\n           As an example,\
+          \ a taxonomy code search for BD* will return all resources with a taxonomy\
+          \ code beginning with BD, the taxonomy code for Food. \r\n           Using\
+          \ taxonomy code wildcard searches ensures all resources with 'child' taxonomy\
+          \ codes are returned (eg. BD-1800 is a child of BD, and would be \r\n  \
+          \         returned with the BD* wildcard taxonomy code search). Wilcards\
+          \ can also be used for taxonomy term searches, and will return matches on\
+          \ all taxonomy terms matching on one or more terms located within the full\
+          \ taxonmy term\r\n           (eg. Food Pantry can be match on Food and/or\
+          \ Pantry). A match occurs when all characters before the \\* are matched\
+          \ on or more terms with the full taxonomy term. As as example, a wilcard\
+          \ search on Food* will return \r\n           resources with taxonomy term(s)\
+          \ that include any word within its taxonomy term(s) beginning with 'Food'.\
+          \ A search for F\\* will return resources with taxonomy term(s) beginning\
+          \ with F)."
+        explode: true
+        in: query
+        name: keywords
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "Location to search for resources. Value can be a zip code, city,\
+          \ county, state, country or \r\n           longitude_latitude pair. (note\
+          \ regading longitude_latitude location values: longitude_latitude locations\
+          \ must follow this format lon:-119.293106_lat:34.28083 and can include up\
+          \ to a maximum of six digits after the decimal). \r\n           There are\
+          \ four patterns for location searching: near, within, serving, servingOnly.\
+          \ The pattern is contolled by LocationMode. See LocationMode for details\
+          \ on using each pattern."
+        explode: true
+        in: query
+        name: location
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: "Format - int32. Maximum distance from the entered location to\
+          \ the physical address where the resource is availalble (ie. service is\
+          \ delivered). \r\n           Set 'OrderByDistance' to true to sort search\
+          \ results from nearest to farthest from enetered location. Distance is ignored\
+          \ (set by the system to 0) \r\n           when LocationMode is set to 'Within'\
+          \ because distance is not applicable when searching within a geographic\
+          \ boundary. Distance is set to 5000, when \r\n           LocationMode set\
+          \ to 'Serving' or 'ServingOnly' to ensure all resources with assigned with\
+          \ the selected service areas area returned \r\n           (ie. locations\
+          \ are considered service areas when LocationMode set to 'Serving' or 'ServingOnly').\
+          \ As an example, a service (ie. resource) may be \r\n           physically\
+          \ located in California but have service areas throughout the country (eg.\
+          \ helplines)."
+        explode: false
+        in: header
+        name: distance
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      - description: "Comma-delimited list of data owners to filter search results.\
+          \ Adding one or more values will programatically add a search filter. If\
+          \ multiple data owners are applied (eg. 211ventura,211bayarea), a match\
+          \ on one or more data owners will result in a match (and resource returned).\
+          \ The 'eq' Assert operator and the 'or' Join operator are the default operator\
+          \ values. Assert operator value 'ne' can only be used with Join operator\
+          \ 'and' (eg. ne,and||211ventura,211ayarea). See /filters/dataOwners on Filters\
+          \ API for a list of data owners."
+        explode: false
+        in: header
+        name: dataOwners
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of tags to filter search results. Adding\
+          \ one or more values will programatically add a search filter. The 'eq'\
+          \ Assert operator and the 'or' Join operator are the default operator values.\
+          \ Assert operator value 'ne' can only be used with Join operator 'and' (eg.\
+          \ ne,and||211ventura,211ayarea). If multiple tags are applied (eg. Kinship,Shelter),\
+          \ a match on one or more tags will result in a match (and resource returned).\
+          \ To match on all tags, set Assert operator value to 'eq' and Join operator\
+          \ value to 'and'. See /filters/tags on Filters API for a list of tags."
+        explode: false
+        in: header
+        name: tagsService
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Type of the location used to set the geographic boundary for\
+          \ searching for resources when LocationMode set to 'Within'. \r\n      \
+          \     Values are City, County, PostalCode, State, Country, Unknown. As an\
+          \ example, if SearchWithinLocationType is set to 'City' with location set\
+          \ to 'Ventura', \r\n           resources with a physical location within\
+          \ the geographic boundary of the city of Ventura will be returned. if SearchWithinLocationType\
+          \ is set to 'County' \r\n           with location set to 'Ventura', resources\
+          \ with a physical location within the geographic boundary of the county\
+          \ of Ventura will be returned. Default value \r\n           is 'Unknown'.\
+          \ If value is set to 'Unknown' (or not set), the LocationType will be determined\
+          \ using the service."
+        explode: false
+        in: header
+        name: searchWithinLocationType
+        required: false
+        schema:
+          $ref: "#/components/schemas/LocationTypeDto"
+        style: simple
+      - description: "Format - int32. Number of results to skip. Used with Size to\
+          \ page results. Note that the total number of resources that match the search\
+          \ is returned with 'count' in the search results, \r\n           if IncludeTotalCount\
+          \ is set to true."
+        explode: false
+        in: header
+        name: skip
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+        style: simple
+      - description: "Format - int32. Number of results to be returned. Used with\
+          \ Skip to page results. Note that the total number of resources that match\
+          \ the search is returned with 'count' in the search results, \r\n      \
+          \     if IncludeTotalCount is set to true."
+        explode: false
+        in: header
+        name: size
+        required: false
+        schema:
+          default: 10
+          format: int32
+          type: integer
+        style: simple
+      - description: Set to 'Any' to match one or more entered search keywords in
+          simple text search. Set to 'All' to match on all search keywords. Default
+          is 'All'.
+        explode: false
+        in: header
+        name: searchMode
+        required: false
+        schema:
+          $ref: "#/components/schemas/SearchModeDto"
+        style: simple
+      - description: "To search for resources 'near' the location, set LocationMode\
+          \ to 'Near', and 'Distance' to a value greater than 0. \r\n           This\
+          \ will return resources with service delivery locations within the chosen\
+          \ distance from the geographic center (latitude/longitude) of the chosen\
+          \ location. \r\n           To search for resources 'within' the geographic\
+          \ boundary of the location, set LocationMode to 'Within'. This will return\
+          \ resources within the boundary \r\n           (polygon of latitude/longitude\
+          \ values) of the chosen location. To search for resources avaialable within\
+          \ a service area (a geographic area that often defines \r\n           eligibility\
+          \ for service), set LocationMode to 'Serving' or 'ServingOnly'. ServingOnly\
+          \ returns resources available within the chosen location (ie. chosen service\
+          \ area). \r\n           Serving returns resources delivered within the chosen\
+          \ location, plus all higher level service area boundaries. As an example,\
+          \ setting LocationMode 'ServingOnly' \r\n           and location to 'Ventura'\
+          \ will return all resources with a service area of Ventura. If LocationMode\
+          \ is set to 'Serving', resources with a service area of \r\n           California\
+          \ and United States will also be returned, as Ventura is a service areas\
+          \ within the higher level service areas of California (state) and United\
+          \ States (country). \r\n           Notes: Distance is ignored when LocationMode\
+          \ is set to 'Within', 'Serving' and 'ServingOnly'. OrderByDistance is ignored\
+          \ when LocationMode is set to 'Within'."
+        explode: false
+        in: header
+        name: locationMode
+        required: true
+        schema:
+          $ref: "#/components/schemas/LocationModeDto"
+        style: simple
+      - description: "Set to false for regular text search. Set to true to search\
+          \ on taxonomy code or taxonomy code with wild card (e.g. BD-1800 or BD-1800*).\
+          \ Wildcard codes return code and any-child codes. Separate multiple codes\
+          \ with comma (eg. BD-1800,LM-200*). See /filters/taxonomy-terms-and-codes-assigned\
+          \ Filters API for a list of codes."
+        explode: false
+        in: header
+        name: keywordIsTaxonomyCode
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: simple
+      - description: "Set to false for regular text search. Set to 'true' if keyword\
+          \ is a taxonomy term or taxonomy terms (eg. Food Pantry). Separate multiple\
+          \ terms with comma (Food Pantry,Emergency Shelter). Wildcards cannot be\
+          \ used with terms. See /filters/taxonomy-terms-assigned Filters API for\
+          \ a list of terms."
+        explode: false
+        in: header
+        name: keywordIsTaxonomyTerm
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: simple
+      - description: "Set to 'true' to return all search request and result details,\
+          \ including the geocoded location and the request input data (which may\
+          \ have been programatically modified). Note: this can help users understand\
+          \ restrictions to search requests implemented through policy, including\
+          \ changes applied to parameter and header arguments."
+        explode: false
+        in: header
+        name: resultsAdvanced
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: simple
+      - description: "Set to true to order results from nearest to farthest from entered\
+          \ location. (note: orderByDistance applies only to locationMode 'Near' searches\
+          \ only.)"
+        explode: false
+        in: header
+        name: orderByDistance
+        required: false
+        schema:
+          default: true
+          type: boolean
+        style: simple
+      - description: "Comma-delimited list of taxonomy terms to filter data on. Adding\
+          \ one or more values will programatically add a search filter. Multiple\
+          \ terms can be added, and wildcards are supported (eg. Food\\*,Food Pantry\
+          \ ). Create a wildcard by appending * to the end of the term, returning\
+          \ all children. The 'eq' Assert operator and the 'or' Join operator are\
+          \ the default operator values. Assert operator value 'ne' can only be used\
+          \ with Join operator 'and' (eg. ne,and||Food*,Food Pantry). If multiple\
+          \ terms are applied (eg. Food Pantry,Medical*), a match on one or more terms\
+          \ will result in a match (and resource returned). To match on all terms,\
+          \ set Assert operator value to 'eq' and Join operator value to 'and'. See\
+          \ /filters/taxonomy-terms-assigned Filters API for a list of terms."
+        explode: false
+        in: header
+        name: taxonomyTerms
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of taxonomy codes to filter data on. Adding\
+          \ one or more values will programatically add a search filter. Multiple\
+          \ codes can be added, and wildcards are supported (eg. BD-1800\\*,PX-2300,HD-8000.1800*\
+          \ ). Create a wildcard by appending * to the end of the code, returning\
+          \ all children. The 'eq' Assert operator and the 'or' Join operator are\
+          \ the default operator values. Assert operator value 'ne' can only be used\
+          \ with Join operator 'and' (eg. ne,and||Older Adults,Women). If multiple\
+          \ terms are applied (eg. Older Adults,Women), a match on one or more terms\
+          \ will result in a match (and resource returned). To match on all terms,\
+          \ set Assert operator value to 'eq' and Join operator value to 'and'. See\
+          \ /filters/taxonomy-terms-and-codes-assigned Filters API for a list of terms."
+        explode: false
+        in: header
+        name: taxonomyCodes
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of target terms to filter data on. A target\
+          \ term is a Y-level AIRS taxonomy term. Adding one or more values will programatically\
+          \ add a search filter. The 'eq' Assert operator and the 'or' Join operator\
+          \ are the default operator values. Assert operator value 'ne' can only be\
+          \ used with Join operator 'and' (eg. ne,and||Older Adults,Women). If multiple\
+          \ terms are applied (eg. Older Adults,Women), a match on one or more terms\
+          \ will result in a match (and resource returned). To match on all terms,\
+          \ set Assert operator value to 'eq' and Join operator value to 'and'. See\
+          \ /filters/target-terms-assigned Filters API for a list of terms."
+        explode: false
+        in: header
+        name: targetTerms
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of countries (non-abbreviated format) to\
+          \ filter results on service area (eg. United States,Canada). The 'eq' Assert\
+          \ operator and the 'or' Join operator are the default operator values. Assert\
+          \ operator value 'ne' can only be used with Join operator 'and' or null\
+          \ (eg. ne,and||United States,Canada). Assert operator value 'eq' or null\
+          \ can only be used with Join operator 'or' (eg. eq,or||United States,Canada.\
+          \ (note: operator values joining multiple service area types is set by default\
+          \ to 'or' Join operator and null Assert operator. Multiple service area\
+          \ type operator values can only be set in POST operation. See /filters/service-area-values\
+          \ on Filters API for a list of service areas."
+        explode: false
+        in: header
+        name: serviceAreaCountries
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of states (non-abbreviated format) to filter\
+          \ results on service area (eg. North Carolina,California).  The 'eq' Assert\
+          \ operator and the 'or' Join operator are the default operator values. Assert\
+          \ operator value 'ne' can only be used with Join operator 'and' or null\
+          \ (eg. ne,and||North Carolina,California). Assert operator value 'eq' or\
+          \ null can only be used with Join operator 'or' (eg. eq,or||North Carolina,California).\
+          \ (note: operator values joining multiple service area types is set by default\
+          \ to 'or' Join operator and null Assert operator. Multiple service area\
+          \ type operator values can only be set in POST operation. See /filters/service-area-values\
+          \ on Filters API for a list of service areas."
+        explode: false
+        in: header
+        name: serviceAreaStates
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of counties to filter results on service\
+          \ area (eg. Wake,Durham).  The 'eq' Assert operator and the 'or' Join operator\
+          \ are the default operator values. Assert operator value 'ne' can only be\
+          \ used with Join operator 'and' or null (eg. ne,and||Wake,Durham). Assert\
+          \ operator value 'eq' or null can only be used with Join operator 'or' (eg.\
+          \ eq,or||Wake,Durham). (note: operator values joining multiple service area\
+          \ types is set by default to 'or' Join operator and null Assert operator.\
+          \ Multiple service area type operator values can only be set in POST operation.\
+          \ See /filters/service-area-values on Filters API for a list of service\
+          \ areas."
+        explode: false
+        in: header
+        name: serviceAreaCounties
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of cities to filter results on service\
+          \ area (eg. Raleigh,San Francisco).  The 'eq' Assert operator and the 'or'\
+          \ Join operator are the default operator values. Assert operator value 'ne'\
+          \ can only be used with Join operator 'and' or null (eg. ne,and||Raleigh,San\
+          \ Francisco). Assert operator value 'eq' or null can only be used with Join\
+          \ operator 'or' (eg. eq,or||Raleigh,San Francisco). (note: operator values\
+          \ joining multiple service area types is set by default to 'or' Join operator\
+          \ and null Assert operator. Multiple service area type operator values can\
+          \ only be set in POST operation. See /filters/service-area-values on Filters\
+          \ API for a list of service areas."
+        explode: false
+        in: header
+        name: serviceAreaCities
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of postal codes to filter results on service\
+          \ area (eg. 95945,95350).  The 'eq' Assert operator and the 'or' Join operator\
+          \ are the default operator values. Assert operator value 'ne' can only be\
+          \ used with Join operator 'and' or null (eg. ne,and||95945,95350). Assert\
+          \ operator value 'eq' or null can only be used with Join operator 'or' (eg.\
+          \ eq,or||95945,95350). (note: operator values joining multiple service area\
+          \ types is set by default to 'or' Join operator and null Assert operator.\
+          \ Multiple service area type operator values can only be set in POST operation.\
+          \ See /filters/service-area-values on Filters API for a list of service\
+          \ areas."
+        explode: false
+        in: header
+        name: serviceAreaPostalCodes
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of countries (non-abbreviated format) to\
+          \ filter results on location address (eg. United States,Canada). The 'eq'\
+          \ Assert operator and the 'or' Join operator are the default operator values.\
+          \ Assert operator value 'ne' can only be used with Join operator 'and' or\
+          \ null (eg. ne,and||United States,Canada). Assert operator value 'eq' or\
+          \ null can only be used with Join operator 'or' (eg. eq,or||United States,Canada).\
+          \ (note: operator values joining multiple address types is set by default\
+          \ to 'and' Join operator and null Assert operator. Multiple address type\
+          \ operator values can only be set in POST operation. See /filters/location-values\
+          \ on Filters API for a list of address locations."
+        explode: false
+        in: header
+        name: addressCountries
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of states (abbreviated format) to filter\
+          \ results on location address (eg. NC,CA). The 'eq' Assert operator and\
+          \ the 'or' Join operator are the default operator values. Assert operator\
+          \ value 'ne' can only be used with Join operator 'and' or null (eg. ne,and||NC,CA).\
+          \ Assert operator value 'eq' or null can only be used with Join operator\
+          \ 'or' (eg. eq,or||NC,CA). (note: operator values joining multiple address\
+          \ types is set by default to 'and' Join operator and null Assert operator.\
+          \ Multiple address type operator values can only be set in POST operation.\
+          \ See /filters/location-values on Filters API for a list of address locations."
+        explode: false
+        in: header
+        name: addressStates
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of counties to filter results on location\
+          \ address (eg. Wake,Durham). The 'eq' Assert operator and the 'or' Join\
+          \ operator are the default operator values. Assert operator value 'ne' can\
+          \ only be used with Join operator 'and' or null (eg. ne,and||Wake,Durham).\
+          \ Assert operator value 'eq' or null can only be used with Join operator\
+          \ 'or' (eg. eq,or||Wake,Durham). (note: operator values joining multiple\
+          \ address types is set by default to 'and' Join operator and null Assert\
+          \ operator. Multiple address type operator values can only be set in POST\
+          \ operation. See /filters/location-values on Filters API for a list of address\
+          \ locations."
+        explode: false
+        in: header
+        name: addressCounties
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of cities to filter results on location\
+          \ address (eg. Raleigh,San Francisco). The 'eq' Assert operator and the\
+          \ 'or' Join operator are the default operator values. Assert operator value\
+          \ 'ne' can only be used with Join operator 'and' or null (eg. ne,and||Raleigh,San\
+          \ Francisco). Assert operator value 'eq' or null can only be used with Join\
+          \ operator 'or' (eg. eq,or||Raleigh,San Francisco). (note: operator values\
+          \ joining multiple address types is set by default to 'and' Join operator\
+          \ and null Assert operator. Multiple address type operator values can only\
+          \ be set in POST operation. See /filters/location-values on Filters API\
+          \ for a list of address locations."
+        explode: false
+        in: header
+        name: addressCities
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of postal codes to filter results on location\
+          \ address (eg. 95945,95350). The 'eq' Assert operator and the 'or' Join\
+          \ operator are the default operator values. Assert operator value 'ne' can\
+          \ only be used with Join operator 'and' or null (eg. ne,and||95945,95350).\
+          \ Assert operator value 'eq' or null can only be used with Join operator\
+          \ 'or' (eg. eq,or||95945,95350). (note: operator values joining multiple\
+          \ address types is set by default to 'and' Join operator and null Assert\
+          \ operator. Multiple address type operator values can only be set in POST\
+          \ operation. See /filters/location-values on Filters API for a list of address\
+          \ locations."
+        explode: false
+        in: header
+        name: addressPostalCodes
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Comma-delimited list of unique identifiers (ids) for organization,\
+          \ service, location or service-at-location. Adding one or more values will\
+          \ programatically add a search filter. Only default operator values 'eq'\
+          \ (assert) and 'or' (join) are accepted for this parameter, and are automatically\
+          \ added."
+        explode: false
+        in: header
+        name: ids
+        required: false
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                count: null
+                request: null
+                location: null
+                results: []
+                facets: {}
+              schema:
+                $ref: "#/components/schemas/SearchOutputDto"
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              example:
+                count: null
+                request: null
+                location: null
+                results: []
+                facets: {}
+              schema:
+                $ref: "#/components/schemas/SearchOutputDto"
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              example:
+                count: null
+                request: null
+                location: null
+                results: []
+                facets: {}
+              schema:
+                $ref: "#/components/schemas/SearchOutputDto"
+          description: Internal Server Error
+      summary: "Search: Keywords"
+      tags:
+      - Keyword
+    post:
+      description: "Searches an index of NDP service at location records. \r\n\r\n\
+        Records are returned in 'service-at-locationn' format, with all services and\
+        \ locations of the organization.\r\n\r\nThe total number of records in the\
+        \ index matching the request is identified as \"count\" at the top of the\
+        \ response. The values set for each parameter are also returned within the\
+        \ request object at the top of the response, when 'resultsAdvanced' is set\
+        \ to 'true'.\r\n\r\nNote: Active and Inactive organizations can be returned.\
+        \ Set the 'includeInactive' filter to true to return both active and inactive\
+        \ records. Default value is set to 'false', returning only active records.\
+        \ \r\n\r\nNote: A search that returns no results will have a status code of\
+        \ 204 or 404. A 204 status code is returned when the Advanced Results parameter\
+        \ value is \r\nis to false. When set to true, a 404 NotFound status code is\
+        \ returned with the request input. Note that the request input may be programitically\
+        \ modified in certain scenarios. As an example, \r\nwhen 'searchWithinLocationType'\
+        \ is set to its default value 'unknown', the geocoding service will set the\
+        \ location type based on the location entered. Refer to the field description\
+        \ for more information. \r\nA 500 ServerError response returns a tracking\
+        \ code that can be used internally to identify undocumented items and/or resolve\
+        \ unmanaged errors."
+      operationId: post-keyword
+      parameters:
+      - description: "(admin use only) Comma-delimited list of data owners to filter\
+          \ search results. Adding one or more values will programatically add a search\
+          \ filter. If multiple data owners are applied (eg. 211ventura,211bayarea),\
+          \ a match on one or more data owners will result in a match (and resource\
+          \ returned). The 'eq' Assert operator and the 'or' Join operator are the\
+          \ default operator values. Assert operator value 'ne' can only be used with\
+          \ Join operator 'and' (eg. ne,and||211ventura,211ayarea). See /filters/dataOwners\
+          \ on Filters API for a list of data owners."
+        explode: false
+        in: header
+        name: dataOwners
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of taxonomy codes to filter\
+          \ data on. Adding one or more values will programatically add a search filter.\
+          \ Multiple codes can be added, and wildcards are supported (eg. BD-1800\\\
+          *,PX-2300,HD-8000.1800* ). Create a wildcard by appending * to the end of\
+          \ the code, returning all children. The 'eq' Assert operator and the 'or'\
+          \ Join operator are the default operator values. Assert operator value 'ne'\
+          \ can only be used with Join operator 'and' (eg. ne,and||Older Adults,Women).\
+          \ If multiple terms are applied (eg. Older Adults,Women), a match on one\
+          \ or more terms will result in a match (and resource returned). To match\
+          \ on all terms, set Assert operator value to 'eq' and Join operator value\
+          \ to 'and'. See /filters/taxonomy-terms-and-codes-assigned Filters API for\
+          \ a list of terms."
+        explode: false
+        in: header
+        name: taxonomyCodes
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of taxonomy terms to filter\
+          \ data on. Adding one or more values will programatically add a search filter.\
+          \ Multiple terms can be added, and wildcards are supported (eg. Food\\*,Food\
+          \ Pantry ). Create a wildcard by appending * to the end of the term, returning\
+          \ all children. The 'eq' Assert operator and the 'or' Join operator are\
+          \ the default operator values. Assert operator value 'ne' can only be used\
+          \ with Join operator 'and' (eg. ne,and||Food*,Food Pantry). If multiple\
+          \ terms are applied (eg. Food Pantry,Medical*), a match on one or more terms\
+          \ will result in a match (and resource returned). To match on all terms,\
+          \ set Assert operator value to 'eq' and Join operator value to 'and'. See\
+          \ /filters/taxonomy-terms-assigned Filters API for a list of terms."
+        explode: false
+        in: header
+        name: taxonomyTerms
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of target terms to filter\
+          \ data on. A target term is a Y-level AIRS taxonomy term. Adding one or\
+          \ more values will programatically add a search filter. The 'eq' Assert\
+          \ operator and the 'or' Join operator are the default operator values. Assert\
+          \ operator value 'ne' can only be used with Join operator 'and' (eg. ne,and||Older\
+          \ Adults,Women). If multiple terms are applied (eg. Older Adults,Women),\
+          \ a match on one or more terms will result in a match (and resource returned).\
+          \ To match on all terms, set Assert operator value to 'eq' and Join operator\
+          \ value to 'and'. See /filters/target-terms-assigned Filters API for a list\
+          \ of terms."
+        explode: false
+        in: header
+        name: targetTerms
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of tags to filter search\
+          \ results. Adding one or more values will programatically add a search filter.\
+          \ The 'eq' Assert operator and the 'or' Join operator are the default operator\
+          \ values. Assert operator value 'ne' can only be used with Join operator\
+          \ 'and' (eg. ne,and||211ventura,211ayarea). If multiple tags are applied\
+          \ (eg. Kinship,Shelter), a match on one or more tags will result in a match\
+          \ (and resource returned). To match on all tags, set Assert operator value\
+          \ to 'eq' and Join operator value to 'and'. See /filters/tags on Filters\
+          \ API for a list of tags."
+        explode: false
+        in: header
+        name: tagsService
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Format - int32. (admin use only) Number of results to skip.\
+          \ Used with Size to page results. Note that the total number of resources\
+          \ that match the search is returned with 'count' in the search results,\
+          \ if IncludeTotalCount is set to true."
+        explode: false
+        in: header
+        name: skip
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      - description: "Format - int32. (admin use only) Number of results to be returned.\
+          \ Used with Skip to page results. Note that the total number of resources\
+          \ that match the search is returned with 'count' in the search results,\
+          \ if IncludeTotalCount is set to true."
+        explode: false
+        in: header
+        name: size
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      - description: "(admin use only) Comma-delimited list of countries (non-abbreviated\
+          \ format) to filter results on service area (eg. United States,Canada).\
+          \ The 'eq' Assert operator and the 'or' Join operator are the default operator\
+          \ values. Assert operator value 'ne' can only be used with Join operator\
+          \ 'and' or null (eg. ne,and||United States,Canada). Assert operator value\
+          \ 'eq' or null can only be used with Join operator 'or' (eg. eq,or||United\
+          \ States,Canada. (note: operator values joining multiple service area types\
+          \ is set by default to 'or' Join operator and null Assert operator. Multiple\
+          \ service area type operator values can only be set in POST operation. See\
+          \ /filters/service-area-values on Filters API for a list of service areas."
+        explode: false
+        in: header
+        name: serviceAreaCountries
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of states (non-abbreviated\
+          \ format) to filter results on service area (eg. North Carolina,California).\
+          \  The 'eq' Assert operator and the 'or' Join operator are the default operator\
+          \ values. Assert operator value 'ne' can only be used with Join operator\
+          \ 'and' or null (eg. ne,and||United States,Canada). Assert operator value\
+          \ 'eq' or null can only be used with Join operator 'or' (eg. eq,or||United\
+          \ States,Canada. (note: operator values joining multiple service area types\
+          \ is set by default to 'or' Join operator and null Assert operator. Multiple\
+          \ service area type operator values can only be set in POST operation. See\
+          \ /filters/service-area-values on Filters API for a list of service areas."
+        explode: false
+        in: header
+        name: serviceAreaStates
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of counties to filter\
+          \ results on service area (eg. Wake,Durham).  The 'eq' Assert operator and\
+          \ the 'or' Join operator are the default operator values. Assert operator\
+          \ value 'ne' can only be used with Join operator 'and' or null (eg. ne,and||United\
+          \ States,Canada). Assert operator value 'eq' or null can only be used with\
+          \ Join operator 'or' (eg. eq,or||United States,Canada. (note: operator values\
+          \ joining multiple service area types is set by default to 'or' Join operator\
+          \ and null Assert operator. Multiple service area type operator values can\
+          \ only be set in POST operation. See /filters/service-area-values on Filters\
+          \ API for a list of service areas."
+        explode: false
+        in: header
+        name: serviceAreaCounties
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of cities to filter results\
+          \ on service area (eg. Raleigh,San Francisco).  The 'eq' Assert operator\
+          \ and the 'or' Join operator are the default operator values. Assert operator\
+          \ value 'ne' can only be used with Join operator 'and' or null (eg. ne,and||United\
+          \ States,Canada). Assert operator value 'eq' or null can only be used with\
+          \ Join operator 'or' (eg. eq,or||United States,Canada. (note: operator values\
+          \ joining multiple service area types is set by default to 'or' Join operator\
+          \ and null Assert operator. Multiple service area type operator values can\
+          \ only be set in POST operation. See /filters/service-area-values on Filters\
+          \ API for a list of service areas."
+        explode: false
+        in: header
+        name: serviceAreaCities
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of postal codes to filter\
+          \ results on service area (eg. 12345,67890).  The 'eq' Assert operator and\
+          \ the 'or' Join operator are the default operator values. Assert operator\
+          \ value 'ne' can only be used with Join operator 'and' or null (eg. ne,and||United\
+          \ States,Canada). Assert operator value 'eq' or null can only be used with\
+          \ Join operator 'or' (eg. eq,or||United States,Canada. (note: operator values\
+          \ joining multiple service area types is set by default to 'or' Join operator\
+          \ and null Assert operator. Multiple service area type operator values can\
+          \ only be set in POST operation. See /filters/service-area-values on Filters\
+          \ API for a list of service areas."
+        explode: false
+        in: header
+        name: serviceAreaPostalCodes
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of countries (non-abbreviated\
+          \ format) to filter results on location address (eg. United States,Canada).\
+          \ The 'eq' Assert operator and the 'or' Join operator are the default operator\
+          \ values. Assert operator value 'ne' can only be used with Join operator\
+          \ 'and' or null (eg. ne,and||United States,Canada). Assert operator value\
+          \ 'eq' or null can only be used with Join operator 'or' (eg. eq,or||United\
+          \ States,Canada). (note: operator values joining multiple address types\
+          \ is set by default to 'and' Join operator and null Assert operator. Multiple\
+          \ address type operator values can only be set in POST operation. See /filters/location-values\
+          \ on Filters API for a list of address locations."
+        explode: false
+        in: header
+        name: addressCountries
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of states (abbreviated\
+          \ format) to filter results on location address (eg. NC,CA). The 'eq' Assert\
+          \ operator and the 'or' Join operator are the default operator values. Assert\
+          \ operator value 'ne' can only be used with Join operator 'and' or null\
+          \ (eg. ne,and||NC,CA). Assert operator value 'eq' or null can only be used\
+          \ with Join operator 'or' (eg. eq,or||NC,CA). (note: operator values joining\
+          \ multiple address types is set by default to 'and' Join operator and null\
+          \ Assert operator. Multiple address type operator values can only be set\
+          \ in POST operation. See /filters/location-values on Filters API for a list\
+          \ of address locations."
+        explode: false
+        in: header
+        name: addressStates
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of counties to filter\
+          \ results on location address (eg. Wake,Durham). The 'eq' Assert operator\
+          \ and the 'or' Join operator are the default operator values. Assert operator\
+          \ value 'ne' can only be used with Join operator 'and' or null (eg. ne,and||Wake,Durham).\
+          \ Assert operator value 'eq' or null can only be used with Join operator\
+          \ 'or' (eg. eq,or||Wake,Durham). (note: operator values joining multiple\
+          \ address types is set by default to 'and' Join operator and null Assert\
+          \ operator. Multiple address type operator values can only be set in POST\
+          \ operation. See /filters/location-values on Filters API for a list of address\
+          \ locations."
+        explode: false
+        in: header
+        name: addressCounties
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of cities to filter results\
+          \ on location address (eg. Raleigh,San Francisco). The 'eq' Assert operator\
+          \ and the 'or' Join operator are the default operator values. Assert operator\
+          \ value 'ne' can only be used with Join operator 'and' or null (eg. ne,and||Raleigh,San\
+          \ Francisco). Assert operator value 'eq' or null can only be used with Join\
+          \ operator 'or' (eg. eq,or||Raleigh,San Francisco). (note: operator values\
+          \ joining multiple address types is set by default to 'and' Join operator\
+          \ and null Assert operator. Multiple address type operator values can only\
+          \ be set in POST operation. See /filters/location-values on Filters API\
+          \ for a list of address locations."
+        explode: false
+        in: header
+        name: addressCities
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of postal codes to filter\
+          \ results on location address (eg. 12345,67890). The 'eq' Assert operator\
+          \ and the 'or' Join operator are the default operator values. Assert operator\
+          \ value 'ne' can only be used with Join operator 'and' or null (eg. ne,and||12345,67890).\
+          \ Assert operator value 'eq' or null can only be used with Join operator\
+          \ 'or' (eg. eq,or||12345,67890). (note: operator values joining multiple\
+          \ address types is set by default to 'and' Join operator and null Assert\
+          \ operator. Multiple address type operator values can only be set in POST\
+          \ operation. See /filters/location-values on Filters API for a list of address\
+          \ locations."
+        explode: false
+        in: header
+        name: addressPostalCodes
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "(admin use only) Comma-delimited list of unique identifiers\
+          \ (ids) for organization, service, location or service-at-location. Adding\
+          \ one or more values will programatically add a search filter. Default operator\
+          \ values: Assert = 'eq'; Join='or'. Only default operator values permitted\
+          \ (ie. Assert=eq;Join=or)."
+        explode: false
+        in: header
+        name: ids
+        required: false
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              search: "BD*,BH-1800.3500"
+              location: "Ventura, California"
+              distance: 10
+              searchWithinLocationType: County
+              skip: 0
+              size: 10
+              includeTotalCount: true
+              filters:
+              - field: dataOwners
+                value:
+                - field: dataOwners
+                  value:
+                  - 211ventura
+                  - 211bayarea
+                  operators:
+                    assert: eq
+                    join: or
+                operators:
+                  assert: eq
+                  join: or
+              - field: serviceAreas
+                value:
+                - field: county
+                  value:
+                  - Ventura
+                  - Kern
+                  operators:
+                    assert: eq
+                    join: or
+                - field: locality
+                  value:
+                  - Los Angeles
+                  operators:
+                    assert: eq
+                    join: or
+                operators:
+                  assert: eq
+                  join: or
+              orderbys:
+              - field: nameService
+                value: asc
+              facets:
+              - tagsService
+              - taxonomy/taxonomyTermLevel1
+              - taxonomy/taxonomyTermLevel2
+              - address/stateProvince
+              - "serviceAreas/valueType,count:100,sort:-value"
+              - dataOwnerDisplayName
+              searchFields:
+              - descriptionService
+              - nameOrganization
+              - nameService
+              - alternateNamesOrganization
+              - alternateNamesService
+              selectFields:
+              - idServiceAtLocation
+              - idService
+              - idLocation
+              - idOrganization
+              - nameOrganization
+              - descriptionOrganization
+              - nameService
+              - descriptionService
+              - nameLocation
+              - nameServiceAtLocation
+              - alternateNamesService
+              - alternateNamesOrganization
+              - address
+              - taxonomy
+              - serviceAreas
+              - dataOwner
+              searchMode: Any
+              locationMode: Within
+              keywordIsTaxonomyCode: true
+              keywordIsTaxonomyTerm: false
+              orderByDistance: true
+              resultsAdvanced: true
+            schema:
+              $ref: "#/components/schemas/SearchInputDto"
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                count: null
+                request: null
+                location: null
+                results: []
+                facets: {}
+              schema:
+                $ref: "#/components/schemas/SearchOutputDto"
+          description: OK
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              example:
+                count: null
+                request: null
+                location: null
+                results: []
+                facets: {}
+              schema:
+                $ref: "#/components/schemas/SearchOutputDto"
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              example:
+                count: null
+                request: null
+                location: null
+                results: []
+                facets: {}
+              schema:
+                $ref: "#/components/schemas/SearchOutputDto"
+          description: Internal Server Error
+      summary: "Search: Keywords"
+      tags:
+      - Keyword
+  /filters/target-terms-assigned:
+    get:
+      description: "Returns all service taxonomy target terms (AIRS Y-terms ie. linked\
+        \ terms) assigned to a 211 center(s) resource data (eg. 'Older Adults' is\
+        \ a target term (ie. linked term) to a taxonomy term such as 'Homeless Shelter').\r\
+        \n\r\nReturned values can be filtered by 211 data owner.\r\n\r\nThis API returns\
+        \ values that can be used as 'targetTerm' parameter value inputs on the Search/Keyword\
+        \ API operation."
+      operationId: get-filters-target-terms-assigned-dataowners-dataowners
+      parameters:
+      - description: "211 data owner(s) to filter values (e.g. 211ventura or 211ventura,211northcarolina).\
+          \ See DataOwners API fitler operation for 211 center values."
+        explode: true
+        in: query
+        name: dataOwners
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - string
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: "Filter: Service Target Term Values Assigned"
+      tags:
+      - Filters
+components:
+  schemas:
+    CoordinateSystem:
+      additionalProperties: false
+      example:
+        epsgId: 9
+        name: name
+        id: id
+      properties:
+        epsgId:
+          format: int32
+          nullable: true
+          readOnly: true
+          title: epsgId
+          type: integer
+        id:
+          nullable: true
+          readOnly: true
+          title: id
+          type: string
+        name:
+          nullable: true
+          readOnly: true
+          title: name
+          type: string
+      title: CoordinateSystem
+      type: object
+    DataOwnerDto:
+      additionalProperties: false
+      example:
+        dataOwnerDisplayName: dataOwnerDisplayName
+        dataOwner: dataOwner
+      properties:
+        dataOwner:
+          nullable: true
+          title: dataOwner
+          type: string
+        dataOwnerDisplayName:
+          nullable: true
+          title: dataOwnerDisplayName
+          type: string
+      title: DataOwnerDto
+      type: object
+    FacetValue:
+      additionalProperties: false
+      example:
+        count: 1
+        value: value
+      properties:
+        value:
+          description: Value of the facet (a filterable field)
+          nullable: true
+          title: value
+          type: string
+        count:
+          description: Count of resources with the value of the facet
+          format: int64
+          nullable: true
+          title: count
+          type: integer
+      title: FacetValue
+      type: object
+    GeographyPoint:
+      additionalProperties: false
+      example:
+        latitude: 3.616076749251911
+        isEmpty: true
+        z: 4.145608029883936
+        coordinateSystem:
+          epsgId: 9
+          name: name
+          id: id
+        m: 7.386281948385884
+        longitude: 2.027123023002322
+      properties:
+        coordinateSystem:
+          $ref: "#/components/schemas/CoordinateSystem"
+        isEmpty:
+          readOnly: true
+          title: isEmpty
+          type: boolean
+        latitude:
+          format: double
+          readOnly: true
+          title: latitude
+          type: number
+        longitude:
+          format: double
+          readOnly: true
+          title: longitude
+          type: number
+        z:
+          format: double
+          nullable: true
+          readOnly: true
+          title: z
+          type: number
+        m:
+          format: double
+          nullable: true
+          readOnly: true
+          title: m
+          type: number
+      title: GeographyPoint
+      type: object
+    LocationModeDto:
+      description: "To search for resources 'near' the location, set LocationMode\
+        \ to 'Near', and 'Distance' to a value greater than 0. \r\nThis will return\
+        \ resources with service delivery locations within the chosen distance from\
+        \ the geographic center (latitude/longitude) of the chosen location.\r\nTo\
+        \ search for resources 'within' the geographic boundary of the location, set\
+        \ LocationMode to 'Within'. \r\nThis will return resources within the boundary\
+        \ (polygon of latitude/longitude values) of the chosen location. \r\nTo search\
+        \ for resources available within a service area (a geographic area that often\
+        \ defines eligibility for service), set LocationMode to 'Serving' or 'ServingOnly'.\
+        \ \r\nServingOnly returns resources available within the chosen location (ie.\
+        \ chosen service area). If SearchWithinLocationMode is set to 'Unknown' (the\
+        \ default value), the geographic location\r\ntype will be determined by the\
+        \ API (eg county, city, etc.). The search will then return resources for service\
+        \ areas that match both the type (eg. county) and the location (eg. Ventura).\
+        \ \r\nLocationMode set to Serving differs from LocationMode set to ServingOnly.\
+        \ Serving return returns resources delivered within the selelect location\
+        \ and geography type, plus all\r\nhigher level service area boundaries. As\
+        \ an example, setting LocationMode to 'ServingOnly', Location to 'Ventura'\
+        \ and SearchWithinLocationType to 'County' will return all resources with\
+        \ a service area of Ventura County. \r\nIf LocationMode is set to 'Serving',\
+        \ resources with a service area of California and United States will also\
+        \ be returned, as Ventura is a service area within the higher \r\nlevel service\
+        \ areas of California (state) and United States (country).\r\nNotes: Distance\
+        \ is ignored when LocationMode is set to 'Within', 'Serving' and 'ServingOnly'.\
+        \ OrderByDistance is ignored when LocationMode is\r\nset to 'Within'. Set\
+        \ 'ResultsAdvanced' to true to inspect programmatics changes made by the API\
+        \ to SearchWithinLocationType if left to default (ie. Unknown)."
+      enum:
+      - Within
+      - Near
+      - Serving
+      - ServingOnly
+      title: LocationModeDto
+      type: string
+    LocationTypeDto:
+      description: "Type of the location used to set the geographic boundary for searching\
+        \ for resources when LocationMode set to 'Within'. Values are City, County,\
+        \ PostalCode, State, Country, Unknown.\r\nAs an example, if SearchWithinLocationType\
+        \ is set to 'City' with location set to 'Ventura', resources with a physical\
+        \ location within the \r\ngeographic boundary of the city of Ventura will\
+        \ be returned. if SearchWithinLocationType is set to 'County' with location\
+        \ set to 'Ventura', resources \r\nwith a physical location within the geographic\
+        \ boundary of the county of Ventura will be returned. Default value is 'Unknown'.\
+        \ If value is set to 'Unknown' (or\r\nnot set), the LocationType will be determined\
+        \ using the service."
+      enum:
+      - Unknown
+      - City
+      - County
+      - PostalCode
+      - State
+      - Country
+      title: LocationTypeDto
+      type: string
+    OperatorValues:
+      additionalProperties: false
+      description: "Operator values add logic to filters. The two values are 'assert'\
+        \ and 'join'. Assert can be set to 'eq' or 'ne'. The default setting is 'eq'.\
+        \ If not set or set to null, the default value is applied programatically.\r\
+        \nWhen assert is set to 'ne', search results exclude values set in the filter.\
+        \ As an example, if assert set to 'ne' for the filter 'dataOwner', search\
+        \ results will exclude records with the set dataOwner value. \r\nJoin can\
+        \ be set to 'and' or 'or'. The default setting is 'or'. When join is set to\
+        \ 'and', search results will exclude records that do not include all values\
+        \ for the targeted filter. As an example, if join set to 'and' for\r\ntaxonomy\
+        \ terms 'Food' and 'Shelter', search results will exclude all records that\
+        \ do not have a Food and a Shelter taxonomy term associated to the resource.\
+        \ Important! Most filters only support Join set to 'or'. This is \r\nbecuase\
+        \ most fields include only a single value, and requesting two matching values\
+        \ when only one is available will results in no resources being returned.\
+        \ Refer to the documentation for each filter field to learn more\r\nabout\
+        \ the options for assert and join on each field."
+      example:
+        assert: assert
+        join: join
+      properties:
+        assert:
+          nullable: true
+          title: assert
+          type: string
+        join:
+          nullable: true
+          title: join
+          type: string
+      title: OperatorValues
+      type: object
+    SearchFilter:
+      additionalProperties: false
+      description: Set the value for a field to filter (scope) the results before
+        search is executed.
+      example:
+        field: "\r\n            dataOwner\r\n            "
+        operators:
+          assert: assert
+          join: join
+        value:
+        - 211ventura
+        - 211bayarea
+      properties:
+        field:
+          description: "The name of the search field to filter on. Fields are:\r\n\
+            * idServiceAtLocation\r\n* idOrganization\r\n* idService\r\n* idLocation\r\
+            \n* tagsService\r\n* dataOwner\r\n* dataOwnerDisplayName\r\n* targetTerm\r\
+            \n* address/city\r\n* address/county\r\n* address/stateProvince\r\n* address/postalCode\r\
+            \n* address/country\r\n* taxonomy/taxonomyTerm\r\n* taxonomy/taxonomyCode\r\
+            \n* taxonomy/target\r\n* serviceAreas/postalCode\r\n* serviceAreas/city\r\
+            \n* serviceAreas/county\r\n* serviceAreas/state\r\n* serviceAreas/country"
+          example: "\r\n            dataOwner\r\n            "
+          minLength: 1
+          title: field
+          type: string
+        value:
+          description: The value to filter the field on.
+          example:
+          - 211ventura
+          - 211bayarea
+          title: value
+        operators:
+          $ref: "#/components/schemas/OperatorValues"
+      required:
+      - field
+      - value
+      title: SearchFilter
+      type: object
+    SearchInputDto:
+      additionalProperties: false
+      description: "Configures search request (note: header values can overwrite search\
+        \ request input, in some cases). Refer to documentation of input field and\
+        \ headers for more information)."
+      example:
+        selectFields:
+        - nameService
+        - nameOrganization
+        - descriptionService
+        - tagsService
+        distance: 6
+        keywordIsTaxonomyCode: false
+        searchMode: All
+        skip: 1
+        filters:
+        - field: "\r\n            dataOwner\r\n            "
+          operators:
+            assert: assert
+            join: join
+          value:
+          - 211ventura
+          - 211bayarea
+        - field: "\r\n            dataOwner\r\n            "
+          operators:
+            assert: assert
+            join: join
+          value:
+          - 211ventura
+          - 211bayarea
+        includeTotalCount: true
+        orderByDistance: true
+        keywordIsTaxonomyTerm: false
+        searchWithinLocationType: Unknown
+        facets:
+        - facets
+        - facets
+        search: food pantry
+        size: 5
+        location: "ventura, california"
+        searchFields:
+        - nameService
+        - nameOrganization
+        - descriptionService
+        locationMode: Within
+        orderbys:
+        - field: "\r\n            nameOrganization\r\n            "
+          value: ""
+        - field: "\r\n            nameOrganization\r\n            "
+          value: ""
+        resultsAdvanced: true
+      properties:
+        search:
+          description: "One or more keywords to search the repository. Set SearchMode\
+            \ to 'Any' to match on at least one keyword. \r\nSet SearchMode to 'All'\
+            \ to match on all words. To search on taxonomy term(s), set KeywordIsTaxonomyTerm\
+            \ to true.\r\nTo search on taxonomy code(s), set KeywordIsTaxonomyCode\
+            \ to true. For taxonomy code or taxonomy term searches, set SearchMode\
+            \ to 'All'\r\nto require all taxonomy terms be assigned to resources returned\
+            \ with search results. Set SearchMode to 'Any' to require a match on at\
+            \ least\r\none taxonomy term/code. Wildcards can be used to search resources\
+            \ with a partial taxonomy code (eg. BD*) or partial taxonomy term (eg.\
+            \ Emer*). All resources matching the characters \r\nbefore * will be returned.\
+            \ As an example, a taxonomy code search for BD\\* will return all resources\
+            \ with a taxonomy code beginning with BD, the taxonomy\r\ncode for Food.\
+            \ Using taxonomy code wildcard searches ensures all resources with 'child'\
+            \ taxonomy codes are returned (eg. BD-1800 is a child of BD, and would\
+            \ be returned\r\nwith the BD\\* wildcard taxonomy code search). Wilcards\
+            \ can also be used for taxonomy term searches, and will return matches\
+            \ on all taxonomy terms matching on one or more terms located within the\
+            \ full taxonmy term\r\n(eg. Food Pantry can be match on Food and/or Pantry).\
+            \ A match occurs when all characters before the \\* are matched on or\
+            \ more terms with the full taxonomy term. As as example, a wilcard search\
+            \ on Food* will return \r\nresources with taxonomy term(s) that include\
+            \ any word within its taxonomy term(s) beginning with 'Food'. A search\
+            \ for F\\* will return resources with taxonomy term(s) beginning with\
+            \ F)."
+          example: food pantry
+          minLength: 1
+          title: search
+          type: string
+        location:
+          description: "Location to search for resources.Value can be a zip code,\
+            \ city, county, state, country or longitude_latitude pair. There are four\
+            \ patterns for location searching: \r\nnear, within, serving, servingOnly.\
+            \ The pattern is contolled by LocationMode. See LocationMode for details\
+            \ on using each pattern. (Notes ==> note 1: latidude and longitude: when\
+            \ using latitude and longitude for location: \r\nlongitude_latitude values\
+            \ must be provided as lon:-119.293106_lat:34.28083 and can include up\
+            \ to a maximum of six digits after the decimal. note 2: the search API\
+            \ geocodes locations and may use the geocoded data\r\nwithin the search\
+            \ logic. to view the geocoded data of the entered location, set the parameter\
+            \ 'resultsAdvanced' to true to return the gecoded 'location' data with\
+            \ the search result)."
+          example: "ventura, california"
+          minLength: 1
+          title: location
+          type: string
+        distance:
+          default: 10
+          description: "Maximum distance from the entered location to the physical\
+            \ address where the resource is availalble (ie. service is delivered).\
+            \ \r\nSet 'OrderByDistance' to true to sort search results from nearest\
+            \ to farthest from enetered location.\r\nDistance is ignored (set by the\
+            \ system to 0) when LocationMode is set to 'Within' because distance is\
+            \ not applicable when searching within a geographic boundary. \r\nDistance\
+            \ is set to 5000, when LocationMode set to 'Serving' or 'ServingOnly'\
+            \ to ensure all resources with assigned with the selected service areas\
+            \ area returned (ie. locations are considered\r\nservice areas when LocationMode\
+            \ set to 'Serving' or 'ServingOnly'). As an example, a service (ie. resource)\
+            \ may be physically located in California but have \r\nservice areas throughout\
+            \ the country (eg. helplines)."
+          format: int32
+          title: distance
+          type: integer
+        searchWithinLocationType:
+          $ref: "#/components/schemas/LocationTypeDto"
+        skip:
+          default: 0
+          description: "Number of results to skip. Used with Size to page results.\
+            \ Note that the total number of resources that match the search is returned\
+            \ with 'count' in\r\nthe search results, if IncludeTotalCount is set to\
+            \ true."
+          format: int32
+          title: skip
+          type: integer
+        size:
+          default: 10
+          description: "Number of results to be returned. Used with Skip to page results.\
+            \ Note that the total number of resources that match the search is returned\
+            \ with 'count' in\r\nthe search results, if IncludeTotalCount is set to\
+            \ true."
+          format: int32
+          title: size
+          type: integer
+        includeTotalCount:
+          default: true
+          description: "Set to 'true' to include total number of results available\
+            \ for return. If Size is less than value returned by total count,\r\n\
+            use Skip to get additional results"
+          title: includeTotalCount
+          type: boolean
+        filters:
+          description: "A list of search filters that can be used to control/limit\
+            \ the scope of the search. A search filter has a field and a value. See\
+            \ 'SearchFilter'\r\nfor a list of avaialable fields that can be used to\
+            \ filter searches."
+          items:
+            $ref: "#/components/schemas/SearchFilter"
+          nullable: true
+          title: filters
+          type: array
+        orderbys:
+          description: "A list of orderBy items used to sort results. An orderBy item\
+            \ has a field and a value. If OrderByDistance is set to true,\r\na orderBy\
+            \ item is programmatically added and used to sort results. OrderBy items\
+            \ added to the list will be executed in the order \r\nthat they are added\
+            \ to the list, after ordering by distance. As an example, to sort results\
+            \ by organization name in descending order add an orderBy \r\nobject to\
+            \ the orderBys array as follows: {\"field\":\"nameOrganization\", \"value\"\
+            : \"desc\"}"
+          items:
+            $ref: "#/components/schemas/SearchOrderby"
+          nullable: true
+          title: orderbys
+          type: array
+        facets:
+          description: "Facets are fields/values returned with results that can be\
+            \ used to resubmit a search with search filter(s). This feature is used\r\
+            \nto implement 'faceted' navigation. Default set to [\"tagsService\",\
+            \ \"taxonomy/taxonomyTermLevel1\", \"taxonomy/taxonomyTermLevel2\", \"\
+            address/stateProvince\", \"serviceAreas/valueType\", \"dataOwnerDisplayName\"\
+            ].\r\nOverride the default count and sorting of facet values by appending\
+            \ count and sort to the field (ie. facetField,count:50,sort:value). Sort\
+            \ by 'value' or 'count'. Use sort:-count to sort in ascending order\r\n\
+            of count; use sort:count to sort in desceding order of count. Use sort:-value\
+            \ to sort in descending order of value, and sort:value to sort in ascending\
+            \ order of value. (full example: to return 100 \r\nserviceAreas/valueType\
+            \ facets, set the field to ==> serviceAreas/valueType,count:100,sort:-value).\
+            \ Default setting is 10 values for each facet, sorted by count in descending\
+            \ order.\r\nFields are:\r\n* address/city\r\n* address/county\r\n* address/stateProvince\r\
+            \n* address/postalCode\r\n* address/country\r\n* taxonomy/TermLevel1\r\
+            \n* taxonomy/TermLevel2\r\n* taxonomy/TermLevel3\r\n* taxonomy/TermLevel4\
+            \        \r\n* taxonomy/TermLevel5\r\n* taxonomy/TermLevel6\r\n* taxonomy/target\r\
+            \n* taxonomy/code\r\n* serviceAreas/valueType\r\n* serviceAreas/value\r\
+            \n* tagsService\r\n* dataOwner\r\n* dataOwnerDisplayName"
+          items:
+            type: string
+          nullable: true
+          title: facets
+          type: array
+        searchFields:
+          description: "List of fields that will be searched using keyword(s). Default\
+            \ set to all fields. Fields are:\r\n* nameOrganization\r\n* nameService\r\
+            \n* nameLocation\r\n* nameServiceAtLocation\r\n* alternateNamesOrganization\r\
+            \n* alternateNamesService\r\n* alternateNamesLocation\r\n* descriptionService\r\
+            \n* descriptionOrganization\r\n\r\nOther fields available for search,\
+            \ but not included in default search:\r\n* taxonomyTerm\r\n* taxonomyCode\r\
+            \n* serviceAreas/value\r\n* serviceAreas/valueType"
+          example:
+          - nameService
+          - nameOrganization
+          - descriptionService
+          items:
+            type: string
+          nullable: true
+          title: searchFields
+          type: array
+        selectFields:
+          description: "List of fields to return in search results. Default set to\
+            \ all fields. Fields are:\r\n* idServiceAtLocation\r\n* idService\r\n\
+            * idOrganization\r\n* idLocation\r\n* nameOrganization\r\n* nameService\r\
+            \n* nameLocation\r\n* nameServiceAtLocation\r\n* alternateNamesOrganization\r\
+            \n* alternateNamesService\r\n* alternateNamesLocation\r\n* descriptionService\r\
+            \n* descriptionOrganization\r\n* address\r\n* serviceAreas\r\n* taxonomy\r\
+            \n* tagsService\r\n* dataOwner\r\n* dataOwnerDisplayName\r\n\r\nOther\
+            \ fields available for selection, but not returned in default search:\r\
+            \n* None. All available fields are returned with default."
+          example:
+          - nameService
+          - nameOrganization
+          - descriptionService
+          - tagsService
+          items:
+            type: string
+          nullable: true
+          title: selectFields
+          type: array
+        searchMode:
+          $ref: "#/components/schemas/SearchModeDto"
+        locationMode:
+          $ref: "#/components/schemas/LocationModeDto"
+        keywordIsTaxonomyCode:
+          default: false
+          description: "Set to false for regular text search. Set to true to search\
+            \ on taxonomy code or taxonomy code with wild card (e.g. BD-1800 or BD-1800*).\
+            \ Wildcard codes return code and any-child codes. Separate multiple codes\
+            \ with comma (eg. BD-1800,LM-200*)."
+          title: keywordIsTaxonomyCode
+          type: boolean
+        keywordIsTaxonomyTerm:
+          default: false
+          description: "Set to false for regular text search. Set to 'true' if keyword\
+            \ is a taxonomy term or taxonomy terms (eg. Food Pantry). Separate multiple\
+            \ terms with comma (Food Pantry,Emergency Shelter). Wildcards cannot be\
+            \ used with terms."
+          title: keywordIsTaxonomyTerm
+          type: boolean
+        orderByDistance:
+          default: true
+          description: "Set to true to order results from nearest to farthest from\
+            \ entered location. OrderByDistance can only be used when locactionMode\
+            \ is set to 'Near', otherwise, will be ignored."
+          title: orderByDistance
+          type: boolean
+        resultsAdvanced:
+          description: "Set to 'true' to return all search request and result details,\
+            \ including the geocoded location and the request input data (which may\
+            \ have been programatically modified). \r\nNote: this can help users understand\
+            \ restrictions to search requests implemented through policy, including\
+            \ changes applied to parameter and header arguments."
+          title: resultsAdvanced
+          type: boolean
+      required:
+      - location
+      - locationMode
+      - search
+      - size
+      - skip
+      title: SearchInputDto
+      type: object
+    SearchModeDto:
+      description: Set to 'Any' to match one or more entered search keywords in simple
+        text search. Set to 'All' to match on all search keywords. Default is 'All'.
+      enum:
+      - All
+      - Any
+      title: SearchModeDto
+      type: string
+    SearchOrderby:
+      additionalProperties: false
+      description: Search Orderby item that identifies the field and order to sort
+        results.
+      example:
+        field: "\r\n            nameOrganization\r\n            "
+        value: ""
+      properties:
+        field:
+          description: "The name of the field to use for sorting. Fields are:\r\n\
+            * nameOrganization\r\n* nameService\r\n* nameLocation\r\n* nameServiceAtLocation"
+          example: "\r\n            nameOrganization\r\n            "
+          minLength: 1
+          title: field
+          type: string
+        value:
+          description: "The value that sets the sort order (either ascending or descending\
+            \ order). Values are: \r\n* asc\r\n* desc"
+          title: value
+      required:
+      - field
+      - value
+      title: SearchOrderby
+      type: object
+    SearchOutputDto:
+      additionalProperties: false
+      example:
+        request:
+          selectFields:
+          - nameService
+          - nameOrganization
+          - descriptionService
+          - tagsService
+          distance: 6
+          keywordIsTaxonomyCode: false
+          searchMode: All
+          skip: 1
+          filters:
+          - field: "\r\n            dataOwner\r\n            "
+            operators:
+              assert: assert
+              join: join
+            value:
+            - 211ventura
+            - 211bayarea
+          - field: "\r\n            dataOwner\r\n            "
+            operators:
+              assert: assert
+              join: join
+            value:
+            - 211ventura
+            - 211bayarea
+          includeTotalCount: true
+          orderByDistance: true
+          keywordIsTaxonomyTerm: false
+          searchWithinLocationType: Unknown
+          facets:
+          - facets
+          - facets
+          search: food pantry
+          size: 5
+          location: "ventura, california"
+          searchFields:
+          - nameService
+          - nameOrganization
+          - descriptionService
+          locationMode: Within
+          orderbys:
+          - field: "\r\n            nameOrganization\r\n            "
+            value: ""
+          - field: "\r\n            nameOrganization\r\n            "
+            value: ""
+          resultsAdvanced: true
+        count: 0
+        location:
+          country: country
+          city: city
+          latitude: 5.637376656633329
+          postalCode: postalCode
+          county: county
+          locationType: null
+          state: state
+          longitude: 2.3021358869347655
+        results:
+        - nameServiceAtLocation: nameServiceAtLocation
+          address:
+            country: country
+            streetAddress: streetAddress
+            city: city
+            postalCode: postalCode
+            latitude: latitude
+            county: county
+            stateProvince: stateProvince
+            longitude: longitude
+          nameService: nameService
+          alternateNamesLocation:
+          - alternateNamesLocation
+          - alternateNamesLocation
+          idServiceAtLocation: idServiceAtLocation
+          nameLocation: nameLocation
+          taxonomy:
+          - taxonomyCode: taxonomyCode
+            taxonomyTermLevel6: taxonomyTermLevel6
+            taxonomyTermLevel5: taxonomyTermLevel5
+            taxonomyTermLevel4: taxonomyTermLevel4
+            taxonomyTermLevel3: taxonomyTermLevel3
+            taxonomyTermLevel2: taxonomyTermLevel2
+            taxonomyTermLevel1: taxonomyTermLevel1
+            taxonomyTerm: taxonomyTerm
+            targets:
+            - code: code
+              term: term
+            - code: code
+              term: term
+          - taxonomyCode: taxonomyCode
+            taxonomyTermLevel6: taxonomyTermLevel6
+            taxonomyTermLevel5: taxonomyTermLevel5
+            taxonomyTermLevel4: taxonomyTermLevel4
+            taxonomyTermLevel3: taxonomyTermLevel3
+            taxonomyTermLevel2: taxonomyTermLevel2
+            taxonomyTermLevel1: taxonomyTermLevel1
+            taxonomyTerm: taxonomyTerm
+            targets:
+            - code: code
+              term: term
+            - code: code
+              term: term
+          dataOwnerDisplayName: dataOwnerDisplayName
+          geoPoint:
+            latitude: 3.616076749251911
+            isEmpty: true
+            z: 4.145608029883936
+            coordinateSystem:
+              epsgId: 9
+              name: name
+              id: id
+            m: 7.386281948385884
+            longitude: 2.027123023002322
+          alternateNamesService:
+          - alternateNamesService
+          - alternateNamesService
+          idLocation: idLocation
+          idOrganization: idOrganization
+          idService: idService
+          descriptionServiceVector:
+          - 7.0614014
+          - 7.0614014
+          alternateNamesOrganization:
+          - alternateNamesOrganization
+          - alternateNamesOrganization
+          descriptionOrganization: descriptionOrganization
+          descriptionService: descriptionService
+          tagsService:
+          - tagsService
+          - tagsService
+          dataOwner: dataOwner
+          nameOrganization: nameOrganization
+          serviceAreas:
+          - type: type
+            value: value
+          - type: type
+            value: value
+          status: status
+        - nameServiceAtLocation: nameServiceAtLocation
+          address:
+            country: country
+            streetAddress: streetAddress
+            city: city
+            postalCode: postalCode
+            latitude: latitude
+            county: county
+            stateProvince: stateProvince
+            longitude: longitude
+          nameService: nameService
+          alternateNamesLocation:
+          - alternateNamesLocation
+          - alternateNamesLocation
+          idServiceAtLocation: idServiceAtLocation
+          nameLocation: nameLocation
+          taxonomy:
+          - taxonomyCode: taxonomyCode
+            taxonomyTermLevel6: taxonomyTermLevel6
+            taxonomyTermLevel5: taxonomyTermLevel5
+            taxonomyTermLevel4: taxonomyTermLevel4
+            taxonomyTermLevel3: taxonomyTermLevel3
+            taxonomyTermLevel2: taxonomyTermLevel2
+            taxonomyTermLevel1: taxonomyTermLevel1
+            taxonomyTerm: taxonomyTerm
+            targets:
+            - code: code
+              term: term
+            - code: code
+              term: term
+          - taxonomyCode: taxonomyCode
+            taxonomyTermLevel6: taxonomyTermLevel6
+            taxonomyTermLevel5: taxonomyTermLevel5
+            taxonomyTermLevel4: taxonomyTermLevel4
+            taxonomyTermLevel3: taxonomyTermLevel3
+            taxonomyTermLevel2: taxonomyTermLevel2
+            taxonomyTermLevel1: taxonomyTermLevel1
+            taxonomyTerm: taxonomyTerm
+            targets:
+            - code: code
+              term: term
+            - code: code
+              term: term
+          dataOwnerDisplayName: dataOwnerDisplayName
+          geoPoint:
+            latitude: 3.616076749251911
+            isEmpty: true
+            z: 4.145608029883936
+            coordinateSystem:
+              epsgId: 9
+              name: name
+              id: id
+            m: 7.386281948385884
+            longitude: 2.027123023002322
+          alternateNamesService:
+          - alternateNamesService
+          - alternateNamesService
+          idLocation: idLocation
+          idOrganization: idOrganization
+          idService: idService
+          descriptionServiceVector:
+          - 7.0614014
+          - 7.0614014
+          alternateNamesOrganization:
+          - alternateNamesOrganization
+          - alternateNamesOrganization
+          descriptionOrganization: descriptionOrganization
+          descriptionService: descriptionService
+          tagsService:
+          - tagsService
+          - tagsService
+          dataOwner: dataOwner
+          nameOrganization: nameOrganization
+          serviceAreas:
+          - type: type
+            value: value
+          - type: type
+            value: value
+          status: status
+        facets:
+          key:
+          - count: 1
+            value: value
+          - count: 1
+            value: value
+      properties:
+        count:
+          description: Total results available
+          format: int64
+          nullable: true
+          title: count
+          type: integer
+        request:
+          $ref: "#/components/schemas/SearchInputDto"
+        location:
+          $ref: "#/components/schemas/SearchOutputLocationDto"
+        results:
+          items:
+            $ref: "#/components/schemas/SearchOutputResultDto"
+          nullable: true
+          title: results
+          type: array
+        facets:
+          additionalProperties:
+            items:
+              $ref: "#/components/schemas/FacetValue"
+            type: array
+          nullable: true
+          title: facets
+          type: object
+      title: SearchOutputDto
+      type: object
+    SearchOutputLocationDto:
+      additionalProperties: false
+      example:
+        country: country
+        city: city
+        latitude: 5.637376656633329
+        postalCode: postalCode
+        county: county
+        locationType: null
+        state: state
+        longitude: 2.3021358869347655
+      properties:
+        latitude:
+          description: Latitude of the physical address for the resource
+          format: double
+          nullable: true
+          title: latitude
+          type: number
+        longitude:
+          description: Longitude of the physical address for the resource
+          format: double
+          nullable: true
+          title: longitude
+          type: number
+        city:
+          description: City where the resource is located
+          nullable: true
+          title: city
+          type: string
+        county:
+          description: County where the resource is located
+          nullable: true
+          title: county
+          type: string
+        state:
+          description: State where the resource is located
+          nullable: true
+          title: state
+          type: string
+        postalCode:
+          description: Zip code (postal code) where the resource is located
+          nullable: true
+          title: postalCode
+          type: string
+        country:
+          description: Country where the resource is located
+          nullable: true
+          title: country
+          type: string
+        locationType:
+          $ref: "#/components/schemas/LocationTypeDto"
+      title: SearchOutputLocationDto
+      type: object
+    SearchOutputResultDto:
+      additionalProperties: false
+      example:
+        nameServiceAtLocation: nameServiceAtLocation
+        address:
+          country: country
+          streetAddress: streetAddress
+          city: city
+          postalCode: postalCode
+          latitude: latitude
+          county: county
+          stateProvince: stateProvince
+          longitude: longitude
+        nameService: nameService
+        alternateNamesLocation:
+        - alternateNamesLocation
+        - alternateNamesLocation
+        idServiceAtLocation: idServiceAtLocation
+        nameLocation: nameLocation
+        taxonomy:
+        - taxonomyCode: taxonomyCode
+          taxonomyTermLevel6: taxonomyTermLevel6
+          taxonomyTermLevel5: taxonomyTermLevel5
+          taxonomyTermLevel4: taxonomyTermLevel4
+          taxonomyTermLevel3: taxonomyTermLevel3
+          taxonomyTermLevel2: taxonomyTermLevel2
+          taxonomyTermLevel1: taxonomyTermLevel1
+          taxonomyTerm: taxonomyTerm
+          targets:
+          - code: code
+            term: term
+          - code: code
+            term: term
+        - taxonomyCode: taxonomyCode
+          taxonomyTermLevel6: taxonomyTermLevel6
+          taxonomyTermLevel5: taxonomyTermLevel5
+          taxonomyTermLevel4: taxonomyTermLevel4
+          taxonomyTermLevel3: taxonomyTermLevel3
+          taxonomyTermLevel2: taxonomyTermLevel2
+          taxonomyTermLevel1: taxonomyTermLevel1
+          taxonomyTerm: taxonomyTerm
+          targets:
+          - code: code
+            term: term
+          - code: code
+            term: term
+        dataOwnerDisplayName: dataOwnerDisplayName
+        geoPoint:
+          latitude: 3.616076749251911
+          isEmpty: true
+          z: 4.145608029883936
+          coordinateSystem:
+            epsgId: 9
+            name: name
+            id: id
+          m: 7.386281948385884
+          longitude: 2.027123023002322
+        alternateNamesService:
+        - alternateNamesService
+        - alternateNamesService
+        idLocation: idLocation
+        idOrganization: idOrganization
+        idService: idService
+        descriptionServiceVector:
+        - 7.0614014
+        - 7.0614014
+        alternateNamesOrganization:
+        - alternateNamesOrganization
+        - alternateNamesOrganization
+        descriptionOrganization: descriptionOrganization
+        descriptionService: descriptionService
+        tagsService:
+        - tagsService
+        - tagsService
+        dataOwner: dataOwner
+        nameOrganization: nameOrganization
+        serviceAreas:
+        - type: type
+          value: value
+        - type: type
+          value: value
+        status: status
+      properties:
+        idServiceAtLocation:
+          description: ID for service-at-location resource
+          nullable: true
+          title: idServiceAtLocation
+          type: string
+        idOrganization:
+          description: ID for organization resource
+          nullable: true
+          title: idOrganization
+          type: string
+        idService:
+          description: ID for service resource
+          nullable: true
+          title: idService
+          type: string
+        idLocation:
+          description: ID for location resource
+          nullable: true
+          title: idLocation
+          type: string
+        nameOrganization:
+          description: Name of the organization
+          nullable: true
+          title: nameOrganization
+          type: string
+        nameService:
+          description: Name of the service
+          nullable: true
+          title: nameService
+          type: string
+        nameLocation:
+          description: Name of the location
+          nullable: true
+          title: nameLocation
+          type: string
+        nameServiceAtLocation:
+          description: Name of the service-at-location
+          nullable: true
+          title: nameServiceAtLocation
+          type: string
+        alternateNamesOrganization:
+          description: Alternates names for the organization
+          items:
+            type: string
+          nullable: true
+          title: alternateNamesOrganization
+          type: array
+        alternateNamesService:
+          description: Alternates names for the service
+          items:
+            type: string
+          nullable: true
+          title: alternateNamesService
+          type: array
+        alternateNamesLocation:
+          description: Alternates names for the location
+          items:
+            type: string
+          nullable: true
+          title: alternateNamesLocation
+          type: array
+        descriptionOrganization:
+          description: Description of the organization
+          nullable: true
+          title: descriptionOrganization
+          type: string
+        descriptionService:
+          description: Description of the service
+          nullable: true
+          title: descriptionService
+          type: string
+        descriptionServiceVector:
+          description: Vectorized description of the service
+          items:
+            format: float
+            type: number
+          nullable: true
+          title: descriptionServiceVector
+          type: array
+        address:
+          $ref: "#/components/schemas/SearchResultAddressDto"
+        taxonomy:
+          description: Taxonomies assigned to the service
+          items:
+            $ref: "#/components/schemas/SearchResultTaxonomyDto"
+          nullable: true
+          title: taxonomy
+          type: array
+        serviceAreas:
+          description: Areas of service delivery
+          items:
+            $ref: "#/components/schemas/SearchResultServiceAreaDto"
+          nullable: true
+          title: serviceAreas
+          type: array
+        tagsService:
+          description: Custom tags assigned to the service
+          items:
+            type: string
+          nullable: true
+          title: tagsService
+          type: array
+        dataOwner:
+          description: Official name of the 211 organization that owns/stewards the
+            resource
+          nullable: true
+          title: dataOwner
+          type: string
+        dataOwnerDisplayName:
+          description: Preferred name for public attribution of the resource
+          nullable: true
+          title: dataOwnerDisplayName
+          type: string
+        geoPoint:
+          $ref: "#/components/schemas/GeographyPoint"
+        status:
+          description: Status of the service at location resource (active or inactive)
+          nullable: true
+          title: status
+          type: string
+      title: SearchOutputResultDto
+      type: object
+    SearchResultAddressDto:
+      additionalProperties: false
+      example:
+        country: country
+        streetAddress: streetAddress
+        city: city
+        postalCode: postalCode
+        latitude: latitude
+        county: county
+        stateProvince: stateProvince
+        longitude: longitude
+      properties:
+        streetAddress:
+          description: Address of the service location
+          nullable: true
+          title: streetAddress
+          type: string
+        city:
+          description: City where the service is located
+          nullable: true
+          title: city
+          type: string
+        county:
+          description: County where the service is located
+          nullable: true
+          title: county
+          type: string
+        stateProvince:
+          description: State where the service is located
+          nullable: true
+          title: stateProvince
+          type: string
+        postalCode:
+          description: Zipcode where the service is located
+          nullable: true
+          title: postalCode
+          type: string
+        country:
+          description: Country where the service is located
+          nullable: true
+          title: country
+          type: string
+        latitude:
+          description: Latitude of the service location
+          nullable: true
+          title: latitude
+          type: string
+        longitude:
+          description: Longitude of the service location
+          nullable: true
+          title: longitude
+          type: string
+      title: SearchResultAddressDto
+      type: object
+    SearchResultServiceAreaDto:
+      additionalProperties: false
+      example:
+        type: type
+        value: value
+      properties:
+        type:
+          description: "Type of service area (zipcode/postalCode, city, county, state,\
+            \ country)"
+          nullable: true
+          title: type
+          type: string
+        value:
+          description: Value of the of the service area
+          nullable: true
+          title: value
+          type: string
+      title: SearchResultServiceAreaDto
+      type: object
+    SearchResultTaxonomyDto:
+      additionalProperties: false
+      example:
+        taxonomyCode: taxonomyCode
+        taxonomyTermLevel6: taxonomyTermLevel6
+        taxonomyTermLevel5: taxonomyTermLevel5
+        taxonomyTermLevel4: taxonomyTermLevel4
+        taxonomyTermLevel3: taxonomyTermLevel3
+        taxonomyTermLevel2: taxonomyTermLevel2
+        taxonomyTermLevel1: taxonomyTermLevel1
+        taxonomyTerm: taxonomyTerm
+        targets:
+        - code: code
+          term: term
+        - code: code
+          term: term
+      properties:
+        taxonomyTerm:
+          description: Taxonomy term assigend to the service
+          nullable: true
+          title: taxonomyTerm
+          type: string
+        taxonomyCode:
+          description: Taxonomy code assigned to the service
+          nullable: true
+          title: taxonomyCode
+          type: string
+        taxonomyTermLevel1:
+          description: Level 1 of the assigned taxonomy term
+          nullable: true
+          title: taxonomyTermLevel1
+          type: string
+        taxonomyTermLevel2:
+          description: Level 2 of the assigned taxonomy term
+          nullable: true
+          title: taxonomyTermLevel2
+          type: string
+        taxonomyTermLevel3:
+          description: Level 3 of the assigned taxonomy term
+          nullable: true
+          title: taxonomyTermLevel3
+          type: string
+        taxonomyTermLevel4:
+          description: Level 4 of the assigned taxonomy term
+          nullable: true
+          title: taxonomyTermLevel4
+          type: string
+        taxonomyTermLevel5:
+          description: Level 5 of the assigned taxonomy term
+          nullable: true
+          title: taxonomyTermLevel5
+          type: string
+        taxonomyTermLevel6:
+          description: Level 6 of the assigned taxonomy term
+          nullable: true
+          title: taxonomyTermLevel6
+          type: string
+        targets:
+          description: Linked target terms and codes assigned to the taxonomy term
+          items:
+            $ref: "#/components/schemas/TaxonomyTarget"
+          nullable: true
+          title: targets
+          type: array
+      title: SearchResultTaxonomyDto
+      type: object
+    StringStringValueTuple:
+      additionalProperties: false
+      title: StringStringValueTuple
+      type: object
+    TaxonomyTarget:
+      additionalProperties: false
+      example:
+        code: code
+        term: term
+      properties:
+        code:
+          nullable: true
+          title: code
+          type: string
+        term:
+          nullable: true
+          title: term
+          type: string
+      title: TaxonomyTarget
+      type: object
+  securitySchemes:
+    apiKeyHeader:
+      in: header
+      name: Api-Key
+      type: apiKey
+    apiKeyQuery:
+      in: query
+      name: api-key
+      type: apiKey

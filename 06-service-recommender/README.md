@@ -92,3 +92,28 @@ Based on [documentation](https://arize.com/docs/phoenix/self-hosting/features/au
       - PHOENIX_API_KEY=${PHOENIX_API_KEY}
       - OTEL_EXPORTER_OTLP_HEADERS=${OTEL_EXPORTER_OTLP_HEADERS}
 ```
+
+## MCP Services
+
+### 211 Search v2
+
+Get OpenAPI from https://apiportal.211.org/api-details#api=SearchV2&operation=get-keyword-keywords-keywords-location-location
+
+#### OpenAPI Generator
+
+Use https://openapi-generator.tech/ to generate Python stub for MCP server:
+
+```sh
+docker run --rm -v $PWD:/local openapitools/openapi-generator-cli generate -i /local/SearchV2.yaml -g python-fastapi -o local/mcp-211-search-v2-service
+```
+
+- Well-defined, detailed, and fairly-complete stubs
+- Need to add implementation
+- Will need to manually handle OpenAPI spec updates
+
+#### openapi-mcp-generator (TypeScript)
+
+Use https://github.com/harsha-iiiv/openapi-mcp-generator to convert "any OpenAPI 3.0+ spec into an MCP-compatible server."
+
+Warning: https://xata.io/blog/built-xata-mcp-server states "It saves time and keeps the API and MCP definitions in sync, avoiding duplicate work. On the other hand, a naïve one-to-one mapping of every endpoint to an MCP tool can overwhelm an LLM. LLMs struggle to choose the right action from so many low-level options, leading to frequent errors or unpredictable calls, especially if several endpoints have similar purposes. ... Instead, we can autogenerate the groundwork from OpenAPI, then curate it. In practice, this means using codegen to produce a set of tool definitions and client calls, then trimming or augmenting the OpenAPI spec that generates the tools to align with real-world usage."
+
