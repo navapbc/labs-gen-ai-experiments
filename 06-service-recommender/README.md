@@ -116,4 +116,19 @@ docker run --rm -v $PWD:/local openapitools/openapi-generator-cli generate -i /l
 Use https://github.com/harsha-iiiv/openapi-mcp-generator to convert "any OpenAPI 3.0+ spec into an MCP-compatible server."
 
 Warning: https://xata.io/blog/built-xata-mcp-server states "It saves time and keeps the API and MCP definitions in sync, avoiding duplicate work. On the other hand, a naïve one-to-one mapping of every endpoint to an MCP tool can overwhelm an LLM. LLMs struggle to choose the right action from so many low-level options, leading to frequent errors or unpredictable calls, especially if several endpoints have similar purposes. ... Instead, we can autogenerate the groundwork from OpenAPI, then curate it. In practice, this means using codegen to produce a set of tool definitions and client calls, then trimming or augmenting the OpenAPI spec that generates the tools to align with real-world usage."
+They used [Kubb](https://kubb.dev/plugins/plugin-mcp/).
 
+```sh
+openapi-mcp-generator --input SearchV2.json --output openapi-211-search-v2 --transport=streamable-http --port=3000
+
+cd openapi-211-search-v2
+npm install
+npm run build
+npm run start:http
+```
+
+Instructions say to "Use the test client to interact with your MCP server" on http://localhost:3000 but I get a "Not Found" response.
+
+#### MCP Python SDK
+
+https://github.com/modelcontextprotocol/python-sdk
