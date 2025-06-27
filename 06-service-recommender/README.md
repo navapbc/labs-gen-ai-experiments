@@ -95,6 +95,11 @@ Based on [documentation](https://arize.com/docs/phoenix/self-hosting/features/au
 
 ## MCP Services
 
+* https://haystack.deepset.ai/integrations/mcp
+    - https://github.com/deepset-ai/haystack-core-integrations/tree/main/integrations/mcp/examples
+* https://docs.haystack.deepset.ai/docs/mcptool#with-the-agent-component
+
+
 ### 211 Search v2
 
 Get OpenAPI from https://apiportal.211.org/api-details#api=SearchV2&operation=get-keyword-keywords-keywords-location-location
@@ -131,4 +136,21 @@ Instructions say to "Use the test client to interact with your MCP server" on ht
 
 #### MCP Python SDK
 
-https://github.com/modelcontextprotocol/python-sdk
+* https://github.com/modelcontextprotocol/python-sdk
+* referring to [Haystack MCP examples](https://github.com/deepset-ai/haystack-core-integrations/tree/main/integrations/mcp/examples)
+
+https://github.com/modelcontextprotocol/python-sdk?tab=readme-ov-file#streamable-http-transport:
+> Note: Streamable HTTP transport is superseding SSE transport for production deployments.
+
+```sh
+uv run python src/mcp_server.py
+```
+
+Useful for MCP inspecting and debugging:
+```sh
+npx @modelcontextprotocol/inspector
+```
+
+```sh
+uv run python src/first_mcp.py
+```
