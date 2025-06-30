@@ -1,0 +1,89 @@
+volumes:
+  database_data:
+    driver: local
+
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phoenix:
+    image: arizephoenix/phoenix:version-10.9.1-nonroot
+    depends_on:
+      - db
+    ports:
+      - "6006:6006" # UI and OTLP HTTP collector
+      - "4317:4317" # OTLP gRPC collector
+    environment:
+      # https://arize.com/docs/phoenix/self-hosting/features/authentication
+      # - PHOENIX_ENABLE_AUTH=True
+      # - PHOENIX_SECRET=${PHOENIX_SECRET}
+      - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+
+  # Since Phoenix doesn't have a status or healthcheck endpoint,
+  # sleep for a while before starting the backend service,
+  # which queries Phoenix for prompt templates during startup.
+  wait_for_phoenix:
+    image: alpine:latest
+    entrypoint: "sleep 5"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      wait_for_phoenix:
+        condition: service_completed_successfully
+    ports:
+      # For Hayhooks
+      - "1416:1416"
+    environment:
+      # Set API keys for LLM clients from .env file
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+      # Don't send telemetry to Haystack
+      - HAYSTACK_TELEMETRY_ENABLED=False
+
+      # For observability
+      - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006
+      - PHOENIX_PROJECT_NAME=local-docker-project
+
+      # Connect using API key -- https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-client#authentication-if-applicable
+      # - PHOENIX_API_KEY=${PHOENIX_API_KEY}
+      # - OTEL_EXPORTER_OTLP_HEADERS=${OTEL_EXPORTER_OTLP_HEADERS}
+
+      # Configure Hayhooks
+      # HAYHOOKS_SHOW_TRACEBACKS is useful for development
+      - HAYHOOKS_SHOW_TRACEBACKS=true
+      # TODO LATER: for security, add Hayhooks CORS settings
+      # https://docs.haystack.deepset.ai/docs/hayhooks#environment-variables
+    healthcheck:
+      test: [ "CMD", "wget", "--tries=1", "http://localhost:1416/status" ]
+      # Every request creates a log message, which clutters the logs
+      # so don't do healthcheck too frequently
+      interval: 60s
+      timeout: 1s
+      retries: 3
+
+  frontend:
+    build: frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - HAYHOOKS_URL=http://backend:1416
