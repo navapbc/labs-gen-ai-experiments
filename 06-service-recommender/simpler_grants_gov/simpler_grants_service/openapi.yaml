@@ -1,0 +1,5003 @@
+openapi: 3.1.0
+info:
+  contact:
+    email: simpler@grants.gov
+    name: Simpler Grants.gov
+    url: https://simpler.grants.gov/
+  description: |2
+
+    Back end API for simpler.grants.gov.
+
+    This API is an ALPHA VERSION! Its current form is primarily for testing and feedback. Features are still under heavy development, and subject to change. Not for production use.
+
+    See [Release Phases](https://github.com/github/roadmap?tab=readme-ov-file#release-phases) for further details.
+  title: Simpler Grants API
+  version: v0
+servers:
+- url: /
+tags:
+- name: Health
+- name: Opportunity v1
+- name: Extract v1
+- name: Agency v1
+- name: User v1 - Internal Only
+paths:
+  /health:
+    get:
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthcheckResponse"
+          description: Successful response
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Service Unavailable
+      summary: Health
+      tags:
+      - Health
+  /v1/agencies:
+    post:
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            examples:
+              example1:
+                summary: No filters
+                value:
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: created_at
+                      sort_direction: descending
+            schema:
+              $ref: "#/components/schemas/AgencyListRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgencyListResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Validation error
+      security:
+      - ApiKeyAuth: []
+      summary: Agencies Get
+      tags:
+      - Agency v1
+  /v1/agencies/search:
+    post:
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            examples:
+              example1:
+                summary: No filters
+                value:
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: agency_name
+                      sort_direction: descending
+                  query: USAID
+              example2:
+                summary: Filter by open/forecasted agency
+                value:
+                  filters:
+                    has_forecasted_opportunity:
+                      one_of:
+                      - "False"
+                    has_open_opportunity:
+                      one_of:
+                      - "False"
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: agency_name
+                      sort_direction: descending
+            schema:
+              $ref: "#/components/schemas/AgencySearchRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgencySearchResponseV1"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Validation error
+      security:
+      - ApiKeyAuth: []
+      summary: Agency Search
+      tags:
+      - Agency v1
+  /v1/extracts:
+    post:
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            examples:
+              example1:
+                summary: No filters
+                value:
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: created_at
+                      sort_direction: descending
+            schema:
+              $ref: "#/components/schemas/ExtractMetadataRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExtractMetadataListResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Validation error
+      security:
+      - ApiKeyAuth: []
+      summary: Extract Metadata Get
+      tags:
+      - Extract v1
+  /v1/opportunities/search:
+    post:
+      description: |2
+
+        __ALPHA VERSION__
+
+        This endpoint in its current form is primarily for testing and feedback.
+
+        Features in this endpoint are still under heavy development, and subject to change. Not for production use.
+
+        See [Release Phases](https://github.com/github/roadmap?tab=readme-ov-file#release-phases) for further details.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            examples:
+              example1:
+                summary: No filters
+                value:
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: opportunity_id
+                      sort_direction: ascending
+              example2:
+                summary: All filters
+                value:
+                  filters:
+                    agency:
+                      one_of:
+                      - USAID
+                      - DOC
+                    applicant_type:
+                      one_of:
+                      - state_governments
+                      - county_governments
+                      - individuals
+                    close_date:
+                      start_date: 2024-01-01
+                    funding_category:
+                      one_of:
+                      - recovery_act
+                      - arts
+                      - natural_resources
+                    funding_instrument:
+                      one_of:
+                      - cooperative_agreement
+                      - grant
+                    opportunity_status:
+                      one_of:
+                      - forecasted
+                      - posted
+                    post_date:
+                      end_date: 2024-02-01
+                      start_date: 2024-01-01
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: opportunity_id
+                      sort_direction: ascending
+                  query: research
+              example3:
+                summary: Query & opportunity_status filters
+                value:
+                  filters:
+                    opportunity_status:
+                      one_of:
+                      - forecasted
+                      - posted
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: opportunity_id
+                      sort_direction: ascending
+                  query: research
+              example4:
+                summary: CSV file response
+                value:
+                  filters:
+                    opportunity_status:
+                      one_of:
+                      - forecasted
+                      - posted
+                  format: csv
+                  pagination:
+                    page_offset: 1
+                    page_size: 100
+                    sort_order:
+                    - order_by: opportunity_id
+                      sort_direction: ascending
+              example5:
+                summary: Filter by award fields
+                value:
+                  filters:
+                    award_ceiling:
+                      max: 1000000
+                    award_floor:
+                      min: 10000
+                    estimated_total_program_funding:
+                      max: 250000
+                      min: 100000
+                    expected_number_of_awards:
+                      min: 5
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: opportunity_id
+                      sort_direction: ascending
+              example6:
+                summary: Filter by assistance listing numbers
+                value:
+                  filters:
+                    assistance_listing_number:
+                      one_of:
+                      - "43.001"
+                      - "47.049"
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: opportunity_id
+                      sort_direction: ascending
+              example7:
+                summary: "Primary sort agency_code desc, secondary sort opportunity_id\
+                  \ asc"
+                value:
+                  pagination:
+                    page_offset: 1
+                    page_size: 25
+                    sort_order:
+                    - order_by: agency_code
+                      sort_direction: descending
+                    - order_by: opportunity_id
+                      sort_direction: ascending
+            schema:
+              $ref: "#/components/schemas/OpportunitySearchRequestV1"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpportunitySearchResponseV1"
+            application/octet-stream: {}
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Validation error
+      security:
+      - ApiKeyAuth: []
+      summary: Opportunity Search
+      tags:
+      - Opportunity v1
+  /v1/opportunities/{opportunity_id}:
+    get:
+      description: |2
+
+        __ALPHA VERSION__
+
+        This endpoint in its current form is primarily for testing and feedback.
+
+        Features in this endpoint are still under heavy development, and subject to change. Not for production use.
+
+        See [Release Phases](https://github.com/github/roadmap?tab=readme-ov-file#release-phases) for further details.
+      parameters:
+      - explode: false
+        in: path
+        name: opportunity_id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpportunityGetResponseV1"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+      security:
+      - ApiKeyAuth: []
+      summary: Opportunity Get
+      tags:
+      - Opportunity v1
+  /v1/users/login:
+    get:
+      description: |2
+
+        To use this endpoint, click [this link](/v1/users/login) which will redirect
+        you to an OAuth provider where you can sign into an account.
+
+        Do not try to use the execute option below as OpenAPI will not redirect your browser for you.
+
+        The token you receive can then be set to the X-SGG-Token header for authenticating with endpoints.
+      parameters: []
+      responses:
+        "302":
+          content:
+            application/json:
+              schema: {}
+          description: Found
+      summary: User Login
+      tags:
+      - User v1 - Internal Only
+  /v1/users/token/logout:
+    post:
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserTokenLogoutResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+      security:
+      - ApiJwtAuth: []
+      summary: User Token Logout
+      tags:
+      - User v1 - Internal Only
+  /v1/users/token/refresh:
+    post:
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserTokenRefreshResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+      security:
+      - ApiJwtAuth: []
+      summary: User Token Refresh
+      tags:
+      - User v1 - Internal Only
+  /v1/users/{user_id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserGetResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+      security:
+      - ApiJwtAuth: []
+      summary: User Get
+      tags:
+      - User v1 - Internal Only
+  /v1/users/{user_id}/organizations:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserOrganizationsResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+      security:
+      - ApiJwtAuth: []
+      summary: User Get Organizations
+      tags:
+      - User v1 - Internal Only
+  /v1/users/{user_id}/saved-opportunities:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSaveOpportunityRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSaveOpportunityResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Validation error
+      security:
+      - ApiJwtAuth: []
+      summary: User Save Opportunity
+      tags:
+      - User v1 - Internal Only
+  /v1/users/{user_id}/saved-opportunities/list:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSavedOpportunitiesRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSavedOpportunitiesResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Validation error
+      security:
+      - ApiJwtAuth: []
+      summary: User Get Saved Opportunities
+      tags:
+      - User v1 - Internal Only
+  /v1/users/{user_id}/saved-opportunities/{opportunity_id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: opportunity_id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDeleteSavedOpportunityResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+      security:
+      - ApiJwtAuth: []
+      summary: User Delete Saved Opportunity
+      tags:
+      - User v1 - Internal Only
+  /v1/users/{user_id}/saved-searches:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSaveSearchRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSaveSearchResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Validation error
+      security:
+      - ApiJwtAuth: []
+      summary: User Save Search
+      tags:
+      - User v1 - Internal Only
+  /v1/users/{user_id}/saved-searches/list:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSavedSearchesRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSavedSearchesResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Validation error
+      security:
+      - ApiJwtAuth: []
+      summary: User Get Saved Searches
+      tags:
+      - User v1 - Internal Only
+  /v1/users/{user_id}/saved-searches/{saved_search_id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: saved_search_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDeleteSavedSearchResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+      security:
+      - ApiJwtAuth: []
+      summary: User Delete Saved Search
+      tags:
+      - User v1 - Internal Only
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: saved_search_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdateSavedSearchRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserUpdateSavedSearchResponse"
+          description: Successful response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Authentication error
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Validation error
+      security:
+      - ApiJwtAuth: []
+      summary: User Update Saved Search
+      tags:
+      - User v1 - Internal Only
+components:
+  schemas:
+    AgencyFilterV1:
+      example:
+        agency_id: 123e4567-e89b-12d3-a456-426614174000
+        active: true
+      properties:
+        active:
+          title: active
+          type: boolean
+        agency_id:
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          title: agency_id
+          type: string
+      title: AgencyFilterV1
+    AgencyListRequest:
+      example:
+        pagination:
+          page_offset: 1
+          sort_order:
+          - sort_direction: ascending
+            order_by: agency_code
+          - sort_direction: ascending
+            order_by: agency_code
+          - sort_direction: ascending
+            order_by: agency_code
+          - sort_direction: ascending
+            order_by: agency_code
+          - sort_direction: ascending
+            order_by: agency_code
+          page_size: 25
+        filters:
+          agency_id: 123e4567-e89b-12d3-a456-426614174000
+          active: true
+      properties:
+        filters:
+          $ref: "#/components/schemas/AgencyFilterV1"
+        pagination:
+          $ref: "#/components/schemas/AgencyPaginationV1"
+      required:
+      - pagination
+      title: AgencyListRequest
+    AgencyListResponse:
+      example:
+        status_code: 200
+        data:
+        - agency_name: agency_name
+          top_level_agency: null
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          agency_code: agency_code
+          agency_id: 123e4567-e89b-12d3-a456-426614174000
+          created_at: 2000-01-23T04:56:07.000+00:00
+        - agency_name: agency_name
+          top_level_agency: null
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          agency_code: agency_code
+          agency_id: 123e4567-e89b-12d3-a456-426614174000
+          created_at: 2000-01-23T04:56:07.000+00:00
+        pagination_info:
+          total_records: 42
+          page_offset: 1
+          total_pages: 2
+          sort_order:
+          - sort_direction: ascending
+            order_by: id
+          - sort_direction: ascending
+            order_by: id
+          page_size: 25
+        message: Success
+      properties:
+        data:
+          description: A list of agency records
+          items:
+            $ref: "#/components/schemas/AgencyResponse"
+          title: data
+          type: array
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        pagination_info:
+          $ref: "#/components/schemas/PaginationInfo"
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: AgencyListResponse
+    AgencyOppSearchFilterV1:
+      example:
+        one_of:
+        - USAID
+        - USAID
+      properties:
+        one_of:
+          items:
+            example: USAID
+            minLength: 2
+            type: string
+          minItems: 1
+          title: one_of
+          type: array
+      title: AgencyOppSearchFilterV1
+    AgencyPaginationV1:
+      example:
+        page_offset: 1
+        sort_order:
+        - sort_direction: ascending
+          order_by: agency_code
+        - sort_direction: ascending
+          order_by: agency_code
+        - sort_direction: ascending
+          order_by: agency_code
+        - sort_direction: ascending
+          order_by: agency_code
+        - sort_direction: ascending
+          order_by: agency_code
+        page_size: 25
+      properties:
+        page_offset:
+          description: "The page number to fetch, starts counting from 1"
+          example: 1
+          minimum: 1
+          title: page_offset
+          type: integer
+        page_size:
+          description: The size of the page to fetch
+          example: 25
+          maximum: 5000
+          minimum: 1
+          title: page_size
+          type: integer
+        sort_order:
+          default:
+          - order_by: agency_code
+            sort_direction: ascending
+          description: The list of sorting rules
+          items:
+            $ref: "#/components/schemas/SortOrderAgencyPaginationV1"
+          maxItems: 5
+          minItems: 1
+          title: sort_order
+          type: array
+      required:
+      - page_offset
+      - page_size
+      title: AgencyPaginationV1
+    AgencyResponse:
+      example:
+        agency_name: agency_name
+        top_level_agency: null
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        agency_code: agency_code
+        agency_id: 123e4567-e89b-12d3-a456-426614174000
+        created_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        agency_code:
+          title: agency_code
+          type: string
+        agency_id:
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          title: agency_id
+          type: string
+        agency_name:
+          title: agency_name
+          type: string
+        created_at:
+          format: date-time
+          title: created_at
+          type: string
+        top_level_agency:
+          $ref: "#/components/schemas/AgencyResponse"
+        updated_at:
+          format: date-time
+          title: updated_at
+          type: string
+      title: AgencyResponse
+    AgencySearchFilterV1:
+      example:
+        opportunity_statuses:
+          one_of:
+          - archived
+          - archived
+        has_active_opportunity:
+          one_of:
+          - true
+          - true
+        is_test_agency:
+          one_of:
+          - true
+          - true
+      properties:
+        has_active_opportunity:
+          $ref: "#/components/schemas/HasActiveOpportunityFilterV1"
+        is_test_agency:
+          $ref: "#/components/schemas/IsTestAgencyFilterV1"
+        opportunity_statuses:
+          $ref: "#/components/schemas/OpportunityStatusesFilterV1"
+      title: AgencySearchFilterV1
+    AgencySearchPaginationV1:
+      example:
+        page_offset: 1
+        sort_order:
+        - sort_direction: ascending
+          order_by: agency_code
+        - sort_direction: ascending
+          order_by: agency_code
+        - sort_direction: ascending
+          order_by: agency_code
+        - sort_direction: ascending
+          order_by: agency_code
+        - sort_direction: ascending
+          order_by: agency_code
+        page_size: 25
+      properties:
+        page_offset:
+          description: "The page number to fetch, starts counting from 1"
+          example: 1
+          minimum: 1
+          title: page_offset
+          type: integer
+        page_size:
+          description: The size of the page to fetch
+          example: 25
+          maximum: 5000
+          minimum: 1
+          title: page_size
+          type: integer
+        sort_order:
+          default:
+          - order_by: agency_code
+            sort_direction: ascending
+          description: The list of sorting rules
+          items:
+            $ref: "#/components/schemas/SortOrderAgencySearchPaginationV1"
+          maxItems: 5
+          minItems: 1
+          title: sort_order
+          type: array
+      required:
+      - page_offset
+      - page_size
+      title: AgencySearchPaginationV1
+    AgencySearchRequest:
+      example:
+        query_operator: OR
+        pagination:
+          page_offset: 1
+          sort_order:
+          - sort_direction: ascending
+            order_by: agency_code
+          - sort_direction: ascending
+            order_by: agency_code
+          - sort_direction: ascending
+            order_by: agency_code
+          - sort_direction: ascending
+            order_by: agency_code
+          - sort_direction: ascending
+            order_by: agency_code
+          page_size: 25
+        query: research
+        filters:
+          opportunity_statuses:
+            one_of:
+            - archived
+            - archived
+          has_active_opportunity:
+            one_of:
+            - true
+            - true
+          is_test_agency:
+            one_of:
+            - true
+            - true
+      properties:
+        filters:
+          $ref: "#/components/schemas/AgencySearchFilterV1"
+        pagination:
+          $ref: "#/components/schemas/AgencySearchPaginationV1"
+        query:
+          description: Query string which searches against several text fields
+          example: research
+          maxLength: 100
+          minLength: 1
+          title: query
+          type: string
+        query_operator:
+          default: OR
+          description: Query operator for combining search conditions
+          enum:
+          - AND
+          - OR
+          example: OR
+          title: query_operator
+          type: string
+      required:
+      - pagination
+      title: AgencySearchRequest
+    AgencySearchResponseV1:
+      example:
+        status_code: 200
+        data:
+        - opportunity_statuses:
+          - posted
+          agency_name: Department of Examples
+          top_level_agency: null
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          agency_code: ABC
+          agency_id: 123e4567-e89b-12d3-a456-426614174000
+          created_at: 2000-01-23T04:56:07.000+00:00
+          is_test_agency: false
+        - opportunity_statuses:
+          - posted
+          agency_name: Department of Examples
+          top_level_agency: null
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          agency_code: ABC
+          agency_id: 123e4567-e89b-12d3-a456-426614174000
+          created_at: 2000-01-23T04:56:07.000+00:00
+          is_test_agency: false
+        pagination_info:
+          total_records: 42
+          page_offset: 1
+          total_pages: 2
+          sort_order:
+          - sort_direction: ascending
+            order_by: id
+          - sort_direction: ascending
+            order_by: id
+          page_size: 25
+        message: Success
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/AgencyV1"
+          title: data
+          type: array
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        pagination_info:
+          $ref: "#/components/schemas/PaginationInfo"
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: AgencySearchResponseV1
+    AgencyV1:
+      example:
+        opportunity_statuses:
+        - posted
+        agency_name: Department of Examples
+        top_level_agency: null
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        agency_code: ABC
+        agency_id: 123e4567-e89b-12d3-a456-426614174000
+        created_at: 2000-01-23T04:56:07.000+00:00
+        is_test_agency: false
+      properties:
+        agency_code:
+          description: The agency who created the opportunity
+          example: ABC
+          title: agency_code
+          type: string
+        agency_id:
+          description: The internal ID of the agency
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          title: agency_id
+          type: string
+        agency_name:
+          description: The name of the agency who created the opportunity
+          example: Department of Examples
+          title: agency_name
+          type: string
+        created_at:
+          format: date-time
+          readOnly: true
+          title: created_at
+          type: string
+        is_test_agency:
+          description: Indicates if the agency is a test agency.
+          example: false
+          title: is_test_agency
+          type: boolean
+        opportunity_statuses:
+          description: List of opportunity statuses the agency is linked with.
+          example:
+          - posted
+          items:
+            enum:
+            - forecasted
+            - posted
+            - closed
+            - archived
+            type: string
+          title: opportunity_statuses
+          type: array
+        top_level_agency:
+          $ref: "#/components/schemas/AgencyV1"
+        updated_at:
+          format: date-time
+          readOnly: true
+          title: updated_at
+          type: string
+      title: AgencyV1
+    ApplicantTypeFilterV1:
+      example:
+        one_of:
+        - state_governments
+        - state_governments
+      properties:
+        one_of:
+          items:
+            enum:
+            - state_governments
+            - county_governments
+            - city_or_township_governments
+            - special_district_governments
+            - independent_school_districts
+            - public_and_state_institutions_of_higher_education
+            - private_institutions_of_higher_education
+            - federally_recognized_native_american_tribal_governments
+            - other_native_american_tribal_organizations
+            - public_and_indian_housing_authorities
+            - nonprofits_non_higher_education_with_501c3
+            - nonprofits_non_higher_education_without_501c3
+            - individuals
+            - for_profit_organizations_other_than_small_businesses
+            - small_businesses
+            - other
+            - unrestricted
+            type: string
+          minItems: 1
+          title: one_of
+          type: array
+      title: ApplicantTypeFilterV1
+    AssistanceListingNumberFilterV1:
+      example:
+        one_of:
+        - "45.149"
+        - "45.149"
+      properties:
+        one_of:
+          items:
+            example: "45.149"
+            pattern: "^\\d{2}\\.\\d{2,3}$"
+            type: string
+          minItems: 1
+          title: one_of
+          type: array
+      title: AssistanceListingNumberFilterV1
+    AwardCeilingFilterV1:
+      example:
+        min: 0
+        max: 10000000
+      properties:
+        max:
+          example: 10000000
+          minimum: 0
+          title: max
+          type: integer
+        min:
+          example: 0
+          minimum: 0
+          title: min
+          type: integer
+      title: AwardCeilingFilterV1
+    AwardFloorFilterV1:
+      example:
+        min: 0
+        max: 10000
+      properties:
+        max:
+          example: 10000
+          minimum: 0
+          title: max
+          type: integer
+        min:
+          example: 0
+          minimum: 0
+          title: min
+          type: integer
+      title: AwardFloorFilterV1
+    CloseDateFilterV1:
+      example:
+        end_date: 2000-01-23
+        start_date_relative: 205491
+        end_date_relative: -839834
+        start_date: 2000-01-23
+      properties:
+        end_date:
+          format: date
+          title: end_date
+          type: string
+        end_date_relative:
+          maximum: 1000000
+          minimum: -1000000
+          title: end_date_relative
+          type: integer
+        start_date:
+          format: date
+          title: end_date
+          type: string
+        start_date_relative:
+          maximum: 1000000
+          minimum: -1000000
+          title: end_date_relative
+          type: integer
+      title: CloseDateFilterV1
+    CompetitionAlpha:
+      example:
+        closing_date: 2000-01-23
+        opportunity_assistance_listing:
+          assistance_listing_number: "43.012"
+          program_title: Space Technology
+        competition_title: Proposal for Advanced Research
+        opportunity_id: 0
+        is_open: true
+        competition_id: 123e4567-e89b-12d3-a456-426614174000
+        competition_forms:
+        - form:
+            form_json_schema:
+              properties:
+                ApplicationNumber:
+                  maxLength: 120
+                  minLength: 1
+                  title: Application number
+                  type: number
+                Date:
+                  format: date
+                  title: 'Date of application '
+                  type: string
+                Description:
+                  maxLength: 15
+                  minLength: 0
+                  title: Description for application
+                  type: string
+                Title:
+                  maxLength: 60
+                  minLength: 1
+                  title: Title
+                  type: string
+              title: Test form for testing
+              type: object
+            form_instruction:
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              file_name: instructions.pdf
+              download_path: download_path
+              created_at: 2000-01-23T04:56:07.000+00:00
+            form_id: 123e4567-e89b-12d3-a456-426614174000
+            form_name: ABC Project Form
+            form_ui_schema: ""
+          is_required: true
+        - form:
+            form_json_schema:
+              properties:
+                ApplicationNumber:
+                  maxLength: 120
+                  minLength: 1
+                  title: Application number
+                  type: number
+                Date:
+                  format: date
+                  title: 'Date of application '
+                  type: string
+                Description:
+                  maxLength: 15
+                  minLength: 0
+                  title: Description for application
+                  type: string
+                Title:
+                  maxLength: 60
+                  minLength: 1
+                  title: Title
+                  type: string
+              title: Test form for testing
+              type: object
+            form_instruction:
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              file_name: instructions.pdf
+              download_path: download_path
+              created_at: 2000-01-23T04:56:07.000+00:00
+            form_id: 123e4567-e89b-12d3-a456-426614174000
+            form_name: ABC Project Form
+            form_ui_schema: ""
+          is_required: true
+        contact_info: |-
+          Bob Smith
+          FakeMail@fake.com
+        competition_instructions:
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          file_name: competition_instructions.pdf
+          download_path: https://cdn.example.com/competition-instructions/file.pdf
+          created_at: 2000-01-23T04:56:07.000+00:00
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          file_name: competition_instructions.pdf
+          download_path: https://cdn.example.com/competition-instructions/file.pdf
+          created_at: 2000-01-23T04:56:07.000+00:00
+        open_to_applicants:
+        - individual
+        - individual
+        opening_date: 2000-01-23
+      properties:
+        closing_date:
+          description: "The closing date of the competition, the last day applications\
+            \ are accepted"
+          format: date
+          title: closing_date
+          type: string
+        competition_forms:
+          items:
+            $ref: "#/components/schemas/CompetitionFormAlpha"
+          title: competition_forms
+          type: array
+        competition_id:
+          description: The competition ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          title: competition_id
+          type: string
+        competition_instructions:
+          description: List of instruction files associated with this competition
+          items:
+            $ref: "#/components/schemas/CompetitionInstructionAlpha"
+          title: competition_instructions
+          type: array
+        competition_title:
+          description: The title of the competition
+          example: Proposal for Advanced Research
+          title: competition_title
+          type: string
+        contact_info:
+          description: Contact info getting assistance with the competition
+          example: |-
+            Bob Smith
+            FakeMail@fake.com
+          title: contact_info
+          type: string
+        is_open:
+          description: Whether the competition is open and accepting applications
+          title: is_open
+          type: boolean
+        open_to_applicants:
+          items:
+            enum:
+            - individual
+            - organization
+            type: string
+          title: open_to_applicants
+          type: array
+        opening_date:
+          description: "The opening date of the competition, the first day applications\
+            \ are accepted"
+          format: date
+          title: opening_date
+          type: string
+        opportunity_assistance_listing:
+          $ref: "#/components/schemas/OpportunityAssistanceListingV1"
+        opportunity_id:
+          description: The opportunity ID that the competition is associated with
+          title: opportunity_id
+          type: integer
+      title: CompetitionAlpha
+    CompetitionFormAlpha:
+      example:
+        form:
+          form_json_schema:
+            properties:
+              ApplicationNumber:
+                maxLength: 120
+                minLength: 1
+                title: Application number
+                type: number
+              Date:
+                format: date
+                title: 'Date of application '
+                type: string
+              Description:
+                maxLength: 15
+                minLength: 0
+                title: Description for application
+                type: string
+              Title:
+                maxLength: 60
+                minLength: 1
+                title: Title
+                type: string
+            title: Test form for testing
+            type: object
+          form_instruction:
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            file_name: instructions.pdf
+            download_path: download_path
+            created_at: 2000-01-23T04:56:07.000+00:00
+          form_id: 123e4567-e89b-12d3-a456-426614174000
+          form_name: ABC Project Form
+          form_ui_schema: ""
+        is_required: true
+      properties:
+        form:
+          $ref: "#/components/schemas/FormAlpha"
+        is_required:
+          description: Whether the form is required for all applications to the competition
+          title: is_required
+          type: boolean
+      title: CompetitionFormAlpha
+    CompetitionInstructionAlpha:
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        file_name: competition_instructions.pdf
+        download_path: https://cdn.example.com/competition-instructions/file.pdf
+        created_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        created_at:
+          description: The date and time when the instruction was created
+          format: date-time
+          title: created_at
+          type: string
+        download_path:
+          description: The URL to download the instruction file
+          example: https://cdn.example.com/competition-instructions/file.pdf
+          title: download_path
+          type: string
+        file_name:
+          description: The name of the instruction file
+          example: competition_instructions.pdf
+          title: file_name
+          type: string
+        updated_at:
+          description: The date and time when the instruction was last updated
+          format: date-time
+          title: updated_at
+          type: string
+      title: CompetitionInstructionAlpha
+    DateRange:
+      example:
+        end_date: 2000-01-23
+        start_date: 2000-01-23
+      properties:
+        end_date:
+          format: date
+          title: end_date
+          type: string
+        start_date:
+          format: date
+          title: start_date
+          type: string
+      required:
+      - end_date
+      - start_date
+      title: DateRange
+    ErrorResponse:
+      example:
+        status_code: 0
+        data: ""
+        internal_request_id: 550e8400-e29b-41d4-a716-446655440000
+        message: Error
+        errors: []
+      properties:
+        data:
+          title: data
+        errors:
+          example: []
+          items:
+            $ref: "#/components/schemas/ValidationIssue"
+          title: errors
+          type: array
+        internal_request_id:
+          description: An internal tracking ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+          title: internal_request_id
+          type: string
+        message:
+          description: General description of the error
+          example: Error
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code of the error
+          title: status_code
+          type: integer
+      title: ErrorResponse
+    EstimatedTotalProgramFundingFilterV1:
+      example:
+        min: 0
+        max: 10000000
+      properties:
+        max:
+          example: 10000000
+          minimum: 0
+          title: max
+          type: integer
+        min:
+          example: 0
+          minimum: 0
+          title: min
+          type: integer
+      title: AwardCeilingFilterV1
+    ExpectedNumberAwardsFilterV1:
+      example:
+        min: 0
+        max: 25
+      properties:
+        max:
+          example: 25
+          minimum: 0
+          title: max
+          type: integer
+        min:
+          example: 0
+          minimum: 0
+          title: min
+          type: integer
+      title: ExpectedNumberAwardsFilterV1
+    ExperimentalV1:
+      example:
+        scoring_rule: default
+      properties:
+        scoring_rule:
+          default: default
+          description: Scoring rule to query against OpenSearch
+          enum:
+          - default
+          - expanded
+          - agency
+          - attachment_only
+          title: scoring_rule
+          type: string
+      title: ExperimentalV1
+    ExtractMetadataFilterV1:
+      example:
+        extract_type: opportunities_json
+        created_at:
+          end_date: 2000-01-23
+          start_date: 2000-01-23
+      properties:
+        created_at:
+          $ref: "#/components/schemas/DateRange"
+        extract_type:
+          description: The type of extract to filter by
+          enum:
+          - opportunities_json
+          - opportunities_csv
+          example: opportunities_json
+          title: extract_type
+          type: string
+      title: ExtractMetadataFilterV1
+    ExtractMetadataListResponse:
+      example:
+        status_code: 200
+        data:
+        - extract_type: opportunity_data_extract
+          extract_metadata_id: 123e4567-e89b-12d3-a456-426614174000
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          download_path: download_path
+          created_at: 2000-01-23T04:56:07.000+00:00
+          file_size_bytes: 1024
+        - extract_type: opportunity_data_extract
+          extract_metadata_id: 123e4567-e89b-12d3-a456-426614174000
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          download_path: download_path
+          created_at: 2000-01-23T04:56:07.000+00:00
+          file_size_bytes: 1024
+        pagination_info:
+          total_records: 42
+          page_offset: 1
+          total_pages: 2
+          sort_order:
+          - sort_direction: ascending
+            order_by: id
+          - sort_direction: ascending
+            order_by: id
+          page_size: 25
+        message: Success
+      properties:
+        data:
+          description: A list of extract metadata records
+          items:
+            $ref: "#/components/schemas/ExtractMetadataResponse"
+          title: data
+          type: array
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        pagination_info:
+          $ref: "#/components/schemas/PaginationInfo"
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: ExtractMetadataListResponse
+    ExtractMetadataPaginationV1:
+      example:
+        page_offset: 1
+        sort_order:
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        page_size: 25
+      properties:
+        page_offset:
+          description: "The page number to fetch, starts counting from 1"
+          example: 1
+          minimum: 1
+          title: page_offset
+          type: integer
+        page_size:
+          description: The size of the page to fetch
+          example: 25
+          maximum: 5000
+          minimum: 1
+          title: page_size
+          type: integer
+        sort_order:
+          description: The list of sorting rules
+          items:
+            $ref: "#/components/schemas/SortOrderExtractMetadataPaginationV1"
+          maxItems: 5
+          minItems: 1
+          title: sort_order
+          type: array
+      required:
+      - page_offset
+      - page_size
+      - sort_order
+      title: ExtractMetadataPaginationV1
+    ExtractMetadataRequest:
+      example:
+        pagination:
+          page_offset: 1
+          sort_order:
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          page_size: 25
+        status_code: 200
+        data: ""
+        filters:
+          extract_type: opportunities_json
+          created_at:
+            end_date: 2000-01-23
+            start_date: 2000-01-23
+        message: Success
+      properties:
+        data:
+          title: data
+        filters:
+          $ref: "#/components/schemas/ExtractMetadataFilterV1"
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        pagination:
+          $ref: "#/components/schemas/ExtractMetadataPaginationV1"
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      required:
+      - pagination
+      title: ExtractMetadataRequest
+    ExtractMetadataResponse:
+      example:
+        extract_type: opportunity_data_extract
+        extract_metadata_id: 123e4567-e89b-12d3-a456-426614174000
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        download_path: download_path
+        created_at: 2000-01-23T04:56:07.000+00:00
+        file_size_bytes: 1024
+      properties:
+        created_at:
+          format: date-time
+          readOnly: true
+          title: created_at
+          type: string
+        download_path:
+          description: The file's download path
+          title: download_path
+          type: string
+        extract_metadata_id:
+          description: The ID of the extract metadata
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          title: extract_metadata_id
+          type: string
+        extract_type:
+          description: The type of extract
+          example: opportunity_data_extract
+          title: extract_type
+          type: string
+        file_size_bytes:
+          description: The size of the file in bytes
+          example: 1024
+          title: file_size_bytes
+          type: integer
+        updated_at:
+          format: date-time
+          readOnly: true
+          title: updated_at
+          type: string
+      title: ExtractMetadataResponse
+    FormAlpha:
+      example:
+        form_json_schema:
+          properties:
+            ApplicationNumber:
+              maxLength: 120
+              minLength: 1
+              title: Application number
+              type: number
+            Date:
+              format: date
+              title: 'Date of application '
+              type: string
+            Description:
+              maxLength: 15
+              minLength: 0
+              title: Description for application
+              type: string
+            Title:
+              maxLength: 60
+              minLength: 1
+              title: Title
+              type: string
+          title: Test form for testing
+          type: object
+        form_instruction:
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          file_name: instructions.pdf
+          download_path: download_path
+          created_at: 2000-01-23T04:56:07.000+00:00
+        form_id: 123e4567-e89b-12d3-a456-426614174000
+        form_name: ABC Project Form
+        form_ui_schema: ""
+      properties:
+        form_id:
+          description: The primary key ID of the form
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          title: form_id
+          type: string
+        form_instruction:
+          $ref: "#/components/schemas/FormInstruction"
+        form_json_schema:
+          additionalProperties: {}
+          description: The JSON Schema representation of the form
+          example:
+            properties:
+              ApplicationNumber:
+                maxLength: 120
+                minLength: 1
+                title: Application number
+                type: number
+              Date:
+                format: date
+                title: 'Date of application '
+                type: string
+              Description:
+                maxLength: 15
+                minLength: 0
+                title: Description for application
+                type: string
+              Title:
+                maxLength: 60
+                minLength: 1
+                title: Title
+                type: string
+            title: Test form for testing
+            type: object
+          title: form_json_schema
+        form_name:
+          description: The name of the form
+          example: ABC Project Form
+          title: form_name
+          type: string
+        form_ui_schema:
+          title: form_ui_schema
+      title: FormAlpha
+    FormInstruction:
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        file_name: instructions.pdf
+        download_path: download_path
+        created_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        created_at:
+          description: The timestamp when the form instruction was created
+          format: date-time
+          title: created_at
+          type: string
+        download_path:
+          description: The download URL for the form instruction file
+          title: download_path
+          type: string
+        file_name:
+          description: The name of the form instruction file
+          example: instructions.pdf
+          title: file_name
+          type: string
+        updated_at:
+          description: The timestamp when the form instruction was last updated
+          format: date-time
+          title: updated_at
+          type: string
+      title: FormInstruction
+    FundingCategoryFilterV1:
+      example:
+        one_of:
+        - recovery_act
+        - recovery_act
+      properties:
+        one_of:
+          items:
+            enum:
+            - recovery_act
+            - agriculture
+            - arts
+            - business_and_commerce
+            - community_development
+            - consumer_protection
+            - disaster_prevention_and_relief
+            - education
+            - employment_labor_and_training
+            - energy
+            - environment
+            - food_and_nutrition
+            - health
+            - housing
+            - humanities
+            - infrastructure_investment_and_jobs_act
+            - information_and_statistics
+            - income_security_and_social_services
+            - law_justice_and_legal_services
+            - natural_resources
+            - opportunity_zone_benefits
+            - regional_development
+            - science_technology_and_other_research_and_development
+            - transportation
+            - affordable_care_act
+            - other
+            type: string
+          minItems: 1
+          title: one_of
+          type: array
+      title: FundingCategoryFilterV1
+    FundingInstrumentFilterV1:
+      example:
+        one_of:
+        - cooperative_agreement
+        - cooperative_agreement
+      properties:
+        one_of:
+          items:
+            enum:
+            - cooperative_agreement
+            - grant
+            - procurement_contract
+            - other
+            type: string
+          minItems: 1
+          title: one_of
+          type: array
+      title: FundingInstrumentFilterV1
+    HasActiveOpportunityFilterV1:
+      example:
+        one_of:
+        - true
+        - true
+      properties:
+        one_of:
+          items:
+            example: true
+            type: boolean
+          title: one_of
+          type: array
+      title: HasActiveOpportunityFilterV1
+    HealthcheckMetadata:
+      example:
+        deploy_whoami: runner
+        commit_sha: ffaca647223e0b6e54344122eefa73401f5ec131
+        release_notes_link: https://github.com/HHS/simpler-grants-gov/releases
+        commit_link: https://github.com/HHS/simpler-grants-gov/commit/main
+        last_deploy_time: 2000-01-23T04:56:07.000+00:00
+      properties:
+        commit_link:
+          description: A github link to the latest deployed commit
+          example: https://github.com/HHS/simpler-grants-gov/commit/main
+          title: commit_link
+          type: string
+        commit_sha:
+          description: The github commit sha for the latest deployed commit
+          example: ffaca647223e0b6e54344122eefa73401f5ec131
+          title: commit_sha
+          type: string
+        deploy_whoami:
+          description: The latest user to deploy the application
+          example: runner
+          title: deploy_whoami
+          type: string
+        last_deploy_time:
+          description: Latest deploy time in US/Eastern timezone
+          format: date-time
+          title: last_deploy_time
+          type: string
+        release_notes_link:
+          description: A github link to the release notes - direct if the latest deploy
+            was a release
+          example: https://github.com/HHS/simpler-grants-gov/releases
+          title: release_notes_link
+          type: string
+      title: HealthcheckMetadata
+    HealthcheckResponse:
+      example:
+        status_code: 200
+        data:
+          deploy_whoami: runner
+          commit_sha: ffaca647223e0b6e54344122eefa73401f5ec131
+          release_notes_link: https://github.com/HHS/simpler-grants-gov/releases
+          commit_link: https://github.com/HHS/simpler-grants-gov/commit/main
+          last_deploy_time: 2000-01-23T04:56:07.000+00:00
+        message: Success
+      properties:
+        data:
+          $ref: "#/components/schemas/HealthcheckMetadata"
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: HealthcheckResponse
+    IsCostSharingFilterV1:
+      example:
+        one_of:
+        - true
+        - true
+      properties:
+        one_of:
+          items:
+            example: true
+            type: boolean
+          title: one_of
+          type: array
+      title: HasActiveOpportunityFilterV1
+    IsTestAgencyFilterV1:
+      example:
+        one_of:
+        - true
+        - true
+      properties:
+        one_of:
+          items:
+            example: true
+            type: boolean
+          title: one_of
+          type: array
+      title: HasActiveOpportunityFilterV1
+    OpportunityAssistanceListingV1:
+      example:
+        assistance_listing_number: "43.012"
+        program_title: Space Technology
+      properties:
+        assistance_listing_number:
+          description: "The assistance listing number, see https://sam.gov/content/assistance-listings\
+            \ for more detail"
+          example: "43.012"
+          title: assistance_listing_number
+          type: string
+        program_title:
+          description: "The name of the program, see https://sam.gov/content/assistance-listings\
+            \ for more detail"
+          example: Space Technology
+          title: program_title
+          type: string
+      title: OpportunityAssistanceListingV1
+    OpportunityAttachmentV1:
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        mime_type: application/pdf
+        file_name: my_NOFO.pdf
+        download_path: download_path
+        file_description: The full announcement NOFO
+        created_at: 2000-01-23T04:56:07.000+00:00
+        file_size_bytes: 1024
+      properties:
+        created_at:
+          format: date-time
+          readOnly: true
+          title: created_at
+          type: string
+        download_path:
+          description: The file's download path
+          title: download_path
+          type: string
+        file_description:
+          description: A description of the attachment
+          example: The full announcement NOFO
+          title: file_description
+          type: string
+        file_name:
+          description: The name of the attachment file
+          example: my_NOFO.pdf
+          title: file_name
+          type: string
+        file_size_bytes:
+          description: The size of the file in bytes
+          example: 1024
+          title: file_size_bytes
+          type: integer
+        mime_type:
+          description: The MIME type of the attachment
+          example: application/pdf
+          title: mime_type
+          type: string
+        updated_at:
+          format: date-time
+          readOnly: true
+          title: updated_at
+          type: string
+      title: OpportunityAttachmentV1
+    OpportunityFacetV1:
+      example:
+        opportunity_status:
+          forecasted: 2
+          posted: 1
+        is_cost_sharing:
+          "false": 3
+          "true": 1
+        agency:
+          DOC: 3
+          USAID: 4
+        funding_instrument:
+          cooperative_agreement: 4
+          grant: 3
+        funding_category:
+          agriculture: 5
+          arts: 3
+          recovery_act: 2
+        applicant_type:
+          city_or_township_governments: 1
+          county_governments: 2
+          state_governments: 3
+      properties:
+        agency:
+          additionalProperties:
+            type: integer
+          description: The counts of agency values in the full response
+          example:
+            DOC: 3
+            USAID: 4
+          title: agency
+        applicant_type:
+          additionalProperties:
+            type: integer
+          description: The counts of applicant_type values in the full response
+          example:
+            city_or_township_governments: 1
+            county_governments: 2
+            state_governments: 3
+          title: applicant_type
+        funding_category:
+          additionalProperties:
+            type: integer
+          description: The counts of funding_category values in the full response
+          example:
+            agriculture: 5
+            arts: 3
+            recovery_act: 2
+          title: funding_category
+        funding_instrument:
+          additionalProperties:
+            type: integer
+          description: The counts of funding_instrument values in the full response
+          example:
+            cooperative_agreement: 4
+            grant: 3
+          title: funding_instrument
+        is_cost_sharing:
+          additionalProperties:
+            type: integer
+          description: The counts of is_cost_sharing values in the full response
+          example:
+            "false": 3
+            "true": 1
+          title: is_cost_sharing
+        opportunity_status:
+          additionalProperties:
+            type: integer
+          description: The counts of opportunity_status values in the full response
+          example:
+            forecasted: 2
+            posted: 1
+          title: opportunity_status
+      title: OpportunityFacetV1
+    OpportunityGetResponseV1:
+      example:
+        status_code: 200
+        data:
+          summary:
+            close_date: 2000-01-23
+            is_cost_sharing: true
+            applicant_eligibility_description: All types of domestic applicants are
+              eligible to apply
+            forecasted_award_date: 2000-01-23
+            expected_number_of_awards: 10
+            forecasted_close_date: 2000-01-23
+            agency_contact_description: "For more information, reach out to Jane Smith\
+              \ at agency US-ABC"
+            created_at: 2000-01-23T04:56:07.000+00:00
+            version_number: 1
+            archive_date: 2000-01-23
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            fiscal_year: 0
+            funding_categories:
+            - recovery_act
+            - recovery_act
+            forecasted_project_start_date: 2000-01-23
+            additional_info_url: grants.gov
+            funding_instruments:
+            - cooperative_agreement
+            - cooperative_agreement
+            applicant_types:
+            - state_governments
+            - state_governments
+            forecasted_close_date_description: Proposals will probably be due on this
+              date
+            forecasted_post_date: 2000-01-23
+            award_ceiling: 100000
+            agency_email_address: fake_email@grants.gov
+            close_date_description: Proposals are due earlier than usual.
+            award_floor: 10000
+            is_forecast: false
+            additional_info_url_description: Click me for more info
+            post_date: 2000-01-23
+            funding_category_description: Economic Support
+            agency_email_address_description: Click me to email the agency
+            estimated_total_program_funding: 10000000
+            summary_description: This opportunity aims to unravel the mysteries of
+              the universe.
+          opportunity_number: ABC-123-XYZ-001
+          agency_name: Department of Examples
+          attachments:
+          - updated_at: 2000-01-23T04:56:07.000+00:00
+            mime_type: application/pdf
+            file_name: my_NOFO.pdf
+            download_path: download_path
+            file_description: The full announcement NOFO
+            created_at: 2000-01-23T04:56:07.000+00:00
+            file_size_bytes: 1024
+          - updated_at: 2000-01-23T04:56:07.000+00:00
+            mime_type: application/pdf
+            file_name: my_NOFO.pdf
+            download_path: download_path
+            file_description: The full announcement NOFO
+            created_at: 2000-01-23T04:56:07.000+00:00
+            file_size_bytes: 1024
+          agency: US-ABC
+          agency_code: US-ABC
+          opportunity_title: Research into conservation techniques
+          competitions:
+          - closing_date: 2000-01-23
+            opportunity_assistance_listing:
+              assistance_listing_number: "43.012"
+              program_title: Space Technology
+            competition_title: Proposal for Advanced Research
+            opportunity_id: 0
+            is_open: true
+            competition_id: 123e4567-e89b-12d3-a456-426614174000
+            competition_forms:
+            - form:
+                form_json_schema:
+                  properties:
+                    ApplicationNumber:
+                      maxLength: 120
+                      minLength: 1
+                      title: Application number
+                      type: number
+                    Date:
+                      format: date
+                      title: 'Date of application '
+                      type: string
+                    Description:
+                      maxLength: 15
+                      minLength: 0
+                      title: Description for application
+                      type: string
+                    Title:
+                      maxLength: 60
+                      minLength: 1
+                      title: Title
+                      type: string
+                  title: Test form for testing
+                  type: object
+                form_instruction:
+                  updated_at: 2000-01-23T04:56:07.000+00:00
+                  file_name: instructions.pdf
+                  download_path: download_path
+                  created_at: 2000-01-23T04:56:07.000+00:00
+                form_id: 123e4567-e89b-12d3-a456-426614174000
+                form_name: ABC Project Form
+                form_ui_schema: ""
+              is_required: true
+            - form:
+                form_json_schema:
+                  properties:
+                    ApplicationNumber:
+                      maxLength: 120
+                      minLength: 1
+                      title: Application number
+                      type: number
+                    Date:
+                      format: date
+                      title: 'Date of application '
+                      type: string
+                    Description:
+                      maxLength: 15
+                      minLength: 0
+                      title: Description for application
+                      type: string
+                    Title:
+                      maxLength: 60
+                      minLength: 1
+                      title: Title
+                      type: string
+                  title: Test form for testing
+                  type: object
+                form_instruction:
+                  updated_at: 2000-01-23T04:56:07.000+00:00
+                  file_name: instructions.pdf
+                  download_path: download_path
+                  created_at: 2000-01-23T04:56:07.000+00:00
+                form_id: 123e4567-e89b-12d3-a456-426614174000
+                form_name: ABC Project Form
+                form_ui_schema: ""
+              is_required: true
+            contact_info: |-
+              Bob Smith
+              FakeMail@fake.com
+            competition_instructions:
+            - updated_at: 2000-01-23T04:56:07.000+00:00
+              file_name: competition_instructions.pdf
+              download_path: https://cdn.example.com/competition-instructions/file.pdf
+              created_at: 2000-01-23T04:56:07.000+00:00
+            - updated_at: 2000-01-23T04:56:07.000+00:00
+              file_name: competition_instructions.pdf
+              download_path: https://cdn.example.com/competition-instructions/file.pdf
+              created_at: 2000-01-23T04:56:07.000+00:00
+            open_to_applicants:
+            - individual
+            - individual
+            opening_date: 2000-01-23
+          - closing_date: 2000-01-23
+            opportunity_assistance_listing:
+              assistance_listing_number: "43.012"
+              program_title: Space Technology
+            competition_title: Proposal for Advanced Research
+            opportunity_id: 0
+            is_open: true
+            competition_id: 123e4567-e89b-12d3-a456-426614174000
+            competition_forms:
+            - form:
+                form_json_schema:
+                  properties:
+                    ApplicationNumber:
+                      maxLength: 120
+                      minLength: 1
+                      title: Application number
+                      type: number
+                    Date:
+                      format: date
+                      title: 'Date of application '
+                      type: string
+                    Description:
+                      maxLength: 15
+                      minLength: 0
+                      title: Description for application
+                      type: string
+                    Title:
+                      maxLength: 60
+                      minLength: 1
+                      title: Title
+                      type: string
+                  title: Test form for testing
+                  type: object
+                form_instruction:
+                  updated_at: 2000-01-23T04:56:07.000+00:00
+                  file_name: instructions.pdf
+                  download_path: download_path
+                  created_at: 2000-01-23T04:56:07.000+00:00
+                form_id: 123e4567-e89b-12d3-a456-426614174000
+                form_name: ABC Project Form
+                form_ui_schema: ""
+              is_required: true
+            - form:
+                form_json_schema:
+                  properties:
+                    ApplicationNumber:
+                      maxLength: 120
+                      minLength: 1
+                      title: Application number
+                      type: number
+                    Date:
+                      format: date
+                      title: 'Date of application '
+                      type: string
+                    Description:
+                      maxLength: 15
+                      minLength: 0
+                      title: Description for application
+                      type: string
+                    Title:
+                      maxLength: 60
+                      minLength: 1
+                      title: Title
+                      type: string
+                  title: Test form for testing
+                  type: object
+                form_instruction:
+                  updated_at: 2000-01-23T04:56:07.000+00:00
+                  file_name: instructions.pdf
+                  download_path: download_path
+                  created_at: 2000-01-23T04:56:07.000+00:00
+                form_id: 123e4567-e89b-12d3-a456-426614174000
+                form_name: ABC Project Form
+                form_ui_schema: ""
+              is_required: true
+            contact_info: |-
+              Bob Smith
+              FakeMail@fake.com
+            competition_instructions:
+            - updated_at: 2000-01-23T04:56:07.000+00:00
+              file_name: competition_instructions.pdf
+              download_path: https://cdn.example.com/competition-instructions/file.pdf
+              created_at: 2000-01-23T04:56:07.000+00:00
+            - updated_at: 2000-01-23T04:56:07.000+00:00
+              file_name: competition_instructions.pdf
+              download_path: https://cdn.example.com/competition-instructions/file.pdf
+              created_at: 2000-01-23T04:56:07.000+00:00
+            open_to_applicants:
+            - individual
+            - individual
+            opening_date: 2000-01-23
+          created_at: 2000-01-23T04:56:07.000+00:00
+          opportunity_assistance_listings:
+          - assistance_listing_number: "43.012"
+            program_title: Space Technology
+          - assistance_listing_number: "43.012"
+            program_title: Space Technology
+          opportunity_status: posted
+          category_explanation: category_explanation
+          opportunity_id: 12345
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          category: discretionary
+          top_level_agency_name: Department of Examples
+        message: Success
+      properties:
+        data:
+          $ref: "#/components/schemas/OpportunityWithAttachmentsV1"
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: OpportunityGetResponseV1
+    OpportunityPaginationV1:
+      example:
+        page_offset: 1
+        sort_order:
+        - sort_direction: ascending
+          order_by: relevancy
+        - sort_direction: ascending
+          order_by: relevancy
+        - sort_direction: ascending
+          order_by: relevancy
+        - sort_direction: ascending
+          order_by: relevancy
+        - sort_direction: ascending
+          order_by: relevancy
+        page_size: 25
+      properties:
+        page_offset:
+          description: "The page number to fetch, starts counting from 1"
+          example: 1
+          minimum: 1
+          title: page_offset
+          type: integer
+        page_size:
+          description: The size of the page to fetch
+          example: 25
+          maximum: 5000
+          minimum: 1
+          title: page_size
+          type: integer
+        sort_order:
+          default:
+          - order_by: opportunity_id
+            sort_direction: descending
+          description: The list of sorting rules
+          items:
+            $ref: "#/components/schemas/SortOrderOpportunityPaginationV1"
+          maxItems: 5
+          minItems: 1
+          title: sort_order
+          type: array
+      required:
+      - page_offset
+      - page_size
+      title: OpportunityPaginationV1
+    OpportunitySearchFilterV1:
+      example:
+        close_date:
+          end_date: 2000-01-23
+          start_date_relative: 205491
+          end_date_relative: -839834
+          start_date: 2000-01-23
+        is_cost_sharing:
+          one_of:
+          - true
+          - true
+        agency:
+          one_of:
+          - USAID
+          - USAID
+        award_ceiling:
+          min: 0
+          max: 10000000
+        expected_number_of_awards:
+          min: 0
+          max: 25
+        funding_instrument:
+          one_of:
+          - cooperative_agreement
+          - cooperative_agreement
+        assistance_listing_number:
+          one_of:
+          - "45.149"
+          - "45.149"
+        award_floor:
+          min: 0
+          max: 10000
+        opportunity_status:
+          one_of:
+          - forecasted
+          - forecasted
+        top_level_agency:
+          one_of:
+          - USAID
+          - USAID
+        post_date:
+          end_date: 2000-01-23
+          start_date_relative: 205491
+          end_date_relative: -839834
+          start_date: 2000-01-23
+        funding_category:
+          one_of:
+          - recovery_act
+          - recovery_act
+        estimated_total_program_funding:
+          min: 0
+          max: 10000000
+        applicant_type:
+          one_of:
+          - state_governments
+          - state_governments
+      properties:
+        agency:
+          $ref: "#/components/schemas/AgencyOppSearchFilterV1"
+        applicant_type:
+          $ref: "#/components/schemas/ApplicantTypeFilterV1"
+        assistance_listing_number:
+          $ref: "#/components/schemas/AssistanceListingNumberFilterV1"
+        award_ceiling:
+          $ref: "#/components/schemas/AwardCeilingFilterV1"
+        award_floor:
+          $ref: "#/components/schemas/AwardFloorFilterV1"
+        close_date:
+          $ref: "#/components/schemas/CloseDateFilterV1"
+        estimated_total_program_funding:
+          $ref: "#/components/schemas/EstimatedTotalProgramFundingFilterV1"
+        expected_number_of_awards:
+          $ref: "#/components/schemas/ExpectedNumberAwardsFilterV1"
+        funding_category:
+          $ref: "#/components/schemas/FundingCategoryFilterV1"
+        funding_instrument:
+          $ref: "#/components/schemas/FundingInstrumentFilterV1"
+        is_cost_sharing:
+          $ref: "#/components/schemas/IsCostSharingFilterV1"
+        opportunity_status:
+          $ref: "#/components/schemas/OpportunityStatusFilterV1"
+        post_date:
+          $ref: "#/components/schemas/PostDateFilterV1"
+        top_level_agency:
+          $ref: "#/components/schemas/TopLevelAgencyOppSearchFilterV1"
+      title: OpportunitySearchFilterV1
+    OpportunitySearchRequestV1:
+      example:
+        query_operator: OR
+        pagination:
+          page_offset: 1
+          sort_order:
+          - sort_direction: ascending
+            order_by: relevancy
+          - sort_direction: ascending
+            order_by: relevancy
+          - sort_direction: ascending
+            order_by: relevancy
+          - sort_direction: ascending
+            order_by: relevancy
+          - sort_direction: ascending
+            order_by: relevancy
+          page_size: 25
+        query: research
+        format: json
+        experimental:
+          scoring_rule: default
+        filters:
+          close_date:
+            end_date: 2000-01-23
+            start_date_relative: 205491
+            end_date_relative: -839834
+            start_date: 2000-01-23
+          is_cost_sharing:
+            one_of:
+            - true
+            - true
+          agency:
+            one_of:
+            - USAID
+            - USAID
+          award_ceiling:
+            min: 0
+            max: 10000000
+          expected_number_of_awards:
+            min: 0
+            max: 25
+          funding_instrument:
+            one_of:
+            - cooperative_agreement
+            - cooperative_agreement
+          assistance_listing_number:
+            one_of:
+            - "45.149"
+            - "45.149"
+          award_floor:
+            min: 0
+            max: 10000
+          opportunity_status:
+            one_of:
+            - forecasted
+            - forecasted
+          top_level_agency:
+            one_of:
+            - USAID
+            - USAID
+          post_date:
+            end_date: 2000-01-23
+            start_date_relative: 205491
+            end_date_relative: -839834
+            start_date: 2000-01-23
+          funding_category:
+            one_of:
+            - recovery_act
+            - recovery_act
+          estimated_total_program_funding:
+            min: 0
+            max: 10000000
+          applicant_type:
+            one_of:
+            - state_governments
+            - state_governments
+      properties:
+        experimental:
+          $ref: "#/components/schemas/ExperimentalV1"
+        filters:
+          $ref: "#/components/schemas/OpportunitySearchFilterV1"
+        format:
+          default: json
+          description: The format of the response
+          enum:
+          - json
+          - csv
+          title: format
+          type: string
+        pagination:
+          $ref: "#/components/schemas/OpportunityPaginationV1"
+        query:
+          description: Query string which searches against several text fields
+          example: research
+          maxLength: 100
+          minLength: 1
+          title: query
+          type: string
+        query_operator:
+          default: AND
+          description: Query operator for combining search conditions
+          enum:
+          - AND
+          - OR
+          example: OR
+          title: query_operator
+          type: string
+      required:
+      - pagination
+      title: OpportunitySearchRequestV1
+    OpportunitySearchResponseV1:
+      example:
+        status_code: 200
+        data:
+        - summary:
+            close_date: 2000-01-23
+            is_cost_sharing: true
+            applicant_eligibility_description: All types of domestic applicants are
+              eligible to apply
+            forecasted_award_date: 2000-01-23
+            expected_number_of_awards: 10
+            forecasted_close_date: 2000-01-23
+            agency_contact_description: "For more information, reach out to Jane Smith\
+              \ at agency US-ABC"
+            created_at: 2000-01-23T04:56:07.000+00:00
+            version_number: 1
+            archive_date: 2000-01-23
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            fiscal_year: 0
+            funding_categories:
+            - recovery_act
+            - recovery_act
+            forecasted_project_start_date: 2000-01-23
+            additional_info_url: grants.gov
+            funding_instruments:
+            - cooperative_agreement
+            - cooperative_agreement
+            applicant_types:
+            - state_governments
+            - state_governments
+            forecasted_close_date_description: Proposals will probably be due on this
+              date
+            forecasted_post_date: 2000-01-23
+            award_ceiling: 100000
+            agency_email_address: fake_email@grants.gov
+            close_date_description: Proposals are due earlier than usual.
+            award_floor: 10000
+            is_forecast: false
+            additional_info_url_description: Click me for more info
+            post_date: 2000-01-23
+            funding_category_description: Economic Support
+            agency_email_address_description: Click me to email the agency
+            estimated_total_program_funding: 10000000
+            summary_description: This opportunity aims to unravel the mysteries of
+              the universe.
+          opportunity_number: ABC-123-XYZ-001
+          agency_name: Department of Examples
+          agency: US-ABC
+          agency_code: US-ABC
+          opportunity_title: Research into conservation techniques
+          created_at: 2000-01-23T04:56:07.000+00:00
+          opportunity_assistance_listings:
+          - assistance_listing_number: "43.012"
+            program_title: Space Technology
+          - assistance_listing_number: "43.012"
+            program_title: Space Technology
+          opportunity_status: posted
+          category_explanation: category_explanation
+          opportunity_id: 12345
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          category: discretionary
+          top_level_agency_name: Department of Examples
+        - summary:
+            close_date: 2000-01-23
+            is_cost_sharing: true
+            applicant_eligibility_description: All types of domestic applicants are
+              eligible to apply
+            forecasted_award_date: 2000-01-23
+            expected_number_of_awards: 10
+            forecasted_close_date: 2000-01-23
+            agency_contact_description: "For more information, reach out to Jane Smith\
+              \ at agency US-ABC"
+            created_at: 2000-01-23T04:56:07.000+00:00
+            version_number: 1
+            archive_date: 2000-01-23
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            fiscal_year: 0
+            funding_categories:
+            - recovery_act
+            - recovery_act
+            forecasted_project_start_date: 2000-01-23
+            additional_info_url: grants.gov
+            funding_instruments:
+            - cooperative_agreement
+            - cooperative_agreement
+            applicant_types:
+            - state_governments
+            - state_governments
+            forecasted_close_date_description: Proposals will probably be due on this
+              date
+            forecasted_post_date: 2000-01-23
+            award_ceiling: 100000
+            agency_email_address: fake_email@grants.gov
+            close_date_description: Proposals are due earlier than usual.
+            award_floor: 10000
+            is_forecast: false
+            additional_info_url_description: Click me for more info
+            post_date: 2000-01-23
+            funding_category_description: Economic Support
+            agency_email_address_description: Click me to email the agency
+            estimated_total_program_funding: 10000000
+            summary_description: This opportunity aims to unravel the mysteries of
+              the universe.
+          opportunity_number: ABC-123-XYZ-001
+          agency_name: Department of Examples
+          agency: US-ABC
+          agency_code: US-ABC
+          opportunity_title: Research into conservation techniques
+          created_at: 2000-01-23T04:56:07.000+00:00
+          opportunity_assistance_listings:
+          - assistance_listing_number: "43.012"
+            program_title: Space Technology
+          - assistance_listing_number: "43.012"
+            program_title: Space Technology
+          opportunity_status: posted
+          category_explanation: category_explanation
+          opportunity_id: 12345
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          category: discretionary
+          top_level_agency_name: Department of Examples
+        pagination_info:
+          total_records: 42
+          page_offset: 1
+          total_pages: 2
+          sort_order:
+          - sort_direction: ascending
+            order_by: id
+          - sort_direction: ascending
+            order_by: id
+          page_size: 25
+        message: Success
+        facet_counts:
+          opportunity_status:
+            forecasted: 2
+            posted: 1
+          is_cost_sharing:
+            "false": 3
+            "true": 1
+          agency:
+            DOC: 3
+            USAID: 4
+          funding_instrument:
+            cooperative_agreement: 4
+            grant: 3
+          funding_category:
+            agriculture: 5
+            arts: 3
+            recovery_act: 2
+          applicant_type:
+            city_or_township_governments: 1
+            county_governments: 2
+            state_governments: 3
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/OpportunityV1"
+          title: data
+          type: array
+        facet_counts:
+          $ref: "#/components/schemas/OpportunityFacetV1"
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        pagination_info:
+          $ref: "#/components/schemas/PaginationInfo"
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: OpportunitySearchResponseV1
+    OpportunityStatusFilterV1:
+      example:
+        one_of:
+        - forecasted
+        - forecasted
+      properties:
+        one_of:
+          items:
+            enum:
+            - forecasted
+            - posted
+            - closed
+            - archived
+            type: string
+          minItems: 1
+          title: one_of
+          type: array
+      title: OpportunityStatusFilterV1
+    OpportunityStatusesFilterV1:
+      example:
+        one_of:
+        - archived
+        - archived
+      properties:
+        one_of:
+          items:
+            example: archived
+            type: string
+          minItems: 1
+          title: one_of
+          type: array
+      title: OpportunityStatusesFilterV1
+    OpportunitySummaryV1:
+      example:
+        close_date: 2000-01-23
+        is_cost_sharing: true
+        applicant_eligibility_description: All types of domestic applicants are eligible
+          to apply
+        forecasted_award_date: 2000-01-23
+        expected_number_of_awards: 10
+        forecasted_close_date: 2000-01-23
+        agency_contact_description: "For more information, reach out to Jane Smith\
+          \ at agency US-ABC"
+        created_at: 2000-01-23T04:56:07.000+00:00
+        version_number: 1
+        archive_date: 2000-01-23
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        fiscal_year: 0
+        funding_categories:
+        - recovery_act
+        - recovery_act
+        forecasted_project_start_date: 2000-01-23
+        additional_info_url: grants.gov
+        funding_instruments:
+        - cooperative_agreement
+        - cooperative_agreement
+        applicant_types:
+        - state_governments
+        - state_governments
+        forecasted_close_date_description: Proposals will probably be due on this
+          date
+        forecasted_post_date: 2000-01-23
+        award_ceiling: 100000
+        agency_email_address: fake_email@grants.gov
+        close_date_description: Proposals are due earlier than usual.
+        award_floor: 10000
+        is_forecast: false
+        additional_info_url_description: Click me for more info
+        post_date: 2000-01-23
+        funding_category_description: Economic Support
+        agency_email_address_description: Click me to email the agency
+        estimated_total_program_funding: 10000000
+        summary_description: This opportunity aims to unravel the mysteries of the
+          universe.
+      properties:
+        additional_info_url:
+          description: A URL to a website that can provide additional information
+            about the opportunity
+          example: grants.gov
+          title: additional_info_url
+          type: string
+        additional_info_url_description:
+          description: The text to display for the additional_info_url link
+          example: Click me for more info
+          title: additional_info_url_description
+          type: string
+        agency_contact_description:
+          description: Information regarding contacting the agency who owns the opportunity
+          example: "For more information, reach out to Jane Smith at agency US-ABC"
+          title: agency_contact_description
+          type: string
+        agency_email_address:
+          description: The contact email of the agency who owns the opportunity
+          example: fake_email@grants.gov
+          title: agency_email_address
+          type: string
+        agency_email_address_description:
+          description: The text for the link to the agency email address
+          example: Click me to email the agency
+          title: agency_email_address_description
+          type: string
+        applicant_eligibility_description:
+          description: Additional information about the types of applicants that are
+            eligible
+          example: All types of domestic applicants are eligible to apply
+          title: applicant_eligibility_description
+          type: string
+        applicant_types:
+          items:
+            enum:
+            - state_governments
+            - county_governments
+            - city_or_township_governments
+            - special_district_governments
+            - independent_school_districts
+            - public_and_state_institutions_of_higher_education
+            - private_institutions_of_higher_education
+            - federally_recognized_native_american_tribal_governments
+            - other_native_american_tribal_organizations
+            - public_and_indian_housing_authorities
+            - nonprofits_non_higher_education_with_501c3
+            - nonprofits_non_higher_education_without_501c3
+            - individuals
+            - for_profit_organizations_other_than_small_businesses
+            - small_businesses
+            - other
+            - unrestricted
+            type: string
+          title: applicant_types
+          type: array
+        archive_date:
+          description: When the opportunity will be archived
+          format: date
+          title: archive_date
+          type: string
+        award_ceiling:
+          description: The maximum amount an opportunity would award
+          example: 100000
+          title: award_ceiling
+          type: integer
+        award_floor:
+          description: The minimum amount an opportunity would award
+          example: 10000
+          title: award_floor
+          type: integer
+        close_date:
+          description: The date that the opportunity will close - only set if is_forecast=False
+          format: date
+          title: close_date
+          type: string
+        close_date_description:
+          description: Optional details regarding the close date
+          example: Proposals are due earlier than usual.
+          title: close_date_description
+          type: string
+        created_at:
+          description: When the opportunity summary was created
+          format: date-time
+          title: created_at
+          type: string
+        estimated_total_program_funding:
+          description: The total program funding of the opportunity in US Dollars
+          example: 10000000
+          title: estimated_total_program_funding
+          type: integer
+        expected_number_of_awards:
+          description: The number of awards the opportunity is expected to award
+          example: 10
+          title: expected_number_of_awards
+          type: integer
+        fiscal_year:
+          description: Forecasted opportunity only. The fiscal year the project is
+            expected to be funded and launched
+          title: fiscal_year
+          type: integer
+        forecasted_award_date:
+          description: Forecasted opportunity only. The date the grantor plans to
+            award the opportunity.
+          format: date
+          title: forecasted_award_date
+          type: string
+        forecasted_close_date:
+          description: Forecasted opportunity only. The date the opportunity is expected
+            to be close once posted.
+          format: date
+          title: forecasted_close_date
+          type: string
+        forecasted_close_date_description:
+          description: Forecasted opportunity only. Optional details regarding the
+            forecasted closed date.
+          example: Proposals will probably be due on this date
+          title: forecasted_close_date_description
+          type: string
+        forecasted_post_date:
+          description: "Forecasted opportunity only. The date the opportunity is expected\
+            \ to be posted, and transition out of being a forecast"
+          format: date
+          title: forecasted_post_date
+          type: string
+        forecasted_project_start_date:
+          description: Forecasted opportunity only. The date the grantor expects the
+            award recipient should start their project
+          format: date
+          title: forecasted_project_start_date
+          type: string
+        funding_categories:
+          items:
+            enum:
+            - recovery_act
+            - agriculture
+            - arts
+            - business_and_commerce
+            - community_development
+            - consumer_protection
+            - disaster_prevention_and_relief
+            - education
+            - employment_labor_and_training
+            - energy
+            - environment
+            - food_and_nutrition
+            - health
+            - housing
+            - humanities
+            - infrastructure_investment_and_jobs_act
+            - information_and_statistics
+            - income_security_and_social_services
+            - law_justice_and_legal_services
+            - natural_resources
+            - opportunity_zone_benefits
+            - regional_development
+            - science_technology_and_other_research_and_development
+            - transportation
+            - affordable_care_act
+            - other
+            type: string
+          title: funding_categories
+          type: array
+        funding_category_description:
+          description: Additional information about the funding category
+          example: Economic Support
+          title: funding_category_description
+          type: string
+        funding_instruments:
+          items:
+            enum:
+            - cooperative_agreement
+            - grant
+            - procurement_contract
+            - other
+            type: string
+          title: funding_instruments
+          type: array
+        is_cost_sharing:
+          description: Whether or not the opportunity has a cost sharing/matching
+            requirement
+          title: is_cost_sharing
+          type: boolean
+        is_forecast:
+          description: "Whether the opportunity is forecasted, that is, the information\
+            \ is only an estimate and not yet official"
+          example: false
+          title: is_forecast
+          type: boolean
+        post_date:
+          description: The date the opportunity was posted
+          format: date
+          title: post_date
+          type: string
+        summary_description:
+          description: The summary of the opportunity
+          example: This opportunity aims to unravel the mysteries of the universe.
+          title: summary_description
+          type: string
+        updated_at:
+          description: When the opportunity summary was last updated
+          format: date-time
+          title: updated_at
+          type: string
+        version_number:
+          description: The version number of the opportunity summary
+          example: 1
+          title: version_number
+          type: integer
+      title: OpportunitySummaryV1
+    OpportunityV1:
+      example:
+        summary:
+          close_date: 2000-01-23
+          is_cost_sharing: true
+          applicant_eligibility_description: All types of domestic applicants are
+            eligible to apply
+          forecasted_award_date: 2000-01-23
+          expected_number_of_awards: 10
+          forecasted_close_date: 2000-01-23
+          agency_contact_description: "For more information, reach out to Jane Smith\
+            \ at agency US-ABC"
+          created_at: 2000-01-23T04:56:07.000+00:00
+          version_number: 1
+          archive_date: 2000-01-23
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          fiscal_year: 0
+          funding_categories:
+          - recovery_act
+          - recovery_act
+          forecasted_project_start_date: 2000-01-23
+          additional_info_url: grants.gov
+          funding_instruments:
+          - cooperative_agreement
+          - cooperative_agreement
+          applicant_types:
+          - state_governments
+          - state_governments
+          forecasted_close_date_description: Proposals will probably be due on this
+            date
+          forecasted_post_date: 2000-01-23
+          award_ceiling: 100000
+          agency_email_address: fake_email@grants.gov
+          close_date_description: Proposals are due earlier than usual.
+          award_floor: 10000
+          is_forecast: false
+          additional_info_url_description: Click me for more info
+          post_date: 2000-01-23
+          funding_category_description: Economic Support
+          agency_email_address_description: Click me to email the agency
+          estimated_total_program_funding: 10000000
+          summary_description: This opportunity aims to unravel the mysteries of the
+            universe.
+        opportunity_number: ABC-123-XYZ-001
+        agency_name: Department of Examples
+        agency: US-ABC
+        agency_code: US-ABC
+        opportunity_title: Research into conservation techniques
+        created_at: 2000-01-23T04:56:07.000+00:00
+        opportunity_assistance_listings:
+        - assistance_listing_number: "43.012"
+          program_title: Space Technology
+        - assistance_listing_number: "43.012"
+          program_title: Space Technology
+        opportunity_status: posted
+        category_explanation: category_explanation
+        opportunity_id: 12345
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        category: discretionary
+        top_level_agency_name: Department of Examples
+      properties:
+        agency:
+          description: "DEPRECATED - use: agency_code"
+          example: US-ABC
+          title: agency
+          type: string
+        agency_code:
+          description: The agency who created the opportunity
+          example: US-ABC
+          title: agency_code
+          type: string
+        agency_name:
+          description: The name of the agency who created the opportunity
+          example: Department of Examples
+          title: agency_name
+          type: string
+        category:
+          description: The opportunity category
+          enum:
+          - discretionary
+          - mandatory
+          - continuation
+          - earmark
+          - other
+          example: discretionary
+          title: category
+          type: string
+        category_explanation:
+          description: Explanation of the category when the category is 'O' (other)
+          title: category_explanation
+          type: string
+          example: null
+        created_at:
+          format: date-time
+          readOnly: true
+          title: created_at
+          type: string
+        opportunity_assistance_listings:
+          items:
+            $ref: "#/components/schemas/OpportunityAssistanceListingV1"
+          title: opportunity_assistance_listings
+          type: array
+        opportunity_id:
+          description: The internal ID of the opportunity
+          example: 12345
+          title: opportunity_id
+          type: integer
+        opportunity_number:
+          description: The funding opportunity number
+          example: ABC-123-XYZ-001
+          title: opportunity_number
+          type: string
+        opportunity_status:
+          description: The current status of the opportunity
+          enum:
+          - forecasted
+          - posted
+          - closed
+          - archived
+          example: posted
+          title: opportunity_status
+          type: string
+        opportunity_title:
+          description: The title of the opportunity
+          example: Research into conservation techniques
+          title: opportunity_title
+          type: string
+        summary:
+          $ref: "#/components/schemas/OpportunitySummaryV1"
+        top_level_agency_name:
+          description: The name of the top level agency who created the oppportunity
+          example: Department of Examples
+          title: top_level_agency_name
+          type: string
+        updated_at:
+          format: date-time
+          readOnly: true
+          title: updated_at
+          type: string
+      title: OpportunityV1
+    OpportunityWithAttachmentsV1:
+      example:
+        summary:
+          close_date: 2000-01-23
+          is_cost_sharing: true
+          applicant_eligibility_description: All types of domestic applicants are
+            eligible to apply
+          forecasted_award_date: 2000-01-23
+          expected_number_of_awards: 10
+          forecasted_close_date: 2000-01-23
+          agency_contact_description: "For more information, reach out to Jane Smith\
+            \ at agency US-ABC"
+          created_at: 2000-01-23T04:56:07.000+00:00
+          version_number: 1
+          archive_date: 2000-01-23
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          fiscal_year: 0
+          funding_categories:
+          - recovery_act
+          - recovery_act
+          forecasted_project_start_date: 2000-01-23
+          additional_info_url: grants.gov
+          funding_instruments:
+          - cooperative_agreement
+          - cooperative_agreement
+          applicant_types:
+          - state_governments
+          - state_governments
+          forecasted_close_date_description: Proposals will probably be due on this
+            date
+          forecasted_post_date: 2000-01-23
+          award_ceiling: 100000
+          agency_email_address: fake_email@grants.gov
+          close_date_description: Proposals are due earlier than usual.
+          award_floor: 10000
+          is_forecast: false
+          additional_info_url_description: Click me for more info
+          post_date: 2000-01-23
+          funding_category_description: Economic Support
+          agency_email_address_description: Click me to email the agency
+          estimated_total_program_funding: 10000000
+          summary_description: This opportunity aims to unravel the mysteries of the
+            universe.
+        opportunity_number: ABC-123-XYZ-001
+        agency_name: Department of Examples
+        attachments:
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          mime_type: application/pdf
+          file_name: my_NOFO.pdf
+          download_path: download_path
+          file_description: The full announcement NOFO
+          created_at: 2000-01-23T04:56:07.000+00:00
+          file_size_bytes: 1024
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          mime_type: application/pdf
+          file_name: my_NOFO.pdf
+          download_path: download_path
+          file_description: The full announcement NOFO
+          created_at: 2000-01-23T04:56:07.000+00:00
+          file_size_bytes: 1024
+        agency: US-ABC
+        agency_code: US-ABC
+        opportunity_title: Research into conservation techniques
+        competitions:
+        - closing_date: 2000-01-23
+          opportunity_assistance_listing:
+            assistance_listing_number: "43.012"
+            program_title: Space Technology
+          competition_title: Proposal for Advanced Research
+          opportunity_id: 0
+          is_open: true
+          competition_id: 123e4567-e89b-12d3-a456-426614174000
+          competition_forms:
+          - form:
+              form_json_schema:
+                properties:
+                  ApplicationNumber:
+                    maxLength: 120
+                    minLength: 1
+                    title: Application number
+                    type: number
+                  Date:
+                    format: date
+                    title: 'Date of application '
+                    type: string
+                  Description:
+                    maxLength: 15
+                    minLength: 0
+                    title: Description for application
+                    type: string
+                  Title:
+                    maxLength: 60
+                    minLength: 1
+                    title: Title
+                    type: string
+                title: Test form for testing
+                type: object
+              form_instruction:
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                file_name: instructions.pdf
+                download_path: download_path
+                created_at: 2000-01-23T04:56:07.000+00:00
+              form_id: 123e4567-e89b-12d3-a456-426614174000
+              form_name: ABC Project Form
+              form_ui_schema: ""
+            is_required: true
+          - form:
+              form_json_schema:
+                properties:
+                  ApplicationNumber:
+                    maxLength: 120
+                    minLength: 1
+                    title: Application number
+                    type: number
+                  Date:
+                    format: date
+                    title: 'Date of application '
+                    type: string
+                  Description:
+                    maxLength: 15
+                    minLength: 0
+                    title: Description for application
+                    type: string
+                  Title:
+                    maxLength: 60
+                    minLength: 1
+                    title: Title
+                    type: string
+                title: Test form for testing
+                type: object
+              form_instruction:
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                file_name: instructions.pdf
+                download_path: download_path
+                created_at: 2000-01-23T04:56:07.000+00:00
+              form_id: 123e4567-e89b-12d3-a456-426614174000
+              form_name: ABC Project Form
+              form_ui_schema: ""
+            is_required: true
+          contact_info: |-
+            Bob Smith
+            FakeMail@fake.com
+          competition_instructions:
+          - updated_at: 2000-01-23T04:56:07.000+00:00
+            file_name: competition_instructions.pdf
+            download_path: https://cdn.example.com/competition-instructions/file.pdf
+            created_at: 2000-01-23T04:56:07.000+00:00
+          - updated_at: 2000-01-23T04:56:07.000+00:00
+            file_name: competition_instructions.pdf
+            download_path: https://cdn.example.com/competition-instructions/file.pdf
+            created_at: 2000-01-23T04:56:07.000+00:00
+          open_to_applicants:
+          - individual
+          - individual
+          opening_date: 2000-01-23
+        - closing_date: 2000-01-23
+          opportunity_assistance_listing:
+            assistance_listing_number: "43.012"
+            program_title: Space Technology
+          competition_title: Proposal for Advanced Research
+          opportunity_id: 0
+          is_open: true
+          competition_id: 123e4567-e89b-12d3-a456-426614174000
+          competition_forms:
+          - form:
+              form_json_schema:
+                properties:
+                  ApplicationNumber:
+                    maxLength: 120
+                    minLength: 1
+                    title: Application number
+                    type: number
+                  Date:
+                    format: date
+                    title: 'Date of application '
+                    type: string
+                  Description:
+                    maxLength: 15
+                    minLength: 0
+                    title: Description for application
+                    type: string
+                  Title:
+                    maxLength: 60
+                    minLength: 1
+                    title: Title
+                    type: string
+                title: Test form for testing
+                type: object
+              form_instruction:
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                file_name: instructions.pdf
+                download_path: download_path
+                created_at: 2000-01-23T04:56:07.000+00:00
+              form_id: 123e4567-e89b-12d3-a456-426614174000
+              form_name: ABC Project Form
+              form_ui_schema: ""
+            is_required: true
+          - form:
+              form_json_schema:
+                properties:
+                  ApplicationNumber:
+                    maxLength: 120
+                    minLength: 1
+                    title: Application number
+                    type: number
+                  Date:
+                    format: date
+                    title: 'Date of application '
+                    type: string
+                  Description:
+                    maxLength: 15
+                    minLength: 0
+                    title: Description for application
+                    type: string
+                  Title:
+                    maxLength: 60
+                    minLength: 1
+                    title: Title
+                    type: string
+                title: Test form for testing
+                type: object
+              form_instruction:
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                file_name: instructions.pdf
+                download_path: download_path
+                created_at: 2000-01-23T04:56:07.000+00:00
+              form_id: 123e4567-e89b-12d3-a456-426614174000
+              form_name: ABC Project Form
+              form_ui_schema: ""
+            is_required: true
+          contact_info: |-
+            Bob Smith
+            FakeMail@fake.com
+          competition_instructions:
+          - updated_at: 2000-01-23T04:56:07.000+00:00
+            file_name: competition_instructions.pdf
+            download_path: https://cdn.example.com/competition-instructions/file.pdf
+            created_at: 2000-01-23T04:56:07.000+00:00
+          - updated_at: 2000-01-23T04:56:07.000+00:00
+            file_name: competition_instructions.pdf
+            download_path: https://cdn.example.com/competition-instructions/file.pdf
+            created_at: 2000-01-23T04:56:07.000+00:00
+          open_to_applicants:
+          - individual
+          - individual
+          opening_date: 2000-01-23
+        created_at: 2000-01-23T04:56:07.000+00:00
+        opportunity_assistance_listings:
+        - assistance_listing_number: "43.012"
+          program_title: Space Technology
+        - assistance_listing_number: "43.012"
+          program_title: Space Technology
+        opportunity_status: posted
+        category_explanation: category_explanation
+        opportunity_id: 12345
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        category: discretionary
+        top_level_agency_name: Department of Examples
+      properties:
+        agency:
+          description: "DEPRECATED - use: agency_code"
+          example: US-ABC
+          title: agency
+          type: string
+        agency_code:
+          description: The agency who created the opportunity
+          example: US-ABC
+          title: agency_code
+          type: string
+        agency_name:
+          description: The name of the agency who created the opportunity
+          example: Department of Examples
+          title: agency_name
+          type: string
+        attachments:
+          description: List of attachments associated with the opportunity
+          items:
+            $ref: "#/components/schemas/OpportunityAttachmentV1"
+          title: attachments
+          type: array
+        category:
+          description: The opportunity category
+          enum:
+          - discretionary
+          - mandatory
+          - continuation
+          - earmark
+          - other
+          example: discretionary
+          title: category
+          type: string
+        category_explanation:
+          description: Explanation of the category when the category is 'O' (other)
+          title: category_explanation
+          type: string
+          example: null
+        competitions:
+          description: List of competitions associated with the opportunity
+          items:
+            $ref: "#/components/schemas/CompetitionAlpha"
+          title: competitions
+          type: array
+        created_at:
+          format: date-time
+          readOnly: true
+          title: created_at
+          type: string
+        opportunity_assistance_listings:
+          items:
+            $ref: "#/components/schemas/OpportunityAssistanceListingV1"
+          title: opportunity_assistance_listings
+          type: array
+        opportunity_id:
+          description: The internal ID of the opportunity
+          example: 12345
+          title: opportunity_id
+          type: integer
+        opportunity_number:
+          description: The funding opportunity number
+          example: ABC-123-XYZ-001
+          title: opportunity_number
+          type: string
+        opportunity_status:
+          description: The current status of the opportunity
+          enum:
+          - forecasted
+          - posted
+          - closed
+          - archived
+          example: posted
+          title: opportunity_status
+          type: string
+        opportunity_title:
+          description: The title of the opportunity
+          example: Research into conservation techniques
+          title: opportunity_title
+          type: string
+        summary:
+          $ref: "#/components/schemas/OpportunitySummaryV1"
+        top_level_agency_name:
+          description: The name of the top level agency who created the oppportunity
+          example: Department of Examples
+          title: top_level_agency_name
+          type: string
+        updated_at:
+          format: date-time
+          readOnly: true
+          title: updated_at
+          type: string
+      title: OpportunityWithAttachmentsV1
+    PaginationInfo:
+      example:
+        total_records: 42
+        page_offset: 1
+        total_pages: 2
+        sort_order:
+        - sort_direction: ascending
+          order_by: id
+        - sort_direction: ascending
+          order_by: id
+        page_size: 25
+      properties:
+        page_offset:
+          description: The page number that was fetched
+          example: 1
+          title: page_offset
+          type: integer
+        page_size:
+          description: The size of the page fetched
+          example: 25
+          title: page_size
+          type: integer
+        sort_order:
+          description: The sort order passed in originally
+          items:
+            $ref: "#/components/schemas/SortOrder"
+          title: sort_order
+          type: array
+        total_pages:
+          description: The total number of pages that can be fetched
+          example: 2
+          title: total_pages
+          type: integer
+        total_records:
+          description: The total number of records fetchable
+          example: 42
+          title: total_records
+          type: integer
+      title: PaginationInfo
+    PostDateFilterV1:
+      example:
+        end_date: 2000-01-23
+        start_date_relative: 205491
+        end_date_relative: -839834
+        start_date: 2000-01-23
+      properties:
+        end_date:
+          format: date
+          title: end_date
+          type: string
+        end_date_relative:
+          maximum: 1000000
+          minimum: -1000000
+          title: end_date_relative
+          type: integer
+        start_date:
+          format: date
+          title: end_date
+          type: string
+        start_date_relative:
+          maximum: 1000000
+          minimum: -1000000
+          title: end_date_relative
+          type: integer
+      title: CloseDateFilterV1
+    SamGovEntity:
+      example:
+        legal_business_name: legal_business_name
+        uei: uei
+        expiration_date: 2000-01-23
+      properties:
+        expiration_date:
+          format: date
+          title: expiration_date
+          type: string
+        legal_business_name:
+          title: legal_business_name
+          type: string
+        uei:
+          title: uei
+          type: string
+      title: SamGovEntity
+    SavedOpportunityResponseV1:
+      example:
+        summary:
+          close_date: 2024-01-01
+          is_forecast: false
+          post_date: 2024-01-01
+        opportunity_status: posted
+        opportunity_id: 1234
+        opportunity_title: my title
+      properties:
+        opportunity_id:
+          description: The ID of the saved opportunity
+          example: 1234
+          title: opportunity_id
+          type: integer
+        opportunity_status:
+          description: The current status of the opportunity
+          enum:
+          - forecasted
+          - posted
+          - closed
+          - archived
+          example: posted
+          title: opportunity_status
+          type: string
+        opportunity_title:
+          description: The title of the opportunity
+          example: my title
+          title: opportunity_title
+          type: string
+        summary:
+          $ref: "#/components/schemas/SavedOpportunitySummaryV1"
+      title: SavedOpportunityResponseV1
+    SavedOpportunitySummaryV1:
+      example:
+        close_date: 2024-01-01
+        is_forecast: false
+        post_date: 2024-01-01
+      properties:
+        close_date:
+          description: The date the opportunity will close
+          example: 2024-01-01
+          format: date
+          title: close_date
+          type: string
+        is_forecast:
+          description: Whether the opportunity is forecasted
+          example: false
+          title: is_forecast
+          type: boolean
+        post_date:
+          description: The date the opportunity was posted
+          example: 2024-01-01
+          format: date
+          title: post_date
+          type: string
+      title: SavedOpportunitySummaryV1
+    SavedSearchResponse:
+      example:
+        saved_search_id: 123e4567-e89b-12d3-a456-426614174000
+        name: Grant opportunities in California
+        created_at: 2024-01-01T00:00:00Z
+        search_query:
+          query_operator: OR
+          pagination:
+            page_offset: 1
+            sort_order:
+            - sort_direction: ascending
+              order_by: relevancy
+            - sort_direction: ascending
+              order_by: relevancy
+            - sort_direction: ascending
+              order_by: relevancy
+            - sort_direction: ascending
+              order_by: relevancy
+            - sort_direction: ascending
+              order_by: relevancy
+            page_size: 25
+          query: research
+          format: json
+          experimental:
+            scoring_rule: default
+          filters:
+            close_date:
+              end_date: 2000-01-23
+              start_date_relative: 205491
+              end_date_relative: -839834
+              start_date: 2000-01-23
+            is_cost_sharing:
+              one_of:
+              - true
+              - true
+            agency:
+              one_of:
+              - USAID
+              - USAID
+            award_ceiling:
+              min: 0
+              max: 10000000
+            expected_number_of_awards:
+              min: 0
+              max: 25
+            funding_instrument:
+              one_of:
+              - cooperative_agreement
+              - cooperative_agreement
+            assistance_listing_number:
+              one_of:
+              - "45.149"
+              - "45.149"
+            award_floor:
+              min: 0
+              max: 10000
+            opportunity_status:
+              one_of:
+              - forecasted
+              - forecasted
+            top_level_agency:
+              one_of:
+              - USAID
+              - USAID
+            post_date:
+              end_date: 2000-01-23
+              start_date_relative: 205491
+              end_date_relative: -839834
+              start_date: 2000-01-23
+            funding_category:
+              one_of:
+              - recovery_act
+              - recovery_act
+            estimated_total_program_funding:
+              min: 0
+              max: 10000000
+            applicant_type:
+              one_of:
+              - state_governments
+              - state_governments
+      properties:
+        created_at:
+          description: When the search was saved
+          example: 2024-01-01T00:00:00Z
+          format: date-time
+          title: created_at
+          type: string
+        name:
+          description: Name of the saved search
+          example: Grant opportunities in California
+          title: name
+          type: string
+        saved_search_id:
+          description: The ID of the saved search
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          title: saved_search_id
+          type: string
+        search_query:
+          $ref: "#/components/schemas/OpportunitySearchRequestV1"
+      title: SavedSearchResponse
+    SortOrder:
+      example:
+        sort_direction: ascending
+        order_by: id
+      properties:
+        order_by:
+          description: The field that the records were sorted by
+          example: id
+          title: order_by
+          type: string
+        sort_direction:
+          description: The direction the records are sorted
+          enum:
+          - ascending
+          - descending
+          title: sort_direction
+          type: string
+      title: SortOrder
+    SortOrderAgencyPaginationV1:
+      example:
+        sort_direction: ascending
+        order_by: agency_code
+      properties:
+        order_by:
+          description: The field to sort the response by
+          enum:
+          - agency_code
+          - agency_name
+          - created_at
+          title: order_by
+          type: string
+        sort_direction:
+          description: Whether to sort the response ascending or descending
+          enum:
+          - ascending
+          - descending
+          title: sort_direction
+          type: string
+      required:
+      - order_by
+      - sort_direction
+      title: SortOrderAgencyPaginationV1
+    SortOrderAgencySearchPaginationV1:
+      example:
+        sort_direction: ascending
+        order_by: agency_code
+      properties:
+        order_by:
+          description: The field to sort the response by
+          enum:
+          - agency_code
+          - agency_name
+          title: order_by
+          type: string
+        sort_direction:
+          description: Whether to sort the response ascending or descending
+          enum:
+          - ascending
+          - descending
+          title: sort_direction
+          type: string
+      required:
+      - order_by
+      - sort_direction
+      title: SortOrderAgencySearchPaginationV1
+    SortOrderExtractMetadataPaginationV1:
+      example:
+        sort_direction: ascending
+        order_by: created_at
+      properties:
+        order_by:
+          description: The field to sort the response by
+          enum:
+          - created_at
+          title: order_by
+          type: string
+        sort_direction:
+          description: Whether to sort the response ascending or descending
+          enum:
+          - ascending
+          - descending
+          title: sort_direction
+          type: string
+      required:
+      - order_by
+      - sort_direction
+      title: SortOrderExtractMetadataPaginationV1
+    SortOrderOpportunityPaginationV1:
+      example:
+        sort_direction: ascending
+        order_by: relevancy
+      properties:
+        order_by:
+          description: The field to sort the response by
+          enum:
+          - relevancy
+          - opportunity_id
+          - opportunity_number
+          - opportunity_title
+          - post_date
+          - close_date
+          - agency_code
+          - agency_name
+          - top_level_agency_name
+          - award_floor
+          - award_ceiling
+          title: order_by
+          type: string
+        sort_direction:
+          description: Whether to sort the response ascending or descending
+          enum:
+          - ascending
+          - descending
+          title: sort_direction
+          type: string
+      required:
+      - order_by
+      - sort_direction
+      title: SortOrderOpportunityPaginationV1
+    SortOrderUserGetSavedOpportunityPaginationV1:
+      example:
+        sort_direction: ascending
+        order_by: created_at
+      properties:
+        order_by:
+          description: The field to sort the response by
+          enum:
+          - created_at
+          - updated_at
+          - opportunity_title
+          - close_date
+          title: order_by
+          type: string
+        sort_direction:
+          description: Whether to sort the response ascending or descending
+          enum:
+          - ascending
+          - descending
+          title: sort_direction
+          type: string
+      required:
+      - order_by
+      - sort_direction
+      title: SortOrderUserGetSavedOpportunityPaginationV1
+    SortOrderUserGetSavedSearchPaginationV1:
+      example:
+        sort_direction: ascending
+        order_by: created_at
+      properties:
+        order_by:
+          description: The field to sort the response by
+          enum:
+          - created_at
+          - updated_at
+          - name
+          title: order_by
+          type: string
+        sort_direction:
+          description: Whether to sort the response ascending or descending
+          enum:
+          - ascending
+          - descending
+          title: sort_direction
+          type: string
+      required:
+      - order_by
+      - sort_direction
+      title: SortOrderUserGetSavedSearchPaginationV1
+    TopLevelAgencyOppSearchFilterV1:
+      example:
+        one_of:
+        - USAID
+        - USAID
+      properties:
+        one_of:
+          items:
+            example: USAID
+            minLength: 2
+            type: string
+          minItems: 1
+          title: one_of
+          type: array
+      title: AgencyOppSearchFilterV1
+    User:
+      example:
+        user_id: 861a0148-cf2c-432b-b0b3-690016299ab1
+        external_user_type: login_gov
+        email: user@example.com
+      properties:
+        email:
+          description: The email address returned from Oauth2 provider
+          example: user@example.com
+          title: email
+          type: string
+        external_user_type:
+          description: The Oauth2 provider through which a user was authenticated
+          enum:
+          - login_gov
+          example: login_gov
+          title: external_user_type
+          type: string
+        user_id:
+          description: The internal ID of a user
+          example: 861a0148-cf2c-432b-b0b3-690016299ab1
+          title: user_id
+          type: string
+      title: User
+    UserDeleteSavedOpportunityResponse:
+      example:
+        status_code: 200
+        data: ""
+        message: Success
+      properties:
+        data:
+          title: data
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserTokenLogoutResponse
+    UserDeleteSavedSearchResponse:
+      example:
+        status_code: 200
+        data: ""
+        message: Success
+      properties:
+        data:
+          title: data
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserTokenLogoutResponse
+    UserGetResponse:
+      example:
+        status_code: 200
+        data:
+          user_id: 861a0148-cf2c-432b-b0b3-690016299ab1
+          external_user_type: login_gov
+          email: user@example.com
+        message: Success
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserGetResponse
+    UserGetSavedOpportunityPaginationV1:
+      example:
+        page_offset: 1
+        sort_order:
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        page_size: 25
+      properties:
+        page_offset:
+          description: "The page number to fetch, starts counting from 1"
+          example: 1
+          minimum: 1
+          title: page_offset
+          type: integer
+        page_size:
+          description: The size of the page to fetch
+          example: 25
+          maximum: 5000
+          minimum: 1
+          title: page_size
+          type: integer
+        sort_order:
+          default:
+          - order_by: created_at
+            sort_direction: descending
+          description: The list of sorting rules
+          items:
+            $ref: "#/components/schemas/SortOrderUserGetSavedOpportunityPaginationV1"
+          maxItems: 5
+          minItems: 1
+          title: sort_order
+          type: array
+      required:
+      - page_offset
+      - page_size
+      title: UserGetSavedOpportunityPaginationV1
+    UserGetSavedSearchPaginationV1:
+      example:
+        page_offset: 1
+        sort_order:
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        - sort_direction: ascending
+          order_by: created_at
+        page_size: 25
+      properties:
+        page_offset:
+          description: "The page number to fetch, starts counting from 1"
+          example: 1
+          minimum: 1
+          title: page_offset
+          type: integer
+        page_size:
+          description: The size of the page to fetch
+          example: 25
+          maximum: 5000
+          minimum: 1
+          title: page_size
+          type: integer
+        sort_order:
+          default:
+          - order_by: created_at
+            sort_direction: descending
+          description: The list of sorting rules
+          items:
+            $ref: "#/components/schemas/SortOrderUserGetSavedSearchPaginationV1"
+          maxItems: 5
+          minItems: 1
+          title: sort_order
+          type: array
+      required:
+      - page_offset
+      - page_size
+      title: UserGetSavedSearchPaginationV1
+    UserOrganization:
+      example:
+        organization_id: 123e4567-e89b-12d3-a456-426614174000
+        is_organization_owner: true
+        sam_gov_entity:
+          legal_business_name: legal_business_name
+          uei: uei
+          expiration_date: 2000-01-23
+      properties:
+        is_organization_owner:
+          description: Whether the user is an owner of this organization
+          example: true
+          title: is_organization_owner
+          type: boolean
+        organization_id:
+          description: The internal ID of the organization
+          example: 123e4567-e89b-12d3-a456-426614174000
+          title: organization_id
+          type: string
+        sam_gov_entity:
+          $ref: "#/components/schemas/SamGovEntity"
+      title: UserOrganization
+    UserOrganizationsResponse:
+      example:
+        status_code: 200
+        data:
+        - organization_id: 123e4567-e89b-12d3-a456-426614174000
+          is_organization_owner: true
+          sam_gov_entity:
+            legal_business_name: legal_business_name
+            uei: uei
+            expiration_date: 2000-01-23
+        - organization_id: 123e4567-e89b-12d3-a456-426614174000
+          is_organization_owner: true
+          sam_gov_entity:
+            legal_business_name: legal_business_name
+            uei: uei
+            expiration_date: 2000-01-23
+        message: Success
+      properties:
+        data:
+          description: List of organizations the user is associated with
+          items:
+            $ref: "#/components/schemas/UserOrganization"
+          title: data
+          type: array
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserOrganizationsResponse
+    UserSaveOpportunityRequest:
+      example:
+        opportunity_id: 0
+      properties:
+        opportunity_id:
+          title: opportunity_id
+          type: integer
+      required:
+      - opportunity_id
+      title: UserSaveOpportunityRequest
+    UserSaveOpportunityResponse:
+      example:
+        status_code: 200
+        data: ""
+        message: Success
+      properties:
+        data:
+          title: data
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserTokenLogoutResponse
+    UserSaveSearchRequest:
+      example:
+        name: Example search
+        search_query:
+          query_operator: OR
+          pagination:
+            page_offset: 1
+            sort_order:
+            - sort_direction: ascending
+              order_by: relevancy
+            - sort_direction: ascending
+              order_by: relevancy
+            - sort_direction: ascending
+              order_by: relevancy
+            - sort_direction: ascending
+              order_by: relevancy
+            - sort_direction: ascending
+              order_by: relevancy
+            page_size: 25
+          query: research
+          format: json
+          experimental:
+            scoring_rule: default
+          filters:
+            close_date:
+              end_date: 2000-01-23
+              start_date_relative: 205491
+              end_date_relative: -839834
+              start_date: 2000-01-23
+            is_cost_sharing:
+              one_of:
+              - true
+              - true
+            agency:
+              one_of:
+              - USAID
+              - USAID
+            award_ceiling:
+              min: 0
+              max: 10000000
+            expected_number_of_awards:
+              min: 0
+              max: 25
+            funding_instrument:
+              one_of:
+              - cooperative_agreement
+              - cooperative_agreement
+            assistance_listing_number:
+              one_of:
+              - "45.149"
+              - "45.149"
+            award_floor:
+              min: 0
+              max: 10000
+            opportunity_status:
+              one_of:
+              - forecasted
+              - forecasted
+            top_level_agency:
+              one_of:
+              - USAID
+              - USAID
+            post_date:
+              end_date: 2000-01-23
+              start_date_relative: 205491
+              end_date_relative: -839834
+              start_date: 2000-01-23
+            funding_category:
+              one_of:
+              - recovery_act
+              - recovery_act
+            estimated_total_program_funding:
+              min: 0
+              max: 10000000
+            applicant_type:
+              one_of:
+              - state_governments
+              - state_governments
+      properties:
+        name:
+          description: Name of the saved search
+          example: Example search
+          title: name
+          type: string
+        search_query:
+          $ref: "#/components/schemas/OpportunitySearchRequestV1"
+      required:
+      - name
+      title: UserSaveSearchRequest
+    UserSaveSearchResponse:
+      example:
+        status_code: 200
+        data:
+          saved_search_id: 123e4567-e89b-12d3-a456-426614174000
+          name: Grant opportunities in California
+          created_at: 2024-01-01T00:00:00Z
+          search_query:
+            query_operator: OR
+            pagination:
+              page_offset: 1
+              sort_order:
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              page_size: 25
+            query: research
+            format: json
+            experimental:
+              scoring_rule: default
+            filters:
+              close_date:
+                end_date: 2000-01-23
+                start_date_relative: 205491
+                end_date_relative: -839834
+                start_date: 2000-01-23
+              is_cost_sharing:
+                one_of:
+                - true
+                - true
+              agency:
+                one_of:
+                - USAID
+                - USAID
+              award_ceiling:
+                min: 0
+                max: 10000000
+              expected_number_of_awards:
+                min: 0
+                max: 25
+              funding_instrument:
+                one_of:
+                - cooperative_agreement
+                - cooperative_agreement
+              assistance_listing_number:
+                one_of:
+                - "45.149"
+                - "45.149"
+              award_floor:
+                min: 0
+                max: 10000
+              opportunity_status:
+                one_of:
+                - forecasted
+                - forecasted
+              top_level_agency:
+                one_of:
+                - USAID
+                - USAID
+              post_date:
+                end_date: 2000-01-23
+                start_date_relative: 205491
+                end_date_relative: -839834
+                start_date: 2000-01-23
+              funding_category:
+                one_of:
+                - recovery_act
+                - recovery_act
+              estimated_total_program_funding:
+                min: 0
+                max: 10000000
+              applicant_type:
+                one_of:
+                - state_governments
+                - state_governments
+        message: Success
+      properties:
+        data:
+          $ref: "#/components/schemas/SavedSearchResponse"
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserSaveSearchResponse
+    UserSavedOpportunitiesRequest:
+      example:
+        pagination:
+          page_offset: 1
+          sort_order:
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          page_size: 25
+      properties:
+        pagination:
+          $ref: "#/components/schemas/UserGetSavedOpportunityPaginationV1"
+      required:
+      - pagination
+      title: UserSavedOpportunitiesRequest
+    UserSavedOpportunitiesResponse:
+      example:
+        status_code: 200
+        data:
+        - summary:
+            close_date: 2024-01-01
+            is_forecast: false
+            post_date: 2024-01-01
+          opportunity_status: posted
+          opportunity_id: 1234
+          opportunity_title: my title
+        - summary:
+            close_date: 2024-01-01
+            is_forecast: false
+            post_date: 2024-01-01
+          opportunity_status: posted
+          opportunity_id: 1234
+          opportunity_title: my title
+        message: Success
+      properties:
+        data:
+          description: List of saved opportunities
+          items:
+            $ref: "#/components/schemas/SavedOpportunityResponseV1"
+          title: data
+          type: array
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserSavedOpportunitiesResponse
+    UserSavedSearchesRequest:
+      example:
+        pagination:
+          page_offset: 1
+          sort_order:
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          - sort_direction: ascending
+            order_by: created_at
+          page_size: 25
+      properties:
+        pagination:
+          $ref: "#/components/schemas/UserGetSavedSearchPaginationV1"
+      required:
+      - pagination
+      title: UserSavedSearchesRequest
+    UserSavedSearchesResponse:
+      example:
+        status_code: 200
+        data:
+        - saved_search_id: 123e4567-e89b-12d3-a456-426614174000
+          name: Grant opportunities in California
+          created_at: 2024-01-01T00:00:00Z
+          search_query:
+            query_operator: OR
+            pagination:
+              page_offset: 1
+              sort_order:
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              page_size: 25
+            query: research
+            format: json
+            experimental:
+              scoring_rule: default
+            filters:
+              close_date:
+                end_date: 2000-01-23
+                start_date_relative: 205491
+                end_date_relative: -839834
+                start_date: 2000-01-23
+              is_cost_sharing:
+                one_of:
+                - true
+                - true
+              agency:
+                one_of:
+                - USAID
+                - USAID
+              award_ceiling:
+                min: 0
+                max: 10000000
+              expected_number_of_awards:
+                min: 0
+                max: 25
+              funding_instrument:
+                one_of:
+                - cooperative_agreement
+                - cooperative_agreement
+              assistance_listing_number:
+                one_of:
+                - "45.149"
+                - "45.149"
+              award_floor:
+                min: 0
+                max: 10000
+              opportunity_status:
+                one_of:
+                - forecasted
+                - forecasted
+              top_level_agency:
+                one_of:
+                - USAID
+                - USAID
+              post_date:
+                end_date: 2000-01-23
+                start_date_relative: 205491
+                end_date_relative: -839834
+                start_date: 2000-01-23
+              funding_category:
+                one_of:
+                - recovery_act
+                - recovery_act
+              estimated_total_program_funding:
+                min: 0
+                max: 10000000
+              applicant_type:
+                one_of:
+                - state_governments
+                - state_governments
+        - saved_search_id: 123e4567-e89b-12d3-a456-426614174000
+          name: Grant opportunities in California
+          created_at: 2024-01-01T00:00:00Z
+          search_query:
+            query_operator: OR
+            pagination:
+              page_offset: 1
+              sort_order:
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              - sort_direction: ascending
+                order_by: relevancy
+              page_size: 25
+            query: research
+            format: json
+            experimental:
+              scoring_rule: default
+            filters:
+              close_date:
+                end_date: 2000-01-23
+                start_date_relative: 205491
+                end_date_relative: -839834
+                start_date: 2000-01-23
+              is_cost_sharing:
+                one_of:
+                - true
+                - true
+              agency:
+                one_of:
+                - USAID
+                - USAID
+              award_ceiling:
+                min: 0
+                max: 10000000
+              expected_number_of_awards:
+                min: 0
+                max: 25
+              funding_instrument:
+                one_of:
+                - cooperative_agreement
+                - cooperative_agreement
+              assistance_listing_number:
+                one_of:
+                - "45.149"
+                - "45.149"
+              award_floor:
+                min: 0
+                max: 10000
+              opportunity_status:
+                one_of:
+                - forecasted
+                - forecasted
+              top_level_agency:
+                one_of:
+                - USAID
+                - USAID
+              post_date:
+                end_date: 2000-01-23
+                start_date_relative: 205491
+                end_date_relative: -839834
+                start_date: 2000-01-23
+              funding_category:
+                one_of:
+                - recovery_act
+                - recovery_act
+              estimated_total_program_funding:
+                min: 0
+                max: 10000000
+              applicant_type:
+                one_of:
+                - state_governments
+                - state_governments
+        message: Success
+      properties:
+        data:
+          description: List of saved searches
+          items:
+            $ref: "#/components/schemas/SavedSearchResponse"
+          title: data
+          type: array
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserSavedSearchesResponse
+    UserTokenLogoutResponse:
+      example:
+        status_code: 200
+        data: ""
+        message: Success
+      properties:
+        data:
+          title: data
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserTokenLogoutResponse
+    UserTokenRefreshResponse:
+      example:
+        status_code: 200
+        data: ""
+        message: Success
+      properties:
+        data:
+          title: data
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserTokenLogoutResponse
+    UserUpdateSavedSearchRequest:
+      example:
+        name: Example search
+      properties:
+        name:
+          description: Name of the saved search
+          example: Example search
+          title: name
+          type: string
+      required:
+      - name
+      title: UserUpdateSavedSearchRequest
+    UserUpdateSavedSearchResponse:
+      example:
+        status_code: 200
+        data: ""
+        message: Success
+      properties:
+        data:
+          title: data
+        message:
+          description: The message to return
+          example: Success
+          title: message
+          type: string
+        status_code:
+          description: The HTTP status code
+          example: 200
+          title: status_code
+          type: integer
+      title: UserTokenLogoutResponse
+    ValidationIssue:
+      properties:
+        field:
+          description: The field that failed
+          example: summary.summary_description
+          title: field
+          type: string
+        message:
+          description: The message to return
+          example: Not a valid string.
+          title: message
+          type: string
+        type:
+          description: The type of error
+          example: invalid
+          title: type
+          type: string
+        value:
+          description: The value that failed
+          example: invalid string
+          title: value
+          type: string
+      title: ValidationIssue
+  securitySchemes:
+    ApiJwtAuth:
+      in: header
+      name: X-SGG-Token
+      type: apiKey
+    ApiKeyAuth:
+      in: header
+      name: X-Auth
+      type: apiKey
+    InternalApiJwtAuth:
+      in: header
+      name: X-SGG-Internal-Token
+      type: apiKey

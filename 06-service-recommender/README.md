@@ -99,42 +99,7 @@ Based on [documentation](https://arize.com/docs/phoenix/self-hosting/features/au
     - https://github.com/deepset-ai/haystack-core-integrations/tree/main/integrations/mcp/examples
 * https://docs.haystack.deepset.ai/docs/mcptool#with-the-agent-component
 
-
-### 211 Search v2
-
-Get OpenAPI from https://apiportal.211.org/api-details#api=SearchV2&operation=get-keyword-keywords-keywords-location-location
-
-#### OpenAPI Generator
-
-Use https://openapi-generator.tech/ to generate Python stub for MCP server:
-
-```sh
-docker run --rm -v $PWD:/local openapitools/openapi-generator-cli generate -i /local/SearchV2.yaml -g python-fastapi -o local/mcp-211-search-v2-service
-```
-
-- Well-defined, detailed, and fairly-complete stubs
-- Need to add implementation
-- Will need to manually handle OpenAPI spec updates
-
-#### openapi-mcp-generator (TypeScript)
-
-Use https://github.com/harsha-iiiv/openapi-mcp-generator to convert "any OpenAPI 3.0+ spec into an MCP-compatible server."
-
-Warning: https://xata.io/blog/built-xata-mcp-server states "It saves time and keeps the API and MCP definitions in sync, avoiding duplicate work. On the other hand, a naïve one-to-one mapping of every endpoint to an MCP tool can overwhelm an LLM. LLMs struggle to choose the right action from so many low-level options, leading to frequent errors or unpredictable calls, especially if several endpoints have similar purposes. ... Instead, we can autogenerate the groundwork from OpenAPI, then curate it. In practice, this means using codegen to produce a set of tool definitions and client calls, then trimming or augmenting the OpenAPI spec that generates the tools to align with real-world usage."
-They used [Kubb](https://kubb.dev/plugins/plugin-mcp/).
-
-```sh
-openapi-mcp-generator --input SearchV2.json --output openapi-211-search-v2 --transport=streamable-http --port=3000
-
-cd openapi-211-search-v2
-npm install
-npm run build
-npm run start:http
-```
-
-Instructions say to "Use the test client to interact with your MCP server" on http://localhost:3000 but I get a "Not Found" response.
-
-#### MCP Python SDK
+### MCP Python SDK
 
 * https://github.com/modelcontextprotocol/python-sdk
 * referring to [Haystack MCP examples](https://github.com/deepset-ai/haystack-core-integrations/tree/main/integrations/mcp/examples)
@@ -154,3 +119,42 @@ npx @modelcontextprotocol/inspector
 ```sh
 uv run python src/first_mcp.py
 ```
+
+### Simpler Grants.gov API
+
+- Get OpenAPI from https://api.simpler.grants.gov/openapi.json
+- Docs at https://api.simpler.grants.gov/docs
+
+#### OpenAPI Generator
+
+Use https://openapi-generator.tech/ to generate Python stub for MCP server:
+
+Use https://editor.swagger.io/#/ to convert `openapi.json` into `openapi.yaml`.
+Address "Structural errors" with a bunch of search and replace.
+
+```sh
+docker run --rm -v $PWD:/local openapitools/openapi-generator-cli generate -i /local/openapi.yaml -g python-fastapi -o local/simpler_grants_service
+```
+
+Inefficient: Follow instructions in `simpler_grants_service/README.md`:
+```sh
+docker compose up --build
+```
+
+Ran `uv add -r requirements.txt`, then
+```sh
+uv run uvicorn openapi_server.main:app --host 0.0.0.0 --port 8080
+```
+
+Browse to http://0.0.0.0:8080/docs
+
+Test with MCP inspector:
+```sh
+npx @modelcontextprotocol/inspector
+```
+
+
+- Well-defined, detailed, and fairly-complete stubs
+- Need to add implementation
+- Will need to manually handle OpenAPI spec updates
+
