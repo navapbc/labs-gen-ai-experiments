@@ -125,36 +125,14 @@ uv run python src/first_mcp.py
 - Get OpenAPI from https://api.simpler.grants.gov/openapi.json
 - Docs at https://api.simpler.grants.gov/docs
 
-#### OpenAPI Generator
+### Add to MCP server
 
-Use https://openapi-generator.tech/ to generate Python stub for MCP server:
-
-Use https://editor.swagger.io/#/ to convert `openapi.json` into `openapi.yaml`.
-Address "Structural errors" with a bunch of search and replace.
+From https://earthkhan.medium.com/turn-your-openapi-in-mcp-server-in-5-minutes-e2859383d0dc
+and https://github.com/nafiul-earth/openapi-2-mcpserver/blob/main/ibmcloud-cos-mcp-server/main.py,
+add `mcp_server_simpler_grants.py`,
 
 ```sh
-docker run --rm -v $PWD:/local openapitools/openapi-generator-cli generate -i /local/openapi.yaml -g python-fastapi -o local/simpler_grants_service
+uv run python src/mcp_server_simpler_grants.py
 ```
 
-Inefficient: Follow instructions in `simpler_grants_service/README.md`:
-```sh
-docker compose up --build
-```
-
-Ran `uv add -r requirements.txt`, then
-```sh
-uv run uvicorn openapi_server.main:app --host 0.0.0.0 --port 8080
-```
-
-Browse to http://0.0.0.0:8080/docs
-
-Test with MCP inspector:
-```sh
-npx @modelcontextprotocol/inspector
-```
-
-
-- Well-defined, detailed, and fairly-complete stubs
-- Need to add implementation
-- Will need to manually handle OpenAPI spec updates
-
+Quick test: `curl http://localhost:8000/tools`
