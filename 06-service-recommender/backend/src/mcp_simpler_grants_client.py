@@ -44,7 +44,6 @@ def search_opportunities(query):
     tool_call = {
         "tool_name": "post__v1_opportunities_search",
         "input": {
-            # "region": "us-south",
             "headers": {
                 "X-Auth": API_KEY,
             },
@@ -65,6 +64,23 @@ def search_opportunities(query):
     print_response(response)
 
 
+def get_opportunity(opportunity_id):
+    tool_call = {
+        "tool_name": "get__v1_opportunities_{opportunity_id}",
+        "input": {
+            "headers": {
+                "X-Auth": API_KEY,
+            },
+            "params": {
+                "opportunity_id": opportunity_id,
+            },
+        },
+    }
+    response = requests.post(MCP_URL, json=tool_call)
+    print(f"Get Opportunity '{opportunity_id}':", response.json())
+    print_response(response)
+
 if __name__ == "__main__":
     # get__health()
-    search_opportunities("Artificial Intelligence")
+    # search_opportunities("Artificial Intelligence")
+    get_opportunity("315583")
