@@ -27,6 +27,10 @@ Copy `.env-template` to a `.env` file and populate with your secrets. These secr
 
 ### Docker Compose
 
+#### First time running
+Build and start the Phoenix Docker containers: `docker compose up phoenix --build`
+
+In another terminal, add a prompt template to Phoenix:
 ```
 cd backend
 
@@ -36,7 +40,12 @@ uv run src/bootstrap.py
 cd ..
 ```
 
+Terminate everything.
+
+#### Start all containers
+
 Build and start all necessary Docker containers: `docker compose up --build`
+
 
 ### Running outside of Docker containers
 
