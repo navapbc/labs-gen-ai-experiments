@@ -136,3 +136,8 @@ uv run python src/mcp_server_simpler_grants.py
 ```
 
 Quick test: `curl http://localhost:8000/tools`
+
+MCP client test:
+```sh
+uv run python src/mcp_simpler_grants_client.py
+```
