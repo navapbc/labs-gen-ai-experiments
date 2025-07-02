@@ -127,7 +127,7 @@ def toolset_pipeline(question):
 
 
 def no_toolset_pipeline(question):
-    pipeline = pipeline_wrapper.create_pipeline0(get_toolset())
+    pipeline = pipeline_wrapper.create_no_toolset_pipeline()
     user_input = ChatMessage.from_user(text=question)
     result = pipeline.run(
         {

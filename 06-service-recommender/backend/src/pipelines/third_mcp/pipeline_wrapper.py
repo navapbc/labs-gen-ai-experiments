@@ -78,9 +78,9 @@ def create_pipeline(toolset=None) -> Pipeline:
     return pipeline
 
 
-def create_pipeline0(toolset=None) -> Pipeline:
+def create_no_toolset_pipeline() -> Pipeline:
     pipeline = Pipeline()
     pipeline.add_component(
-        "llm", OpenAIChatGenerator(model="gpt-4o-mini", tools=toolset)
+        "llm", OpenAIChatGenerator(model="gpt-4o-mini", tools=None)
     )
     return pipeline
