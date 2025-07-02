@@ -107,6 +107,8 @@ Based on [documentation](https://arize.com/docs/phoenix/self-hosting/features/au
 https://github.com/modelcontextprotocol/python-sdk?tab=readme-ov-file#streamable-http-transport:
 > Note: Streamable HTTP transport is superseding SSE transport for production deployments.
 
+and https://brightdata.com/blog/ai/sse-vs-streamable-http#:~:text=As%20explained%20here%2C%20third%2Dparty,specs%20must%20implement%20Streamable%20HTTP
+
 ```sh
 uv run python src/mcp_server.py
 ```
@@ -125,7 +127,9 @@ uv run python src/first_mcp.py
 - Get OpenAPI from https://api.simpler.grants.gov/openapi.json
 - Docs at https://api.simpler.grants.gov/docs
 
-### Add to MCP server
+### generate_tools_from_openapi
+
+This create regular REST endpoints, not Streamable HTTP or SSE, so the MCP inspector isn't relevant.
 
 From https://earthkhan.medium.com/turn-your-openapi-in-mcp-server-in-5-minutes-e2859383d0dc
 and https://github.com/nafiul-earth/openapi-2-mcpserver/blob/main/ibmcloud-cos-mcp-server/main.py,
@@ -141,3 +145,25 @@ MCP client test:
 ```sh
 uv run python src/mcp_simpler_grants_client.py
 ```
+
+### Convert to SSE MCP service
+
+```sh
+uv run python src/mcp_server_simpler_grants_sse.py
+```
+
+Run MCP inspector
+```sh
+npx @modelcontextprotocol/inspector
+```
+and connect to http://localhost:8000/mcp.
+
+However, only 2 tools are listed:
+- `list_tools_tools_get`
+- `invoke_tool_invoke_post`
+since we used the `generate_tools_from_openapi` approach
+
+### Convert to Streamable HTTP
+
+> MCP (Model Context Protocol) can use non-streamable HTTP, but it's not the preferred or recommended approach. While older versions of MCP relied heavily on Server-Sent Events (SSE) for streaming data, the current specification favors Streamable HTTP. Streamable HTTP allows for a more efficient and stateless way to communicate with MCP servers, making it the preferred method for new implementations. 
+

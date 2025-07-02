@@ -17,4 +17,5 @@ dependencies = [
     "amazon-bedrock-haystack>=3.7.0",
     "mcp-haystack>=0.4.0",
     "mcp-server-time>=0.6.2",
+    "fastapi-mcp>=0.3.4",
 ]
