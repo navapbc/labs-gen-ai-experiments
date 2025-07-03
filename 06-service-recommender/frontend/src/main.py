@@ -8,14 +8,35 @@ from pprint import pformat
 
 import requests
 
+from presidio_analyzer import AnalyzerEngine
+from presidio_anonymizer import AnonymizerEngine
+
 # TODO: Try Streamlit alternatives:
 #   https://www.assistant-ui.com/examples
 #   https://docs.nlkit.com/nlux/examples/react-js-ai-assistant
 #   https://fredrikoseberg.github.io/react-chatbot-kit-docs/
 import streamlit as st
 
+analyzer = AnalyzerEngine()
+anonymizer = AnonymizerEngine()
+def remove_pii(text: str) -> str:
+    # Check to see if the text has any PII fields we are looking for (entities)
+    # Default entities are person, email, phone number, ssn, credit card, iban code, ip address, date_time, location
+    results = analyzer.analyze(text=text, entities=[], language="en")
+    if results:
+        scrubbed_results = anonymizer.anonymize(text=text, analyzer_results=results)
+        return scrubbed_results.text
+    return text
+
+class PresidioFilter(logging.Filter):
+    def filter(self, record):
+        if hasattr(record,'msg') and isinstance(record.msg, str):
+            record.msg = remove_pii(record.msg)
+            return True
+
 
 logger = logging.getLogger(__name__)
+logger.applyFilter(PresidioFilter())
 logging.basicConfig(
     format="%(levelname)s - %(name)s -  %(message)s", level=logging.INFO
 )
