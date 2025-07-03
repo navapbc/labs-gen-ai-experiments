@@ -146,7 +146,9 @@ MCP client test:
 uv run python src/mcp_simpler_grants_client.py
 ```
 
-### Convert to SSE MCP service
+### Convert to SSE-based MCP service
+
+Use https://github.com/tadata-org/fastapi_mcp to quickly create MCP service via SSE. Unfortunately, Streamable HTTP is [not available](https://github.com/tadata-org/fastapi_mcp/discussions/142).
 
 ```sh
 uv run python src/mcp_server_simpler_grants_sse.py
@@ -161,9 +163,48 @@ and connect to http://localhost:8000/mcp.
 However, only 2 tools are listed:
 - `list_tools_tools_get`
 - `invoke_tool_invoke_post`
-since we used the `generate_tools_from_openapi` approach
+since the `generate_tools_from_openapi` approach was used.
 
-### Convert to Streamable HTTP
+### Convert to Streamable HTTP transport protocol
 
 > MCP (Model Context Protocol) can use non-streamable HTTP, but it's not the preferred or recommended approach. While older versions of MCP relied heavily on Server-Sent Events (SSE) for streaming data, the current specification favors Streamable HTTP. Streamable HTTP allows for a more efficient and stateless way to communicate with MCP servers, making it the preferred method for new implementations. 
 
+#### Test https://mcp.liblab.com/
+* Had to fix OpenAPI spec using https://editor.swagger.io/#/
+* The 4th version of the yaml file worked, though with some errors
+* Saved in `mcp_simpler_grants_gov` folder -- see `mcp_simpler_grants_gov/PyPI_README.md`
+
+```
+cd mcp_simpler_grants_gov
+uv venv
+uv sync
+```
+
+Wait this is the SDK!
+
+#### jlowin's FastMCP
+
+(Not to be confused with MCP Python SDK which uses the `mcp.server.fastmcp` package.)
+
+Use https://github.com/jlowin/fastmcp, specifically https://gofastmcp.com/servers/openapi#openapi-integration.
+
+> FastMCP can automatically generate an MCP server from an OpenAPI specification or FastAPI app. Instead of manually creating tools and resources, you provide an OpenAPI spec and FastMCP intelligently converts your API endpoints into the appropriate MCP components.
+
+```sh
+uv run python src/mcp_server_simpler_grants_streamable.py
+```
+
+- Had to remove `  "servers": "."` from json to address `OpenAPI schema validation failed`
+- Ran into `RecursionError: maximum recursion depth exceeded` (recent issues [931](https://github.com/jlowin/fastmcp/issues/931) and [1016](https://github.com/jlowin/fastmcp/issues/1016)). Downgrading to v2.8.1 works
+
+Run MCP inspector
+```sh
+npx @modelcontextprotocol/inspector
+```
+and connect to http://localhost:8000/mcp using Streamable HTTP transport protocol and list tools.
+
+- Select `Health` tool and "Run Tool"
+- Select `Opportunity_Search` tool and 
+   - Ran into `PointerToNowhere: '/components/schemas/SortOrderOpportunityPaginationV1' does not exist within ...`
+   - Found [PR](https://github.com/jlowin/fastmcp/pull/995) merged 3 day ago
+   - Replacing `SortOrderOpportunityPaginationV1` in the json with its definitions works!
