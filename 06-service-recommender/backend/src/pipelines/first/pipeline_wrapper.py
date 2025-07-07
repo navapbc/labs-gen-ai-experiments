@@ -63,13 +63,11 @@ class PipelineWrapper(BasePipelineWrapper):
         logger.info(
             "Running chat completion with model: %s, messages: %s", model, messages
         )
-        # Alternative chat history: https://haystack.deepset.ai/cookbook/conversational_rag_using_memory
         question = hayhooks.get_last_user_message(messages)
         logger.info("Question: %s", question)
         return hayhooks.streaming_generator(
             pipeline=self.pipeline,
             pipeline_run_args={
-                "chat_history_prepender": {"history": messages[:-1]},
                 "retriever": {"query": question},
                 "prompt_builder": {"question": question},
             },
