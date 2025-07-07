@@ -40,11 +40,13 @@ def create_rag_pipeline(retriever, llm, prompt_version: PromptVersion) -> Pipeli
 
     chat_template = to_chat_messages(prompt_version)
     # Use a wildcard to include all required variables mentioned in the template
+    # TODO: Replace ChatPromptBuilder with custom component that outputs list[ChatMessage] to llm.messages (see https://haystack.deepset.ai/tutorials/40_building_chat_application_with_function_calling#running-openaichatgenerator-with-tools)
+    # TODO: add chat history? https://community.openai.com/t/how-to-pass-conversation-history-back-to-the-api/697083
     prompt_builder = ChatPromptBuilder(template=chat_template, required_variables="*")
 
     rag_pipeline.add_component("prompt_builder", prompt_builder)
     rag_pipeline.connect("retriever.documents", "prompt_builder.documents")
-    rag_pipeline.connect("prompt_builder.prompt", "llm.messages")
+    # rag_pipeline.connect("prompt_builder.prompt", "llm.messages")
     return rag_pipeline
 
 
