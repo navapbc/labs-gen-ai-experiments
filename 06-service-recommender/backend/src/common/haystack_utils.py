@@ -48,7 +48,10 @@ def create_rag_pipeline(retriever, llm, prompt_version: PromptVersion) -> Pipeli
     rag_pipeline.connect("prompt_builder.prompt", "llm.messages")
     return rag_pipeline
 
-def to_chat_messages(msg_list: Sequence[dict | v1.PromptMessage | ChatMessage]) -> list[ChatMessage]:
+
+def to_chat_messages(
+    msg_list: Sequence[dict | v1.PromptMessage | ChatMessage],
+) -> list[ChatMessage]:
     messages = []
     for msg in msg_list:
         if isinstance(msg, ChatMessage):

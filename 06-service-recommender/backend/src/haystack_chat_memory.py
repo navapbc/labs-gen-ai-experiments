@@ -25,7 +25,6 @@ print("Configure Phoenix project name")
 os.environ["PHOENIX_PROJECT_NAME"] = "haystack_chat_memory.py"
 
 
-
 pipeline_wrapper = PipelineWrapper()
 pipeline_wrapper.setup()
 
