@@ -24,9 +24,8 @@ class PipelineWrapper(BasePipelineWrapper):
 
         chat_template: list[ChatMessage] = [
             ChatMessage.from_system(
-                "If Harold's location is mentioned, state Harold's location and answer the question. "
-                "DO NOT answer the user's question if Harold's location is not mentioned. "
-                "Instead, ask for Harold's location. "
+                "If Harold's location has been mentioned, state Harold's location and answer the question. "
+                "Otherwise, DO NOT answer the user's question and ask for Harold's location."
             ),
             ChatMessage.from_user("{{question}}"),
         ]

@@ -41,17 +41,14 @@ msg_history = [
     ),
     ChatMessage.from_user("Who lives in Paris?"),
     ChatMessage.from_assistant("Jean lives in Paris."),
+    ChatMessage.from_user("Harold's location is Berlin."),
 ]
 
-last_question = "Which country is that?"
+last_question = "Which country does Harold live in?"
 messages = msg_history + [{"role": "user", "content": last_question}]
 result: Generator = pipeline_wrapper.run_chat_completion(
-    "model not used", messages, body={}
+    "doesn't matter", messages, body={}
 )
 result_chunks = [chunk for chunk in result]
 print("Result from the pipeline:")
 pprint(result_chunks)
-
-
-# print("Pipeline result:", result)
-# import pdb; pdb.set_trace()

@@ -23,11 +23,7 @@ class PipelineWrapper(BasePipelineWrapper):
     def _create_pipeline(self, llm) -> Pipeline:
         pipeline = Pipeline()
 
-        system_prompt = dedent(
-            """
-                If Harold's location is mentioned in the conversation history, then state Harold's location and answer the question, else ask for Harold's location.
-            """
-        )
+        system_prompt = "If Harold's location is mentioned in the conversation history, then state Harold's location and answer the question, else ask for Harold's location."
         msg_history_prompt = dedent(
             """
                 Conversation history:
