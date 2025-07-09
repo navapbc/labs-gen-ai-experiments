@@ -1,5 +1,6 @@
 import logging
 from pprint import pformat
+from textwrap import dedent
 
 import hayhooks
 from hayhooks import BasePipelineWrapper
@@ -9,7 +10,7 @@ from haystack.components.generators.chat import OpenAIChatGenerator
 from haystack.dataclasses.chat_message import ChatMessage
 
 # https://github.com/deepset-ai/hayhooks?tab=readme-ov-file#sharing-code-between-pipeline-wrappers
-from common import components, phoenix_utils
+from common import haystack_utils, phoenix_utils
 
 logger = logging.getLogger(__name__)
 
@@ -22,13 +23,24 @@ class PipelineWrapper(BasePipelineWrapper):
     def _create_pipeline(self, llm) -> Pipeline:
         pipeline = Pipeline()
 
+        system_prompt = dedent(
+            """
+                If Harold's location is mentioned in the conversation history, then state Harold's location and answer the question, else ask for Harold's location.
+            """
+        )
+        msg_history_prompt = dedent(
+            """
+                Conversation history:
+                {% for msg in history %}
+                {{ msg.role.value }}: {{ msg.text }}
+                {% endfor %}
+            """
+        )
+
         chat_template: list[ChatMessage] = [
-            ChatMessage.from_system(
-                "If Harold's location is mentioned, state Harold's location and answer the question. "
-                "DO NOT answer the user's question if Harold's location is not mentioned. "
-                "Instead, ask for Harold's location. "
-            ),
-            ChatMessage.from_user("{{question}}"),
+            ChatMessage.from_system(system_prompt),
+            ChatMessage.from_user(msg_history_prompt),
+            ChatMessage.from_user("Question: {{question}}"),
         ]
 
         # https://nava.slack.com/archives/C06ETE82UHM/p1751562152543639
@@ -36,21 +48,15 @@ class PipelineWrapper(BasePipelineWrapper):
         #   - Example: https://haystack.deepset.ai/cookbook/conversational_rag_using_memory
         # Option 2: a list of dicts of previous messages
         # See https://community.openai.com/t/how-to-pass-conversation-history-back-to-the-api/697083
-        # Option 2 is implemented here using ChatHistoryPrepender
+        # Option 1 is implemented here using ChatPromptBuilder
         prompt_builder = ChatPromptBuilder(
             template=chat_template, required_variables="*"
         )
         pipeline.add_component("prompt_builder", prompt_builder)
 
-        # Add custom component that outputs list[ChatMessage] to llm.messages
-        pipeline.add_component(
-            "chat_history_prepender", components.ChatHistoryPrepender()
-        )
-
         pipeline.add_component("llm", llm)
 
-        pipeline.connect("prompt_builder.prompt", "chat_history_prepender.prompt")
-        pipeline.connect("chat_history_prepender.full_prompt", "llm.messages")
+        pipeline.connect("prompt_builder.prompt", "llm.messages")
 
         return pipeline
 
@@ -78,11 +84,16 @@ class PipelineWrapper(BasePipelineWrapper):
             "Running chat completion with model: %s, messages: %s", model, messages
         )
         question = hayhooks.get_last_user_message(messages)
+        # prev_user_messages = [
+        #     ChatMessage.from_user(msg["content"]) for msg in messages[:-1] if msg["role"] == "user"
+        # ]
         logger.info("Question: %s", question)
         return hayhooks.streaming_generator(
             pipeline=self.pipeline,
             pipeline_run_args={
-                "chat_history_prepender": {"history": messages[:-1]},
-                "prompt_builder": {"question": question},
+                "prompt_builder": {
+                    "history": haystack_utils.to_chat_messages(messages[:-1]),
+                    "question": question,
+                },
             },
         )
