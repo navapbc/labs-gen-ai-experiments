@@ -1,0 +1,10 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Haystack pipelines"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi-mcp>=0.3.4",
+    "fastmcp==2.10.4",
+]

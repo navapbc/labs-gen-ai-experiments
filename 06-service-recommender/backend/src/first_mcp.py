@@ -112,6 +112,7 @@ def toolset_pipeline(question):
     pipeline = pipeline_wrapper.create_pipeline(toolset)
     if not os.path.exists("toolset_pipeline.png"):
         pipeline.draw(Path("toolset_pipeline.png"))
+
     user_input = ChatMessage.from_user(
         text=question
     )  # "What is the time in New York?")
@@ -171,7 +172,7 @@ if __name__ == "__main__":
     from common import haystack_utils, phoenix_utils
 
     haystack_utils.set_up_tracing()
-    phoenix_utils.configure_phoenix()
-    # toolset_pipeline("yoom value of 2 and 3")
+    # phoenix_utils.configure_phoenix()
+    toolset_pipeline("yoom value of 2 and 3")
     # no_toolset_pipeline("yoom value of 2 and 3")
     # agent("yoom value of 2 and 3")

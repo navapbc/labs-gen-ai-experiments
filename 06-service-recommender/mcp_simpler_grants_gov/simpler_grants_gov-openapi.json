@@ -543,7 +543,9 @@
           },
           "opportunity_id": {
             "description": "The opportunity ID that the competition is associated with",
-            "type": "integer"
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "format": "uuid",
+            "type": "string"
           }
         },
         "type": "object"
@@ -721,7 +723,6 @@
             "example": "opportunities_json",
             "type": [
               "string",
-              "null",
               "null"
             ]
           }
@@ -1309,40 +1310,10 @@
             ],
             "description": "The list of sorting rules",
             "items": {
-              "properties": {
-                "order_by": {
-                  "description": "The field to sort the response by",
-                  "enum": [
-                    "relevancy",
-                    "opportunity_id",
-                    "opportunity_number",
-                    "opportunity_title",
-                    "post_date",
-                    "close_date",
-                    "agency_code",
-                    "agency_name",
-                    "top_level_agency_name",
-                    "award_floor",
-                    "award_ceiling"
-                  ],
-                  "type": "string"
-                },
-                "sort_direction": {
-                  "description": "Whether to sort the response ascending or descending",
-                  "enum": [
-                    "ascending",
-                    "descending"
-                  ],
-                  "type": [
-                    "string"
-                  ]
-                }
-              },
-              "required": [
-                "order_by",
-                "sort_direction"
-              ],
-              "type": "object"
+              "$ref": "#/components/schemas/SortOrderOpportunityPaginationV1",
+              "type": [
+                "object"
+              ]
             },
             "maxItems": 5,
             "minItems": 1,
@@ -1890,7 +1861,6 @@
             "example": "discretionary",
             "type": [
               "string",
-              "null",
               "null"
             ]
           },
@@ -1907,6 +1877,11 @@
             "readOnly": true,
             "type": "string"
           },
+          "legacy_opportunity_id": {
+            "description": "The internal legacy ID of the opportunity",
+            "example": 12345,
+            "type": "integer"
+          },
           "opportunity_assistance_listings": {
             "items": {
               "$ref": "#/components/schemas/OpportunityAssistanceListingV1",
@@ -1918,8 +1893,9 @@
           },
           "opportunity_id": {
             "description": "The internal ID of the opportunity",
-            "example": 12345,
-            "type": "integer"
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "format": "uuid",
+            "type": "string"
           },
           "opportunity_number": {
             "description": "The funding opportunity number",
@@ -2047,6 +2023,11 @@
             "readOnly": true,
             "type": "string"
           },
+          "legacy_opportunity_id": {
+            "description": "The internal legacy ID of the opportunity",
+            "example": 12345,
+            "type": "integer"
+          },
           "opportunity_assistance_listings": {
             "items": {
               "$ref": "#/components/schemas/OpportunityAssistanceListingV1",
@@ -2058,8 +2039,9 @@
           },
           "opportunity_id": {
             "description": "The internal ID of the opportunity",
-            "example": 12345,
-            "type": "integer"
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "format": "uuid",
+            "type": "string"
           },
           "opportunity_number": {
             "description": "The funding opportunity number",
@@ -2201,8 +2183,9 @@
         "properties": {
           "opportunity_id": {
             "description": "The ID of the saved opportunity",
-            "example": 1234,
-            "type": "integer"
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "format": "uuid",
+            "type": "string"
           },
           "opportunity_status": {
             "description": "The current status of the opportunity",
@@ -2713,7 +2696,9 @@
       "UserSaveOpportunityRequest": {
         "properties": {
           "opportunity_id": {
-            "type": "integer"
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "format": "uuid",
+            "type": "string"
           }
         },
         "required": [
@@ -3506,6 +3491,62 @@
         ]
       }
     },
+    "/v1/opportunities/{legacy_opportunity_id}": {
+      "get": {
+        "description": "\n__ALPHA VERSION__\n\nThis endpoint in its current form is primarily for testing and feedback.\n\nFeatures in this endpoint are still under heavy development, and subject to change. Not for production use.\n\nSee [Release Phases](https://github.com/github/roadmap?tab=readme-ov-file#release-phases) for further details.\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "legacy_opportunity_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpportunityGetResponseV1"
+                }
+              }
+            },
+            "description": "Successful response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Authentication error"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "summary": "Opportunity Get Legacy",
+        "tags": [
+          "Opportunity v1"
+        ]
+      }
+    },
     "/v1/opportunities/{opportunity_id}": {
       "get": {
         "description": "\n__ALPHA VERSION__\n\nThis endpoint in its current form is primarily for testing and feedback.\n\nFeatures in this endpoint are still under heavy development, and subject to change. Not for production use.\n\nSee [Release Phases](https://github.com/github/roadmap?tab=readme-ov-file#release-phases) for further details.\n",
@@ -3515,7 +3556,7 @@
             "name": "opportunity_id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -3942,6 +3983,69 @@
         ]
       }
     },
+    "/v1/users/{user_id}/saved-opportunities/{legacy_opportunity_id}": {
+      "delete": {
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "legacy_opportunity_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDeleteSavedOpportunityResponse"
+                }
+              }
+            },
+            "description": "Successful response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Authentication error"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "security": [
+          {
+            "ApiJwtAuth": []
+          }
+        ],
+        "summary": "User Delete Saved Opportunity Legacy",
+        "tags": [
+          "User v1 - Internal Only"
+        ]
+      }
+    },
     "/v1/users/{user_id}/saved-opportunities/{opportunity_id}": {
       "delete": {
         "parameters": [
@@ -3958,7 +4062,7 @@
             "name": "opportunity_id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],

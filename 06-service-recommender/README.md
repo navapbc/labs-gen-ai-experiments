@@ -99,7 +99,9 @@ Based on [documentation](https://arize.com/docs/phoenix/self-hosting/features/au
     - https://github.com/deepset-ai/haystack-core-integrations/tree/main/integrations/mcp/examples
 * https://docs.haystack.deepset.ai/docs/mcptool#with-the-agent-component
 
-### MCP Python SDK
+Run the following in the `mcp_simpler_grants_gov` subfolder.
+
+### MCP Python SDK server (using Streamable HTTP) and Haystack client
 
 * https://github.com/modelcontextprotocol/python-sdk
 * referring to [Haystack MCP examples](https://github.com/deepset-ai/haystack-core-integrations/tree/main/integrations/mcp/examples)
@@ -109,6 +111,7 @@ https://github.com/modelcontextprotocol/python-sdk?tab=readme-ov-file#streamable
 
 and https://brightdata.com/blog/ai/sse-vs-streamable-http#:~:text=As%20explained%20here%2C%20third%2Dparty,specs%20must%20implement%20Streamable%20HTTP
 
+Start MCP Server:
 ```sh
 uv run python src/mcp_server.py
 ```
@@ -118,30 +121,40 @@ Useful for MCP inspecting and debugging:
 npx @modelcontextprotocol/inspector
 ```
 
+Run Haystack pipeline:
 ```sh
+cd ../backend
+export OPENAI_API_KEY='...'
 uv run python src/first_mcp.py
 ```
+
+Tweak `first_mcp.py` to test other functions in that file.
 
 ### Simpler Grants.gov API
 
 - Get OpenAPI from https://api.simpler.grants.gov/openapi.json
 - Docs at https://api.simpler.grants.gov/docs
 
-### generate_tools_from_openapi
+### generate_tools_from_openapi (non-streaming)
 
-This create regular REST endpoints, not Streamable HTTP or SSE, so the MCP inspector isn't relevant.
+This creates regular REST endpoints, not Streamable HTTP or SSE, so the MCP inspector isn't relevant.
+
+Also this 
 
 From https://earthkhan.medium.com/turn-your-openapi-in-mcp-server-in-5-minutes-e2859383d0dc
 and https://github.com/nafiul-earth/openapi-2-mcpserver/blob/main/ibmcloud-cos-mcp-server/main.py,
 add `mcp_server_simpler_grants.py`,
 
+Start MCP Server:
 ```sh
 uv run python src/mcp_server_simpler_grants.py
 ```
+Note only 2 tools are exposed -- see "Convert to SSE-based MCP service" section below.
+
 
 Quick test: `curl http://localhost:8000/tools`
 
-MCP client test:
+MCP client test (without any LLM):
 ```sh
 uv run python src/mcp_simpler_grants_client.py
 ```
@@ -165,37 +178,26 @@ However, only 2 tools are listed:
 - `invoke_tool_invoke_post`
 since the `generate_tools_from_openapi` approach was used.
 
+
 ### Convert to Streamable HTTP transport protocol
 
 > MCP (Model Context Protocol) can use non-streamable HTTP, but it's not the preferred or recommended approach. While older versions of MCP relied heavily on Server-Sent Events (SSE) for streaming data, the current specification favors Streamable HTTP. Streamable HTTP allows for a more efficient and stateless way to communicate with MCP servers, making it the preferred method for new implementations. 
 
-#### Test https://mcp.liblab.com/
-* Had to fix OpenAPI spec using https://editor.swagger.io/#/
-* The 4th version of the yaml file worked, though with some errors
-* Saved in `mcp_simpler_grants_gov` folder -- see `mcp_simpler_grants_gov/PyPI_README.md`
-
-```
-cd mcp_simpler_grants_gov
-uv venv
-uv sync
-```
-
-Wait this is the SDK!
-
-#### jlowin's FastMCP
+#### (Recommended) jlowin's FastMCP
 
 (Not to be confused with MCP Python SDK which uses the `mcp.server.fastmcp` package.)
 
-Use https://github.com/jlowin/fastmcp, specifically https://gofastmcp.com/servers/openapi#openapi-integration.
+Use https://github.com/jlowin/fastmcp (version 2.10.4), specifically https://gofastmcp.com/servers/openapi#openapi-integration.
 
 > FastMCP can automatically generate an MCP server from an OpenAPI specification or FastAPI app. Instead of manually creating tools and resources, you provide an OpenAPI spec and FastMCP intelligently converts your API endpoints into the appropriate MCP components.
 
+Start MCP Server:
 ```sh
 uv run python src/mcp_server_simpler_grants_streamable.py
 ```
 
 - Had to remove `  "servers": "."` from json to address `OpenAPI schema validation failed`
-- Ran into `RecursionError: maximum recursion depth exceeded` (recent issues [931](https://github.com/jlowin/fastmcp/issues/931) and [1016](https://github.com/jlowin/fastmcp/issues/1016)). Downgrading to v2.8.1 works
+- Had to remove extra `"null"` under `schema['$defs']['OpportunityV1']['properties']['category']['type']` in json to address `['string', 'null', 'null'] is not valid under any of the given schemas`
 
 Run MCP inspector
 ```sh
@@ -205,6 +207,25 @@ and connect to http://localhost:8000/mcp using Streamable HTTP transport protoco
 
 - Select `Health` tool and "Run Tool"
 - Select `Opportunity_Search` tool and 
-   - Ran into `PointerToNowhere: '/components/schemas/SortOrderOpportunityPaginationV1' does not exist within ...`
-   - Found [PR](https://github.com/jlowin/fastmcp/pull/995) merged 3 day ago
-   - Replacing `SortOrderOpportunityPaginationV1` in the json with its definitions works!
+   - paste [this snippet](https://api.simpler.grants.gov/docs#/Opportunity%20v1/post_v1_opportunities_search) into the `pagination` text area:
+```json
+{
+    "page_offset": 1,
+    "page_size": 25
+}
+```
+   - and some search term like `NASA` into the `query` text area. Then click "Run Tool".
+
+### jlowin's FastMCP and Haystack client
+
+Start MCP Server:
+```sh
+uv run python src/mcp_server_simpler_grants_streamable.py
+```
+
+Run Haystack pipeline:
+```sh
+cd ../backend
+export OPENAI_API_KEY='...'
+uv run python src/first_mcp.py
+```
