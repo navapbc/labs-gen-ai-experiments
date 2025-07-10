@@ -1325,6 +1325,84 @@
             "type": [
               "object"
             ]
+          },
+          "applicant_type": {
+            "$ref": "#/components/schemas/ApplicantTypeFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "assistance_listing_number": {
+            "$ref": "#/components/schemas/AssistanceListingNumberFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "award_ceiling": {
+            "$ref": "#/components/schemas/AwardCeilingFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "award_floor": {
+            "$ref": "#/components/schemas/AwardFloorFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "close_date": {
+            "$ref": "#/components/schemas/CloseDateFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "estimated_total_program_funding": {
+            "$ref": "#/components/schemas/EstimatedTotalProgramFundingFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "expected_number_of_awards": {
+            "$ref": "#/components/schemas/ExpectedNumberAwardsFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "funding_category": {
+            "$ref": "#/components/schemas/FundingCategoryFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "funding_instrument": {
+            "$ref": "#/components/schemas/FundingInstrumentFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "is_cost_sharing": {
+            "$ref": "#/components/schemas/IsCostSharingFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "opportunity_status": {
+            "$ref": "#/components/schemas/OpportunityStatusFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "post_date": {
+            "$ref": "#/components/schemas/PostDateFilterV1",
+            "type": [
+              "object"
+            ]
+          },
+          "top_level_agency": {
+            "$ref": "#/components/schemas/TopLevelAgencyOppSearchFilterV1",
+            "type": [
+              "object"
+            ]
           }
         },
         "type": "object"
