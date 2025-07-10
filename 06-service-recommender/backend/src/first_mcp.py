@@ -90,10 +90,10 @@ def get_toolset():
     server_info = StreamableHttpServerInfo(url="http://127.0.0.1:8000/mcp")
     toolset = MCPToolset(
         server_info=server_info,
-        # tool_names=["add", "subtract"],  # Only include specific tools
+        tool_names=["Opportunity_Search"],  # Only include specific tools
     )
 
-    logger.info("Resulting toolset: %s", pformat(toolset))
+    logger.info("Resulting tools: %s", [t.name for t in toolset.tools])
     return toolset
 
 
@@ -109,6 +109,41 @@ def toolset_pipeline(question):
     toolset = get_toolset()
     # Haystack logs and Phoenix show `"tools": null` but tools are being passed to the
     # OpenAIChatGenerator llm when running the pipeline and it works :confused:
+
+    # toolset = [t for t in toolset.tools if t.name in ["Health", "Opportunity_Search"]]
+    # logger.info("Toolset: %s", [t.name for t in toolset.tools])
+    """
+File "/Users/yoom/dev/labs-gen-ai-experiments/06-service-recommender/backend/.venv/lib/python3.12/site-packages/openai/resources/chat/completions/completions.py", line 925, in create
+    return self._post(
+           ^^^^^^^^^^^
+File "/Users/yoom/dev/labs-gen-ai-experiments/06-service-recommender/backend/.venv/lib/python3.12/site-packages/openai/_base_client.py", line 1242, in post
+return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/Users/yoom/dev/labs-gen-ai-experiments/06-service-recommender/backend/.venv/lib/python3.12/site-packages/openai/_base_client.py", line 1037, in request
+raise self._make_status_error_from_response(err.response) from None
+
+openai.BadRequestError: Error code: 400 - {'error': {'message': "Invalid schema for function 'Opportunity_Search'. Please ensure it is a valid JSON Schema.", 
+'type': 'invalid_request_error', 'param': 'tools[2].function.parameters', 'code': 'invalid_function_parameters'}}
+
+toolset[0].function.parameters
+pprint(toolset[0].parameters)
+print(json.dumps(toolset[0].parameters))
+
+No responses: https://community.openai.com/t/tool-calls-rejecting-valid-json-from-correct-specification/862849
+https://community.openai.com/t/pydantic-response-model-failure/789207:
+- Is the input too large for your max tokens maybe?
+- If I make my response model too “deep” it seems to fail.
+- Not the problem: "Replace #/definitions with #$defs"
+- Found a "Circular References" to AgencyV1
+
+
+    """
+    from pprint import pprint
+    import json
+    import openai
+    openai.resources
+    import pdb; pdb.set_trace()
+
     pipeline = pipeline_wrapper.create_pipeline(toolset)
     if not os.path.exists("toolset_pipeline.png"):
         pipeline.draw(Path("toolset_pipeline.png"))
@@ -149,7 +184,7 @@ def agent(question):
     # This results into multiple threads in Phoenix logs, which is undesirable
     toolset = get_toolset()
     agent = Agent(
-        chat_generator=OpenAIChatGenerator(), tools=toolset, exit_conditions=["text"]
+        chat_generator=OpenAIChatGenerator(tools_strict=False), tools=toolset, exit_conditions=["text"]
     )
     agent.warm_up()
 
@@ -173,6 +208,9 @@ if __name__ == "__main__":
 
     haystack_utils.set_up_tracing()
     # phoenix_utils.configure_phoenix()
-    toolset_pipeline("yoom value of 2 and 3")
+    # toolset_pipeline("yoom value of 2 and 3")
     # no_toolset_pipeline("yoom value of 2 and 3")
     # agent("yoom value of 2 and 3")
+
+    toolset_pipeline("What grant opportunities are available for NASA?")
+    # agent("What grant opportunities are available for NASA?")
