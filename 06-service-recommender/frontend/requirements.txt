@@ -2,88 +2,225 @@
 #    uv pip compile pyproject.toml -o requirements.txt
 altair==5.5.0
     # via streamlit
+annotated-types==0.7.0
+    # via pydantic
 attrs==25.3.0
     # via
     #   jsonschema
     #   referencing
 blinker==1.9.0
     # via streamlit
+blis==1.3.0
+    # via thinc
 cachetools==5.5.2
     # via streamlit
+catalogue==2.0.10
+    # via
+    #   spacy
+    #   srsly
+    #   thinc
 certifi==2025.4.26
     # via requests
+cffi==1.17.1
+    # via cryptography
 charset-normalizer==3.4.2
     # via requests
 click==8.2.1
-    # via streamlit
+    # via
+    #   streamlit
+    #   typer
+cloudpathlib==0.21.1
+    # via weasel
+confection==0.1.5
+    # via
+    #   thinc
+    #   weasel
+cryptography==44.0.3
+    # via presidio-anonymizer
+cymem==2.0.11
+    # via
+    #   preshed
+    #   spacy
+    #   thinc
+filelock==3.18.0
+    # via tldextract
 gitdb==4.0.12
     # via gitpython
 gitpython==3.1.44
     # via streamlit
 idna==3.10
-    # via requests
+    # via
+    #   requests
+    #   tldextract
 jinja2==3.1.6
     # via
     #   altair
     #   pydeck
+    #   spacy
 jsonschema==4.24.0
     # via altair
 jsonschema-specifications==2025.4.1
     # via jsonschema
+langcodes==3.5.0
+    # via spacy
+language-data==1.3.0
+    # via langcodes
+marisa-trie==1.2.1
+    # via language-data
+markdown-it-py==3.0.0
+    # via rich
 markupsafe==3.0.2
     # via jinja2
+mdurl==0.1.2
+    # via markdown-it-py
+murmurhash==1.0.13
+    # via
+    #   preshed
+    #   spacy
+    #   thinc
 narwhals==1.42.0
     # via altair
 numpy==2.3.0
     # via
+    #   blis
     #   pandas
     #   pydeck
+    #   spacy
     #   streamlit
+    #   thinc
 packaging==24.2
     # via
     #   altair
+    #   spacy
     #   streamlit
+    #   thinc
+    #   weasel
 pandas==2.3.0
     # via streamlit
+phonenumbers==9.0.9
+    # via presidio-analyzer
 pillow==11.2.1
     # via streamlit
+preshed==3.0.10
+    # via
+    #   spacy
+    #   thinc
+presidio-analyzer==2.2.359
+    # via frontend (pyproject.toml)
+presidio-anonymizer==2.2.359
+    # via frontend (pyproject.toml)
 protobuf==6.31.1
     # via streamlit
 pyarrow==20.0.0
     # via streamlit
+pycparser==2.22
+    # via cffi
+pydantic==2.11.7
+    # via
+    #   confection
+    #   spacy
+    #   thinc
+    #   weasel
+pydantic-core==2.33.2
+    # via pydantic
 pydeck==0.9.1
     # via streamlit
+pygments==2.19.2
+    # via rich
 python-dateutil==2.9.0.post0
     # via pandas
 pytz==2025.2
     # via pandas
+pyyaml==6.0.2
+    # via presidio-analyzer
 referencing==0.36.2
     # via
     #   jsonschema
     #   jsonschema-specifications
+regex==2024.11.6
+    # via presidio-analyzer
 requests==2.32.4
-    # via streamlit
+    # via
+    #   frontend (pyproject.toml)
+    #   requests-file
+    #   spacy
+    #   streamlit
+    #   tldextract
+    #   weasel
+requests-file==2.1.0
+    # via tldextract
+rich==14.0.0
+    # via typer
 rpds-py==0.25.1
     # via
     #   jsonschema
     #   referencing
+setuptools==80.9.0
+    # via
+    #   marisa-trie
+    #   spacy
+    #   thinc
+shellingham==1.5.4
+    # via typer
 six==1.17.0
     # via python-dateutil
+smart-open==7.3.0.post1
+    # via weasel
 smmap==5.0.2
     # via gitdb
+spacy==3.8.7
+    # via
+    #   frontend (pyproject.toml)
+    #   presidio-analyzer
+spacy-legacy==3.0.12
+    # via spacy
+spacy-loggers==1.0.5
+    # via spacy
+srsly==2.5.1
+    # via
+    #   confection
+    #   spacy
+    #   thinc
+    #   weasel
 streamlit==1.45.1
     # via frontend (pyproject.toml)
 tenacity==9.1.2
     # via streamlit
+thinc==8.3.6
+    # via spacy
+tldextract==5.3.0
+    # via presidio-analyzer
 toml==0.10.2
     # via streamlit
 tornado==6.5.1
     # via streamlit
+tqdm==4.67.1
+    # via spacy
+typer==0.16.0
+    # via
+    #   spacy
+    #   weasel
 typing-extensions==4.14.0
     # via
     #   altair
+    #   pydantic
+    #   pydantic-core
+    #   referencing
     #   streamlit
+    #   typer
+    #   typing-inspection
+typing-inspection==0.4.1
+    # via pydantic
 tzdata==2025.2
     # via pandas
 urllib3==2.4.0
     # via requests
+wasabi==1.1.3
+    # via
+    #   spacy
+    #   thinc
+    #   weasel
+weasel==0.4.1
+    # via spacy
+wrapt==1.17.2
+    # via smart-open

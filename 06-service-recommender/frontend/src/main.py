@@ -36,7 +36,7 @@ class PresidioFilter(logging.Filter):
 
 
 logger = logging.getLogger(__name__)
-logger.applyFilter(PresidioFilter())
+logger.addFilter(PresidioFilter())
 logging.basicConfig(
     format="%(levelname)s - %(name)s -  %(message)s", level=logging.INFO
 )
