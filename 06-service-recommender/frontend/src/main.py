@@ -8,31 +8,13 @@ from pprint import pformat
 
 import requests
 
-from presidio_analyzer import AnalyzerEngine
-from presidio_anonymizer import AnonymizerEngine
 
 # TODO: Try Streamlit alternatives:
 #   https://www.assistant-ui.com/examples
 #   https://docs.nlkit.com/nlux/examples/react-js-ai-assistant
 #   https://fredrikoseberg.github.io/react-chatbot-kit-docs/
 import streamlit as st
-
-analyzer = AnalyzerEngine()
-anonymizer = AnonymizerEngine()
-def remove_pii(text: str) -> str:
-    # Check to see if the text has any PII fields we are looking for (entities)
-    # Default entities are person, email, phone number, ssn, credit card, iban code, ip address, date_time, location
-    results = analyzer.analyze(text=text, entities=[], language="en")
-    if results:
-        scrubbed_results = anonymizer.anonymize(text=text, analyzer_results=results)
-        return scrubbed_results.text
-    return text
-
-class PresidioFilter(logging.Filter):
-    def filter(self, record):
-        if hasattr(record,'msg') and isinstance(record.msg, str):
-            record.msg = remove_pii(record.msg)
-            return True
+from common.pii_filter import PresidioFilter, remove_pii
 
 
 logger = logging.getLogger(__name__)
@@ -40,6 +22,10 @@ logger.addFilter(PresidioFilter())
 logging.basicConfig(
     format="%(levelname)s - %(name)s -  %(message)s", level=logging.INFO
 )
+
+handler = logging.StreamHandler()
+handler.addFilter(PresidioFilter())
+
 
 st.title("Simple chat")
 
@@ -60,7 +46,6 @@ if "pipelines" not in st.session_state:
     else:
         logger.error("Failed to fetch models from Hayhooks API: %s", models_resp.text)
         st.session_state.pipelines = []
-
 
 with st.sidebar:
     st.write("[Phoenix UI](http://localhost:6006)")
@@ -117,12 +102,13 @@ def decode_chunk(chunk):
 def create_streaming_response(question):
     payload = {"model": pipeline, "messages": [{"role": "user", "content": question}]}
     url = f"{HAYHOOKS_URL}/chat/completions"
-    logger.info("Sending request to %s for %r", url, question)
+    filtered_question = remove_pii(question)
+    logger.info("Sending request to %s for %r", url, filtered_question)
     with requests.post(
-        url,
-        # headers={"Content-Type": "application/json", "Accept": "application/json"},
-        stream=True,
-        data=json.dumps(payload),
+            url,
+            # headers={"Content-Type": "application/json", "Accept": "application/json"},
+            stream=True,
+            data=json.dumps(payload),
     ) as response:
         if response.ok:
             for chunk in response.iter_content(chunk_size=None, decode_unicode=True):
