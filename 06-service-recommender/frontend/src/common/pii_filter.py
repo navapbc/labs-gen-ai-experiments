@@ -19,7 +19,10 @@ def remove_pii(text: str) -> str:
 
 
 class PresidioFilter(logging.Filter):
-    def filter(self, record):
-        if hasattr(record, 'msg') and isinstance(record.msg, str):
-            record.msg = remove_pii(record.msg)
+    def filter(self, record: logging.LogRecord):
+        if record.msg:
+            # get the full log message (include args)
+            full_message = record.getMessage()
+            record.msg = remove_pii(full_message)
+            record.args = ()  # these should now be in the full_message and we want to protect them from getting logged
         return True

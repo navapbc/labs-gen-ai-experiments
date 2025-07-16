@@ -3,6 +3,7 @@ import logging
 import json
 import os
 import re
+import sys
 import time
 from pprint import pformat
 
@@ -18,13 +19,14 @@ from common.pii_filter import PresidioFilter, remove_pii
 
 
 logger = logging.getLogger(__name__)
-logger.addFilter(PresidioFilter())
 logging.basicConfig(
     format="%(levelname)s - %(name)s -  %(message)s", level=logging.INFO
 )
 
-handler = logging.StreamHandler()
+handler = logging.StreamHandler(sys.stdout)
 handler.addFilter(PresidioFilter())
+
+logger.addHandler(handler)
 
 
 st.title("Simple chat")
@@ -102,8 +104,7 @@ def decode_chunk(chunk):
 def create_streaming_response(question):
     payload = {"model": pipeline, "messages": [{"role": "user", "content": question}]}
     url = f"{HAYHOOKS_URL}/chat/completions"
-    filtered_question = remove_pii(question)
-    logger.info("Sending request to %s for %r", url, filtered_question)
+    logger.info("Sending request to %s for %r", url, question)
     with requests.post(
             url,
             # headers={"Content-Type": "application/json", "Accept": "application/json"},
