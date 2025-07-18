@@ -8,6 +8,7 @@ import httpx
 import opentelemetry.exporter.otlp.proto.http.trace_exporter as otel_trace_exporter
 import opentelemetry.sdk.trace as otel_sdk_trace
 import opentelemetry.trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
 # https://docs.arize.com/phoenix/tracing/integrations-tracing/haystack
 # Arize's Phoenix observability platform
@@ -18,6 +19,7 @@ import phoenix.otel
 from openinference.instrumentation.haystack import HaystackInstrumentor
 
 from common.app_config import config
+from common.pii_filter import PIIRedactingSpanProcessor
 
 logger = logging.getLogger(__name__)
 
@@ -64,12 +66,24 @@ def configure_phoenix(only_if_alive=True):
             # Auto-instrument based on installed OpenInference dependencies
             auto_instrument=True,
         )
+
+        tracer_provider = otel_sdk_trace.TracerProvider()
+
+        # Create the PII redacting processor with the OTLP exporter
+        pii_processor = PIIRedactingSpanProcessor(OTLPSpanExporter(endpoint),)
+        tracer_provider.add_span_processor(pii_processor)
+
     else:
         # Using Haystack docs: https://haystack.deepset.ai/integrations/arize-phoenix
         # This is a more manual setup that uses HaystackInstrumentor
         # Since this doesn't use PHOENIX_PROJECT_NAME, it logs to the 'default' Phoenix project
         logger.info("Using HaystackInstrumentor")
         tracer_provider = otel_sdk_trace.TracerProvider()
+
+        # Create the PII redacting processor with the OTLP exporter
+        pii_processor = PIIRedactingSpanProcessor(OTLPSpanExporter(endpoint),)
+        tracer_provider.add_span_processor(pii_processor)
+
         # Set the URL since PHOENIX_COLLECTOR_ENDPOINT is not used by HaystackInstrumentor
         span_exporter = otel_trace_exporter.OTLPSpanExporter(f"{endpoint}/v1/traces")
         if BATCH_OTEL:
