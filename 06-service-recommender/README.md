@@ -229,3 +229,55 @@ cd ../backend
 export OPENAI_API_KEY='...'
 uv run python src/first_mcp.py
 ```
+
+#### LLM errors due to JSON Schema (generated from the OpenAPI spec)
+
+Got "Invalid schema" error and "Please ensure it is a valid JSON Schema." message.
+- No responses to this post: https://community.openai.com/t/tool-calls-rejecting-valid-json-from-correct-specification/862849
+- https://community.openai.com/t/pydantic-response-model-failure/789207:
+    - Is the input too large for your max tokens maybe?
+    - If I make my response model too “deep” it seems to fail.
+    - Not the problem: "Replace #/definitions with #$defs"
+    - Found a "Circular References" to AgencyV1
+
+It frequently doesn't provide required 'pagination' parameter, so added `Make sure to provide the required 'pagination' parameter.` to the LLM prompt.
+
+Haystack's ToolInvoker may not handle OpenAI API versions beyond v3.0:
+- v3.0: The nullable: true keyword is used for object properties that can be null.
+- v3.1: Instead of nullable: true, you can include null as one of the possible types in the type array.
+
+The OpenAPI spec for simpler.grants.gov's is v3.1 so this version incompatibility also causes:
+- "Output validation error: None is not of type 'string'" due to incorrect use of 'one_of' in the OpenAPI spec
+- "Input validation error: ['NASA'] is not of type 'object'" due to `"type": [ "object" ]` in the OpenAPI spec
+
+Tried https://github.com/apiture/openapi-down-convert to downgrade the version:
+
+Validating v3.1:
+```
+❯ uv run --with openapi-spec-validator openapi-spec-validator simpler_grants_gov-openapi_v3_1.json
+simpler_grants_gov-openapi_v3_1.json: OK
+```
+
+Validating v3.0 fails:
+```
+❯ uv run --with openapi-spec-validator openapi-spec-validator simpler_grants_gov-openapi_v3.json
+- Failed validating 'oneOf' ...
+```
+
+so the downgrade wasn't successful.
+
+### Concluding remarks
+
+There are several factors that make it challenging:
+- The OpenAPI spec from Simpler Grants is not stable (it’s an ALPHA VERSION) so it’s uncertain how polished the spec is – this is evidenced by me having to tweak the JSON file so that the MCP server starts up without errors.
+- The API is fairly large, so trying to pinpoint the actual root cause of the error is challenging.
+- There are many OpenAI forum threads for `invalid_request_error` and there are multiple possible causes. The OpenAPI spec is interpreted by several libraries (jlowin's FastMCP, indirectly by Haystack's ToolInvoker, and the LLM that generate the API call). A malformed JSON representation or OpenAPI spec version incompatibility could result in an error.
+
+Possible workarounds for complex OpenAPI specs:
+- Winnow down the API json so that it's smaller and simpler, reducing the possibility of errors and hallucinations.
+- Use a proxy MCP service that acts like `mcp_simpler_grants_client.py` so that it provides a minimal API spec for the MCP client.
+- Some other way to override the JSON schema so that it’s compatible with OpenAI’s acceptable schema – https://community.openai.com/t/pydantic-response-model-failure/789207 
+   - "If I make my response model too "deep" it seems to fail." 
+   - "I see, GPT says there are some issues with the actual schema: ChatGPT, might want to take a look. There are various versions of JSON schema"
+
+The more parameters and options there are in the API spec, the more uncertainty and risk (1) when developing the MCP server and client, and (2) when the LLM generates tool-calling output.

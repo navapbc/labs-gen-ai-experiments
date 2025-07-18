@@ -114,48 +114,7 @@ def toolset_pipeline(question):
 
     # toolset = [t for t in toolset.tools if t.name in ["Health", "Opportunity_Search"]]
     # logger.info("Toolset: %s", [t.name for t in toolset.tools])
-    """
-No responses: https://community.openai.com/t/tool-calls-rejecting-valid-json-from-correct-specification/862849
-https://community.openai.com/t/pydantic-response-model-failure/789207:
-- Is the input too large for your max tokens maybe?
-- If I make my response model too “deep” it seems to fail.
-- Not the problem: "Replace #/definitions with #$defs"
-- Found a "Circular References" to AgencyV1
 
-It frequently doesn't provide required 'pagination' parameter.
-
-Addresses some "Please ensure it is a valid JSON Schema." errors:
-Haystack's ToolInvoker may not handle newer OpenAI API versions
-- v3.0: The nullable: true keyword is used for object properties that can be null.
-- v3.1: Instead of nullable: true, you can include null as one of the possible types in the type array.
-
-Incorrect use of 'one_of' in the OpenAPI spec causes:
-    Error: Failed to invoke Tool `Opportunity_Search` with parameters {'filters': {'agency': {'one_of': ['NASA']}}, 'pagination': {'page_offset': 1, 'page_size': 5}}.
-    Error: Failed to invoke tool 'Opportunity_Search' with args:      {'filters': {'agency': {'one_of': ['NASA']}}, 'pagination': {'page_offset': 1, 'page_size': 5}} ,
-    got error: Tool 'Opportunity_Search' returned an error: [TextContent(type='text', text="Output validation error: None is not of type 'string'", annotations=None, meta=None)]
-
-API spec error?
-    Error: Failed to invoke Tool `Opportunity_Search` with parameters {'filters': {'agency': ['NASA']}, 'pagination': {'page_offset': 1, 'page_size': 5}, 'format': 'json'}.
-    Error: Failed to invoke tool 'Opportunity_Search' with args:      {'filters': {'agency': ['NASA']}, 'pagination': {'page_offset': 1, 'page_size': 5}, 'format': 'json'} ,
-    got error: Tool 'Opportunity_Search' returned an error: [TextContent(type='text', text="Input validation error: ['NASA'] is not of type 'object'", annotations=None, meta=None)]
-
-    Error: Failed to invoke Tool `Opportunity_Search` with parameters {'filters': {'agency': ['NASA']}, 'pagination': {'page_offset': 1, 'page_size': 5}}. 
-    Error: Failed to invoke tool 'Opportunity_Search' with args: {'filters': {'agency': ['NASA']}, 'pagination': {'page_offset': 1, 'page_size': 5}} ,
-    got error: Tool 'Opportunity_Search' returned an error: [TextContent(type='text', text="Input validation error: ['NASA'] is not of type 'object'", annotations=None, meta=None)
-
-Use https://github.com/apiture/openapi-down-convert
-=> Failed
-
-❯ uv run --with openapi-spec-validator openapi-spec-validator simpler_grants_gov-openapi_v3_1.json
-simpler_grants_gov-openapi_v3_1.json: OK
-
-Unfortunately 3.1 isn't supported by ToolInvoker yet, so we have to use 3.0:
-
-❯ uv run --with openapi-spec-validator openapi-spec-validator simpler_grants_gov-openapi_v3.json
-- Failed validating 'oneOf' ...
-- 
-    """
-    
     pipeline = pipeline_wrapper.create_pipeline(toolset)
     if not os.path.exists("toolset_pipeline.png"):
         pipeline.draw(Path("toolset_pipeline.png"))
@@ -175,14 +134,16 @@ Unfortunately 3.1 isn't supported by ToolInvoker yet, so we have to use 3.0:
                 "llm": {"messages": [user_input]},
                 "adapter": {"initial_msg": [user_input]},
             },
-            include_outputs_from=["response_llm", "adapter", "llm", "tool_invoker"]
+            include_outputs_from=["response_llm", "adapter", "llm", "tool_invoker"],
         )
         print(result["llm"]["replies"][0].text)
     logger.info("Result: %s", pformat(result))
 
-    tool_result = json.loads(result["tool_invoker"]["tool_messages"][0].tool_call_result.result)
-    result_content = json.loads(tool_result['content'][0]['text'])
-    entity_list = result_content['data']
+    tool_result = json.loads(
+        result["tool_invoker"]["tool_messages"][0].tool_call_result.result
+    )
+    result_content = json.loads(tool_result["content"][0]["text"])
+    entity_list = result_content["data"]
     for entity in entity_list:
         print(f"Opportunity ID: {entity['opportunity_id']}")
         print(f"Opportunity Title: {entity['opportunity_title']}")
@@ -216,7 +177,9 @@ def agent(question):
     toolset = get_toolset()
     agent = Agent(
         # chat_generator=OpenAIChatGenerator(tools_strict=False), tools=toolset, exit_conditions=["text"]
-        chat_generator=OpenAIChatGenerator(), tools=toolset, exit_conditions=["text"]
+        chat_generator=OpenAIChatGenerator(),
+        tools=toolset,
+        exit_conditions=["text"],
     )
     agent.warm_up()
 
@@ -244,5 +207,8 @@ if __name__ == "__main__":
     # no_toolset_pipeline("yoom value of 2 and 3")
     # agent("yoom value of 2 and 3")
 
-    toolset_pipeline("What grant opportunities are available for NASA? Make sure to provide the required 'pagination' parameter.")
+    pipeline_wrapper.ONLY_INVOKE_TOOL = True
+    toolset_pipeline(
+        "What grant opportunities are available for NASA? Make sure to provide the required 'pagination' parameter."
+    )
     # agent("What grant opportunities are available for NASA?")

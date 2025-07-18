@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.environ["SIMPLER_GRANTS_API_KEY"]
-MCP_URL = os.environ["MCP_URL"]
+MCP_URL = os.environ.get("MCP_URL", "http://localhost:8000/invoke")
 
 
 # def get_iam_token():
