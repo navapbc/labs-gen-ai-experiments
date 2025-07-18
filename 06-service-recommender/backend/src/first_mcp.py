@@ -103,6 +103,8 @@ from pipelines.third_mcp import pipeline_wrapper
 from haystack.dataclasses import ChatMessage
 import os
 from pathlib import Path
+from pprint import pprint
+import json
 
 
 def toolset_pipeline(question):
@@ -113,22 +115,6 @@ def toolset_pipeline(question):
     # toolset = [t for t in toolset.tools if t.name in ["Health", "Opportunity_Search"]]
     # logger.info("Toolset: %s", [t.name for t in toolset.tools])
     """
-File "/Users/yoom/dev/labs-gen-ai-experiments/06-service-recommender/backend/.venv/lib/python3.12/site-packages/openai/resources/chat/completions/completions.py", line 925, in create
-    return self._post(
-           ^^^^^^^^^^^
-File "/Users/yoom/dev/labs-gen-ai-experiments/06-service-recommender/backend/.venv/lib/python3.12/site-packages/openai/_base_client.py", line 1242, in post
-return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/Users/yoom/dev/labs-gen-ai-experiments/06-service-recommender/backend/.venv/lib/python3.12/site-packages/openai/_base_client.py", line 1037, in request
-raise self._make_status_error_from_response(err.response) from None
-
-openai.BadRequestError: Error code: 400 - {'error': {'message': "Invalid schema for function 'Opportunity_Search'. Please ensure it is a valid JSON Schema.", 
-'type': 'invalid_request_error', 'param': 'tools[2].function.parameters', 'code': 'invalid_function_parameters'}}
-
-toolset[0].function.parameters
-pprint(toolset[0].parameters)
-print(json.dumps(toolset[0].parameters))
-
 No responses: https://community.openai.com/t/tool-calls-rejecting-valid-json-from-correct-specification/862849
 https://community.openai.com/t/pydantic-response-model-failure/789207:
 - Is the input too large for your max tokens maybe?
@@ -136,14 +122,40 @@ https://community.openai.com/t/pydantic-response-model-failure/789207:
 - Not the problem: "Replace #/definitions with #$defs"
 - Found a "Circular References" to AgencyV1
 
+It frequently doesn't provide required 'pagination' parameter.
 
+Addresses some "Please ensure it is a valid JSON Schema." errors:
+Haystack's ToolInvoker may not handle newer OpenAI API versions
+- v3.0: The nullable: true keyword is used for object properties that can be null.
+- v3.1: Instead of nullable: true, you can include null as one of the possible types in the type array.
+
+Incorrect use of 'one_of' in the OpenAPI spec causes:
+    Error: Failed to invoke Tool `Opportunity_Search` with parameters {'filters': {'agency': {'one_of': ['NASA']}}, 'pagination': {'page_offset': 1, 'page_size': 5}}.
+    Error: Failed to invoke tool 'Opportunity_Search' with args:      {'filters': {'agency': {'one_of': ['NASA']}}, 'pagination': {'page_offset': 1, 'page_size': 5}} ,
+    got error: Tool 'Opportunity_Search' returned an error: [TextContent(type='text', text="Output validation error: None is not of type 'string'", annotations=None, meta=None)]
+
+API spec error?
+    Error: Failed to invoke Tool `Opportunity_Search` with parameters {'filters': {'agency': ['NASA']}, 'pagination': {'page_offset': 1, 'page_size': 5}, 'format': 'json'}.
+    Error: Failed to invoke tool 'Opportunity_Search' with args:      {'filters': {'agency': ['NASA']}, 'pagination': {'page_offset': 1, 'page_size': 5}, 'format': 'json'} ,
+    got error: Tool 'Opportunity_Search' returned an error: [TextContent(type='text', text="Input validation error: ['NASA'] is not of type 'object'", annotations=None, meta=None)]
+
+    Error: Failed to invoke Tool `Opportunity_Search` with parameters {'filters': {'agency': ['NASA']}, 'pagination': {'page_offset': 1, 'page_size': 5}}. 
+    Error: Failed to invoke tool 'Opportunity_Search' with args: {'filters': {'agency': ['NASA']}, 'pagination': {'page_offset': 1, 'page_size': 5}} ,
+    got error: Tool 'Opportunity_Search' returned an error: [TextContent(type='text', text="Input validation error: ['NASA'] is not of type 'object'", annotations=None, meta=None)
+
+Use https://github.com/apiture/openapi-down-convert
+=> Failed
+
+❯ uv run --with openapi-spec-validator openapi-spec-validator simpler_grants_gov-openapi_v3_1.json
+simpler_grants_gov-openapi_v3_1.json: OK
+
+Unfortunately 3.1 isn't supported by ToolInvoker yet, so we have to use 3.0:
+
+❯ uv run --with openapi-spec-validator openapi-spec-validator simpler_grants_gov-openapi_v3.json
+- Failed validating 'oneOf' ...
+- 
     """
-    from pprint import pprint
-    import json
-    import openai
-    openai.resources
-    import pdb; pdb.set_trace()
-
+    
     pipeline = pipeline_wrapper.create_pipeline(toolset)
     if not os.path.exists("toolset_pipeline.png"):
         pipeline.draw(Path("toolset_pipeline.png"))
@@ -151,15 +163,34 @@ https://community.openai.com/t/pydantic-response-model-failure/789207:
     user_input = ChatMessage.from_user(
         text=question
     )  # "What is the time in New York?")
-    result = pipeline.run(
-        {
-            "llm": {"messages": [user_input]},
-            "adapter": {"initial_msg": [user_input]},
-        },
-        # include_outputs_from=["response_llm", "adapter", "llm", "tool_invoker"]
-    )
+    if pipeline_wrapper.ONLY_INVOKE_TOOL:
+        result = pipeline.run(
+            {
+                "llm": {"messages": [user_input]},
+            },
+        )
+    else:
+        result = pipeline.run(
+            {
+                "llm": {"messages": [user_input]},
+                "adapter": {"initial_msg": [user_input]},
+            },
+            include_outputs_from=["response_llm", "adapter", "llm", "tool_invoker"]
+        )
+        print(result["llm"]["replies"][0].text)
     logger.info("Result: %s", pformat(result))
-    print(result["response_llm"]["replies"][0].text)
+
+    tool_result = json.loads(result["tool_invoker"]["tool_messages"][0].tool_call_result.result)
+    result_content = json.loads(tool_result['content'][0]['text'])
+    entity_list = result_content['data']
+    for entity in entity_list:
+        print(f"Opportunity ID: {entity['opportunity_id']}")
+        print(f"Opportunity Title: {entity['opportunity_title']}")
+        print(f"Agency: {entity['agency']}")
+        print(f"Summary: {entity['summary']['summary_description']}")
+        print("---" * 20)
+    if "response_llm" in result:
+        print(result["response_llm"]["replies"][0].text)
 
 
 def no_toolset_pipeline(question):
@@ -184,7 +215,8 @@ def agent(question):
     # This results into multiple threads in Phoenix logs, which is undesirable
     toolset = get_toolset()
     agent = Agent(
-        chat_generator=OpenAIChatGenerator(tools_strict=False), tools=toolset, exit_conditions=["text"]
+        # chat_generator=OpenAIChatGenerator(tools_strict=False), tools=toolset, exit_conditions=["text"]
+        chat_generator=OpenAIChatGenerator(), tools=toolset, exit_conditions=["text"]
     )
     agent.warm_up()
 
@@ -212,5 +244,5 @@ if __name__ == "__main__":
     # no_toolset_pipeline("yoom value of 2 and 3")
     # agent("yoom value of 2 and 3")
 
-    toolset_pipeline("What grant opportunities are available for NASA?")
+    toolset_pipeline("What grant opportunities are available for NASA? Make sure to provide the required 'pagination' parameter.")
     # agent("What grant opportunities are available for NASA?")

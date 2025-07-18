@@ -49,6 +49,8 @@ class PipelineWrapper(BasePipelineWrapper):
             logger.info("Result: %s", result)
             return str(result)
 
+# For testing purposes, we can set this to True to only invoke the tool without generating a final response from the LLM
+ONLY_INVOKE_TOOL = False
 
 def create_pipeline(toolset=None) -> Pipeline:
     # https://docs.haystack.deepset.ai/docs/mcptoolset#in-a-pipeline
@@ -61,6 +63,11 @@ def create_pipeline(toolset=None) -> Pipeline:
         "llm", OpenAIChatGenerator(model="gpt-4o-mini", tools=toolset)
     )
     pipeline.add_component("tool_invoker", ToolInvoker(tools=toolset))
+    pipeline.connect("llm.replies", "tool_invoker.messages")
+
+    if ONLY_INVOKE_TOOL:
+        return pipeline
+
     pipeline.add_component(
         "adapter",
         OutputAdapter(
@@ -71,11 +78,9 @@ def create_pipeline(toolset=None) -> Pipeline:
     )
     pipeline.add_component("response_llm", OpenAIChatGenerator(model="gpt-4o-mini"))
 
-    pipeline.connect("llm.replies", "tool_invoker.messages")
     pipeline.connect("llm.replies", "adapter.initial_tool_messages")
     pipeline.connect("tool_invoker.tool_messages", "adapter.tool_messages")
     pipeline.connect("adapter.output", "response_llm.messages")
-    return pipeline
 
 
 def create_no_toolset_pipeline() -> Pipeline:
