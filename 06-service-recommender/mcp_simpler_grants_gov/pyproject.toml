@@ -1,0 +1,10 @@
+[project]
+name = "mcp_simpler_grants_gov"
+version = "0.1.0"
+description = "MCP Server for Simpler Grants.gov"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi-mcp>=0.3.4",
+    "fastmcp==2.10.4",
+]
