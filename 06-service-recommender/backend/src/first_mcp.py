@@ -1,13 +1,22 @@
-import logging
 import json
+import logging
+import os
+from pathlib import Path
 from pprint import pformat
 
-from haystack_integrations.tools.mcp import MCPTool, StreamableHttpServerInfo
-from haystack_integrations.tools.mcp import StdioServerInfo, MCPToolset
-
+from haystack.components.agents import Agent
+from haystack.components.generators.chat import OpenAIChatGenerator
+from haystack.dataclasses import ChatMessage
+from haystack_integrations.tools.mcp import (
+    MCPTool,
+    MCPToolset,
+    StdioServerInfo,
+    StreamableHttpServerInfo,
+)
+from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
 from mcp.shared.metadata_utils import get_display_name
-from mcp import ClientSession
+from pipelines.third_mcp import pipeline_wrapper
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -99,13 +108,6 @@ def get_toolset():
 
 #
 
-from pipelines.third_mcp import pipeline_wrapper
-from haystack.dataclasses import ChatMessage
-import os
-from pathlib import Path
-from pprint import pprint
-import json
-
 
 def toolset_pipeline(question):
     toolset = get_toolset()
@@ -167,9 +169,6 @@ def no_toolset_pipeline(question):
 
 
 #
-
-from haystack.components.generators.chat import OpenAIChatGenerator
-from haystack.components.agents import Agent
 
 
 def agent(question):

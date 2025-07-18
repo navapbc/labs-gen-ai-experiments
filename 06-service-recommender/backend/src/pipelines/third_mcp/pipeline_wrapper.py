@@ -1,19 +1,18 @@
 import logging
 from pprint import pformat
 
-from haystack_integrations.tools.mcp import MCPTool, StreamableHttpServerInfo
-from haystack import Document, Pipeline
+# https://github.com/deepset-ai/hayhooks?tab=readme-ov-file#sharing-code-between-pipeline-wrappers
+from common import phoenix_utils
 from hayhooks import BasePipelineWrapper
 from haystack import Pipeline
+from haystack.components.converters import OutputAdapter
 from haystack.components.generators.chat import OpenAIChatGenerator
 from haystack.components.tools import ToolInvoker
-from haystack.components.converters import OutputAdapter
 from haystack.dataclasses import ChatMessage
-from haystack_integrations.tools.mcp import MCPToolset, StdioServerInfo
-
-# https://github.com/deepset-ai/hayhooks?tab=readme-ov-file#sharing-code-between-pipeline-wrappers
-from common import haystack_utils, phoenix_utils
-
+from haystack_integrations.tools.mcp import (
+    MCPToolset,
+    StreamableHttpServerInfo,
+)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
