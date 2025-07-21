@@ -94,7 +94,8 @@ def decode_chunk(chunk):
 
 # To test, try 'Write a short poem about where Jean lives'
 def create_streaming_response(question):
-    payload = {"model": pipeline, "messages": [{"role": "user", "content": question}]}
+    messages = st.session_state.messages
+    payload = {"model": pipeline, "messages": messages}
     url = f"{HAYHOOKS_URL}/chat/completions"
     logger.info("Sending request to %s for %r", url, question)
     with requests.post(
