@@ -1,17 +1,9 @@
 import json
-
-# import httpx
-# from fastapi import FastAPI, Request
-# from fastapi.responses import JSONResponse
-# from pydantic import BaseModel
-# from typing import Dict, Any
-# import uvicorn
 import os
 
 import httpx
-from fastmcp import FastMCP
-
 from dotenv import load_dotenv
+from fastmcp import FastMCP
 
 load_dotenv()
 API_KEY = os.environ["SIMPLER_GRANTS_API_KEY"]

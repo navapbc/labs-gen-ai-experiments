@@ -10,20 +10,6 @@ API_KEY = os.environ["SIMPLER_GRANTS_API_KEY"]
 MCP_URL = os.environ.get("MCP_URL", "http://localhost:8000/invoke")
 
 
-# def get_iam_token():
-#     iam_url = "https://.../identity/token"
-#     headers = {
-#         "Content-Type": "application/x-www-form-urlencoded",
-#     }
-#     data = {
-#         "apikey": API_KEY,
-#         "grant_type": "urn:...:params:oauth:grant-type:apikey"
-#     }
-#     response = requests.post(iam_url, headers=headers, data=data)
-#     response.raise_for_status()
-#     return response.json()["access_token"]
-
-
 def get__health():
     tool_call = {
         "tool_name": "get__health",

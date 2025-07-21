@@ -125,7 +125,9 @@ Run Haystack pipeline:
 ```sh
 cd ../backend
 export OPENAI_API_KEY='...'
-uv run python src/first_mcp.py
+MCP_SERVER=true uv run python src/first_mcp.py
+
+COMPUTE_YOOM_MCP_SERVER=true uv run python src/first_mcp.py
 ```
 
 Tweak `first_mcp.py` to test other functions in that file.
@@ -173,10 +175,9 @@ npx @modelcontextprotocol/inspector
 ```
 and connect to http://localhost:8000/mcp.
 
-However, only 2 tools are listed:
+However since the `generate_tools_from_openapi` approach was used, only 2 generic tools are listed:
 - `list_tools_tools_get`
 - `invoke_tool_invoke_post`
-since the `generate_tools_from_openapi` approach was used.
 
 
 ### Convert to Streamable HTTP transport protocol
@@ -227,8 +228,10 @@ Run Haystack pipeline:
 ```sh
 cd ../backend
 export OPENAI_API_KEY='...'
-uv run python src/first_mcp.py
+GRANTS_MCP_SERVER=true uv run python src/first_mcp.py
 ```
+
+Results in error: `Output validation error: None is not of type 'string'`
 
 #### LLM errors due to JSON Schema (generated from the OpenAPI spec)
 
@@ -263,7 +266,6 @@ Validating v3.0 fails:
 ❯ uv run --with openapi-spec-validator openapi-spec-validator simpler_grants_gov-openapi_v3.json
 - Failed validating 'oneOf' ...
 ```
-
 so the downgrade wasn't successful.
 
 ### Concluding remarks
@@ -274,7 +276,7 @@ There are several factors that make it challenging:
 - There are many OpenAI forum threads for `invalid_request_error` and there are multiple possible causes. The OpenAPI spec is interpreted by several libraries (jlowin's FastMCP, indirectly by Haystack's ToolInvoker, and the LLM that generate the API call). A malformed JSON representation or OpenAPI spec version incompatibility could result in an error.
 
 Possible workarounds for complex OpenAPI specs:
-- Winnow down the API json so that it's smaller and simpler, reducing the possibility of errors and hallucinations.
+- To use jlowin's FastMCP, winnow down the API json so that it's smaller and simpler, reducing the possibility of errors and hallucinations.
 - Use a proxy MCP service that acts like `mcp_simpler_grants_client.py` so that it provides a minimal API spec for the MCP client.
 - Some other way to override the JSON schema so that it’s compatible with OpenAI’s acceptable schema – https://community.openai.com/t/pydantic-response-model-failure/789207 
    - "If I make my response model too "deep" it seems to fail." 

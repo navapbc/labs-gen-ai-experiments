@@ -17,10 +17,16 @@
       "AgencyListRequest": {
         "properties": {
           "filters": {
-            "$ref": "#/components/schemas/AgencyFilterV1"
+            "$ref": "#/components/schemas/AgencyFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "pagination": {
-            "$ref": "#/components/schemas/AgencyPaginationV1"
+            "$ref": "#/components/schemas/AgencyPaginationV1",
+            "type": [
+              "object"
+            ]
           }
         },
         "required": [
@@ -33,7 +39,10 @@
           "data": {
             "description": "A list of agency records",
             "items": {
-              "$ref": "#/components/schemas/AgencyResponse"
+              "$ref": "#/components/schemas/AgencyResponse",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -43,7 +52,11 @@
             "type": "string"
           },
           "pagination_info": {
-            "$ref": "#/components/schemas/PaginationInfo"
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "The pagination information for paginated endpoints",
+            "type": [
+              "object"
+            ]
           },
           "status_code": {
             "description": "The HTTP status code",
@@ -91,7 +104,10 @@
             ],
             "description": "The list of sorting rules",
             "items": {
-              "$ref": "#/components/schemas/SortOrderAgencyPaginationV1"
+              "$ref": "#/components/schemas/SortOrderAgencyPaginationV1",
+              "type": [
+                "object"
+              ]
             },
             "maxItems": 5,
             "minItems": 1,
@@ -122,7 +138,10 @@
             "type": "string"
           },
           "top_level_agency": {
-            "$ref": "#/components/schemas/AgencyResponse"
+            "$ref": "#/components/schemas/AgencyResponse",
+            "type": [
+              "object"
+            ]
           },
           "updated_at": {
             "format": "date-time",
@@ -134,13 +153,22 @@
       "AgencySearchFilterV1": {
         "properties": {
           "has_active_opportunity": {
-            "$ref": "#/components/schemas/HasActiveOpportunityFilterV1"
+            "$ref": "#/components/schemas/HasActiveOpportunityFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "is_test_agency": {
-            "$ref": "#/components/schemas/IsTestAgencyFilterV1"
+            "$ref": "#/components/schemas/IsTestAgencyFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "opportunity_statuses": {
-            "$ref": "#/components/schemas/OpportunityStatusesFilterV1"
+            "$ref": "#/components/schemas/OpportunityStatusesFilterV1",
+            "type": [
+              "object"
+            ]
           }
         },
         "type": "object"
@@ -169,7 +197,10 @@
             ],
             "description": "The list of sorting rules",
             "items": {
-              "$ref": "#/components/schemas/SortOrderAgencySearchPaginationV1"
+              "$ref": "#/components/schemas/SortOrderAgencySearchPaginationV1",
+              "type": [
+                "object"
+              ]
             },
             "maxItems": 5,
             "minItems": 1,
@@ -185,10 +216,16 @@
       "AgencySearchRequest": {
         "properties": {
           "filters": {
-            "$ref": "#/components/schemas/AgencySearchFilterV1"
+            "$ref": "#/components/schemas/AgencySearchFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "pagination": {
-            "$ref": "#/components/schemas/AgencySearchPaginationV1"
+            "$ref": "#/components/schemas/AgencySearchPaginationV1",
+            "type": [
+              "object"
+            ]
           },
           "query": {
             "description": "Query string which searches against several text fields",
@@ -229,7 +266,11 @@
             "type": "string"
           },
           "pagination_info": {
-            "$ref": "#/components/schemas/PaginationInfo"
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "The pagination information for paginated endpoints",
+            "type": [
+              "object"
+            ]
           },
           "status_code": {
             "description": "The HTTP status code",
@@ -414,7 +455,10 @@
           },
           "competition_forms": {
             "items": {
-              "$ref": "#/components/schemas/CompetitionFormAlpha"
+              "$ref": "#/components/schemas/CompetitionFormAlpha",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -427,7 +471,10 @@
           "competition_instructions": {
             "description": "List of instruction files associated with this competition",
             "items": {
-              "$ref": "#/components/schemas/CompetitionInstructionAlpha"
+              "$ref": "#/components/schemas/CompetitionInstructionAlpha",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -463,7 +510,10 @@
             "type": "string"
           },
           "opportunity_assistance_listing": {
-            "$ref": "#/components/schemas/OpportunityAssistanceListingV1"
+            "$ref": "#/components/schemas/OpportunityAssistanceListingV1",
+            "type": [
+              "object"
+            ]
           },
           "opportunity_id": {
             "description": "The opportunity ID that the competition is associated with",
@@ -477,7 +527,10 @@
       "CompetitionFormAlpha": {
         "properties": {
           "form": {
-            "$ref": "#/components/schemas/FormAlpha"
+            "$ref": "#/components/schemas/FormAlpha",
+            "type": [
+              "object"
+            ]
           },
           "is_required": {
             "description": "Whether the form is required for all applications to the competition",
@@ -539,7 +592,10 @@
           "errors": {
             "example": [],
             "items": {
-              "$ref": "#/components/schemas/ValidationIssue"
+              "$ref": "#/components/schemas/ValidationIssue",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -615,7 +671,10 @@
       "ExtractMetadataFilterV1": {
         "properties": {
           "created_at": {
-            "$ref": "#/components/schemas/DateRange"
+            "$ref": "#/components/schemas/DateRange",
+            "type": [
+              "object"
+            ]
           },
           "extract_type": {
             "description": "The type of extract to filter by",
@@ -635,7 +694,10 @@
           "data": {
             "description": "A list of extract metadata records",
             "items": {
-              "$ref": "#/components/schemas/ExtractMetadataResponse"
+              "$ref": "#/components/schemas/ExtractMetadataResponse",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -645,7 +707,11 @@
             "type": "string"
           },
           "pagination_info": {
-            "$ref": "#/components/schemas/PaginationInfo"
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "The pagination information for paginated endpoints",
+            "type": [
+              "object"
+            ]
           },
           "status_code": {
             "description": "The HTTP status code",
@@ -673,7 +739,10 @@
           "sort_order": {
             "description": "The list of sorting rules",
             "items": {
-              "$ref": "#/components/schemas/SortOrderExtractMetadataPaginationV1"
+              "$ref": "#/components/schemas/SortOrderExtractMetadataPaginationV1",
+              "type": [
+                "object"
+              ]
             },
             "maxItems": 5,
             "minItems": 1,
@@ -693,7 +762,10 @@
             "description": "The REST resource object"
           },
           "filters": {
-            "$ref": "#/components/schemas/ExtractMetadataFilterV1"
+            "$ref": "#/components/schemas/ExtractMetadataFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "message": {
             "description": "The message to return",
@@ -701,7 +773,10 @@
             "type": "string"
           },
           "pagination": {
-            "$ref": "#/components/schemas/ExtractMetadataPaginationV1"
+            "$ref": "#/components/schemas/ExtractMetadataPaginationV1",
+            "type": [
+              "object"
+            ]
           },
           "status_code": {
             "description": "The HTTP status code",
@@ -767,8 +842,10 @@
               }
             ],
             "description": "The instruction file for the form, if available",
-            "type": "object",
-            "nullable": true
+            "type": [
+              "object",
+              "null"
+            ]
           },
           "form_json_schema": {
             "additionalProperties": {},
@@ -926,8 +1003,10 @@
               "example": true,
               "type": "boolean"
             },
-            "type": "array",
-            "nullable": true
+            "type": [
+              "array",
+              "null"
+            ]
           }
         },
         "type": "object"
@@ -965,7 +1044,10 @@
       "HealthcheckResponse": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/HealthcheckMetadata"
+            "$ref": "#/components/schemas/HealthcheckMetadata",
+            "type": [
+              "object"
+            ]
           },
           "message": {
             "description": "The message to return",
@@ -987,8 +1069,10 @@
               "example": true,
               "type": "boolean"
             },
-            "type": "array",
-            "nullable": true
+            "type": [
+              "array",
+              "null"
+            ]
           }
         },
         "type": "object"
@@ -1000,8 +1084,10 @@
               "example": true,
               "type": "boolean"
             },
-            "type": "array",
-            "nullable": true
+            "type": [
+              "array",
+              "null"
+            ]
           }
         },
         "type": "object"
@@ -1138,7 +1224,10 @@
       "OpportunityGetResponseV1": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/OpportunityWithAttachmentsV1"
+            "$ref": "#/components/schemas/OpportunityWithAttachmentsV1",
+            "type": [
+              "object"
+            ]
           },
           "message": {
             "description": "The message to return",
@@ -1177,7 +1266,10 @@
             ],
             "description": "The list of sorting rules",
             "items": {
-              "$ref": "#/components/schemas/SortOrderOpportunityPaginationV1"
+              "$ref": "#/components/schemas/SortOrderOpportunityPaginationV1",
+              "type": [
+                "object"
+              ]
             },
             "maxItems": 5,
             "minItems": 1,
@@ -1193,36 +1285,65 @@
       "OpportunitySearchFilterV1": {
         "properties": {
           "agency": {
-            "$ref": "#/components/schemas/AgencyOppSearchFilterV1"
+            "$ref": "#/components/schemas/AgencyOppSearchFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "applicant_type": {
-            "$ref": "#/components/schemas/ApplicantTypeFilterV1"
+            "$ref": "#/components/schemas/ApplicantTypeFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "assistance_listing_number": {
-            "$ref": "#/components/schemas/AssistanceListingNumberFilterV1"
+            "$ref": "#/components/schemas/AssistanceListingNumberFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "award_ceiling": {
-            "$ref": "#/components/schemas/AwardCeilingFilterV1"
+            "$ref": "#/components/schemas/AwardCeilingFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "award_floor": {
-            "$ref": "#/components/schemas/AwardFloorFilterV1"
+            "$ref": "#/components/schemas/AwardFloorFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "close_date": {
-            "$ref": "#/components/schemas/CloseDateFilterV1"
+            "$ref": "#/components/schemas/CloseDateFilterV1",
+            "type": [
+              "object"
+            ]
           },
+
           "estimated_total_program_funding": {
-            "$ref": "#/components/schemas/EstimatedTotalProgramFundingFilterV1"
+            "$ref": "#/components/schemas/EstimatedTotalProgramFundingFilterV1",
+            "type": [
+              "object"
+            ]
           }
+
         },
         "type": "object"
       },
       "OpportunitySearchRequestV1": {
         "properties": {
           "experimental": {
-            "$ref": "#/components/schemas/ExperimentalV1"
+            "$ref": "#/components/schemas/ExperimentalV1",
+            "type": [
+              "object"
+            ]
           },
           "filters": {
-            "$ref": "#/components/schemas/OpportunitySearchFilterV1"
+            "$ref": "#/components/schemas/OpportunitySearchFilterV1",
+            "type": [
+              "object"
+            ]
           },
           "format": {
             "default": "json",
@@ -1236,7 +1357,10 @@
             ]
           },
           "pagination": {
-            "$ref": "#/components/schemas/OpportunityPaginationV1"
+            "$ref": "#/components/schemas/OpportunityPaginationV1",
+            "type": [
+              "object"
+            ]
           },
           "query": {
             "description": "Query string which searches against several text fields",
@@ -1272,7 +1396,11 @@
             "type": "array"
           },
           "facet_counts": {
-            "$ref": "#/components/schemas/OpportunityFacetV1"
+            "$ref": "#/components/schemas/OpportunityFacetV1",
+            "description": "Counts of filter/facet values in the full response",
+            "type": [
+              "object"
+            ]
           },
           "message": {
             "description": "The message to return",
@@ -1280,7 +1408,11 @@
             "type": "string"
           },
           "pagination_info": {
-            "$ref": "#/components/schemas/PaginationInfo"
+            "$ref": "#/components/schemas/PaginationInfo",
+            "description": "The pagination information for paginated endpoints",
+            "type": [
+              "object"
+            ]
           },
           "status_code": {
             "description": "The HTTP status code",
@@ -1528,8 +1660,10 @@
           },
           "is_cost_sharing": {
             "description": "Whether or not the opportunity has a cost sharing/matching requirement",
-            "type": "boolean",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "is_forecast": {
             "description": "Whether the opportunity is forecasted, that is, the information is only an estimate and not yet official",
@@ -1612,7 +1746,10 @@
           },
           "opportunity_assistance_listings": {
             "items": {
-              "$ref": "#/components/schemas/OpportunityAssistanceListingV1"
+              "$ref": "#/components/schemas/OpportunityAssistanceListingV1",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -1648,7 +1785,10 @@
             "nullable": true
           },
           "summary": {
-            "$ref": "#/components/schemas/OpportunitySummaryV1"
+            "$ref": "#/components/schemas/OpportunitySummaryV1",
+            "type": [
+              "object"
+            ]
           },
           "top_level_agency_name": {
             "description": "The name of the top level agency who created the oppportunity",
@@ -1687,7 +1827,10 @@
           "attachments": {
             "description": "List of attachments associated with the opportunity",
             "items": {
-              "$ref": "#/components/schemas/OpportunityAttachmentV1"
+              "$ref": "#/components/schemas/OpportunityAttachmentV1",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -1716,7 +1859,10 @@
           "competitions": {
             "description": "List of competitions associated with the opportunity",
             "items": {
-              "$ref": "#/components/schemas/CompetitionAlpha"
+              "$ref": "#/components/schemas/CompetitionAlpha",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -1732,7 +1878,10 @@
           },
           "opportunity_assistance_listings": {
             "items": {
-              "$ref": "#/components/schemas/OpportunityAssistanceListingV1"
+              "$ref": "#/components/schemas/OpportunityAssistanceListingV1",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -1768,7 +1917,10 @@
             "nullable": true
           },
           "summary": {
-            "$ref": "#/components/schemas/OpportunitySummaryV1"
+            "$ref": "#/components/schemas/OpportunitySummaryV1",
+            "type": [
+              "object"
+            ]
           },
           "top_level_agency_name": {
             "description": "The name of the top level agency who created the oppportunity",
@@ -1799,7 +1951,10 @@
           "sort_order": {
             "description": "The sort order passed in originally",
             "items": {
-              "$ref": "#/components/schemas/SortOrder"
+              "$ref": "#/components/schemas/SortOrder",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -1886,7 +2041,10 @@
             "nullable": true
           },
           "summary": {
-            "$ref": "#/components/schemas/SavedOpportunitySummaryV1"
+            "$ref": "#/components/schemas/SavedOpportunitySummaryV1",
+            "type": [
+              "object"
+            ]
           }
         },
         "type": "object"
@@ -1933,7 +2091,11 @@
             "type": "string"
           },
           "search_query": {
-            "$ref": "#/components/schemas/OpportunitySearchRequestV1"
+            "$ref": "#/components/schemas/OpportunitySearchRequestV1",
+            "description": "The saved search query parameters",
+            "type": [
+              "object"
+            ]
           }
         },
         "type": "object"
@@ -2210,7 +2372,10 @@
       "UserGetResponse": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/User"
+            "$ref": "#/components/schemas/User",
+            "type": [
+              "object"
+            ]
           },
           "message": {
             "description": "The message to return",
@@ -2249,7 +2414,10 @@
             ],
             "description": "The list of sorting rules",
             "items": {
-              "$ref": "#/components/schemas/SortOrderUserGetSavedOpportunityPaginationV1"
+              "$ref": "#/components/schemas/SortOrderUserGetSavedOpportunityPaginationV1",
+              "type": [
+                "object"
+              ]
             },
             "maxItems": 5,
             "minItems": 1,
@@ -2286,7 +2454,10 @@
             ],
             "description": "The list of sorting rules",
             "items": {
-              "$ref": "#/components/schemas/SortOrderUserGetSavedSearchPaginationV1"
+              "$ref": "#/components/schemas/SortOrderUserGetSavedSearchPaginationV1",
+              "type": [
+                "object"
+              ]
             },
             "maxItems": 5,
             "minItems": 1,
@@ -2321,8 +2492,10 @@
               }
             ],
             "description": "SAM.gov entity information for the organization",
-            "type": "object",
-            "nullable": true
+            "type": [
+              "object",
+              "null"
+            ]
           }
         },
         "type": "object"
@@ -2332,7 +2505,10 @@
           "data": {
             "description": "List of organizations the user is associated with",
             "items": {
-              "$ref": "#/components/schemas/UserOrganization"
+              "$ref": "#/components/schemas/UserOrganization",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -2388,7 +2564,10 @@
             "type": "string"
           },
           "search_query": {
-            "$ref": "#/components/schemas/OpportunitySearchRequestV1"
+            "$ref": "#/components/schemas/OpportunitySearchRequestV1",
+            "type": [
+              "object"
+            ]
           }
         },
         "required": [
@@ -2399,7 +2578,10 @@
       "UserSaveSearchResponse": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/SavedSearchResponse"
+            "$ref": "#/components/schemas/SavedSearchResponse",
+            "type": [
+              "object"
+            ]
           },
           "message": {
             "description": "The message to return",
@@ -2417,7 +2599,10 @@
       "UserSavedOpportunitiesRequest": {
         "properties": {
           "pagination": {
-            "$ref": "#/components/schemas/UserGetSavedOpportunityPaginationV1"
+            "$ref": "#/components/schemas/UserGetSavedOpportunityPaginationV1",
+            "type": [
+              "object"
+            ]
           }
         },
         "required": [
@@ -2430,7 +2615,10 @@
           "data": {
             "description": "List of saved opportunities",
             "items": {
-              "$ref": "#/components/schemas/SavedOpportunityResponseV1"
+              "$ref": "#/components/schemas/SavedOpportunityResponseV1",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -2450,7 +2638,10 @@
       "UserSavedSearchesRequest": {
         "properties": {
           "pagination": {
-            "$ref": "#/components/schemas/UserGetSavedSearchPaginationV1"
+            "$ref": "#/components/schemas/UserGetSavedSearchPaginationV1",
+            "type": [
+              "object"
+            ]
           }
         },
         "required": [
@@ -2463,7 +2654,10 @@
           "data": {
             "description": "List of saved searches",
             "items": {
-              "$ref": "#/components/schemas/SavedSearchResponse"
+              "$ref": "#/components/schemas/SavedSearchResponse",
+              "type": [
+                "object"
+              ]
             },
             "type": "array"
           },
@@ -2601,7 +2795,7 @@
     "title": "Simpler Grants API",
     "version": "v0"
   },
-  "openapi": "3.0.3",
+  "openapi": "3.1.0",
   "paths": {
     "/health": {
       "get": {

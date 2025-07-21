@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import sys
 from pathlib import Path
 from pprint import pformat
 
@@ -16,6 +17,8 @@ from haystack_integrations.tools.mcp import (
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
 from mcp.shared.metadata_utils import get_display_name
+
+from common import haystack_utils, phoenix_utils
 from pipelines.third_mcp import pipeline_wrapper
 
 logger = logging.getLogger(__name__)
@@ -53,7 +56,7 @@ def stdio():
 #
 
 
-async def client():
+async def mcp_info():
     # Connect to a streamable HTTP server
     async with streamablehttp_client("http://127.0.0.1:8000/mcp") as (
         read_stream,
@@ -94,12 +97,12 @@ async def display_resources(session: ClientSession):
         print(f"Resource: {display_name} ({resource.uri})")
 
 
-def get_toolset():
+def get_toolset(tool_names=None):
     # https://docs.haystack.deepset.ai/docs/mcptoolset
     server_info = StreamableHttpServerInfo(url="http://127.0.0.1:8000/mcp")
     toolset = MCPToolset(
         server_info=server_info,
-        tool_names=["Opportunity_Search"],  # Only include specific tools
+        tool_names=tool_names,  # Only include specific tools
     )
 
     logger.info("Resulting tools: %s", [t.name for t in toolset.tools])
@@ -109,8 +112,8 @@ def get_toolset():
 #
 
 
-def toolset_pipeline(question):
-    toolset = get_toolset()
+def toolset_pipeline(question, tool_names=None):
+    toolset = get_toolset(tool_names)
     # Haystack logs and Phoenix show `"tools": null` but tools are being passed to the
     # OpenAIChatGenerator llm when running the pipeline and it works :confused:
 
@@ -123,7 +126,7 @@ def toolset_pipeline(question):
 
     user_input = ChatMessage.from_user(
         text=question
-    )  # "What is the time in New York?")
+    )
     if pipeline_wrapper.ONLY_INVOKE_TOOL:
         result = pipeline.run(
             {
@@ -140,20 +143,9 @@ def toolset_pipeline(question):
         )
         print(result["llm"]["replies"][0].text)
     logger.info("Result: %s", pformat(result))
-
-    tool_result = json.loads(
-        result["tool_invoker"]["tool_messages"][0].tool_call_result.result
-    )
-    result_content = json.loads(tool_result["content"][0]["text"])
-    entity_list = result_content["data"]
-    for entity in entity_list:
-        print(f"Opportunity ID: {entity['opportunity_id']}")
-        print(f"Opportunity Title: {entity['opportunity_title']}")
-        print(f"Agency: {entity['agency']}")
-        print(f"Summary: {entity['summary']['summary_description']}")
-        print("---" * 20)
     if "response_llm" in result:
         print(result["response_llm"]["replies"][0].text)
+    return result
 
 
 def no_toolset_pipeline(question):
@@ -171,9 +163,9 @@ def no_toolset_pipeline(question):
 #
 
 
-def agent(question):
+def agent(question, tool_names=None):
     # This results into multiple threads in Phoenix logs, which is undesirable
-    toolset = get_toolset()
+    toolset = get_toolset(tool_names)
     agent = Agent(
         # chat_generator=OpenAIChatGenerator(tools_strict=False), tools=toolset, exit_conditions=["text"]
         chat_generator=OpenAIChatGenerator(),
@@ -189,25 +181,62 @@ def agent(question):
 
 #
 
-if __name__ == "__main__":
+
+def call_mcp_server_using_haystack():
+    "Basic test to demonstrate that Haystack's MCP client works with an MCP server"
     # stdio()
-    # streamable()
+    streamable()
 
-    # import asyncio
-    # asyncio.run(client())
-
-    # get_toolset()
-
-    from common import haystack_utils, phoenix_utils
-
-    haystack_utils.set_up_tracing()
-    # phoenix_utils.configure_phoenix()
-    # toolset_pipeline("yoom value of 2 and 3")
-    # no_toolset_pipeline("yoom value of 2 and 3")
-    # agent("yoom value of 2 and 3")
-
-    pipeline_wrapper.ONLY_INVOKE_TOOL = True
-    toolset_pipeline(
-        "What grant opportunities are available for NASA? Make sure to provide the required 'pagination' parameter."
+def print_grants_result(result):
+    tool_result = json.loads(
+        result["tool_invoker"]["tool_messages"][0].tool_call_result.result
     )
-    # agent("What grant opportunities are available for NASA?")
+    result_content = json.loads(tool_result["content"][0]["text"])
+    entity_list = result_content["data"]
+    for entity in entity_list:
+        print(f"Opportunity ID: {entity['opportunity_id']}")
+        print(f"Opportunity Title: {entity['opportunity_title']}")
+        print(f"Agency: {entity['agency']}")
+        print(f"Summary: {entity['summary']['summary_description']}")
+        print("---" * 20)
+
+if __name__ == "__main__":
+    haystack_utils.set_up_tracing()
+    if PHOENIX_ENABLED := os.environ.get("PHOENIX_ENABLED", "false").lower() == "true":
+        phoenix_utils.configure_phoenix()
+
+    if os.environ.get("MCP_SERVER", "false").lower() == "true":
+        # Get MCP server info using MCP library
+        import asyncio
+        asyncio.run(mcp_info())
+
+        # Use Haystack's MCP client to call the MCP server
+        call_mcp_server_using_haystack()
+
+    if os.environ.get("COMPUTE_YOOM_MCP_SERVER", "false").lower() == "true":
+        # Get MCP server's toolset using Haystack library
+        get_toolset()
+
+        # Test Haystack's MCP toolset usage with a Haystack Pipeline,
+        # where a 'compute_yoom' tool is defined to get the "yoom value"
+        toolset_pipeline("yoom value of 2 and 3")
+
+        # Test Haystack's MCP toolset usage with a Haystack Agent
+        # agent("yoom value of 2 and 3")
+
+        # Fails without a toolset, as expected
+        # no_toolset_pipeline("yoom value of 2 and 3")
+
+    if os.environ.get("GRANTS_MCP_SERVER", "false").lower() == "true":
+        # Test Haystack's MCP toolset usage with Simpler Grants API
+        pipeline_wrapper.ONLY_INVOKE_TOOL = True
+        result = toolset_pipeline(
+            "What grant opportunities are available for NASA? Make sure to provide the required 'pagination' parameter.",
+            tool_names=["Opportunity_Search"]  # Only include specific tools
+        )
+        # Results in error: Output validation error: None is not of type 'string'
+
+        # If API spec was winnowed down, pipeline could work, so print the result
+        print_grants_result(result)
+
+        # agent("What grant opportunities are available for NASA?", tool_names=["Opportunity_Search"])

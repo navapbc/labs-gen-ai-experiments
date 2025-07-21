@@ -82,6 +82,7 @@ def create_pipeline(toolset=None) -> Pipeline:
     pipeline.connect("llm.replies", "adapter.initial_tool_messages")
     pipeline.connect("tool_invoker.tool_messages", "adapter.tool_messages")
     pipeline.connect("adapter.output", "response_llm.messages")
+    return pipeline
 
 
 def create_no_toolset_pipeline() -> Pipeline:
