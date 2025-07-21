@@ -56,15 +56,16 @@ class PipelineWrapper(BasePipelineWrapper):
             else:
                 return replies[0]
 
+    # https://docs.haystack.deepset.ai/docs/hayhooks#openai-compatibility
     # Called for the `{pipeline_name}/chat`, `/chat/completions`, or `/v1/chat/completions` streaming endpoint using Server-Sent Events (SSE)
-    # stream response https://docs.haystack.deepset.ai/docs/hayhooks#streaming-responses
-    # https://github.com/deepset-ai/hayhooks?tab=readme-ov-file#streaming-responses-in-openai-compatible-endpoints
     def run_chat_completion(self, model: str, messages: list, body: dict):
         logger.info(
             "Running chat completion with model: %s, messages: %s", model, messages
         )
         question = hayhooks.get_last_user_message(messages)
         logger.info("Question: %s", question)
+        # stream response https://docs.haystack.deepset.ai/docs/hayhooks#streaming-responses
+        # https://github.com/deepset-ai/hayhooks?tab=readme-ov-file#streaming-responses-in-openai-compatible-endpoints
         return hayhooks.streaming_generator(
             pipeline=self.pipeline,
             pipeline_run_args={
