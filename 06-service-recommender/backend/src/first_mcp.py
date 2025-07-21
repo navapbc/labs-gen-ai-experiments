@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import sys
 from pathlib import Path
 from pprint import pformat
 
@@ -124,9 +123,7 @@ def toolset_pipeline(question, tool_names=None):
     if not os.path.exists("toolset_pipeline.png"):
         pipeline.draw(Path("toolset_pipeline.png"))
 
-    user_input = ChatMessage.from_user(
-        text=question
-    )
+    user_input = ChatMessage.from_user(text=question)
     if pipeline_wrapper.ONLY_INVOKE_TOOL:
         result = pipeline.run(
             {
@@ -187,6 +184,7 @@ def call_mcp_server_using_haystack():
     # stdio()
     streamable()
 
+
 def print_grants_result(result):
     tool_result = json.loads(
         result["tool_invoker"]["tool_messages"][0].tool_call_result.result
@@ -200,6 +198,7 @@ def print_grants_result(result):
         print(f"Summary: {entity['summary']['summary_description']}")
         print("---" * 20)
 
+
 if __name__ == "__main__":
     haystack_utils.set_up_tracing()
     if PHOENIX_ENABLED := os.environ.get("PHOENIX_ENABLED", "false").lower() == "true":
@@ -208,6 +207,7 @@ if __name__ == "__main__":
     if os.environ.get("MCP_SERVER", "false").lower() == "true":
         # Get MCP server info using MCP library
         import asyncio
+
         asyncio.run(mcp_info())
 
         # Use Haystack's MCP client to call the MCP server
@@ -232,7 +232,7 @@ if __name__ == "__main__":
         pipeline_wrapper.ONLY_INVOKE_TOOL = True
         result = toolset_pipeline(
             "What grant opportunities are available for NASA? Make sure to provide the required 'pagination' parameter.",
-            tool_names=["Opportunity_Search"]  # Only include specific tools
+            tool_names=["Opportunity_Search"],  # Only include specific tools
         )
         # Results in error: Output validation error: None is not of type 'string'
 

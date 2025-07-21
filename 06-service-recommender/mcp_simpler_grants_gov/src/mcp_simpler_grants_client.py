@@ -13,11 +13,12 @@ MCP_URL = os.environ.get("MCP_URL", "http://localhost:8000/invoke")
 def get__health():
     tool_call = {
         "tool_name": "get__health",
-        "input": {        },
+        "input": {},
     }
     response = requests.post(MCP_URL, json=tool_call)
     print("get__health:", response.json())
     print_response(response)
+
 
 def print_response(response):
     output = response.json()["output"]
@@ -65,6 +66,7 @@ def get_opportunity(opportunity_id):
     response = requests.post(MCP_URL, json=tool_call)
     print(f"Get Opportunity '{opportunity_id}':", response.json())
     print_response(response)
+
 
 if __name__ == "__main__":
     # get__health()

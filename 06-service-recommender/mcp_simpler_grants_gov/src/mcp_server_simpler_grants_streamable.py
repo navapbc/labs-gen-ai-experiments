@@ -12,9 +12,7 @@ OPENAPI_JSON = "simpler_grants_gov-openapi.json"
 BASE_URL = "https://api.simpler.grants.gov"
 
 # Create an HTTP client for your API
-client = httpx.AsyncClient(
-    base_url=BASE_URL, headers={"X-Auth": API_KEY}
-)
+client = httpx.AsyncClient(base_url=BASE_URL, headers={"X-Auth": API_KEY})
 
 # Load your OpenAPI spec
 if os.path.exists(OPENAPI_JSON):

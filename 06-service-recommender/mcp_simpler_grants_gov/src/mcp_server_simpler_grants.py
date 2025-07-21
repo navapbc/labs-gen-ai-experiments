@@ -84,6 +84,7 @@ def generate_tools_from_openapi(openapi: Dict[str, Any]):
             # Create a basic tool function with a name and HTTP method
             def make_tool(p, m):
                 print(f"Creating tool for {m.upper()} {p}")
+
                 async def tool_func(input_data):
                     try:
                         # region = input_data.get("region", "us-south")
@@ -100,7 +101,11 @@ def generate_tools_from_openapi(openapi: Dict[str, Any]):
                         print("URL:", url)
                         async with httpx.AsyncClient() as client:
                             req = client.build_request(
-                                m.upper(), url, headers=headers, json=body, params=params
+                                m.upper(),
+                                url,
+                                headers=headers,
+                                json=body,
+                                params=params,
                             )
                             res = await client.send(req)
                             return {"status_code": res.status_code, "body": res.text}
