@@ -15,4 +15,6 @@ dependencies = [
     "hayhooks>=0.8.0",
     "arize-phoenix-client>=1.10.0",
     "amazon-bedrock-haystack>=3.7.0",
+    "mcp-haystack>=0.4.0",
+    "mcp-server-time>=0.6.2",
 ]
