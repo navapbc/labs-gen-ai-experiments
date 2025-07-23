@@ -130,12 +130,12 @@ MCP_SERVER=true uv run python src/first_mcp.py
 COMPUTE_YOOM_MCP_SERVER=true uv run python src/first_mcp.py
 ```
 
-Tweak `first_mcp.py` to test other functions in that file.
-
 ### Simpler Grants.gov API
 
 - Get OpenAPI from https://api.simpler.grants.gov/openapi.json
 - Docs at https://api.simpler.grants.gov/docs
+
+In the `mcp_simpler_grants_gov` folder, copy `.env_template` to `.env` and set `SIMPLER_GRANTS_API_KEY`.
 
 ### generate_tools_from_openapi (non-streaming)
 
