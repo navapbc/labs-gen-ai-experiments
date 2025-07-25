@@ -7,9 +7,7 @@ from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import NlpEngineProvider
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
-import spacy
 
-spacy.load('en_core_web_lg')
 
 class PresidioRedactionSpanProcessor(SpanProcessor):
     """

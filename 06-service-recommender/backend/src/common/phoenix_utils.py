@@ -18,7 +18,6 @@ import phoenix.otel
 from openinference.instrumentation.haystack import HaystackInstrumentor
 
 from common.app_config import config
-# from common.pii_span_processor import PIIRedactingSpanProcessor TODO MRH remove
 from common.presidio_pii_filter import PresidioRedactionSpanProcessor
 
 logger = logging.getLogger(__name__)
