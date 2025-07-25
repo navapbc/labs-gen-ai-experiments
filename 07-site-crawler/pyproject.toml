@@ -1,0 +1,10 @@
+[project]
+name = "07-site-crawler"
+version = "0.1.0"
+description = "navigate the website and output information as structured data"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "crawl4ai>=0.7.1",
+    "dotenv>=0.9.9",
+]
