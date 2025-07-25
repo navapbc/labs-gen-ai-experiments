@@ -18,7 +18,8 @@ import phoenix.otel
 from openinference.instrumentation.haystack import HaystackInstrumentor
 
 from common.app_config import config
-from common.pii_span_processor import PIIRedactingSpanProcessor
+# from common.pii_span_processor import PIIRedactingSpanProcessor TODO MRH remove
+from common.presidio_pii_filter import PresidioRedactionSpanProcessor
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s")
@@ -38,7 +39,7 @@ def service_alive():
 
 
 USE_PHOENIX_OTEL_REGISTER = True
-BATCH_OTEL = False
+BATCH_OTEL = False  # TODO MRH change, batch processing recommended for PROD
 
 
 def configure_phoenix(only_if_alive=True):
@@ -69,7 +70,7 @@ def configure_phoenix(only_if_alive=True):
         span_exporter = otel_trace_exporter.OTLPSpanExporter(f"{endpoint}/v1/traces")
         otel_sdk_trace.export.BatchSpanProcessor(span_exporter)
         # Create the PII redacting processor with the OTLP exporter
-        pii_processor = PIIRedactingSpanProcessor(span_exporter)
+        pii_processor = PresidioRedactionSpanProcessor(span_exporter)
         tracer_provider.add_span_processor(pii_processor)
     else:
         # Using Haystack docs: https://haystack.deepset.ai/integrations/arize-phoenix
@@ -86,7 +87,7 @@ def configure_phoenix(only_if_alive=True):
             processor = otel_sdk_trace.export.SimpleSpanProcessor(span_exporter)
         tracer_provider.add_span_processor(processor)
         # Create the PII redacting processor with the OTLP exporter
-        pii_processor = PIIRedactingSpanProcessor(otel_trace_exporter.OTLPSpanExporter(trace_endpoint), )
+        pii_processor = PresidioRedactionSpanProcessor(otel_trace_exporter.OTLPSpanExporter(trace_endpoint), )
         tracer_provider.add_span_processor(pii_processor)
         # PHOENIX_API_KEY env variable seems to be used by HaystackInstrumentor
         HaystackInstrumentor().instrument(tracer_provider=tracer_provider)

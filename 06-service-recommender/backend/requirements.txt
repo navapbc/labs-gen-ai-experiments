@@ -21,7 +21,9 @@ annotated-types==0.7.0
 anyio==4.9.0
     # via
     #   httpx
+    #   mcp
     #   openai
+    #   sse-starlette
     #   starlette
     #   watchfiles
 arize-phoenix-client==1.10.0
@@ -35,6 +37,8 @@ attrs==25.3.0
     #   referencing
 backoff==2.2.1
     # via posthog
+blis==1.3.0
+    # via thinc
 boto3==1.37.3
     # via
     #   aiobotocore
@@ -44,11 +48,18 @@ botocore==1.37.3
     #   aiobotocore
     #   boto3
     #   s3transfer
+catalogue==2.0.10
+    # via
+    #   spacy
+    #   srsly
+    #   thinc
 certifi==2025.4.26
     # via
     #   httpcore
     #   httpx
     #   requests
+cffi==1.17.1
+    # via cryptography
 charset-normalizer==3.4.2
     # via requests
 click==8.2.1
@@ -56,6 +67,19 @@ click==8.2.1
     #   rich-toolkit
     #   typer
     #   uvicorn
+cloudpathlib==0.21.1
+    # via weasel
+confection==0.1.5
+    # via
+    #   thinc
+    #   weasel
+cryptography==44.0.3
+    # via presidio-anonymizer
+cymem==2.0.11
+    # via
+    #   preshed
+    #   spacy
+    #   thinc
 distro==1.9.0
     # via
     #   openai
@@ -66,10 +90,14 @@ docstring-parser==0.16
     # via hayhooks
 email-validator==2.2.0
     # via fastapi
+exceptiongroup==1.3.0
+    # via mcp-haystack
 fastapi==0.115.12
     # via hayhooks
 fastapi-cli==0.0.7
     # via fastapi
+filelock==3.18.0
+    # via tldextract
 filetype==1.2.0
     # via haystack-experimental
 frozenlist==1.7.0
@@ -94,6 +122,7 @@ haystack-ai==2.14.2
     #   amazon-bedrock-haystack
     #   hayhooks
     #   haystack-experimental
+    #   mcp-haystack
 haystack-experimental==0.10.0
     # via haystack-ai
 httpcore==1.0.9
@@ -104,13 +133,18 @@ httpx==0.28.1
     # via
     #   arize-phoenix-client
     #   fastapi
+    #   mcp
+    #   mcp-haystack
     #   openai
+httpx-sse==0.4.1
+    # via mcp
 idna==3.10
     # via
     #   anyio
     #   email-validator
     #   httpx
     #   requests
+    #   tldextract
     #   yarl
 importlib-metadata==8.7.0
     # via opentelemetry-api
@@ -118,6 +152,7 @@ jinja2==3.1.6
     # via
     #   fastapi
     #   haystack-ai
+    #   spacy
 jiter==0.10.0
     # via openai
 jmespath==1.0.1
@@ -126,17 +161,33 @@ jmespath==1.0.1
     #   boto3
     #   botocore
 jsonschema==4.24.0
-    # via haystack-ai
+    # via
+    #   haystack-ai
+    #   mcp
 jsonschema-specifications==2025.4.1
     # via jsonschema
+langcodes==3.5.0
+    # via spacy
+language-data==1.3.0
+    # via langcodes
 lazy-imports==1.0.0
     # via haystack-ai
 loguru==0.7.3
     # via hayhooks
+marisa-trie==1.2.1
+    # via language-data
 markdown-it-py==3.0.0
     # via rich
 markupsafe==3.0.2
     # via jinja2
+mcp==1.12.2
+    # via
+    #   mcp-haystack
+    #   mcp-server-time
+mcp-haystack==0.4.0
+    # via backend (pyproject.toml)
+mcp-server-time==2025.7.1
+    # via backend (pyproject.toml)
 mdurl==0.1.2
     # via markdown-it-py
 more-itertools==10.7.0
@@ -146,10 +197,19 @@ multidict==6.4.4
     #   aiobotocore
     #   aiohttp
     #   yarl
+murmurhash==1.0.13
+    # via
+    #   preshed
+    #   spacy
+    #   thinc
 networkx==3.5
     # via haystack-ai
 numpy==2.3.0
-    # via haystack-ai
+    # via
+    #   blis
+    #   haystack-ai
+    #   spacy
+    #   thinc
 openai==1.85.0
     # via
     #   backend (pyproject.toml)
@@ -208,9 +268,23 @@ opentelemetry-semantic-conventions==0.55b0
     #   opentelemetry-instrumentation
     #   opentelemetry-sdk
 packaging==25.0
-    # via opentelemetry-instrumentation
+    # via
+    #   opentelemetry-instrumentation
+    #   spacy
+    #   thinc
+    #   weasel
+phonenumbers==9.0.10
+    # via presidio-analyzer
 posthog==4.6.0
     # via haystack-ai
+preshed==3.0.10
+    # via
+    #   spacy
+    #   thinc
+presidio-analyzer==2.2.359
+    # via backend (pyproject.toml)
+presidio-anonymizer==2.2.359
+    # via backend (pyproject.toml)
 propcache==0.3.2
     # via
     #   aiohttp
@@ -219,16 +293,26 @@ protobuf==5.29.5
     # via
     #   googleapis-common-protos
     #   opentelemetry-proto
+pycparser==2.22
+    # via cffi
 pydantic==2.11.5
     # via
+    #   confection
     #   fastapi
     #   haystack-ai
+    #   mcp
+    #   mcp-server-time
     #   openai
     #   pydantic-settings
+    #   spacy
+    #   thinc
+    #   weasel
 pydantic-core==2.33.2
     # via pydantic
 pydantic-settings==2.9.1
-    # via hayhooks
+    # via
+    #   hayhooks
+    #   mcp
 pygments==2.19.1
     # via rich
 python-dateutil==2.9.0.post0
@@ -247,20 +331,30 @@ python-multipart==0.0.20
     # via
     #   fastapi
     #   hayhooks
+    #   mcp
 pyyaml==6.0.2
     # via
     #   haystack-ai
+    #   presidio-analyzer
     #   uvicorn
 referencing==0.36.2
     # via
     #   jsonschema
     #   jsonschema-specifications
+regex==2024.11.6
+    # via presidio-analyzer
 requests==2.32.4
     # via
     #   hayhooks
     #   haystack-ai
     #   opentelemetry-exporter-otlp-proto-http
     #   posthog
+    #   requests-file
+    #   spacy
+    #   tldextract
+    #   weasel
+requests-file==2.1.0
+    # via tldextract
 rich==14.0.0
     # via
     #   hayhooks
@@ -274,33 +368,66 @@ rpds-py==0.25.1
     #   referencing
 s3transfer==0.11.3
     # via boto3
+setuptools==80.9.0
+    # via
+    #   marisa-trie
+    #   spacy
+    #   thinc
 shellingham==1.5.4
     # via typer
 six==1.17.0
     # via
     #   posthog
     #   python-dateutil
+smart-open==7.3.0.post1
+    # via weasel
 sniffio==1.3.1
     # via
     #   anyio
     #   openai
+spacy==3.8.7
+    # via
+    #   backend (pyproject.toml)
+    #   presidio-analyzer
+spacy-legacy==3.0.12
+    # via spacy
+spacy-loggers==1.0.5
+    # via spacy
+srsly==2.5.1
+    # via
+    #   confection
+    #   spacy
+    #   thinc
+    #   weasel
+sse-starlette==2.4.1
+    # via mcp
 starlette==0.46.2
-    # via fastapi
+    # via
+    #   fastapi
+    #   mcp
 tenacity==9.1.2
     # via haystack-ai
+thinc==8.3.6
+    # via spacy
+tldextract==5.3.0
+    # via presidio-analyzer
 tqdm==4.67.1
     # via
     #   haystack-ai
     #   openai
+    #   spacy
 typer==0.16.0
     # via
     #   fastapi-cli
     #   hayhooks
+    #   spacy
+    #   weasel
 typing-extensions==4.14.0
     # via
     #   anyio
     #   arize-phoenix-client
     #   arize-phoenix-otel
+    #   exceptiongroup
     #   fastapi
     #   haystack-ai
     #   openai
@@ -320,6 +447,10 @@ typing-inspection==0.4.1
     # via
     #   pydantic
     #   pydantic-settings
+tzdata==2025.2
+    # via mcp-server-time
+tzlocal==5.3.1
+    # via mcp-server-time
 urllib3==2.4.0
     # via
     #   botocore
@@ -329,10 +460,18 @@ uvicorn==0.34.3
     #   fastapi
     #   fastapi-cli
     #   hayhooks
+    #   mcp
 uvloop==0.21.0
     # via uvicorn
+wasabi==1.1.3
+    # via
+    #   spacy
+    #   thinc
+    #   weasel
 watchfiles==1.0.5
     # via uvicorn
+weasel==0.4.1
+    # via spacy
 websockets==15.0.1
     # via uvicorn
 wrapt==1.17.2
@@ -341,6 +480,7 @@ wrapt==1.17.2
     #   arize-phoenix-otel
     #   openinference-instrumentation-haystack
     #   opentelemetry-instrumentation
+    #   smart-open
 yarl==1.20.1
     # via aiohttp
 zipp==3.23.0

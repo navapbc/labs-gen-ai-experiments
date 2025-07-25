@@ -1,46 +1,91 @@
-import logging
-import re
-from opentelemetry.sdk.trace import SpanProcessor
-from opentelemetry.sdk.trace.export import SpanExporter
 import json
-from typing import Any, Dict, Optional
-from opentelemetry.trace import Span
-from opentelemetry.sdk.trace import ReadableSpan
+from typing import Optional, List, Any, Dict
 
+from opentelemetry.sdk.trace import SpanProcessor, ReadableSpan, Event, Span
+from opentelemetry.sdk.trace.export import SpanExporter
+from presidio_analyzer import AnalyzerEngine
+from presidio_analyzer.nlp_engine import NlpEngineProvider
+from presidio_anonymizer import AnonymizerEngine
+from presidio_anonymizer.entities import OperatorConfig
+import spacy
 
-logger = logging.getLogger(__name__)
+spacy.load('en_core_web_lg')
 
-class PIIRedactingSpanProcessor(SpanProcessor):
-    def __init__(self, exporter: SpanExporter, pii_patterns: Optional[Dict[str, str]] = None):
+class PresidioRedactionSpanProcessor(SpanProcessor):
+    """
+    OpenTelemetry span processor that redacts PII data using Microsoft Presidio.
+    """
+
+    def __init__(
+            self,
+            exporter: SpanExporter,
+            entities: Optional[List[str]] = None,
+            language: str = "en"
+    ):
         """
-        Initialize the PII redacting processor with an exporter and optional patterns.
+        Initialize the PII redacting processor with Presidio and an exporter.
 
         Args:
             exporter: The span exporter to use after PII redaction
-            pii_patterns: Dictionary of pattern names and their regex patterns
+            entities: List of PII entity types to detect and redact.
+                     If None, uses a default set of common PII types.
+            language: Language to use for NLP analysis
         """
         self._exporter = exporter
-        self._default_patterns = {
-            'email': r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
-            'phone': r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b',
-            'ssn': r'\b\d{3}-\d{2}-\d{4}\b',
-            'credit_card': r'\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
-            'ip_address': r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b',
-            'date_of_birth': r'\b\d{2}[-/]\d{2}[-/]\d{4}\b',
-        }
-        self._patterns = {**self._default_patterns, **(pii_patterns or {})}
 
-        # Compile patterns for better performance
-        self._compiled_patterns = {
-            name: re.compile(pattern) for name, pattern in self._patterns.items()
+        # Default supported entity types in Presidio
+        self._default_entities = [
+            "PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "US_SSN",
+            "CREDIT_CARD", "IP_ADDRESS", "DATE_TIME", "US_BANK_NUMBER",
+            "US_DRIVER_LICENSE", "LOCATION", "NRP", "US_PASSPORT",
+            "US_ITIN", "CRYPTO", "UK_NHS", "IBAN_CODE"
+        ]
+
+        self._entities = entities or self._default_entities
+
+        # Set up Presidio engines with proper configuration
+        nlp_configuration = {
+            "nlp_engine_name": "spacy",
+            "models": [
+                {"lang_code": language, "model_name": "en_core_web_lg"}
+            ]
+        }
+        nlp_engine = NlpEngineProvider(nlp_configuration=nlp_configuration).create_engine()
+        self._analyzer = AnalyzerEngine(nlp_engine=nlp_engine)
+        self._anonymizer = AnonymizerEngine()
+
+        # Default operator for anonymization (replacement with entity type)
+        self._operators = {
+            entity: OperatorConfig("replace", {"new_value": f"[REDACTED_{entity}]"})
+            for entity in self._entities
         }
 
     def _redact_string(self, value: str) -> str:
-        """Redact PII from any string value."""
-        redacted = value
-        for pattern_name, pattern in self._compiled_patterns.items():
-            redacted = pattern.sub(f'[REDACTED_{pattern_name.upper()}]', redacted)
-        return redacted
+        """Redact PII from any string value using Presidio."""
+        if not value.strip():
+            return value
+
+        try:
+            # Analyze the text for PII
+            results = self._analyzer.analyze(
+                text=value,
+                entities=self._entities,
+                language="en"
+            )
+
+            # If PII is found, anonymize it
+            if results:
+                anonymized_text = self._anonymizer.anonymize(
+                    text=value,
+                    analyzer_results=results,
+                    operators=self._operators
+                )
+                return anonymized_text.text
+
+            return value
+        except Exception as e:
+            print(f"Error redacting string: {str(e)}")
+            return "[REDACTION_ERROR]"
 
     def _redact_value(self, value: Any) -> Any:
         """
@@ -68,9 +113,9 @@ class PIIRedactingSpanProcessor(SpanProcessor):
     def _redact_span_attributes(self, span: ReadableSpan) -> Dict[str, Any]:
         """
         Create a new dictionary of redacted span attributes.
-        Returns the redacted attributes instead of modifying in place.
         """
         redacted_attributes = {}
+
         for key, value in span.attributes.items():
             # Skip certain metadata attributes that shouldn't contain PII
             if key in {'service.name', 'telemetry.sdk.name', 'telemetry.sdk.version'}:
@@ -93,7 +138,7 @@ class PIIRedactingSpanProcessor(SpanProcessor):
         # Create redacted attributes
         redacted_attributes = self._redact_span_attributes(span)
 
-        # Create a new span with redacted name and attributes
+        # Redact span name
         redacted_name = self._redact_string(span.name)
 
         # Handle events
@@ -103,15 +148,14 @@ class PIIRedactingSpanProcessor(SpanProcessor):
                 k: self._redact_value(v) for k, v in event.attributes.items()
             }
             # Create new event with redacted attributes
-            from opentelemetry.sdk.trace import Event
             redacted_event = Event(
                 name=self._redact_string(event.name),
                 attributes=redacted_event_attrs,
                 timestamp=event.timestamp
             )
+            redacted_events.append(redacted_event)
 
         # Create new span with redacted data
-        from opentelemetry.sdk.trace import Span
         redacted_span = ReadableSpan(
             name=redacted_name,
             context=span.get_span_context(),
@@ -124,7 +168,7 @@ class PIIRedactingSpanProcessor(SpanProcessor):
             status=span.status,
             start_time=span.start_time,
             end_time=span.end_time,
-            instrumentation_info=span.instrumentation_info
+            instrumentation_scope=span.instrumentation_scope
         )
 
         return redacted_span
