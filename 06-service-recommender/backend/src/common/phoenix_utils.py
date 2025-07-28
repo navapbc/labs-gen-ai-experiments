@@ -39,7 +39,7 @@ def service_alive():
 
 
 USE_PHOENIX_OTEL_REGISTER = True
-BATCH_OTEL = False  # TODO MRH change, batch processing recommended for PROD
+BATCH_OTEL = True
 
 
 def configure_phoenix(only_if_alive=True):
