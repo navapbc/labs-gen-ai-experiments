@@ -15,10 +15,10 @@ class PresidioRedactionSpanProcessor(SpanProcessor):
     """
 
     def __init__(
-            self,
-            exporter: SpanExporter,
-            entities: Optional[List[str]] = None,
-            language: str = "en"
+        self,
+        exporter: SpanExporter,
+        entities: Optional[List[str]] = None,
+        language: str = "en",
     ):
         """
         Initialize the PII redacting processor with Presidio and an exporter.
@@ -33,10 +33,22 @@ class PresidioRedactionSpanProcessor(SpanProcessor):
 
         # Default supported entity types in Presidio
         self._default_entities = [
-            "PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "US_SSN",
-            "CREDIT_CARD", "IP_ADDRESS", "DATE_TIME", "US_BANK_NUMBER",
-            "US_DRIVER_LICENSE", "LOCATION", "NRP", "US_PASSPORT",
-            "US_ITIN", "CRYPTO", "UK_NHS", "IBAN_CODE"
+            "PERSON",
+            "EMAIL_ADDRESS",
+            "PHONE_NUMBER",
+            "US_SSN",
+            "CREDIT_CARD",
+            "IP_ADDRESS",
+            "DATE_TIME",
+            "US_BANK_NUMBER",
+            "US_DRIVER_LICENSE",
+            "LOCATION",
+            "NRP",
+            "US_PASSPORT",
+            "US_ITIN",
+            "CRYPTO",
+            "UK_NHS",
+            "IBAN_CODE",
         ]
 
         self._entities = entities or self._default_entities
@@ -44,11 +56,11 @@ class PresidioRedactionSpanProcessor(SpanProcessor):
         # Set up Presidio engines with proper configuration
         nlp_configuration = {
             "nlp_engine_name": "spacy",
-            "models": [
-                {"lang_code": language, "model_name": "en_core_web_lg"}
-            ]
+            "models": [{"lang_code": language, "model_name": "en_core_web_lg"}],
         }
-        nlp_engine = NlpEngineProvider(nlp_configuration=nlp_configuration).create_engine()
+        nlp_engine = NlpEngineProvider(
+            nlp_configuration=nlp_configuration
+        ).create_engine()
         self._analyzer = AnalyzerEngine(nlp_engine=nlp_engine)
         self._anonymizer = AnonymizerEngine()
 
@@ -66,17 +78,13 @@ class PresidioRedactionSpanProcessor(SpanProcessor):
         try:
             # Analyze the text for PII
             results = self._analyzer.analyze(
-                text=value,
-                entities=self._entities,
-                language="en"
+                text=value, entities=self._entities, language="en"
             )
 
             # If PII is found, anonymize it
             if results:
                 anonymized_text = self._anonymizer.anonymize(
-                    text=value,
-                    analyzer_results=results,
-                    operators=self._operators
+                    text=value, analyzer_results=results, operators=self._operators
                 )
                 return anonymized_text.text
 
@@ -116,7 +124,7 @@ class PresidioRedactionSpanProcessor(SpanProcessor):
 
         for key, value in span.attributes.items():
             # Skip certain metadata attributes that shouldn't contain PII
-            if key in {'service.name', 'telemetry.sdk.name', 'telemetry.sdk.version'}:
+            if key in {"service.name", "telemetry.sdk.name", "telemetry.sdk.version"}:
                 redacted_attributes[key] = value
                 continue
 
@@ -149,7 +157,7 @@ class PresidioRedactionSpanProcessor(SpanProcessor):
             redacted_event = Event(
                 name=self._redact_string(event.name),
                 attributes=redacted_event_attrs,
-                timestamp=event.timestamp
+                timestamp=event.timestamp,
             )
             redacted_events.append(redacted_event)
 
@@ -166,7 +174,7 @@ class PresidioRedactionSpanProcessor(SpanProcessor):
             status=span.status,
             start_time=span.start_time,
             end_time=span.end_time,
-            instrumentation_scope=span.instrumentation_scope
+            instrumentation_scope=span.instrumentation_scope,
         )
 
         return redacted_span

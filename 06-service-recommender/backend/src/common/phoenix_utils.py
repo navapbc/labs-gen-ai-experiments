@@ -23,6 +23,7 @@ from common.presidio_pii_filter import PresidioRedactionSpanProcessor
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s")
 
+
 def create_client():
     return phoenix.client.Client(base_url=config.phoenix_base_url)
 
@@ -86,7 +87,9 @@ def configure_phoenix(only_if_alive=True):
             processor = otel_sdk_trace.export.SimpleSpanProcessor(span_exporter)
         tracer_provider.add_span_processor(processor)
         # Create the PII redacting processor with the OTLP exporter
-        pii_processor = PresidioRedactionSpanProcessor(otel_trace_exporter.OTLPSpanExporter(trace_endpoint), )
+        pii_processor = PresidioRedactionSpanProcessor(
+            otel_trace_exporter.OTLPSpanExporter(trace_endpoint),
+        )
         tracer_provider.add_span_processor(pii_processor)
         # PHOENIX_API_KEY env variable seems to be used by HaystackInstrumentor
         HaystackInstrumentor().instrument(tracer_provider=tracer_provider)
