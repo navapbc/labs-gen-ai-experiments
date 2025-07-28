@@ -67,7 +67,7 @@ def configure_phoenix(only_if_alive=True):
             # Auto-instrument based on installed OpenInference dependencies
             auto_instrument=True,
         )
-        span_exporter = otel_trace_exporter.OTLPSpanExporter(f"{endpoint}/v1/traces")
+        span_exporter = otel_trace_exporter.OTLPSpanExporter(trace_endpoint)
         otel_sdk_trace.export.BatchSpanProcessor(span_exporter)
         # Create the PII redacting processor with the OTLP exporter
         pii_processor = PresidioRedactionSpanProcessor(span_exporter)
