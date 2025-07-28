@@ -1,7 +1,6 @@
 import asyncio
-import os
-import pdb
 import sys
+import os
 from pprint import pprint
 from typing import Any, Dict
 
@@ -30,7 +29,6 @@ from pydantic import BaseModel, Field
 load_dotenv()
 
 # url = "https://www.goodwillcentraltexas.org/programs-and-services/career-opportunities-for-young-adults/"
-# url = "https://excelcenterhighschool.org/ and https://excelcenterhighschool.org/contact/general-faqs/"
 # url = "https://excelcenterhighschool.org/contact/general-faqs/"
 # url = "https://excelcenterhighschool.org/"
 
@@ -147,6 +145,7 @@ async def extract_structured_data_using_llm(
             print(result.extracted_content)
 
     llm_strategy.show_usage()
+
 
 async def adaptive_crawl(url: str):
     """
