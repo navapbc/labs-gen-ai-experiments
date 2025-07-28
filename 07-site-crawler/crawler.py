@@ -229,17 +229,6 @@ async def adaptive_example():
 
 # TODO: For sites with search boxes, try C4A script: https://docs.crawl4ai.com/core/c4a-script/ or https://docs.crawl4ai.com/core/page-interaction/
 
-
-INSTRUCT = """structured JSON output about the described service.
-The JSON output should include:
-- 'name': name of the service
-- 'type': what kind of service it is or the service or resource it is providing
-- 'eligibility': who is eligible for the services
-- 'service_area': the geographic area served by the service
-
-If the website does not provide certain information about the service, set the corresponding field to null."""
-
-
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python crawler.py <mode>")
