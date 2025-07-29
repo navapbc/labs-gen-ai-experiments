@@ -18,8 +18,10 @@ import phoenix.otel
 from openinference.instrumentation.haystack import HaystackInstrumentor
 
 from common.app_config import config
+from common.presidio_pii_filter import PresidioRedactionSpanProcessor
 
 logger = logging.getLogger(__name__)
+formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s")
 
 
 def create_client():
@@ -51,6 +53,7 @@ def configure_phoenix(only_if_alive=True):
 
     # PHOENIX_COLLECTOR_ENDPOINT env variable is used by phoenix.otel
     endpoint = os.environ.get("PHOENIX_COLLECTOR_ENDPOINT", "http://localhost:6006")
+    trace_endpoint = f"{endpoint}/v1/traces"
     logger.info("Using Phoenix endpoint: %s", endpoint)
 
     # Both implementations produce the same traces
@@ -59,11 +62,16 @@ def configure_phoenix(only_if_alive=True):
         logger.info("Using phoenix.otel.register")
         # This uses PHOENIX_COLLECTOR_ENDPOINT and PHOENIX_PROJECT_NAME env variables
         # and PHOENIX_API_KEY to handle authentication to Phoenix.
-        phoenix.otel.register(
+        tracer_provider = phoenix.otel.register(
             batch=BATCH_OTEL,
             # Auto-instrument based on installed OpenInference dependencies
             auto_instrument=True,
         )
+        span_exporter = otel_trace_exporter.OTLPSpanExporter(trace_endpoint)
+        otel_sdk_trace.export.BatchSpanProcessor(span_exporter)
+        # Create the PII redacting processor with the OTLP exporter
+        pii_processor = PresidioRedactionSpanProcessor(span_exporter)
+        tracer_provider.add_span_processor(pii_processor)
     else:
         # Using Haystack docs: https://haystack.deepset.ai/integrations/arize-phoenix
         # This is a more manual setup that uses HaystackInstrumentor
@@ -78,6 +86,11 @@ def configure_phoenix(only_if_alive=True):
             # Send traces immediately
             processor = otel_sdk_trace.export.SimpleSpanProcessor(span_exporter)
         tracer_provider.add_span_processor(processor)
+        # Create the PII redacting processor with the OTLP exporter
+        pii_processor = PresidioRedactionSpanProcessor(
+            otel_trace_exporter.OTLPSpanExporter(trace_endpoint),
+        )
+        tracer_provider.add_span_processor(pii_processor)
         # PHOENIX_API_KEY env variable seems to be used by HaystackInstrumentor
         HaystackInstrumentor().instrument(tracer_provider=tracer_provider)
 

@@ -3,6 +3,7 @@ import logging
 import json
 import os
 import re
+import sys
 import time
 from pprint import pformat
 
@@ -13,12 +14,19 @@ import requests
 #   https://docs.nlkit.com/nlux/examples/react-js-ai-assistant
 #   https://fredrikoseberg.github.io/react-chatbot-kit-docs/
 import streamlit as st
+from common.pii_filter import PresidioFilter
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     format="%(levelname)s - %(name)s -  %(message)s", level=logging.INFO
 )
+
+handler = logging.StreamHandler(sys.stdout)
+handler.addFilter(PresidioFilter())
+
+logger.addHandler(handler)
+
 
 st.title("Simple chat")
 

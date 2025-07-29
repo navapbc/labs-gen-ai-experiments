@@ -292,3 +292,25 @@ Possible workarounds for complex OpenAPI specs:
    - "I see, GPT says there are some issues with the actual schema: ChatGPT, might want to take a look. There are various versions of JSON schema"
 
 The more parameters and options there are in the API spec, the more uncertainty and risk (1) when developing the MCP server and client, and (2) when the LLM generates tool-calling output.
+
+
+## PII Redaction
+
+We integrated Microsoft Presidio into the logger in the frontend and as a span processor applied to the OTEL traces in the backend. Presidio identifies
+fields that are Personally Identifiable Information, PII, and creates a redaction label to replace the field
+
+### Testing PII Redaction in the frontend
+The handler applied in main.py filters the logging statements through Presidio's recognition processing. To test:
+1. Submit a prompt with a typical entity that is considered PII: Name, address, phone number, SSN, etc
+2. check the application logs and confirm that the PII field added in the prompt is not present in the logs
+
+### Testing PII Redaction in the Backend - Phoenix Arize
+Helps `phoenix_utils.py` configure the Haystack Pipelines and Phoenix Arize in each configuration we add a span processor, 
+which is a function that gets applied to every trace OTEL generates while tracing the application execution
+
+To view the redacted spans:
+1. Execute the `first` or `second` Hayhooks pipeline (localhost:8501)
+2. The prompt should include PII fields so that there is content for the span processor to recognize and redact 
+3. Submit the prompt then navigate to http://localhost:6006/projects and clock on "local-docker-project"
+4. There will be a list of traces, click on the top/ most recent to view your pipline execution
+5. Verify that the input and output for the different run steps are redacted
