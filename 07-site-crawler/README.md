@@ -35,7 +35,7 @@ uv run crawler.py adaptive  # Crawls pages depending on relevance to query
 uv run crawler.py adaptive_example  # Even their example produced low confidence results
 ```
 
-The `adaptive` mode does live up to its promise -- couldn't get sensible results even after fiddling with `AdaptiveConfig` parameters.
+The `adaptive` mode does not live up to its promise -- couldn't get sensible results even after fiddling with `AdaptiveConfig` parameters.
 Unless we get that working, we'll have to do one of the following:
 1. Direct the crawler to the relevant pages (e.g., by doing regex on the page URL like `*faq*` or page contents)
 2. Crawl the entire website and feed the resulting markdown to an LLM to produce structured output
