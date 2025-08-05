@@ -1,8 +1,5 @@
 # This file is for testing a Haystack pipeline before deploying it to Hayhooks
 
-import truststore
-truststore.inject_into_ssl()
-
 import os
 import logging
 from pprint import pprint
@@ -107,38 +104,15 @@ def main():
     print("Done running pipeline")
 
 if __name__ == "__main__":
-    # import ssl
-    # ssl._create_default_https_context = ssl._create_unverified_context
-
     import httpx
     import certifi
-    # cert_chain = "/Users/yoom/Downloads/otel_phoenix/certs/certificate_chain.txt"
-    # print(certifi.contents())
 
     # Python 3.6 does not rely on MacOS' openSSL anymore. It comes with its own openSSL bundled
     # and doesn't have access on MacOS' root certificates. https://stackoverflow.com/a/42107877
-    pem_file = certifi.where()
-    # pem_file = os.environ['REQUESTS_CA_BUNDLE']
-    print("pem_file:", pem_file)
-
-    from requests.utils import DEFAULT_CA_BUNDLE_PATH
-    print("         ", DEFAULT_CA_BUNDLE_PATH)
-    # os.environ['SSL_CERT_FILE'] = pem_file
-    # pem_file = "amazon_m04.pem"
-    # with open(pem_file, 'r') as f:
-    #     azn_m04 = f.read()
-    # print("Certificate chain:", azn_m04)
-    # # Append to certifi.where() file
-    # with open(certifi.where(), 'a') as f:
-    #     f.write(azn_m04)
-
-    # pem_file = "amazon_certs.pem" # full chain works
-    # pem_file = "amazon_m04.pem" # does not work
-    # resp = httpx.get(config.phoenix_base_url, verify=pem_file)
+    print("certifi.where():", certifi.where())
+    print("request.default:", requests.utils.DEFAULT_CA_BUNDLE_PATH)
     resp = httpx.get(config.phoenix_base_url)
     print("Phoenix service is alive:", resp.read().decode('utf-8'))
-    import pdb; pdb.set_trace()
-
 
     if config.disable_ssl_verification:
         print("Running with SSL verification disabled")

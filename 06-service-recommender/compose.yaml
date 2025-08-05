@@ -90,14 +90,7 @@ services:
       # TLS
       - PHOENIX_COLLECTOR_ENDPOINT=https://phoenix.referral-pilot-dev.navateam.com:6006
       # - DISABLE_SSL_VERIFICATION=True  # Eventually fails due to batch OTEL
-      # - REQUESTS_CA_BUNDLE=/my_certs.crt
-      # - SSL_CERT_FILE=/my_certs.crt
-      # - REQUESTS_CA_BUNDLE=/cert.pem
-      # - SSL_CERT_FILE=/cert.pem
-    volumes:
-      # - ./backend/cert.pem:/cert.pem #/etc/ssl/certs/ca-certificates.crt
-      # - ./backend/certifi_cacert.pem:/opt/venv/lib/python3.12/site-packages/certifi/cacert.pem # /my_certs.crt
-      - ./backend/certifi_cacert.pem:/my_certs.crt #/etc/ssl/certs/ca-certificates.crt
+      - STRIP_PII=False
     healthcheck:
       test: [ "CMD", "wget", "--tries=1", "http://localhost:1416/status" ]
       # Every request creates a log message, which clutters the logs

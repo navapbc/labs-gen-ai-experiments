@@ -3,7 +3,6 @@ FROM deepset/haystack:base-v2.14.0
 
 # Install wget for Docker Compose healthcheck
 RUN apt-get update && apt-get install -y --no-install-recommends wget && \
-    apt-get install -y ca-certificates && update-ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 
@@ -18,10 +17,10 @@ COPY src .
 # https://github.com/deepset-ai/hayhooks/tree/main/examples/shared_code_between_wrappers
 ENV HAYHOOKS_ADDITIONAL_PYTHON_PATH=.
 
-# ARG INTERMEDIATE_CACERT
-# # Append intermediate certificate to /opt/venv/lib/python3.12/site-packages/certifi/cacert.pem
-# RUN CERTIFI_CACERT_FILE=$(python -c "import certifi; print(certifi.where())") \
-#     && [ -f "$CERTIFI_CACERT_FILE" ] && echo "$INTERMEDIATE_CACERT" >> $CERTIFI_CACERT_FILE
+ARG INTERMEDIATE_CACERT
+# Append intermediate certificate to /opt/venv/lib/python3.12/site-packages/certifi/cacert.pem
+RUN CERTIFI_CACERT_FILE=$(python -c "import certifi; print(certifi.where())") \
+    && [ -f "$CERTIFI_CACERT_FILE" ] && echo "$INTERMEDIATE_CACERT" >> $CERTIFI_CACERT_FILE
 
 ENV LOG=DEBUG
 # Haystack pipelines defined under pipelines folder are automatically deployed on Hayhooks startup
