@@ -1,11 +1,13 @@
 # This file is for testing a Haystack pipeline before deploying it to Hayhooks
 
-import os
+import contextlib
 import logging
+import os
 from pprint import pprint
 from time import sleep
-from dotenv import load_dotenv
 
+import requests
+from dotenv import load_dotenv
 
 from common import haystack_utils
 from common.app_config import config
@@ -29,21 +31,14 @@ load_dotenv()
 print("Configure Phoenix project name")
 os.environ["PHOENIX_PROJECT_NAME"] = "ssl-my-haystack-rag.py"
 
-# endpoint = os.environ.get("PHOENIX_COLLECTOR_ENDPOINT", "https://localhost:6006")
-# print("Using Phoenix endpoint: %s", endpoint)
-# if config.phoenix_base_url is None:
-#     config.phoenix_base_url = endpoint
-
-
-import contextlib
-import requests
 
 old_merge_environment_settings = requests.Session.merge_environment_settings
 
+
 @contextlib.contextmanager
 def no_ssl_verification():
-    import warnings
-    from urllib3.exceptions import InsecureRequestWarning
+    # import warnings
+    # from urllib3.exceptions import InsecureRequestWarning
 
     print("Disabling SSL verification for requests")
     opened_adapters = set()
@@ -55,8 +50,10 @@ def no_ssl_verification():
         print("--- Opening adapter for URL: %s", url, verify, cert)
         opened_adapters.add(self.get_adapter(url))
 
-        settings = old_merge_environment_settings(self, url, proxies, stream, verify, cert)
-        settings['verify'] = False
+        settings = old_merge_environment_settings(
+            self, url, proxies, stream, verify, cert
+        )
+        settings["verify"] = False
 
         return settings
 
@@ -72,7 +69,7 @@ def no_ssl_verification():
 
         for adapter in opened_adapters:
             try:
-                pass # adapter.close()
+                adapter.close()
             except Exception as e:
                 print("Error closing adapter: %s", e)
 
@@ -103,16 +100,17 @@ def main():
     sleep(5)  # Allow time for traces to be sent
     print("Done running pipeline")
 
+
 if __name__ == "__main__":
-    import httpx
     import certifi
+    import httpx
 
     # Python 3.6 does not rely on MacOS' openSSL anymore. It comes with its own openSSL bundled
     # and doesn't have access on MacOS' root certificates. https://stackoverflow.com/a/42107877
     print("certifi.where():", certifi.where())
     print("request.default:", requests.utils.DEFAULT_CA_BUNDLE_PATH)
     resp = httpx.get(config.phoenix_base_url)
-    print("Phoenix service is alive:", resp.read().decode('utf-8'))
+    print("Phoenix service is alive:", resp.read().decode("utf-8"))
 
     if config.disable_ssl_verification:
         print("Running with SSL verification disabled")
