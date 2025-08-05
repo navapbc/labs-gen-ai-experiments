@@ -26,12 +26,23 @@ services:
       - db
     ports:
       - "6006:6006" # UI and OTLP HTTP collector
-      - "4317:4317" # OTLP gRPC collector
+      # - "4317:4317" # OTLP gRPC collector
     environment:
       # https://arize.com/docs/phoenix/self-hosting/features/authentication
       # - PHOENIX_ENABLE_AUTH=True
       # - PHOENIX_SECRET=${PHOENIX_SECRET}
       - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      # https://arize.com/docs/phoenix/release-notes/04.2025/04.28.2025-tls-support-for-phoenix-server
+      - PHOENIX_TLS_ENABLED=True
+      - PHOENIX_TLS_CERT_FILE=/certs/server-cert.pem
+      - PHOENIX_TLS_KEY_FILE=/certs/server-key.pem
+      - PHOENIX_TLS_KEY_FILE_PASSWORD=server
+      # for client verification
+      - PHOENIX_TLS_VERIFY_CLIENT=False
+      # - PHOENIX_TLS_CA_FILE=ca-cert.pem
+    volumes:
+      - ./certs:/certs
+
 
   # Since Phoenix doesn't have a status or healthcheck endpoint,
   # sleep for a while before starting the backend service,
@@ -44,6 +55,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        INTERMEDIATE_CACERT: ${INTERMEDIATE_CACERT}
     depends_on:
       wait_for_phoenix:
         condition: service_completed_successfully
@@ -61,7 +74,7 @@ services:
       - HAYSTACK_TELEMETRY_ENABLED=False
 
       # For observability
-      - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006
+      # - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006
       - PHOENIX_PROJECT_NAME=local-docker-project
 
       # Connect using API key -- https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-client#authentication-if-applicable
@@ -73,6 +86,18 @@ services:
       - HAYHOOKS_SHOW_TRACEBACKS=true
       # TODO LATER: for security, add Hayhooks CORS settings
       # https://docs.haystack.deepset.ai/docs/hayhooks#environment-variables
+
+      # TLS
+      - PHOENIX_COLLECTOR_ENDPOINT=https://phoenix.referral-pilot-dev.navateam.com:6006
+      # - DISABLE_SSL_VERIFICATION=True  # Eventually fails due to batch OTEL
+      # - REQUESTS_CA_BUNDLE=/my_certs.crt
+      # - SSL_CERT_FILE=/my_certs.crt
+      # - REQUESTS_CA_BUNDLE=/cert.pem
+      # - SSL_CERT_FILE=/cert.pem
+    volumes:
+      # - ./backend/cert.pem:/cert.pem #/etc/ssl/certs/ca-certificates.crt
+      # - ./backend/certifi_cacert.pem:/opt/venv/lib/python3.12/site-packages/certifi/cacert.pem # /my_certs.crt
+      - ./backend/certifi_cacert.pem:/my_certs.crt #/etc/ssl/certs/ca-certificates.crt
     healthcheck:
       test: [ "CMD", "wget", "--tries=1", "http://localhost:1416/status" ]
       # Every request creates a log message, which clutters the logs
