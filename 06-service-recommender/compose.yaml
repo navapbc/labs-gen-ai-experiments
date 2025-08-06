@@ -32,14 +32,16 @@ services:
       # - PHOENIX_ENABLE_AUTH=True
       # - PHOENIX_SECRET=${PHOENIX_SECRET}
       - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+
       # https://arize.com/docs/phoenix/release-notes/04.2025/04.28.2025-tls-support-for-phoenix-server
       - PHOENIX_TLS_ENABLED=True
+      # The following applies when PHOENIX_TLS_ENABLED=True
       - PHOENIX_TLS_CERT_FILE=/certs/server-fullchain.crt
       # Server's private key
       - PHOENIX_TLS_KEY_FILE=/certs/server.key
       # For local dev, no password set for the server's private key
       - PHOENIX_TLS_KEY_FILE_PASSWORD=
-      # for client verification
+      # For verifying client certificates
       - PHOENIX_TLS_VERIFY_CLIENT=False
       # - PHOENIX_TLS_CA_FILE=ca-cert.pem
     volumes:
