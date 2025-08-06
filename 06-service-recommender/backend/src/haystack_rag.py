@@ -144,21 +144,23 @@ def test_basic_http_request():
     # Python 3.6 does not rely on MacOS' openSSL anymore. It comes with its own openSSL bundled
     # and doesn't have access on MacOS' root certificates. https://stackoverflow.com/a/42107877
     print("certifi.where():", certifi.where())
-    print("request.default:", requests.utils.DEFAULT_CA_BUNDLE_PATH)
-    # TODO: Not sure if this is needed when a pipeline runs in hayhooks
-    # os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
-    # os.environ["SSL_CERT_FILE"] = os.environ["REQUESTS_CA_BUNDLE"]
+    assert certifi.where() == requests.utils.DEFAULT_CA_BUNDLE_PATH
     check_ssl_certificate()
 
     resp = httpx.get(config.phoenix_base_url)
     print("Phoenix service is alive:", resp.read().decode("utf-8"))
 
 
+# Usage: PHOENIX_COLLECTOR_ENDPOINT=https://localhost:6006 uv run src/haystack_rag.py
 if __name__ == "__main__":
+    test_basic_http_request()
+
     if config.disable_ssl_verification:
         print("Running with SSL verification disabled")
         with no_ssl_verification():
             main()
     else:
         print("Running with SSL verification enabled")
+        # If this fails with an SSL error, make sure the self-signed root CA certificate is
+        # appended to the file at DEFAULT_CA_BUNDLE_PATH, as done in the Dockerfile
         main()
