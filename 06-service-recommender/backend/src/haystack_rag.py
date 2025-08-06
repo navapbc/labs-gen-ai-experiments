@@ -3,6 +3,8 @@
 import contextlib
 import logging
 import os
+import socket
+import ssl
 from pprint import pprint
 from time import sleep
 
@@ -101,7 +103,41 @@ def main():
     print("Done running pipeline")
 
 
-if __name__ == "__main__":
+def get_certificate_hostnames(hostname, port):
+    # Establish a connection to the server
+    sock = socket.create_connection((hostname, port))
+    ctx = ssl.create_default_context()
+    # ctx.check_hostname = False
+    sslsock = ctx.wrap_socket(sock, server_hostname=hostname)
+
+    pprint(sslsock.getpeercert())
+    common_name = next(
+        s[0][1] for s in sslsock.getpeercert()["subject"] if s[0][0] == "commonName"
+    )
+    san_list = list(s[1] for s in sslsock.getpeercert()["subjectAltName"])
+    sslsock.close()
+    sock.close()
+    return common_name, san_list
+
+
+def check_ssl_certificate():
+    domain_and_port = config.phoenix_base_url.split("://")[-1].split(":")
+    target_hostname = domain_and_port[0]
+    port = domain_and_port[1]
+    cn, sans = get_certificate_hostnames(target_hostname, port)
+
+    print(f"Connected to: {target_hostname}")
+    print(f"Certificate Common Name (CN): {cn}")
+    print(f"Certificate Subject Alternative Names (SANs): {sans}")
+
+    # Compare with the target hostname
+    if target_hostname != cn and target_hostname not in sans:
+        print(f"Hostname mismatch: '{target_hostname}' != '{cn}' or any SANs.")
+    else:
+        print(f"Hostname '{target_hostname}' matches the certificate.")
+
+
+def test_basic_http_request():
     import certifi
     import httpx
 
@@ -109,9 +145,16 @@ if __name__ == "__main__":
     # and doesn't have access on MacOS' root certificates. https://stackoverflow.com/a/42107877
     print("certifi.where():", certifi.where())
     print("request.default:", requests.utils.DEFAULT_CA_BUNDLE_PATH)
+    # TODO: Not sure if this is needed when a pipeline runs in hayhooks
+    # os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
+    # os.environ["SSL_CERT_FILE"] = os.environ["REQUESTS_CA_BUNDLE"]
+    check_ssl_certificate()
+
     resp = httpx.get(config.phoenix_base_url)
     print("Phoenix service is alive:", resp.read().decode("utf-8"))
 
+
+if __name__ == "__main__":
     if config.disable_ssl_verification:
         print("Running with SSL verification disabled")
         with no_ssl_verification():
