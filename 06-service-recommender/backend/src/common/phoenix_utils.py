@@ -27,7 +27,12 @@ formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s")
 def create_client():
     logger.info("Creating Phoenix client to %s", config.phoenix_base_url)
     if config.disable_ssl_verification:
-        logger.warning("SSL verification is disabled!")
+        # For other calls (i.e., in Haystack pipelines), something like no_ssl_verification()
+        # in haystack_rag.py is needed to disable SSL verification.
+        # For local development, we shouldn't enable SSL at all.
+        logger.warning(
+            "SSL verification is disabled for this call, but not other calls"
+        )
         client = httpx.Client(base_url=config.phoenix_base_url, verify=False)
     else:
         client = None
@@ -46,7 +51,7 @@ def service_alive():
     return False
 
 
-USE_PHOENIX_OTEL_REGISTER = False
+USE_PHOENIX_OTEL_REGISTER = True
 BATCH_OTEL = False
 
 
@@ -71,9 +76,7 @@ def configure_phoenix(only_if_alive=True):
         # This uses PHOENIX_COLLECTOR_ENDPOINT and PHOENIX_PROJECT_NAME env variables
         # and PHOENIX_API_KEY to handle authentication to Phoenix.
         tracer_provider = phoenix.otel.register(
-            # FIXME: Investigate why USE_PHOENIX_OTEL_REGISTER=True doesn't work
-            # endpoint=endpoint, # Setting this causes: ERROR - opentelemetry.exporter.otlp.proto.http.trace_exporter -  Failed to export batch code: 405, reason: Method Not Allowed
-            # without setting endpoint, we get repeated: WARNING - opentelemetry.exporter.otlp.proto.grpc.exporter -  Transient error StatusCode.UNAVAILABLE encountered while exporting traces to ...:4317, retrying
+            endpoint=trace_endpoint,
             batch=BATCH_OTEL,
             # Auto-instrument based on installed OpenInference dependencies
             auto_instrument=True,
