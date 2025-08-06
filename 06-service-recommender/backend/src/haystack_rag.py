@@ -8,11 +8,12 @@ import ssl
 from pprint import pprint
 from time import sleep
 
+import certifi
+import httpx
 import requests
-from dotenv import load_dotenv
-
 from common import haystack_utils
 from common.app_config import config
+from dotenv import load_dotenv
 from pipelines.first import pipeline_wrapper
 
 logging.basicConfig(
@@ -137,10 +138,7 @@ def check_ssl_certificate():
         print(f"Hostname '{target_hostname}' matches the certificate.")
 
 
-def test_basic_http_request():
-    import certifi
-    import httpx
-
+def test_basic_https_request():
     # Python 3.6 does not rely on MacOS' openSSL anymore. It comes with its own openSSL bundled
     # and doesn't have access on MacOS' root certificates. https://stackoverflow.com/a/42107877
     print("certifi.where():", certifi.where())
@@ -153,14 +151,19 @@ def test_basic_http_request():
 
 # Usage: PHOENIX_COLLECTOR_ENDPOINT=https://localhost:6006 uv run src/haystack_rag.py
 if __name__ == "__main__":
-    test_basic_http_request()
-
     if config.disable_ssl_verification:
         print("Running with SSL verification disabled")
         with no_ssl_verification():
             main()
     else:
-        print("Running with SSL verification enabled")
-        # If this fails with an SSL error, make sure the self-signed root CA certificate is
-        # appended to the file at DEFAULT_CA_BUNDLE_PATH, as done in the Dockerfile
-        main()
+        try:
+            test_basic_https_request()
+            print("Running with SSL verification enabled")
+            main()
+        except ssl.SSLCertVerificationError as e:
+            print(
+                "Please ensure the self-signed root CA certificate is appended to ",
+                certifi.where(),
+                "as done in the Dockerfile",
+            )
+            raise e
