@@ -319,53 +319,53 @@ To view the redacted spans:
 
 Based on [this documentation](https://arize.com/docs/phoenix/release-notes/04.2025/04.28.2025-tls-support-for-phoenix-server).
 
-1. [Create self-signed cert](https://dev.to/techschoolguru/how-to-create-sign-ssl-tls-certificates-2aai)
+1. Get TLS/SSL certificate
+   * (For local dev environment) Create self-signed certificate for Phoenix instance
 ```sh
-# Generate CA'private key and certificate
-openssl req -x509 -newkey rsa:4096 -days 365 -keyout ca-key.pem -out ca-cert.pem
-# first
-# Generate web server's private key and CSR
-openssl req -newkey rsa:4096 -keyout server-key.pem -out server-req.pem
-# server; challenge pwd: phoenix
-# Sign the web server's certificate request
-openssl x509 -req -in server-req.pem -days 60 -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem
+# Starting at the project root folder
+# This 'certs' folder will be mounted as a volume in the phoenix Docker container
+mkdir certs && cd certs
+# Generate root CA's private key
+openssl genrsa -out rootCA.key 4096
+# Create self-signed root CA certificate
+openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt -subj "/C=US/ST=Test/L=Test/O=DevRootCA/OU=IT/CN=DevRootCA"
 
-# For multiple domain names plus localhost
-echo "subjectAltName=DNS:*.pcbook.com,DNS:*.pcbook.org,IP:0.0.0.0" > server-ext.cnf
-openssl x509 -req -in server-req.pem -days 60 -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -extfile server-ext.cnf
-openssl x509 -in server-cert.pem -noout -text
+# Generate a server's private key
+openssl genrsa -out server.key 2048
+# Create the server's certificate signing request (CSR)
+# Important: include ALL possible hostnames in the subjectAltName list
+# - "phoenix" for interactions between Docker containers within docker-compose network
+# - "localhost" for connecting to Phoenix Docker container from outside the docker-compose network
+openssl req -new -key server.key -out server.csr -subj "/C=US/ST=Test/L=Test/O=MyTestServer/OU=IT/CN=phoenix" -addext "subjectAltName = DNS:phoenix,DNS:localhost"
+# Sign CSR with the root CA certificate
+# Important: use '-copy_extensions copy' to copy over subjectAltName values
+openssl x509 -req -in server.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out server.crt -days 825 -sha256 -copy_extensions copy
+# Confirm alternative name
+openssl x509 -in server.crt -noout -ext subjectAltName
+# and other data
+openssl x509 -in server.crt -noout -text
+# Verify against root CA
+openssl verify -CAfile rootCA.crt server.crt
 
-# Verify a certificate
-openssl verify -CAfile ca-cert.pem server-cert.pem
-
-
-# Generate a Private Key
-openssl genpkey -algorithm RSA -out private.key -aes256
-# Create a Certificate Signing Request (CSR)
-openssl req -new -key private.key -out certificate.csr
-# Generate the Self-Signed Certificate
-openssl x509 -req -days 365 -in certificate.csr -signkey private.key -out selfsigned.crt
-# Verify the Certificate
-openssl x509 -in selfsigned.crt -text -noout
+# Include Root CA in server's cert so that it's available for client-side validation
+cat server.crt rootCA.crt > server-fullchain.crt
 ```
+   * (For Lightsail instance of Phoenix) Create and download certificate from ACM (AWS Certificate Manager)
+      - Enable and copy static IP from Lightsail instance
+      - Create A record static IP in Route 53
+      - Request certificate in ACM
+      - Created CNAME record based on request result for ACM to validate request
+      - Upon ACM validation, exported certificate from ACM; download and move to a `certs` folder
+      - Copy to Lightsail instance: `scp -i $SSH_KEY_PEM_FILE -r certs ec2-user@${STATIC_IP}`
 
-Created A record static IP
-Requested cert from ACM (AWS Certificate Manager)
-Created CNAME record based on request result
-Wait for ACM validation
-Exported certs from ACM; download and move to certs folder
-Copy to Lightsail instance:
-```
-scp -i phoenix-arize-ssh-key.pem -r certs ec2-user@52.4.126.145:
-```
-Update `compose.yaml` with:
-```
+2. Configure SSL in Phoenix by updating `compose.yaml` (locally or in Lightsail instance) with:
+```yaml
     environment:
       ...
       - PHOENIX_TLS_ENABLED=True
-      - PHOENIX_TLS_CERT_FILE=/certs/certificate.pem
-      - PHOENIX_TLS_KEY_FILE=/certs/private_key.pem
-      - PHOENIX_TLS_KEY_FILE_PASSWORD=...
+      - PHOENIX_TLS_CERT_FILE=/certs/server-fullchain.crt
+      - PHOENIX_TLS_KEY_FILE=/certs/server.key
+      # - PHOENIX_TLS_KEY_FILE_PASSWORD=
       # for client verification
       - PHOENIX_TLS_VERIFY_CLIENT=False
     volumes:
@@ -376,4 +376,6 @@ CERT_PATH=$(uv run python -m certifi)
 export SSL_CERT_FILE=${CERT_PATH}
 export REQUESTS_CA_BUNDLE=${CERT_PATH}
 
-To trust self-signed cert: https://stackoverflow.com/a/72053605
+To trust self-signed cert
+
+Set INTERMEDIATE_CACERT

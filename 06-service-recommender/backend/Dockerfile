@@ -5,7 +5,6 @@ FROM deepset/haystack:base-v2.14.0
 RUN apt-get update && apt-get install -y --no-install-recommends wget && \
     rm -rf /var/lib/apt/lists/*
 
-
 WORKDIR /app
 COPY requirements.txt .
 # Use --no-deps because transitive dependencies have already been included

@@ -438,8 +438,6 @@ tqdm==4.67.1
     #   haystack-ai
     #   openai
     #   spacy
-truststore==0.10.3
-    # via backend (pyproject.toml)
 typer==0.16.0
     # via
     #   fastapi-cli

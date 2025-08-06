@@ -59,10 +59,9 @@ def configure_phoenix(only_if_alive=True):
         logger.info("Opentelemetry tracing already configured; skipping")
         return
 
-    # PHOENIX_COLLECTOR_ENDPOINT env variable is used by phoenix.otel
-    endpoint = os.environ.get("PHOENIX_COLLECTOR_ENDPOINT", "https://0.0.0.0:6006")
-    trace_endpoint = f"{endpoint}/v1/traces"
-    logger.info("Using Phoenix endpoint: %s", endpoint)
+    # endpoint = config.phoenix_base_url
+    trace_endpoint = f"{config.phoenix_base_url}/v1/traces"
+    logger.info("Using Phoenix OTEL endpoint: %s", trace_endpoint)
 
     strip_pii = os.environ.get("STRIP_PII", "true").lower() == "true"
     # Both implementations produce the same traces

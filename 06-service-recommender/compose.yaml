@@ -34,9 +34,11 @@ services:
       - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
       # https://arize.com/docs/phoenix/release-notes/04.2025/04.28.2025-tls-support-for-phoenix-server
       - PHOENIX_TLS_ENABLED=True
-      - PHOENIX_TLS_CERT_FILE=/certs/server-cert.pem
-      - PHOENIX_TLS_KEY_FILE=/certs/server-key.pem
-      - PHOENIX_TLS_KEY_FILE_PASSWORD=server
+      - PHOENIX_TLS_CERT_FILE=/certs/server-fullchain.crt
+      # Server's private key
+      - PHOENIX_TLS_KEY_FILE=/certs/server.key
+      # For local dev, no password set for the server's private key
+      - PHOENIX_TLS_KEY_FILE_PASSWORD=
       # for client verification
       - PHOENIX_TLS_VERIFY_CLIENT=False
       # - PHOENIX_TLS_CA_FILE=ca-cert.pem
@@ -88,7 +90,6 @@ services:
       # https://docs.haystack.deepset.ai/docs/hayhooks#environment-variables
 
       # TLS
-      - PHOENIX_COLLECTOR_ENDPOINT=https://phoenix.referral-pilot-dev.navateam.com:6006
       # - DISABLE_SSL_VERIFICATION=True  # Eventually fails due to batch OTEL
       - STRIP_PII=False
     healthcheck:
