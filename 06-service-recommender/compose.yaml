@@ -26,12 +26,27 @@ services:
       - db
     ports:
       - "6006:6006" # UI and OTLP HTTP collector
-      - "4317:4317" # OTLP gRPC collector
+      # - "4317:4317" # OTLP gRPC collector
     environment:
       # https://arize.com/docs/phoenix/self-hosting/features/authentication
       # - PHOENIX_ENABLE_AUTH=True
       # - PHOENIX_SECRET=${PHOENIX_SECRET}
       - PHOENIX_SQL_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+
+      # https://arize.com/docs/phoenix/release-notes/04.2025/04.28.2025-tls-support-for-phoenix-server
+      - PHOENIX_TLS_ENABLED=True
+      # The following applies when PHOENIX_TLS_ENABLED=True
+      - PHOENIX_TLS_CERT_FILE=/certs/server-fullchain.crt
+      # Server's private key
+      - PHOENIX_TLS_KEY_FILE=/certs/server.key
+      # For local dev, no password set for the server's private key
+      - PHOENIX_TLS_KEY_FILE_PASSWORD=
+      # For verifying client certificates
+      - PHOENIX_TLS_VERIFY_CLIENT=False
+      # - PHOENIX_TLS_CA_FILE=ca-cert.pem
+    volumes:
+      - ./certs:/certs
+
 
   # Since Phoenix doesn't have a status or healthcheck endpoint,
   # sleep for a while before starting the backend service,
@@ -44,6 +59,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        INTERMEDIATE_CACERT: ${INTERMEDIATE_CACERT}
     depends_on:
       wait_for_phoenix:
         condition: service_completed_successfully
@@ -61,7 +78,7 @@ services:
       - HAYSTACK_TELEMETRY_ENABLED=False
 
       # For observability
-      - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006
+      # - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006
       - PHOENIX_PROJECT_NAME=local-docker-project
 
       # Connect using API key -- https://arize.com/docs/phoenix/sdk-api-reference/python-pacakges/arize-phoenix-client#authentication-if-applicable
@@ -73,6 +90,11 @@ services:
       - HAYHOOKS_SHOW_TRACEBACKS=true
       # TODO LATER: for security, add Hayhooks CORS settings
       # https://docs.haystack.deepset.ai/docs/hayhooks#environment-variables
+
+      # TLS
+      # For testing: - PHOENIX_COLLECTOR_ENDPOINT=https://phoenix.referral-pilot-dev.navateam.com:6006
+      # - DISABLE_SSL_VERIFICATION=True  # Eventually fails due to batch OTEL
+      - STRIP_PII=False
     healthcheck:
       test: [ "CMD", "wget", "--tries=1", "http://localhost:1416/status" ]
       # Every request creates a log message, which clutters the logs

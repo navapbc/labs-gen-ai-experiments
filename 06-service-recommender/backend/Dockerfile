@@ -16,6 +16,14 @@ COPY src .
 # https://github.com/deepset-ai/hayhooks/tree/main/examples/shared_code_between_wrappers
 ENV HAYHOOKS_ADDITIONAL_PYTHON_PATH=.
 
+# Using the `truststore` library worked outside of Docker, but did not work inside a Docker container
+# so the current solution is to add the intermediate CA cert to the CA cert file.
+# https://stackoverflow.com/questions/27068163/python-requests-not-handling-missing-intermediate-certificate-only-from-one-mach
+ARG INTERMEDIATE_CACERT
+# Append intermediate certificate to /opt/venv/lib/python3.12/site-packages/certifi/cacert.pem
+RUN CERTIFI_CACERT_FILE=$(python -c "import certifi; print(certifi.where())") \
+    && [ -f "$CERTIFI_CACERT_FILE" ] && echo "$INTERMEDIATE_CACERT" >> $CERTIFI_CACERT_FILE
+
 ENV LOG=DEBUG
 # Haystack pipelines defined under pipelines folder are automatically deployed on Hayhooks startup
 CMD ["hayhooks", "run", "--host", "0.0.0.0"]

@@ -25,13 +25,26 @@ formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s")
 
 
 def create_client():
-    return phoenix.client.Client(base_url=config.phoenix_base_url)
+    logger.info("Creating Phoenix client to %s", config.phoenix_base_url)
+    if config.disable_ssl_verification:
+        # For other calls (i.e., in Haystack pipelines), something like no_ssl_verification()
+        # in haystack_rag.py is needed to disable SSL verification.
+        # For local development, we shouldn't enable SSL at all.
+        logger.warning(
+            "SSL verification is disabled for this call, but not other calls"
+        )
+        client = httpx.Client(base_url=config.phoenix_base_url, verify=False)
+    else:
+        client = None
+
+    return phoenix.client.Client(base_url=config.phoenix_base_url, http_client=client)
 
 
 def service_alive():
     client = create_client()
     try:
-        client.projects.list()
+        projects = client.projects.list()
+        logger.info("Phoenix service is alive: %s", projects)
         return True
     except httpx.HTTPStatusError as error:
         logger.info("Phoenix service is not alive: %s", error)
@@ -39,7 +52,7 @@ def service_alive():
 
 
 USE_PHOENIX_OTEL_REGISTER = True
-BATCH_OTEL = True
+BATCH_OTEL = False
 
 
 def configure_phoenix(only_if_alive=True):
@@ -51,11 +64,11 @@ def configure_phoenix(only_if_alive=True):
         logger.info("Opentelemetry tracing already configured; skipping")
         return
 
-    # PHOENIX_COLLECTOR_ENDPOINT env variable is used by phoenix.otel
-    endpoint = os.environ.get("PHOENIX_COLLECTOR_ENDPOINT", "http://localhost:6006")
-    trace_endpoint = f"{endpoint}/v1/traces"
-    logger.info("Using Phoenix endpoint: %s", endpoint)
+    # endpoint = config.phoenix_base_url
+    trace_endpoint = f"{config.phoenix_base_url}/v1/traces"
+    logger.info("Using Phoenix OTEL endpoint: %s", trace_endpoint)
 
+    strip_pii = os.environ.get("STRIP_PII", "true").lower() == "true"
     # Both implementations produce the same traces
     if USE_PHOENIX_OTEL_REGISTER:
         # Using Phoenix docs: https://arize.com/docs/phoenix/tracing/integrations-tracing/haystack
@@ -63,15 +76,17 @@ def configure_phoenix(only_if_alive=True):
         # This uses PHOENIX_COLLECTOR_ENDPOINT and PHOENIX_PROJECT_NAME env variables
         # and PHOENIX_API_KEY to handle authentication to Phoenix.
         tracer_provider = phoenix.otel.register(
+            endpoint=trace_endpoint,
             batch=BATCH_OTEL,
             # Auto-instrument based on installed OpenInference dependencies
             auto_instrument=True,
         )
-        span_exporter = otel_trace_exporter.OTLPSpanExporter(trace_endpoint)
-        otel_sdk_trace.export.BatchSpanProcessor(span_exporter)
-        # Create the PII redacting processor with the OTLP exporter
-        pii_processor = PresidioRedactionSpanProcessor(span_exporter)
-        tracer_provider.add_span_processor(pii_processor)
+        if strip_pii:
+            span_exporter = otel_trace_exporter.OTLPSpanExporter(trace_endpoint)
+            otel_sdk_trace.export.BatchSpanProcessor(span_exporter)
+            # Create the PII redacting processor with the OTLP exporter
+            pii_processor = PresidioRedactionSpanProcessor(span_exporter)
+            tracer_provider.add_span_processor(pii_processor)
     else:
         # Using Haystack docs: https://haystack.deepset.ai/integrations/arize-phoenix
         # This is a more manual setup that uses HaystackInstrumentor
@@ -79,18 +94,19 @@ def configure_phoenix(only_if_alive=True):
         logger.info("Using HaystackInstrumentor")
         tracer_provider = otel_sdk_trace.TracerProvider()
         # Set the URL since PHOENIX_COLLECTOR_ENDPOINT is not used by HaystackInstrumentor
-        span_exporter = otel_trace_exporter.OTLPSpanExporter(f"{endpoint}/v1/traces")
+        span_exporter = otel_trace_exporter.OTLPSpanExporter(trace_endpoint)
         if BATCH_OTEL:
             processor = otel_sdk_trace.export.BatchSpanProcessor(span_exporter)
         else:
             # Send traces immediately
             processor = otel_sdk_trace.export.SimpleSpanProcessor(span_exporter)
         tracer_provider.add_span_processor(processor)
-        # Create the PII redacting processor with the OTLP exporter
-        pii_processor = PresidioRedactionSpanProcessor(
-            otel_trace_exporter.OTLPSpanExporter(trace_endpoint),
-        )
-        tracer_provider.add_span_processor(pii_processor)
+        if strip_pii:
+            # Create the PII redacting processor with the OTLP exporter
+            pii_processor = PresidioRedactionSpanProcessor(
+                otel_trace_exporter.OTLPSpanExporter(trace_endpoint),
+            )
+            tracer_provider.add_span_processor(pii_processor)
         # PHOENIX_API_KEY env variable seems to be used by HaystackInstrumentor
         HaystackInstrumentor().instrument(tracer_provider=tracer_provider)
 
