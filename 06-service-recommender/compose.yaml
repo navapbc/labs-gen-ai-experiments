@@ -92,6 +92,7 @@ services:
       # https://docs.haystack.deepset.ai/docs/hayhooks#environment-variables
 
       # TLS
+      # For testing: - PHOENIX_COLLECTOR_ENDPOINT=https://phoenix.referral-pilot-dev.navateam.com:6006
       # - DISABLE_SSL_VERIFICATION=True  # Eventually fails due to batch OTEL
       - STRIP_PII=False
     healthcheck:

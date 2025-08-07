@@ -107,8 +107,7 @@ def main():
 def get_certificate_hostnames(hostname, port):
     # Establish a connection to the server
     sock = socket.create_connection((hostname, port))
-    ctx = ssl.create_default_context()
-    # ctx.check_hostname = False
+    ctx = ssl.create_default_context(cafile=certifi.where())
     sslsock = ctx.wrap_socket(sock, server_hostname=hostname)
 
     pprint(sslsock.getpeercert())
@@ -162,7 +161,7 @@ if __name__ == "__main__":
             main()
         except ssl.SSLCertVerificationError as e:
             print(
-                "Please ensure the self-signed root CA certificate is appended to ",
+                "Please ensure the self-signed root CA certificate is appended to",
                 certifi.where(),
                 "as done in the Dockerfile",
             )
