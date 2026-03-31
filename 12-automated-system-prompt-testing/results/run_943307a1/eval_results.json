@@ -1,0 +1,457 @@
+[
+  {
+    "query_id": "q_001",
+    "user_query": "My client needs food assistance.\nInclude resources that support the following categories: Food Assis",
+    "location": "Austin (Travis county), TX 78702",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 87.6,
+            "flesch_grade": 3.9,
+            "gunning_fog": 5.8,
+            "smog_index": 6.5,
+            "grade_level": 3.9
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 4,
+          "total": 7,
+          "ungrounded_names": [
+            "H-E-B Free Curbside and Delivery with SNAP (Food Stamps)",
+            "Travis County Health and Human Services \u2013 Social Services (Food Help and SNAP)",
+            "Texas Health and Human Services \u2013 Benefits Office (SNAP Food Stamps)",
+            "Sunrise Homeless Navigation Center \u2013 Daily Meals"
+          ],
+          "grounding_pct": 42.9,
+          "web_search_used": false,
+          "rag_resource_count": 4
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 23912,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 88.1,
+            "flesch_grade": 3.5,
+            "gunning_fog": 4.9,
+            "smog_index": 6.2,
+            "grade_level": 3.5
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 2,
+          "ungrounded": 5,
+          "total": 7,
+          "ungrounded_names": [
+            "El Buen Samaritano",
+            "H-E-B Hunger Relief / Feast of Sharing Partners (via Store and Local Drives)",
+            "St. Vincent de Paul Thrift Store and Food Help (Diocese of Austin)",
+            "Sunrise Homeless Navigation Center (Sunrise Church Austin)",
+            "City of Austin WIC (Women, Infants, and Children) Program"
+          ],
+          "grounding_pct": 28.6,
+          "web_search_used": false,
+          "rag_resource_count": 4
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 45378,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_002",
+    "user_query": "CPR Training\nInclude resources that support the following categories: Employment & Job Training\nFocu",
+    "location": "Austin (Travis county), TX 78753",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 4,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 76.1,
+            "flesch_grade": 5.6,
+            "gunning_fog": 6.9,
+            "smog_index": 8.2,
+            "grade_level": 5.6
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 4
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 1,
+          "total": 4,
+          "ungrounded_names": [
+            "CPR Training Austin (American Heart Association Classes)"
+          ],
+          "grounding_pct": 75.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 4,
+      "flag_count": 0,
+      "latency_ms": 11175,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 4,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 79.8,
+            "flesch_grade": 4.6,
+            "gunning_fog": 5.8,
+            "smog_index": 7.5,
+            "grade_level": 4.6
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 4
+        },
+        "rag_grounding": {
+          "grounded": 2,
+          "ungrounded": 2,
+          "total": 4,
+          "ungrounded_names": [
+            "CPR Resources \u2013 Austin (CPR, BLS, and First Aid Training)",
+            "Code One Training Solutions \u2013 Austin (CPR and BLS Classes)"
+          ],
+          "grounding_pct": 50.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 4,
+      "flag_count": 2,
+      "latency_ms": 8601,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_003",
+    "user_query": "Include resources that support the following categories: Housing Assistance, Utility Assistance\nFocu",
+    "location": "Austin (Travis county), TX 78741",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 89.8,
+            "flesch_grade": 3.3,
+            "gunning_fog": 5.6,
+            "smog_index": 6.7,
+            "grade_level": 3.3
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 4,
+          "total": 7,
+          "ungrounded_names": [
+            "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "Society of St. Louise \u2013 St. Louis King of France Catholic Church",
+            "Texas Health and Human Services \u2013 Benefits (SNAP, TANF, Medicaid)",
+            "2-1-1 Texas \u2013 United Way Helpline"
+          ],
+          "grounding_pct": 42.9,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 17542,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 85.1,
+            "flesch_grade": 4.2,
+            "gunning_fog": 5.9,
+            "smog_index": 7.4,
+            "grade_level": 4.2
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "Catholic Charities of Central Texas"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 15848,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_004",
+    "user_query": "Include resources that support the following categories: Childcare, Legal Services, Financial Assist",
+    "location": "Austin (Travis county), TX 78745",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 82.5,
+            "flesch_grade": 4.4,
+            "gunning_fog": 5.8,
+            "smog_index": 7.2,
+            "grade_level": 4.4
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 4,
+          "ungrounded": 3,
+          "total": 7,
+          "ungrounded_names": [
+            "Catholic Charities of Central Texas \u2013 Financial Stability and Emergency Help",
+            "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "Foundation Communities \u2013 Prosper Financial Centers"
+          ],
+          "grounding_pct": 57.1,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 13464,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [
+        "EMPTY_OUTPUT",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": false
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 1579,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_005",
+    "user_query": "My client is a veteran who needs mental health support and employment assistance.\nInclude resources ",
+    "location": "Austin (Travis county), TX 78723",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 74.0,
+            "flesch_grade": 6.0,
+            "gunning_fog": 8.6,
+            "smog_index": 9.6,
+            "grade_level": 6.0
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "Workforce Solutions Capital Area \u2013 North Career Center",
+            "Lone Star Circle of Care at William Cannon \u2013 Veterans Mental Health (Telehealth and In\u2011Person)"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 16706,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 78.9,
+            "flesch_grade": 5.4,
+            "gunning_fog": 7.6,
+            "smog_index": 8.7,
+            "grade_level": 5.4
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 6,
+          "ungrounded": 1,
+          "total": 7,
+          "ungrounded_names": [
+            "Workforce Solutions Capital Area"
+          ],
+          "grounding_pct": 85.7,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 15085,
+      "web_search_used": false
+    }
+  }
+]

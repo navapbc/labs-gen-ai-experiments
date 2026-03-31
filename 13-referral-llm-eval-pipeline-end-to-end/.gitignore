@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+results/*.json
+results/*.md
+results/*.csv
+!results/.gitkeep
+.DS_Store

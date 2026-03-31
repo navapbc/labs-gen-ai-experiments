@@ -1,0 +1,255 @@
+[
+  {
+    "query_id": "q_001",
+    "user_query": "My client needs food assistance.\nInclude resources that support the following categories: Food Assis",
+    "location": "Austin (Travis county), TX 78702",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 84.6,
+            "flesch_grade": 4.2,
+            "gunning_fog": 6.0,
+            "smog_index": 7.4,
+            "grade_level": 4.2
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 4,
+          "total": 7,
+          "ungrounded_names": [
+            "El Buen Samaritano",
+            "SAFE Alliance - Food and Basic Needs for Clients",
+            "St. Vincent de Paul Society - Diocesan Council of Austin",
+            "Texas Health and Human Services - SNAP (Food Stamps)"
+          ],
+          "grounding_pct": 42.9,
+          "web_search_used": false,
+          "rag_resource_count": 4
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 20994,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_002",
+    "user_query": "CPR Training\nInclude resources that support the following categories: Employment & Job Training\nFocu",
+    "location": "Austin (Travis county), TX 78753",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 5,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 79.9,
+            "flesch_grade": 4.8,
+            "gunning_fog": 5.5,
+            "smog_index": 7.0,
+            "grade_level": 4.8
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 5
+        },
+        "rag_grounding": {
+          "grounded": 4,
+          "ungrounded": 1,
+          "total": 5,
+          "ungrounded_names": [
+            "Austin Community College \u2013 Continuing Education CPR Classes"
+          ],
+          "grounding_pct": 80.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 5,
+      "flag_count": 0,
+      "latency_ms": 16156,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_003",
+    "user_query": "Include resources that support the following categories: Housing Assistance, Utility Assistance\nFocu",
+    "location": "Austin (Travis county), TX 78741",
+    "baseline": {
+      "flags": [
+        "DUPLICATE_RESOURCE",
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 5,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 86.7,
+            "flesch_grade": 3.6,
+            "gunning_fog": 5.8,
+            "smog_index": 7.1,
+            "grade_level": 3.6
+          }
+        },
+        "duplicates": {
+          "duplicates": [
+            {
+              "resource_a": "St. Austin Catholic Parish \u2013 St. Vincent de Paul Conference",
+              "resource_b": "St. Louis King of France Catholic Church \u2013 St. Vincent de Paul Conference",
+              "similarity": 0.8,
+              "match_type": "name"
+            }
+          ]
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 5
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 5,
+          "total": 5,
+          "ungrounded_names": [
+            "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "Society of St. Vincent de Paul \u2013 St. Ignatius Martyr Conference",
+            "Society of St. Vincent de Paul \u2013 Dolores Catholic Church Conference",
+            "St. Austin Catholic Parish \u2013 St. Vincent de Paul Conference",
+            "St. Louis King of France Catholic Church \u2013 St. Vincent de Paul Conference"
+          ],
+          "grounding_pct": 0.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 5,
+      "flag_count": 3,
+      "latency_ms": 14909,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_004",
+    "user_query": "Include resources that support the following categories: Childcare, Legal Services, Financial Assist",
+    "location": "Austin (Travis county), TX 78745",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 85.4,
+            "flesch_grade": 3.8,
+            "gunning_fog": 5.4,
+            "smog_index": 7.0,
+            "grade_level": 3.8
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "Society of St. Vincent de Paul \u2013 St. Ignatius Martyr Conference (South Austin)"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 17360,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_005",
+    "user_query": "My client is a veteran who needs mental health support and employment assistance.\nInclude resources ",
+    "location": "Austin (Travis county), TX 78723",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 77.4,
+            "flesch_grade": 5.3,
+            "gunning_fog": 7.4,
+            "smog_index": 8.5,
+            "grade_level": 5.3
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "Austin Vet Center (U.S. Department of Veterans Affairs)",
+            "Workforce Solutions Capital Area \u2013 Veteran Employment Services"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 14249,
+      "web_search_used": false
+    }
+  }
+]

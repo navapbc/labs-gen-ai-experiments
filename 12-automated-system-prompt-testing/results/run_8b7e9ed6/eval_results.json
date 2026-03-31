@@ -1,0 +1,1798 @@
+[
+  {
+    "query_id": "q_001",
+    "user_query": "My client needs food assistance.\nInclude resources that support the following categories: Food Assis",
+    "location": "Austin (Travis county), TX 78702",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 87.9,
+            "flesch_grade": 3.5,
+            "gunning_fog": 5.2,
+            "smog_index": 6.4,
+            "grade_level": 3.5
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 4,
+          "ungrounded": 3,
+          "total": 7,
+          "ungrounded_names": [
+            "St. Vincent de Paul \u2013 Diocesan Council of Austin",
+            "St. Austin Catholic Parish \u2013 Food Help (Micah 6 / Local Outreach Partner)",
+            "Texas Health and Human Services \u2013 SNAP (Food Stamps)"
+          ],
+          "grounding_pct": 57.1,
+          "web_search_used": false,
+          "rag_resource_count": 4
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Central Texas Food Bank",
+              "url": "https://centraltexasfoodbank.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Caritas of Austin \u2013 Food Services",
+              "url": "https://caritasofaustin.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Salvation Army Austin \u2013 Social Services",
+              "url": "https://salvationarmytexas.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "St. Vincent de Paul \u2013 Diocesan Council of Austin",
+              "url": "https://ssvdp.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "St. Austin Catholic Parish \u2013 Food Help (Micah 6 / Local Outreach Partner)",
+              "url": "https://staustin.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Manos de Cristo \u2013 Food Pantry",
+              "url": "https://manosdecristo.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Health and Human Services \u2013 SNAP (Food Stamps)",
+              "url": "https://hhs.texas.gov",
+              "status": "VALID"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 16393,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_002",
+    "user_query": "CPR Training\nInclude resources that support the following categories: Employment & Job Training\nFocu",
+    "location": "Austin (Travis county), TX 78753",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 4,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 76.2,
+            "flesch_grade": 5.1,
+            "gunning_fog": 6.5,
+            "smog_index": 8.0,
+            "grade_level": 5.1
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 4
+        },
+        "rag_grounding": {
+          "grounded": 4,
+          "ungrounded": 0,
+          "total": 4,
+          "ungrounded_names": [],
+          "grounding_pct": 100.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "American Red Cross Central & South Texas - CPR and First Aid Training",
+              "url": "https://www.redcross.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "CPR Training Austin - CPR and BLS for Work Requirements",
+              "url": "https://www.cprtrainingaustin.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Code 1 Training Solutions Austin - CPR, BLS, and First Aid",
+              "url": "https://code1web.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Heart CPR Training - North Austin",
+              "url": "https://texasheartcprtraining.com",
+              "status": "VALID"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 4,
+      "flag_count": 0,
+      "latency_ms": 13751,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_003",
+    "user_query": "Include resources that support the following categories: Housing Assistance, Utility Assistance\nFocu",
+    "location": "Austin (Travis county), TX 78741",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 3,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 93.4,
+            "flesch_grade": 2.7,
+            "gunning_fog": 5.1,
+            "smog_index": 6.2,
+            "grade_level": 2.7
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 3
+        },
+        "rag_grounding": {
+          "grounded": 1,
+          "ungrounded": 2,
+          "total": 3,
+          "ungrounded_names": [
+            "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "Society of St. Louise \u2013 St. Louis King of France Catholic Church"
+          ],
+          "grounding_pct": 33.3,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+              "url": "https://ssvdp.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "St. Austin Catholic Parish \u2013 Financial Assistance Ministry",
+              "url": "https://staustin.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Society of St. Louise \u2013 St. Louis King of France Catholic Church",
+              "url": "https://stlouischurch.org",
+              "status": "FORBIDDEN"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 3,
+      "flag_count": 1,
+      "latency_ms": 8062,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_004",
+    "user_query": "Include resources that support the following categories: Childcare, Legal Services, Financial Assist",
+    "location": "Austin (Travis county), TX 78745",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 86.0,
+            "flesch_grade": 4.0,
+            "gunning_fog": 5.7,
+            "smog_index": 7.0,
+            "grade_level": 4.0
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "Society of St. Vincent de Paul \u2013 Diocesan Council of Austin",
+            "Catholic Charities of Central Texas \u2013 Financial Stability"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Workforce Solutions Capital Area \u2013 Child Care Assistance",
+              "url": "https://wfscapitalarea.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Health and Human Services (HHS) \u2013 Austin Research Blvd Office",
+              "url": "https://hhs.texas.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas RioGrande Legal Aid \u2013 Austin",
+              "url": "https://trla.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Volunteer Legal Services of Central Texas",
+              "url": "https://vlsoct.org",
+              "status": "TIMEOUT"
+            },
+            {
+              "resource": "Society of St. Vincent de Paul \u2013 Diocesan Council of Austin",
+              "url": "https://ssvdp.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "St. Austin Catholic Parish \u2013 Financial Assistance Ministry",
+              "url": "https://staustin.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Catholic Charities of Central Texas \u2013 Financial Stability",
+              "url": "https://ccctx.org",
+              "status": "VALID"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 22655,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_005",
+    "user_query": "My client is a veteran who needs mental health support and employment assistance.\nInclude resources ",
+    "location": "Austin (Travis county), TX 78723",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 77.2,
+            "flesch_grade": 5.4,
+            "gunning_fog": 8.1,
+            "smog_index": 8.9,
+            "grade_level": 5.4
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 6,
+          "ungrounded": 1,
+          "total": 7,
+          "ungrounded_names": [
+            "Workforce Solutions Capital Area (Veteran Employment Services)"
+          ],
+          "grounding_pct": 85.7,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "VA Austin Outpatient Clinic",
+              "url": "https://www.va.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Integral Care (Veterans and Mental Health Support)",
+              "url": "https://integralcare.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Workforce Solutions Capital Area (Veteran Employment Services)",
+              "url": "https://www.wfscapitalarea.com",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Texas Veterans Commission \u2013 Austin Area",
+              "url": "https://www.tvc.texas.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Easterseals Central Texas \u2013 Veterans Services",
+              "url": "https://www.easterseals.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Heroes Night Out (Veteran Support Center)",
+              "url": "https://heroesnightout.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "National Veterans Crisis Line",
+              "url": "https://www.veteranscrisisline.net",
+              "status": "VALID"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 16941,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_006",
+    "user_query": "My client is a single mom escaping domestic violence. She needs a safe place to stay tonight and hel",
+    "location": "Austin (Travis county), TX 78704",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 83.8,
+            "flesch_grade": 4.2,
+            "gunning_fog": 5.5,
+            "smog_index": 6.9,
+            "grade_level": 4.2
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 6,
+          "ungrounded": 1,
+          "total": 7,
+          "ungrounded_names": [
+            "Travis County Attorney \u2013 Protective Order Division"
+          ],
+          "grounding_pct": 85.7,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "SAFE Alliance \u2013 SAFEline and Shelter",
+              "url": "https://safeaustin.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "SAFE Alliance \u2013 Legal Help for Protective Orders",
+              "url": "https://safeaustin.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Texas Advocacy Project \u2013 Domestic Violence Legal Help",
+              "url": "https://texasadvocacyproject.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Travis County Attorney \u2013 Protective Order Division",
+              "url": "https://traviscountytx.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas RioGrande Legal Aid \u2013 Austin",
+              "url": "https://trla.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "YWCA Greater Austin \u2013 Support for Survivors",
+              "url": "https://ywcaaustin.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "National Domestic Violence Hotline",
+              "url": "https://thehotline.org",
+              "status": "FORBIDDEN"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 19691,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_007",
+    "user_query": "My client is a senior citizen who can't drive and needs help getting to doctor appointments.\nInclude",
+    "location": "Austin (Travis county), TX 78758",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 80.0,
+            "flesch_grade": 4.9,
+            "gunning_fog": 6.4,
+            "smog_index": 7.6,
+            "grade_level": 4.9
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 4,
+          "total": 7,
+          "ungrounded_names": [
+            "City of Austin \u2013 Senior Transportation (Neighborhood Centers & Senior Programs)",
+            "Area Agency on Aging of the Capital Area",
+            "Faith in Action Georgetown \u2013 Senior Rides (for nearby areas)",
+            "MyRide \u2013 Ride Coordination for Older Adults (United Way / CAPCOG)"
+          ],
+          "grounding_pct": 42.9,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Drive a Senior Central Texas",
+              "url": "https://driveasenior.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "AGE of Central Texas \u2013 Transportation and Senior Help",
+              "url": "https://ageofcentraltx.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Capital Metro MetroAccess (Paratransit Rides)",
+              "url": "https://capmetro.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "City of Austin \u2013 Senior Transportation (Neighborhood Centers & Senior Programs)",
+              "url": "https://austintexas.gov",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Area Agency on Aging of the Capital Area",
+              "url": "https://capcog.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Faith in Action Georgetown \u2013 Senior Rides (for nearby areas)",
+              "url": "https://faithinactiongt.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "MyRide \u2013 Ride Coordination for Older Adults (United Way / CAPCOG)",
+              "url": "https://myridecc.org",
+              "status": "ERROR_ConnectError"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 18743,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_008",
+    "user_query": "Client recently released from incarceration, needs help finding a job and stable housing.\nInclude re",
+    "location": "Austin (Travis county), TX 78701",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 77.5,
+            "flesch_grade": 5.9,
+            "gunning_fog": 7.3,
+            "smog_index": 7.5,
+            "grade_level": 5.9
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 4,
+          "total": 7,
+          "ungrounded_names": [
+            "Texas Department of Criminal Justice Reentry and Integration Division",
+            "Workforce Solutions Capital Area \u2013 Downtown Austin Career Center",
+            "Front Steps \u2013 Austin Resource Center for the Homeless (ARCH)",
+            "Foundation Communities \u2013 Supportive Housing"
+          ],
+          "grounding_pct": 42.9,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Texas Department of Criminal Justice Reentry and Integration Division",
+              "url": "https://tdcj.texas.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Workforce Solutions Capital Area \u2013 Downtown Austin Career Center",
+              "url": "https://wfscapitalarea.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Integral Care \u2013 Forensic and Justice-Related Services",
+              "url": "https://integralcare.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Caritas of Austin",
+              "url": "https://caritasofaustin.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Front Steps \u2013 Austin Resource Center for the Homeless (ARCH)",
+              "url": "https://frontsteps.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "The Salvation Army Austin \u2013 Rathgeber Center and Social Services",
+              "url": "https://salvationarmytexas.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Foundation Communities \u2013 Supportive Housing",
+              "url": "https://foundcom.org",
+              "status": "FORBIDDEN"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 13959,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_009",
+    "user_query": "I need help paying my electric bill this month. I'm behind on rent too.\nInclude resources that suppo",
+    "location": "Austin (Travis county), TX 78744",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 88.6,
+            "flesch_grade": 3.6,
+            "gunning_fog": 5.4,
+            "smog_index": 6.2,
+            "grade_level": 3.6
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 2,
+          "ungrounded": 5,
+          "total": 7,
+          "ungrounded_names": [
+            "Society of St. Vincent de Paul \u2013 St. Ignatius Martyr Catholic Church Conference",
+            "Catholic Charities of Central Texas \u2013 Financial Stability Program",
+            "Salvation Army Austin \u2013 Social Services",
+            "Travis County \u2013 Community Services Block Grant (Rent and Utility Help)",
+            "Texas Rent Relief (Statewide Online Program)"
+          ],
+          "grounding_pct": 28.6,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+              "url": "https://ssvdp.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Society of St. Vincent de Paul \u2013 St. Ignatius Martyr Catholic Church Conference",
+              "url": "https://stignatius.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Catholic Charities of Central Texas \u2013 Financial Stability Program",
+              "url": "https://ccctx.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Salvation Army Austin \u2013 Social Services",
+              "url": "https://salvationarmytexas.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Travis County \u2013 Community Services Block Grant (Rent and Utility Help)",
+              "url": "https://www.traviscountytx.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "City of Austin \u2013 Customer Assistance Programs for Utilities",
+              "url": "https://www.austinenergy.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Rent Relief (Statewide Online Program)",
+              "url": "https://texasrentrelief.com",
+              "status": "TIMEOUT"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 19966,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_010",
+    "user_query": "My client is pregnant and uninsured. She needs prenatal care and help applying for Medicaid.\nInclude",
+    "location": "Austin (Travis county), TX 78752",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 75.3,
+            "flesch_grade": 6.0,
+            "gunning_fog": 8.3,
+            "smog_index": 9.0,
+            "grade_level": 6.0
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 1,
+          "ungrounded": 6,
+          "total": 7,
+          "ungrounded_names": [
+            "CommUnityCare Health Centers \u2013 Women's Health (Central Austin area)",
+            "El Buen Samaritano \u2013 Health Clinic and Benefits Help",
+            "Central Health Eligibility and Enrollment (MAP / Medicaid Help)",
+            "Texas Health and Human Services \u2013 Benefits Office (Medicaid, SNAP, TANF)",
+            "Foundation Communities \u2013 Prosper Centers (Health Insurance and Benefits Help)",
+            "Planned Parenthood of Greater Texas \u2013 North Austin Health Center"
+          ],
+          "grounding_pct": 14.3,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "CommUnityCare Health Centers \u2013 Women's Health (Central Austin area)",
+              "url": "https://communitycaretx.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "People's Community Clinic \u2013 Prenatal and Women's Health",
+              "url": "https://www.peoplesclinic.org",
+              "status": "TIMEOUT"
+            },
+            {
+              "resource": "El Buen Samaritano \u2013 Health Clinic and Benefits Help",
+              "url": "https://elbuen.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Central Health Eligibility and Enrollment (MAP / Medicaid Help)",
+              "url": "https://www.centralhealth.net",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Health and Human Services \u2013 Benefits Office (Medicaid, SNAP, TANF)",
+              "url": "https://www.hhs.texas.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Foundation Communities \u2013 Prosper Centers (Health Insurance and Benefits Help)",
+              "url": "https://foundcom.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Planned Parenthood of Greater Texas \u2013 North Austin Health Center",
+              "url": "https://www.plannedparenthood.org",
+              "status": "FORBIDDEN"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 20163,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_011",
+    "user_query": "Client needs substance abuse treatment. Prefers outpatient.\nInclude resources that support the follo",
+    "location": "Austin (Travis county), TX 78721",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 5,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 76.1,
+            "flesch_grade": 6.0,
+            "gunning_fog": 9.1,
+            "smog_index": 9.5,
+            "grade_level": 6.0
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 5
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 2,
+          "total": 5,
+          "ungrounded_names": [
+            "CommUnityCare \u2013 MAT and Substance Use Help",
+            "Texas HHSC \u2013 Outreach, Screening, Assessment and Referral (OSAR) for Substance Use"
+          ],
+          "grounding_pct": 60.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Integral Care \u2013 Outpatient Treatment (Substance Use)",
+              "url": "https://integralcare.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Austin Recovery Network \u2013 Outpatient Treatment",
+              "url": "https://austinrecovery.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "CommUnityCare \u2013 MAT and Substance Use Help",
+              "url": "https://communitycaretx.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Texas HHSC \u2013 Outreach, Screening, Assessment and Referral (OSAR) for Substance Use",
+              "url": "https://hhs.texas.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Integral Care \u2013 Mobile Crisis Helpline",
+              "url": "https://integralcare.org",
+              "status": "FORBIDDEN"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 5,
+      "flag_count": 2,
+      "latency_ms": 14205,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_012",
+    "user_query": "My client is an immigrant and needs help understanding their rights. They also need English classes.",
+    "location": "Austin (Travis county), TX 78753",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 78.1,
+            "flesch_grade": 5.2,
+            "gunning_fog": 6.6,
+            "smog_index": 8.1,
+            "grade_level": 5.2
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "Austin Community College \u2013 ESOL (English for Speakers of Other Languages)",
+            "El Buen Samaritano"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "American Gateways \u2013 Austin",
+              "url": "https://americangateways.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Casa Marianella",
+              "url": "https://casamarianella.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Austin Community College \u2013 ESOL (English for Speakers of Other Languages)",
+              "url": "https://austincc.edu",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Literacy Coalition of Central Texas \u2013 English Classes",
+              "url": "https://willread.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "El Buen Samaritano",
+              "url": "https://elbuen.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Catholic Charities of Central Texas \u2013 Immigration Legal Services",
+              "url": "https://ccctx.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas RioGrande Legal Aid \u2013 Austin",
+              "url": "https://trla.org",
+              "status": "VALID"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 19343,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_013",
+    "user_query": "My client is a teenager who ran away from home. They need a safe place and someone to talk to.\nInclu",
+    "location": "Austin (Travis county), TX 78757",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 91.0,
+            "flesch_grade": 3.6,
+            "gunning_fog": 5.4,
+            "smog_index": 6.2,
+            "grade_level": 3.6
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "LifeWorks \u2013 Youth Emergency Shelter and Street Outreach",
+            "Travis County Youth Services \u2013 Gardner Betts Juvenile Center (Walk\u2011in Help Office)"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "SAFE Alliance \u2013 SAFE Children\u2019s Shelter and Youth Services",
+              "url": "https://safeaustin.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "LifeWorks \u2013 Youth Emergency Shelter and Street Outreach",
+              "url": "https://lifeworksaustin.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "The SAFE Alliance \u2013 24/7 SAFEline (Phone, Text, Chat)",
+              "url": "https://safeaustin.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Integral Care \u2013 24/7 Helpline and Mobile Crisis Team",
+              "url": "https://integralcare.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Travis County Youth Services \u2013 Gardner Betts Juvenile Center (Walk\u2011in Help Office)",
+              "url": "https://traviscountytx.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "National Runaway Safeline",
+              "url": "https://www.1800runaway.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "The Trevor Project \u2013 Crisis Line for LGBTQ Youth",
+              "url": "https://www.thetrevorproject.org",
+              "status": "VALID"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 16821,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_014",
+    "user_query": "Client has diabetes and can't afford their insulin or test strips.\nInclude resources that support th",
+    "location": "Austin (Travis county), TX 78748",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 80.0,
+            "flesch_grade": 5.1,
+            "gunning_fog": 7.4,
+            "smog_index": 8.8,
+            "grade_level": 5.1
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 2,
+          "ungrounded": 5,
+          "total": 7,
+          "ungrounded_names": [
+            "Lone Star Circle of Care at William Cannon",
+            "Central Health Medical Access Program (MAP) and MAP Basic",
+            "Texas Rx Card (Free Prescription Discount Program)",
+            "Bristol Myers Squibb \u2013 Patient Assistance Foundation (insulin and diabetes medicines)",
+            "Lilly Cares Foundation Patient Assistance Program (Eli Lilly insulins)"
+          ],
+          "grounding_pct": 28.6,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Lone Star Circle of Care at William Cannon",
+              "url": "https://lonestarcares.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "CommUnityCare Health Centers \u2013 Southeast Health and Wellness Center",
+              "url": "https://communitycaretx.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Central Health Medical Access Program (MAP) and MAP Basic",
+              "url": "https://centralhealth.net",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Rx Card (Free Prescription Discount Program)",
+              "url": "https://texasrxcard.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Bristol Myers Squibb \u2013 Patient Assistance Foundation (insulin and diabetes medicines)",
+              "url": "https://bmspaf.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Lilly Cares Foundation Patient Assistance Program (Eli Lilly insulins)",
+              "url": "https://lillycares.com",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Novo Nordisk Patient Assistance Program (Novo insulins)",
+              "url": "https://novocare.com",
+              "status": "VALID"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 16286,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_015",
+    "user_query": "My client is disabled and needs help applying for SSI and finding accessible housing.\nInclude resour",
+    "location": "Austin (Travis county), TX 78731",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 77.3,
+            "flesch_grade": 5.8,
+            "gunning_fog": 7.5,
+            "smog_index": 8.0,
+            "grade_level": 5.8
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 4,
+          "ungrounded": 3,
+          "total": 7,
+          "ungrounded_names": [
+            "Austin Tenants Council",
+            "Easterseals Central Texas",
+            "Social Security Administration \u2013 Austin North Office"
+          ],
+          "grounding_pct": 57.1,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Austin Tenants Council",
+              "url": "https://housing-rights.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Easterseals Central Texas",
+              "url": "https://easterseals.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Age of Central Texas \u2013 Caregiver and Benefits Help",
+              "url": "https://ageofcentraltx.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas RioGrande Legal Aid \u2013 Austin",
+              "url": "https://trla.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Health and Human Services \u2013 Austin Benefits Office",
+              "url": "https://hhs.texas.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Austin Tenant Stabilization \u2013 City of Austin",
+              "url": "https://austintexas.gov",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Social Security Administration \u2013 Austin North Office",
+              "url": "https://ssa.gov",
+              "status": "FORBIDDEN"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 20097,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_016",
+    "user_query": "Client is homeless and needs a place to shower, do laundry, and get mail.\nInclude resources that sup",
+    "location": "Austin (Travis county), TX 78701",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 87.9,
+            "flesch_grade": 4.1,
+            "gunning_fog": 5.2,
+            "smog_index": 4.5,
+            "grade_level": 4.1
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "The Other Ones Foundation \u2013 Esperanza Community",
+            "Caritas of Austin \u2013 Downtown Office"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "The Salvation Army Austin \u2013 Rathgeber Center for Families (Day Services Info Line)",
+              "url": "https://salvationarmytexas.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Austin Resource Center for the Homeless (ARCH)",
+              "url": "https://austinecho.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "The Other Ones Foundation \u2013 Esperanza Community",
+              "url": "https://toofound.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Caritas of Austin \u2013 Downtown Office",
+              "url": "https://caritasofaustin.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Trinity Center Austin",
+              "url": "https://trinitycenteraustin.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Sunrise Homeless Navigation Center",
+              "url": "https://sunriseaustin.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Front Steps \u2013 Homeless Services (Administrative Office)",
+              "url": "https://frontsteps.org",
+              "status": "VALID"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 17854,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_017",
+    "user_query": "My client's child has been diagnosed with autism. They need therapy services and support groups.\nInc",
+    "location": "Austin (Travis county), TX 78759",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 78.9,
+            "flesch_grade": 4.7,
+            "gunning_fog": 6.3,
+            "smog_index": 7.7,
+            "grade_level": 4.7
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 7,
+          "ungrounded": 0,
+          "total": 7,
+          "ungrounded_names": [],
+          "grounding_pct": 100.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Bluebonnet Trails Community Services \u2013 Autism and Early Childhood Intervention",
+              "url": "https://bbtrails.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Any Baby Can \u2013 Autism Services and Parent Support",
+              "url": "https://anybabycan.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "The Arc of the Capital Area \u2013 Autism Family Support and Case Help",
+              "url": "https://arcaustin.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Austin Child Guidance Center \u2013 Autism and Mental Health Support",
+              "url": "https://austinchildguidance.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Health and Human Services \u2013 Children\u2019s Autism Program",
+              "url": "https://hhs.texas.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Easterseals Central Texas \u2013 Autism and Disability Services",
+              "url": "https://easterseals.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Autism Society of Texas \u2013 Central Texas Support and Education",
+              "url": "https://texasautismsociety.org",
+              "status": "HTTP_405"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 14893,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_018",
+    "user_query": "I just lost my job and need help with groceries this week and finding new employment.\nInclude resour",
+    "location": "Austin (Travis county), TX 78660",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 6,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 90.1,
+            "flesch_grade": 3.5,
+            "gunning_fog": 6.0,
+            "smog_index": 6.8,
+            "grade_level": 3.5
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 6
+        },
+        "rag_grounding": {
+          "grounded": 4,
+          "ungrounded": 2,
+          "total": 6,
+          "ungrounded_names": [
+            "Hays County Food Bank (serving nearby areas)",
+            "Texas Health and Human Services \u2013 Benefits (SNAP and TANF)"
+          ],
+          "grounding_pct": 66.7,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Hays County Food Bank (serving nearby areas)",
+              "url": "https://haysfoodbank.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Central Texas Food Bank",
+              "url": "https://centraltexasfoodbank.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Health and Human Services \u2013 Benefits (SNAP and TANF)",
+              "url": "https://yourtexasbenefits.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Workforce Solutions Rural Capital Area \u2013 Pflugerville Area",
+              "url": "https://workforcesolutionsrca.com",
+              "status": "VALID"
+            },
+            {
+              "resource": "Goodwill Central Texas \u2013 Job Help and Training",
+              "url": "https://goodwillcentraltexas.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Goodwill Central Texas \u2013 Connect to Central Texas Food Help",
+              "url": "https://goodwillcentraltexas.org",
+              "status": "FORBIDDEN"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 6,
+      "flag_count": 2,
+      "latency_ms": 12532,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_019",
+    "user_query": "Client needs dental care but has no insurance and very limited income.\nInclude resources that suppor",
+    "location": "Austin (Travis county), TX 78704",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 82.6,
+            "flesch_grade": 4.5,
+            "gunning_fog": 5.8,
+            "smog_index": 6.8,
+            "grade_level": 4.5
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 4,
+          "total": 7,
+          "ungrounded_names": [
+            "Dental Relief Fund \u2013 Texas Mission of Mercy (Mobile Free Dental Clinics)",
+            "Lone Star Circle of Care \u2013 Austin Clinics (Medical and Some Dental)",
+            "Central Health \u2013 Medical Access Program (MAP and MAP Basic)",
+            "Texas Health and Human Services \u2013 Benefits (Medicaid and CHIP)"
+          ],
+          "grounding_pct": 42.9,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "CommUnityCare Health Centers \u2013 Southeast Health & Wellness Center (Dental)",
+              "url": "https://communitycaretx.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Health Resources & Services Administration \u2013 Find a Health Center (Dental and Medical)",
+              "url": "https://www.hrsa.gov",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Dental Relief Fund \u2013 Texas Mission of Mercy (Mobile Free Dental Clinics)",
+              "url": "https://www.tdasmiles.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Lone Star Circle of Care \u2013 Austin Clinics (Medical and Some Dental)",
+              "url": "https://lonestarcares.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Integral Care \u2013 Health and Dental Help Links",
+              "url": "https://integralcare.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Central Health \u2013 Medical Access Program (MAP and MAP Basic)",
+              "url": "https://www.centralhealth.net",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Health and Human Services \u2013 Benefits (Medicaid and CHIP)",
+              "url": "https://www.hhs.texas.gov",
+              "status": "VALID"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 12620,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_020",
+    "user_query": "My client is an elderly person living alone who has been the victim of financial exploitation by a f",
+    "location": "Austin (Travis county), TX 78756",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 82.1,
+            "flesch_grade": 4.8,
+            "gunning_fog": 5.8,
+            "smog_index": 6.4,
+            "grade_level": 4.8
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 4,
+          "ungrounded": 3,
+          "total": 7,
+          "ungrounded_names": [
+            "Family Eldercare \u2013 Guardianship, Money Management, and Senior Support",
+            "Austin Police Department \u2013 Elder Abuse Unit (via 3-1-1 or 9-1-1)",
+            "Area Agency on Aging of the Capital Area (AGE of Central Texas location partner)"
+          ],
+          "grounding_pct": 57.1,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        },
+        "url_validity": {
+          "url_results": [
+            {
+              "resource": "Texas Adult Protective Services (APS)",
+              "url": "https://www.hhs.texas.gov",
+              "status": "VALID"
+            },
+            {
+              "resource": "Texas Legal Services Center \u2013 Crime Victims and Elder Financial Safety",
+              "url": "https://www.tlsc.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Volunteer Legal Services of Central Texas",
+              "url": "https://www.vlsoct.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "AGE of Central Texas \u2013 Caregiver and Senior Support",
+              "url": "https://www.ageofcentraltx.org",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Family Eldercare \u2013 Guardianship, Money Management, and Senior Support",
+              "url": "https://www.familyeldercare.org",
+              "status": "VALID"
+            },
+            {
+              "resource": "Austin Police Department \u2013 Elder Abuse Unit (via 3-1-1 or 9-1-1)",
+              "url": "https://www.austintexas.gov",
+              "status": "FORBIDDEN"
+            },
+            {
+              "resource": "Area Agency on Aging of the Capital Area (AGE of Central Texas location partner)",
+              "url": "https://www.capcog.org",
+              "status": "FORBIDDEN"
+            }
+          ]
+        },
+        "location_match": {
+          "expected_state": "TX",
+          "cross_state_count": 0
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 14967,
+      "web_search_used": false
+    }
+  }
+]

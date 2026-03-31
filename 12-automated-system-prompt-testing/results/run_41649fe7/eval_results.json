@@ -1,0 +1,770 @@
+[
+  {
+    "query_id": "q_001",
+    "user_query": "My client needs food assistance.\nInclude resources that support the following categories: Food Assis",
+    "location": "Austin (Travis county), TX 78702",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 12747,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_002",
+    "user_query": "CPR Training\nInclude resources that support the following categories: Employment & Job Training\nFocu",
+    "location": "Austin (Travis county), TX 78753",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 12382,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_003",
+    "user_query": "Include resources that support the following categories: Housing Assistance, Utility Assistance\nFocu",
+    "location": "Austin (Travis county), TX 78741",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 13098,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_004",
+    "user_query": "Include resources that support the following categories: Childcare, Legal Services, Financial Assist",
+    "location": "Austin (Travis county), TX 78745",
+    "baseline": {
+      "flags": [
+        "EMPTY_OUTPUT",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 2911,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_005",
+    "user_query": "My client is a veteran who needs mental health support and employment assistance.\nInclude resources ",
+    "location": "Austin (Travis county), TX 78723",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 17474,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_006",
+    "user_query": "My client is a single mom escaping domestic violence. She needs a safe place to stay tonight and hel",
+    "location": "Austin (Travis county), TX 78704",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 13063,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_007",
+    "user_query": "My client is a senior citizen who can't drive and needs help getting to doctor appointments.\nInclude",
+    "location": "Austin (Travis county), TX 78758",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 4,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 75.3,
+            "flesch_grade": 6.2,
+            "gunning_fog": 7.9,
+            "smog_index": 8.3,
+            "grade_level": 6.2
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 4
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 1,
+          "total": 4,
+          "ungrounded_names": [
+            "Pickup by CapMetro \u2013 Walnut Creek / Northeast Austin Zones"
+          ],
+          "grounding_pct": 75.0,
+          "web_search_used": true,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 4,
+      "flag_count": 0,
+      "latency_ms": 15429,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_008",
+    "user_query": "Client recently released from incarceration, needs help finding a job and stable housing.\nInclude re",
+    "location": "Austin (Travis county), TX 78701",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 20159,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_009",
+    "user_query": "I need help paying my electric bill this month. I'm behind on rent too.\nInclude resources that suppo",
+    "location": "Austin (Travis county), TX 78744",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 19818,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_010",
+    "user_query": "My client is pregnant and uninsured. She needs prenatal care and help applying for Medicaid.\nInclude",
+    "location": "Austin (Travis county), TX 78752",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 73.1,
+            "flesch_grade": 7.1,
+            "gunning_fog": 9.8,
+            "smog_index": 9.9,
+            "grade_level": 7.1
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 6,
+          "ungrounded": 1,
+          "total": 7,
+          "ungrounded_names": [
+            "Central Health \u2013 Eligibility Services (Medical Access Program, Medicaid, CHIP)"
+          ],
+          "grounding_pct": 85.7,
+          "web_search_used": true,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 15461,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_011",
+    "user_query": "Client needs substance abuse treatment. Prefers outpatient.\nInclude resources that support the follo",
+    "location": "Austin (Travis county), TX 78721",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 11734,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_012",
+    "user_query": "My client is an immigrant and needs help understanding their rights. They also need English classes.",
+    "location": "Austin (Travis county), TX 78753",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 22790,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_013",
+    "user_query": "My client is a teenager who ran away from home. They need a safe place and someone to talk to.\nInclu",
+    "location": "Austin (Travis county), TX 78757",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 19756,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_014",
+    "user_query": "Client has diabetes and can't afford their insulin or test strips.\nInclude resources that support th",
+    "location": "Austin (Travis county), TX 78748",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 30195,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_015",
+    "user_query": "My client is disabled and needs help applying for SSI and finding accessible housing.\nInclude resour",
+    "location": "Austin (Travis county), TX 78731",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 23487,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_016",
+    "user_query": "Client is homeless and needs a place to shower, do laundry, and get mail.\nInclude resources that sup",
+    "location": "Austin (Travis county), TX 78701",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 21251,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_017",
+    "user_query": "My client's child has been diagnosed with autism. They need therapy services and support groups.\nInc",
+    "location": "Austin (Travis county), TX 78759",
+    "baseline": {
+      "flags": [
+        "ZERO_RESOURCES",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 20255,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_018",
+    "user_query": "I just lost my job and need help with groceries this week and finding new employment.\nInclude resour",
+    "location": "Austin (Travis county), TX 78660",
+    "baseline": {
+      "flags": [
+        "EMPTY_OUTPUT",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": true
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 5163,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_019",
+    "user_query": "Client needs dental care but has no insurance and very limited income.\nInclude resources that suppor",
+    "location": "Austin (Travis county), TX 78704",
+    "baseline": {
+      "flags": [
+        "DUPLICATE_RESOURCE"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 4,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 72.7,
+            "flesch_grade": 7.1,
+            "gunning_fog": 9.2,
+            "smog_index": 9.1,
+            "grade_level": 7.1
+          }
+        },
+        "duplicates": {
+          "duplicates": [
+            {
+              "resource_a": "CommUnityCare South Austin Dental Clinic",
+              "resource_b": "CommUnityCare North Central Dental Clinic",
+              "similarity": 0.81,
+              "match_type": "name"
+            }
+          ]
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 4
+        },
+        "rag_grounding": {
+          "grounded": 4,
+          "ungrounded": 0,
+          "total": 4,
+          "ungrounded_names": [],
+          "grounding_pct": 100.0,
+          "web_search_used": true,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 4,
+      "flag_count": 1,
+      "latency_ms": 14244,
+      "web_search_used": true
+    }
+  },
+  {
+    "query_id": "q_020",
+    "user_query": "My client is an elderly person living alone who has been the victim of financial exploitation by a f",
+    "location": "Austin (Travis county), TX 78756",
+    "baseline": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 68.3,
+            "flesch_grade": 7.8,
+            "gunning_fog": 7.8,
+            "smog_index": 8.2,
+            "grade_level": 7.8
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "Area Agency on Aging of the Capital Area (AAACAP)",
+            "Family Eldercare \u2013 Senior Support and Money Management"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": true,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 30575,
+      "web_search_used": true
+    }
+  }
+]

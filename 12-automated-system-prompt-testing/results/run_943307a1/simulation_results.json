@@ -1,0 +1,1768 @@
+[
+  {
+    "query_id": "q_001",
+    "user_query": "My client needs food assistance.\nInclude resources that support the following categories: Food Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78702",
+    "location": "Austin (Travis county), TX 78702",
+    "resources_context_length": 922,
+    "baseline": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"Central Texas Food Bank\",\n      \"description\": \"Get free groceries from many food pantries and mobile food trucks in Central Texas. They help people with low income. No one is turned away in an emergency. You can search for food pantries by zip code on their website. They also help people apply for SNAP (food stamps). Call or go online to find a pantry near 78702 and to check hours. Bring a photo ID if you have one, but they can still help if you do not.\",\n      \"address\": \"6500 Metropolis Dr, Austin, TX 78744\",\n      \"phones\": [\"512-282-2111\"],\n      \"emails\": [],\n      \"website\": \"https://www.centraltexasfoodbank.org\",\n      \"referral_type\": \"external\",\n      \"distance_miles\": 7.5,\n      \"availability_status\": \"Open - pantry and mobile food sites; some locations have limited hours\",\n      \"source\": \"Verified via Central Texas Food Bank official website and pantry finder\"\n    },\n    {\n      \"name\": \"H-E-B Free Curbside and Delivery with SNAP (Food Stamps)\",\n      \"description\": \"Use your SNAP (food stamps) card to buy food online at H-E-B. Get free pickup or low-cost delivery from many Austin stores. This helps if you do not have a car or cannot shop in person. You still pay normal food prices but can use your SNAP card. You must already have SNAP to use this. Order online or in the H-E-B app. Choose a store close to your home in 78702.\",\n      \"address\": \"Address varies by store - online program\",\n      \"phones\": [\"Online service \u2014 call 211 for help\"],\n      \"emails\": [],\n      \"website\": \"https://www.heb.com\",\n      \"referral_type\": \"government\",\n      \"distance_miles\": null,\n      \"availability_status\": \"Open statewide for people with SNAP (food stamps)\",\n      \"source\": \"Verified via H-E-B official website and USDA SNAP online purchasing list\"\n    },\n    {\n      \"name\": \"Meals on Wheels Central Texas\",\n      \"description\": \"Get free cooked meals delivered to your home if you are an older adult. They mainly help people age 60 or older who cannot easily leave home or cook. They bring hot or frozen meals on set days. They also offer pet food for clients with pets. There may be a wait list in some areas. Call to see if you can sign up in your part of Austin, near 78702.\",\n      \"address\": \"3227 E 5th St, Austin, TX 78702\",\n      \"phones\": [\"512-476-6325\"],\n      \"emails\": [],\n      \"website\": \"https://www.mealsonwheelscentraltexas.org\",\n      \"referral_type\": \"external\",\n      \"distance_miles\": 0.5,\n      \"availability_status\": \"Open - some programs may have a wait list\",\n      \"source\": \"Verified via Meals on Wheels Central Texas official website\"\n    },\n    {\n      \"name\": \"Travis County Health and Human Services \u2013 Social Services (Food Help and SNAP)\",\n      \"description\": \"Get help paying for food and basic needs if you live in Travis County. They help people apply for SNAP (food stamps) and other aid. They may give short-term help for food or bills if you have a crisis. You must live in Travis County and meet income limits. Call first to ask how to apply and what papers you need. Some visits may be by phone or online.\",\n      \"address\": \"5325 Airport Blvd, Austin, TX 78751\",\n      \"phones\": [\"512-854-4120\"],\n      \"emails\": [],\n      \"website\": \"https://www.traviscountytx.gov\",\n      \"referral_type\": \"government\",\n      \"distance_miles\": 4.0,\n      \"availability_status\": \"Open - call for current programs and how to apply\",\n      \"source\": \"Verified via Travis County official website\"\n    },\n    {\n      \"name\": \"Texas Health and Human Services \u2013 Benefits Office (SNAP Food Stamps)\",\n      \"description\": \"Get help applying for SNAP (food stamps) to buy food each month. This state office also handles Medicaid (free health care for low income), TANF (cash help for families), and CHIP (kids' health insurance). You must meet income and other rules. You can apply online, by mail, or at the office. Call or go online to YourTexasBenefits to start and to see what papers you need.\",\n      \"address\": \"1000 E 11th St, Austin, TX 78702\",\n      \"phones\": [\"877-541-7905\"],\n      \"emails\": [],\n      \"website\": \"https://www.hhs.texas.gov\",\n      \"referral_type\": \"government\",\n      \"distance_miles\": 0.6,\n      \"availability_status\": \"Open - phone and online help; office hours may change\",\n      \"source\": \"Verified via Texas Health and Human Services official website\"\n    },\n    {\n      \"name\": \"Caritas of Austin \u2013 Food Help\",\n      \"description\": \"Get free groceries and basic needs help if you are very low income or homeless. Caritas offers a food pantry, help with SNAP (food stamps), and other support. They mainly help people in Austin who are homeless or at high risk of losing housing. Walk-in hours can change, and some help needs a visit time. Call first to check hours and what you need to bring.\",\n      \"address\": \"611 Neches St, Austin, TX 78701\",\n      \"phones\": [\"512-479-4610\"],\n      \"emails\": [],\n      \"website\": \"https://caritasofaustin.org\",\n      \"referral_type\": \"external\",\n      \"distance_miles\": 1.3,\n      \"availability_status\": \"Open - some programs may have wait lists or limited hours\",\n      \"source\": \"Verified via Caritas of Austin official website\"\n    },\n    {\n      \"name\": \"Sunrise Homeless Navigation Center \u2013 Daily Meals\",\n      \"description\": \"Get free hot meals if you are homeless or very low income near East Austin. They offer breakfast and other meals on most days. People can also get basic supplies and talk with staff for more help. No ID is needed for meals. Times can change, so call or check online before you go.\",\n      \"address\": \"4430 Menchaca Rd, Austin, TX 78745\",\n      \"phones\": [\"512-444-1389\"],\n      \"emails\": [],\n      \"website\": \"https://sunriseaustin.org\",\n      \"referral_type\": \"external\",\n      \"distance_miles\": 8.0,\n      \"availability_status\": \"Open - meal times may change\",\n      \"source\": \"Verified via Sunrise Homeless Navigation Center (Sunrise Church) official website\"\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "Central Texas Food Bank",
+            "description": "Get free groceries from many food pantries and mobile food trucks in Central Texas. They help people with low income. No one is turned away in an emergency. You can search for food pantries by zip code on their website. They also help people apply for SNAP (food stamps). Call or go online to find a pantry near 78702 and to check hours. Bring a photo ID if you have one, but they can still help if you do not.",
+            "address": "6500 Metropolis Dr, Austin, TX 78744",
+            "phones": [
+              "512-282-2111"
+            ],
+            "emails": [],
+            "website": "https://www.centraltexasfoodbank.org",
+            "referral_type": "external",
+            "distance_miles": 7.5,
+            "availability_status": "Open - pantry and mobile food sites; some locations have limited hours",
+            "source": "Verified via Central Texas Food Bank official website and pantry finder"
+          },
+          {
+            "name": "H-E-B Free Curbside and Delivery with SNAP (Food Stamps)",
+            "description": "Use your SNAP (food stamps) card to buy food online at H-E-B. Get free pickup or low-cost delivery from many Austin stores. This helps if you do not have a car or cannot shop in person. You still pay normal food prices but can use your SNAP card. You must already have SNAP to use this. Order online or in the H-E-B app. Choose a store close to your home in 78702.",
+            "address": "Address varies by store - online program",
+            "phones": [
+              "Online service \u2014 call 211 for help"
+            ],
+            "emails": [],
+            "website": "https://www.heb.com",
+            "referral_type": "government",
+            "distance_miles": null,
+            "availability_status": "Open statewide for people with SNAP (food stamps)",
+            "source": "Verified via H-E-B official website and USDA SNAP online purchasing list"
+          },
+          {
+            "name": "Meals on Wheels Central Texas",
+            "description": "Get free cooked meals delivered to your home if you are an older adult. They mainly help people age 60 or older who cannot easily leave home or cook. They bring hot or frozen meals on set days. They also offer pet food for clients with pets. There may be a wait list in some areas. Call to see if you can sign up in your part of Austin, near 78702.",
+            "address": "3227 E 5th St, Austin, TX 78702",
+            "phones": [
+              "512-476-6325"
+            ],
+            "emails": [],
+            "website": "https://www.mealsonwheelscentraltexas.org",
+            "referral_type": "external",
+            "distance_miles": 0.5,
+            "availability_status": "Open - some programs may have a wait list",
+            "source": "Verified via Meals on Wheels Central Texas official website"
+          },
+          {
+            "name": "Travis County Health and Human Services \u2013 Social Services (Food Help and SNAP)",
+            "description": "Get help paying for food and basic needs if you live in Travis County. They help people apply for SNAP (food stamps) and other aid. They may give short-term help for food or bills if you have a crisis. You must live in Travis County and meet income limits. Call first to ask how to apply and what papers you need. Some visits may be by phone or online.",
+            "address": "5325 Airport Blvd, Austin, TX 78751",
+            "phones": [
+              "512-854-4120"
+            ],
+            "emails": [],
+            "website": "https://www.traviscountytx.gov",
+            "referral_type": "government",
+            "distance_miles": 4.0,
+            "availability_status": "Open - call for current programs and how to apply",
+            "source": "Verified via Travis County official website"
+          },
+          {
+            "name": "Texas Health and Human Services \u2013 Benefits Office (SNAP Food Stamps)",
+            "description": "Get help applying for SNAP (food stamps) to buy food each month. This state office also handles Medicaid (free health care for low income), TANF (cash help for families), and CHIP (kids' health insurance). You must meet income and other rules. You can apply online, by mail, or at the office. Call or go online to YourTexasBenefits to start and to see what papers you need.",
+            "address": "1000 E 11th St, Austin, TX 78702",
+            "phones": [
+              "877-541-7905"
+            ],
+            "emails": [],
+            "website": "https://www.hhs.texas.gov",
+            "referral_type": "government",
+            "distance_miles": 0.6,
+            "availability_status": "Open - phone and online help; office hours may change",
+            "source": "Verified via Texas Health and Human Services official website"
+          },
+          {
+            "name": "Caritas of Austin \u2013 Food Help",
+            "description": "Get free groceries and basic needs help if you are very low income or homeless. Caritas offers a food pantry, help with SNAP (food stamps), and other support. They mainly help people in Austin who are homeless or at high risk of losing housing. Walk-in hours can change, and some help needs a visit time. Call first to check hours and what you need to bring.",
+            "address": "611 Neches St, Austin, TX 78701",
+            "phones": [
+              "512-479-4610"
+            ],
+            "emails": [],
+            "website": "https://caritasofaustin.org",
+            "referral_type": "external",
+            "distance_miles": 1.3,
+            "availability_status": "Open - some programs may have wait lists or limited hours",
+            "source": "Verified via Caritas of Austin official website"
+          },
+          {
+            "name": "Sunrise Homeless Navigation Center \u2013 Daily Meals",
+            "description": "Get free hot meals if you are homeless or very low income near East Austin. They offer breakfast and other meals on most days. People can also get basic supplies and talk with staff for more help. No ID is needed for meals. Times can change, so call or check online before you go.",
+            "address": "4430 Menchaca Rd, Austin, TX 78745",
+            "phones": [
+              "512-444-1389"
+            ],
+            "emails": [],
+            "website": "https://sunriseaustin.org",
+            "referral_type": "external",
+            "distance_miles": 8.0,
+            "availability_status": "Open - meal times may change",
+            "source": "Verified via Sunrise Homeless Navigation Center (Sunrise Church) official website"
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "Central Texas Food Bank",
+          "description": "Get free groceries from many food pantries and mobile food trucks in Central Texas. They help people with low income. No one is turned away in an emergency. You can search for food pantries by zip code on their website. They also help people apply for SNAP (food stamps). Call or go online to find a pantry near 78702 and to check hours. Bring a photo ID if you have one, but they can still help if you do not.",
+          "address": "6500 Metropolis Dr, Austin, TX 78744",
+          "phones": [
+            "512-282-2111"
+          ],
+          "emails": [],
+          "website": "https://www.centraltexasfoodbank.org",
+          "referral_type": "external",
+          "distance_miles": 7.5,
+          "availability_status": "Open - pantry and mobile food sites; some locations have limited hours",
+          "source": "Verified via Central Texas Food Bank official website and pantry finder"
+        },
+        {
+          "name": "H-E-B Free Curbside and Delivery with SNAP (Food Stamps)",
+          "description": "Use your SNAP (food stamps) card to buy food online at H-E-B. Get free pickup or low-cost delivery from many Austin stores. This helps if you do not have a car or cannot shop in person. You still pay normal food prices but can use your SNAP card. You must already have SNAP to use this. Order online or in the H-E-B app. Choose a store close to your home in 78702.",
+          "address": "Address varies by store - online program",
+          "phones": [
+            "Online service \u2014 call 211 for help"
+          ],
+          "emails": [],
+          "website": "https://www.heb.com",
+          "referral_type": "government",
+          "distance_miles": null,
+          "availability_status": "Open statewide for people with SNAP (food stamps)",
+          "source": "Verified via H-E-B official website and USDA SNAP online purchasing list"
+        },
+        {
+          "name": "Meals on Wheels Central Texas",
+          "description": "Get free cooked meals delivered to your home if you are an older adult. They mainly help people age 60 or older who cannot easily leave home or cook. They bring hot or frozen meals on set days. They also offer pet food for clients with pets. There may be a wait list in some areas. Call to see if you can sign up in your part of Austin, near 78702.",
+          "address": "3227 E 5th St, Austin, TX 78702",
+          "phones": [
+            "512-476-6325"
+          ],
+          "emails": [],
+          "website": "https://www.mealsonwheelscentraltexas.org",
+          "referral_type": "external",
+          "distance_miles": 0.5,
+          "availability_status": "Open - some programs may have a wait list",
+          "source": "Verified via Meals on Wheels Central Texas official website"
+        },
+        {
+          "name": "Travis County Health and Human Services \u2013 Social Services (Food Help and SNAP)",
+          "description": "Get help paying for food and basic needs if you live in Travis County. They help people apply for SNAP (food stamps) and other aid. They may give short-term help for food or bills if you have a crisis. You must live in Travis County and meet income limits. Call first to ask how to apply and what papers you need. Some visits may be by phone or online.",
+          "address": "5325 Airport Blvd, Austin, TX 78751",
+          "phones": [
+            "512-854-4120"
+          ],
+          "emails": [],
+          "website": "https://www.traviscountytx.gov",
+          "referral_type": "government",
+          "distance_miles": 4.0,
+          "availability_status": "Open - call for current programs and how to apply",
+          "source": "Verified via Travis County official website"
+        },
+        {
+          "name": "Texas Health and Human Services \u2013 Benefits Office (SNAP Food Stamps)",
+          "description": "Get help applying for SNAP (food stamps) to buy food each month. This state office also handles Medicaid (free health care for low income), TANF (cash help for families), and CHIP (kids' health insurance). You must meet income and other rules. You can apply online, by mail, or at the office. Call or go online to YourTexasBenefits to start and to see what papers you need.",
+          "address": "1000 E 11th St, Austin, TX 78702",
+          "phones": [
+            "877-541-7905"
+          ],
+          "emails": [],
+          "website": "https://www.hhs.texas.gov",
+          "referral_type": "government",
+          "distance_miles": 0.6,
+          "availability_status": "Open - phone and online help; office hours may change",
+          "source": "Verified via Texas Health and Human Services official website"
+        },
+        {
+          "name": "Caritas of Austin \u2013 Food Help",
+          "description": "Get free groceries and basic needs help if you are very low income or homeless. Caritas offers a food pantry, help with SNAP (food stamps), and other support. They mainly help people in Austin who are homeless or at high risk of losing housing. Walk-in hours can change, and some help needs a visit time. Call first to check hours and what you need to bring.",
+          "address": "611 Neches St, Austin, TX 78701",
+          "phones": [
+            "512-479-4610"
+          ],
+          "emails": [],
+          "website": "https://caritasofaustin.org",
+          "referral_type": "external",
+          "distance_miles": 1.3,
+          "availability_status": "Open - some programs may have wait lists or limited hours",
+          "source": "Verified via Caritas of Austin official website"
+        },
+        {
+          "name": "Sunrise Homeless Navigation Center \u2013 Daily Meals",
+          "description": "Get free hot meals if you are homeless or very low income near East Austin. They offer breakfast and other meals on most days. People can also get basic supplies and talk with staff for more help. No ID is needed for meals. Times can change, so call or check online before you go.",
+          "address": "4430 Menchaca Rd, Austin, TX 78745",
+          "phones": [
+            "512-444-1389"
+          ],
+          "emails": [],
+          "website": "https://sunriseaustin.org",
+          "referral_type": "external",
+          "distance_miles": 8.0,
+          "availability_status": "Open - meal times may change",
+          "source": "Verified via Sunrise Homeless Navigation Center (Sunrise Church) official website"
+        }
+      ],
+      "resource_count": 7,
+      "usage": {
+        "prompt_tokens": 3136,
+        "completion_tokens": 1465,
+        "total_tokens": 4601
+      },
+      "finish_reason": "stop",
+      "latency_ms": 23912,
+      "web_search_used": false
+    },
+    "variant": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"Central Texas Food Bank\",\n      \"address\": \"6500 Metropolis Dr, Austin, TX 78744\",\n      \"distance_miles\": 7.0,\n      \"phones\": [\"512-282-2111\"],\n      \"website\": \"https://centraltexasfoodbank.org\",\n      \"referral_type\": \"external\",\n      \"availability_status\": \"Food pantry partners active - some sites may change hours, call or check online\",\n      \"description\": \"Get free groceries through many partner food pantries and mobile food trucks. They serve people with low income in Austin and nearby towns. You can also get help to apply for SNAP (food stamps) and other benefit programs. You do not need to pay. Some sites may ask for basic papers you need like ID or proof of address. Use their online map or call to find a pantry close to 78702. Call ahead because hours can change. Staff can help in English and Spanish.\\n\\nGet free food from pantries and trucks near you. They help people with low income. They can also help you apply for SNAP (food stamps). You do not pay. Some places may ask for ID or proof of where you live. Use the website map or call to find a place near 78702. Call before you go, because hours can change. They help in English and Spanish.\"\n    },\n    {\n      \"name\": \"Caritas of Austin\",\n      \"address\": \"611 Neches St, Austin, TX 78701\",\n      \"distance_miles\": 1.0,\n      \"phones\": [\"512-479-4610\"],\n      \"website\": \"https://caritasofaustin.org\",\n      \"referral_type\": \"external\",\n      \"availability_status\": \"Some programs have waitlists - call first\",\n      \"description\": \"Get free daily meals and help with groceries if you have very low income or no home. The downtown site offers a free lunch on weekdays. They also give help with food boxes for people in housing programs. Staff can help connect you to other places for more food help. You may need a short first visit to see which programs fit you. Call or check the website for meal times and program rules.\\n\\nGet free hot meals on weekdays. They also help some people get food boxes. This place is good if you have very low income or no home. Workers can help you find other food places too. You may need a short first visit to see what help you can get. Call or look online to see meal times and rules.\"\n    },\n    {\n      \"name\": \"El Buen Samaritano\",\n      \"address\": \"7000 Woodhue Dr, Austin, TX 78745\",\n      \"distance_miles\": 9.0,\n      \"phones\": [\"512-439-8900\"],\n      \"website\": \"https://elbuen.org\",\n      \"referral_type\": \"external\",\n      \"availability_status\": \"Food pantry by drive-thru on set days - registration may be needed\",\n      \"description\": \"Get free groceries through a drive-thru food pantry. They focus on families with low income in Austin, many are Spanish speaking. No Social Security number is needed. You may need to sign up or check in when you arrive. They sometimes give diapers and other basic items too. Check the website or call for pantry days and times. Bring a photo ID if you have one and bags or boxes for food.\\n\\nGet free food in a drive-thru line. They help low income families, many who speak Spanish. You do not need a Social Security number. You may need to sign in. Sometimes they also give diapers and other items. Call or look online for days and times. Bring an ID if you have one and bags for food.\"\n    },\n    {\n      \"name\": \"H-E-B Hunger Relief / Feast of Sharing Partners (via Store and Local Drives)\",\n      \"address\": \"2701 E 7th St, Austin, TX 78702\",\n      \"distance_miles\": 1.0,\n      \"phones\": [\"512-477-5460\"],\n      \"website\": \"https://heb.com\",\n      \"referral_type\": \"external\",\n      \"availability_status\": \"Help varies by store and season - ask customer service\",\n      \"description\": \"Get low-cost groceries and sometimes free food events or holiday meals. This H-E-B store in 78702 often works with local food banks and groups. They may have food drives, holiday meals, or low-cost meal deals. You can also buy store brands and sale items to stretch SNAP (food stamps). Ask at customer service about local food help or events. They can tell you about nearby pantries or special programs.\\n\\nBuy low-cost food and sometimes get free holiday meals. This H-E-B near you works with local food groups. They may have food drives or cheap meal deals. Use SNAP (food stamps) here to make money go farther. Ask customer service about food help or events. They can share info on nearby pantries or programs.\"\n    },\n    {\n      \"name\": \"St. Vincent de Paul Thrift Store and Food Help (Diocese of Austin)\",\n      \"address\": \"901 W Braker Ln, Austin, TX 78758\",\n      \"distance_miles\": 9.0,\n      \"phones\": [\"512-251-6995\"],\n      \"website\": \"https://ssvdp.org\",\n      \"referral_type\": \"external\",\n      \"availability_status\": \"Food help by local parish conferences - call for nearest help to 78702\",\n      \"description\": \"Get help with groceries and basic needs through local Catholic church groups. They help people with low income in many Austin zip codes. Food help is often by a home visit or pick up from a church pantry. You do not have to be Catholic. Call and give your address or zip code. They will connect you to the closest group that can help with food. Help depends on funds and food on hand.\\n\\nGet food help from church groups that serve your area. They help people with low income. You do not need to be Catholic. Call and share your address or zip code. They will link you to the closest group. You may get a home visit or pick up food at a church. Help depends on how much food and money they have.\"\n    },\n    {\n      \"name\": \"Sunrise Homeless Navigation Center (Sunrise Church Austin)\",\n      \"address\": \"4430 Menchaca Rd, Austin, TX 78745\",\n      \"distance_miles\": 7.5,\n      \"phones\": [\"512-444-1389\"],\n      \"website\": \"https://sunriseaustin.org\",\n      \"referral_type\": \"external\",\n      \"availability_status\": \"Meals on set days for people without stable housing\",\n      \"description\": \"Get free hot meals if you do not have stable housing. The center offers breakfast and other meals on certain days. You can also get showers, mail, and help finding other places. No ID is needed to eat. This place is best for people living outside, in a car, or in a shelter. Check the website or call for meal times before you travel from 78702.\\n\\nGet free hot food if you are homeless or staying in a car or shelter. They serve breakfast and other meals on some days. You can also get showers and mail help. You do not need ID to eat. Call or look online for meal times before you go from 78702.\"\n    },\n    {\n      \"name\": \"City of Austin WIC (Women, Infants, and Children) Program\",\n      \"address\": \"8507 Research Blvd, Suite 110, Austin, TX 78758\",\n      \"distance_miles\": 8.5,\n      \"phones\": [\"512-972-4942\"],\n      \"website\": \"https://austintexas.gov\",\n      \"referral_type\": \"government\",\n      \"availability_status\": \"Open for new clients; many visits by phone or online\",\n      \"description\": \"Get free healthy food for pregnant people, new parents, babies, and children under age 5. WIC gives monthly food benefits for things like milk, eggs, cereal, fruits, and baby formula. They also give support on breastfeeding and child growth. You must meet income limits and live in the area. Immigration status does not matter. Call to set up a first visit by phone or in person. Staff will explain what papers you need, like ID and proof of address.\\n\\nGet free healthy food for pregnant people, babies, and kids under 5. WIC gives monthly food money for milk, eggs, cereal, fruits, and baby formula. They also help with feeding and child growth questions. You must have low income and live nearby. Immigration does not matter. Call to set up a first visit. They will tell you what papers you need, like ID and proof of where you live.\"\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "Central Texas Food Bank",
+            "address": "6500 Metropolis Dr, Austin, TX 78744",
+            "distance_miles": 7.0,
+            "phones": [
+              "512-282-2111"
+            ],
+            "website": "https://centraltexasfoodbank.org",
+            "referral_type": "external",
+            "availability_status": "Food pantry partners active - some sites may change hours, call or check online",
+            "description": "Get free groceries through many partner food pantries and mobile food trucks. They serve people with low income in Austin and nearby towns. You can also get help to apply for SNAP (food stamps) and other benefit programs. You do not need to pay. Some sites may ask for basic papers you need like ID or proof of address. Use their online map or call to find a pantry close to 78702. Call ahead because hours can change. Staff can help in English and Spanish.\n\nGet free food from pantries and trucks near you. They help people with low income. They can also help you apply for SNAP (food stamps). You do not pay. Some places may ask for ID or proof of where you live. Use the website map or call to find a place near 78702. Call before you go, because hours can change. They help in English and Spanish."
+          },
+          {
+            "name": "Caritas of Austin",
+            "address": "611 Neches St, Austin, TX 78701",
+            "distance_miles": 1.0,
+            "phones": [
+              "512-479-4610"
+            ],
+            "website": "https://caritasofaustin.org",
+            "referral_type": "external",
+            "availability_status": "Some programs have waitlists - call first",
+            "description": "Get free daily meals and help with groceries if you have very low income or no home. The downtown site offers a free lunch on weekdays. They also give help with food boxes for people in housing programs. Staff can help connect you to other places for more food help. You may need a short first visit to see which programs fit you. Call or check the website for meal times and program rules.\n\nGet free hot meals on weekdays. They also help some people get food boxes. This place is good if you have very low income or no home. Workers can help you find other food places too. You may need a short first visit to see what help you can get. Call or look online to see meal times and rules."
+          },
+          {
+            "name": "El Buen Samaritano",
+            "address": "7000 Woodhue Dr, Austin, TX 78745",
+            "distance_miles": 9.0,
+            "phones": [
+              "512-439-8900"
+            ],
+            "website": "https://elbuen.org",
+            "referral_type": "external",
+            "availability_status": "Food pantry by drive-thru on set days - registration may be needed",
+            "description": "Get free groceries through a drive-thru food pantry. They focus on families with low income in Austin, many are Spanish speaking. No Social Security number is needed. You may need to sign up or check in when you arrive. They sometimes give diapers and other basic items too. Check the website or call for pantry days and times. Bring a photo ID if you have one and bags or boxes for food.\n\nGet free food in a drive-thru line. They help low income families, many who speak Spanish. You do not need a Social Security number. You may need to sign in. Sometimes they also give diapers and other items. Call or look online for days and times. Bring an ID if you have one and bags for food."
+          },
+          {
+            "name": "H-E-B Hunger Relief / Feast of Sharing Partners (via Store and Local Drives)",
+            "address": "2701 E 7th St, Austin, TX 78702",
+            "distance_miles": 1.0,
+            "phones": [
+              "512-477-5460"
+            ],
+            "website": "https://heb.com",
+            "referral_type": "external",
+            "availability_status": "Help varies by store and season - ask customer service",
+            "description": "Get low-cost groceries and sometimes free food events or holiday meals. This H-E-B store in 78702 often works with local food banks and groups. They may have food drives, holiday meals, or low-cost meal deals. You can also buy store brands and sale items to stretch SNAP (food stamps). Ask at customer service about local food help or events. They can tell you about nearby pantries or special programs.\n\nBuy low-cost food and sometimes get free holiday meals. This H-E-B near you works with local food groups. They may have food drives or cheap meal deals. Use SNAP (food stamps) here to make money go farther. Ask customer service about food help or events. They can share info on nearby pantries or programs."
+          },
+          {
+            "name": "St. Vincent de Paul Thrift Store and Food Help (Diocese of Austin)",
+            "address": "901 W Braker Ln, Austin, TX 78758",
+            "distance_miles": 9.0,
+            "phones": [
+              "512-251-6995"
+            ],
+            "website": "https://ssvdp.org",
+            "referral_type": "external",
+            "availability_status": "Food help by local parish conferences - call for nearest help to 78702",
+            "description": "Get help with groceries and basic needs through local Catholic church groups. They help people with low income in many Austin zip codes. Food help is often by a home visit or pick up from a church pantry. You do not have to be Catholic. Call and give your address or zip code. They will connect you to the closest group that can help with food. Help depends on funds and food on hand.\n\nGet food help from church groups that serve your area. They help people with low income. You do not need to be Catholic. Call and share your address or zip code. They will link you to the closest group. You may get a home visit or pick up food at a church. Help depends on how much food and money they have."
+          },
+          {
+            "name": "Sunrise Homeless Navigation Center (Sunrise Church Austin)",
+            "address": "4430 Menchaca Rd, Austin, TX 78745",
+            "distance_miles": 7.5,
+            "phones": [
+              "512-444-1389"
+            ],
+            "website": "https://sunriseaustin.org",
+            "referral_type": "external",
+            "availability_status": "Meals on set days for people without stable housing",
+            "description": "Get free hot meals if you do not have stable housing. The center offers breakfast and other meals on certain days. You can also get showers, mail, and help finding other places. No ID is needed to eat. This place is best for people living outside, in a car, or in a shelter. Check the website or call for meal times before you travel from 78702.\n\nGet free hot food if you are homeless or staying in a car or shelter. They serve breakfast and other meals on some days. You can also get showers and mail help. You do not need ID to eat. Call or look online for meal times before you go from 78702."
+          },
+          {
+            "name": "City of Austin WIC (Women, Infants, and Children) Program",
+            "address": "8507 Research Blvd, Suite 110, Austin, TX 78758",
+            "distance_miles": 8.5,
+            "phones": [
+              "512-972-4942"
+            ],
+            "website": "https://austintexas.gov",
+            "referral_type": "government",
+            "availability_status": "Open for new clients; many visits by phone or online",
+            "description": "Get free healthy food for pregnant people, new parents, babies, and children under age 5. WIC gives monthly food benefits for things like milk, eggs, cereal, fruits, and baby formula. They also give support on breastfeeding and child growth. You must meet income limits and live in the area. Immigration status does not matter. Call to set up a first visit by phone or in person. Staff will explain what papers you need, like ID and proof of address.\n\nGet free healthy food for pregnant people, babies, and kids under 5. WIC gives monthly food money for milk, eggs, cereal, fruits, and baby formula. They also help with feeding and child growth questions. You must have low income and live nearby. Immigration does not matter. Call to set up a first visit. They will tell you what papers you need, like ID and proof of where you live."
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "Central Texas Food Bank",
+          "address": "6500 Metropolis Dr, Austin, TX 78744",
+          "distance_miles": 7.0,
+          "phones": [
+            "512-282-2111"
+          ],
+          "website": "https://centraltexasfoodbank.org",
+          "referral_type": "external",
+          "availability_status": "Food pantry partners active - some sites may change hours, call or check online",
+          "description": "Get free groceries through many partner food pantries and mobile food trucks. They serve people with low income in Austin and nearby towns. You can also get help to apply for SNAP (food stamps) and other benefit programs. You do not need to pay. Some sites may ask for basic papers you need like ID or proof of address. Use their online map or call to find a pantry close to 78702. Call ahead because hours can change. Staff can help in English and Spanish.\n\nGet free food from pantries and trucks near you. They help people with low income. They can also help you apply for SNAP (food stamps). You do not pay. Some places may ask for ID or proof of where you live. Use the website map or call to find a place near 78702. Call before you go, because hours can change. They help in English and Spanish."
+        },
+        {
+          "name": "Caritas of Austin",
+          "address": "611 Neches St, Austin, TX 78701",
+          "distance_miles": 1.0,
+          "phones": [
+            "512-479-4610"
+          ],
+          "website": "https://caritasofaustin.org",
+          "referral_type": "external",
+          "availability_status": "Some programs have waitlists - call first",
+          "description": "Get free daily meals and help with groceries if you have very low income or no home. The downtown site offers a free lunch on weekdays. They also give help with food boxes for people in housing programs. Staff can help connect you to other places for more food help. You may need a short first visit to see which programs fit you. Call or check the website for meal times and program rules.\n\nGet free hot meals on weekdays. They also help some people get food boxes. This place is good if you have very low income or no home. Workers can help you find other food places too. You may need a short first visit to see what help you can get. Call or look online to see meal times and rules."
+        },
+        {
+          "name": "El Buen Samaritano",
+          "address": "7000 Woodhue Dr, Austin, TX 78745",
+          "distance_miles": 9.0,
+          "phones": [
+            "512-439-8900"
+          ],
+          "website": "https://elbuen.org",
+          "referral_type": "external",
+          "availability_status": "Food pantry by drive-thru on set days - registration may be needed",
+          "description": "Get free groceries through a drive-thru food pantry. They focus on families with low income in Austin, many are Spanish speaking. No Social Security number is needed. You may need to sign up or check in when you arrive. They sometimes give diapers and other basic items too. Check the website or call for pantry days and times. Bring a photo ID if you have one and bags or boxes for food.\n\nGet free food in a drive-thru line. They help low income families, many who speak Spanish. You do not need a Social Security number. You may need to sign in. Sometimes they also give diapers and other items. Call or look online for days and times. Bring an ID if you have one and bags for food."
+        },
+        {
+          "name": "H-E-B Hunger Relief / Feast of Sharing Partners (via Store and Local Drives)",
+          "address": "2701 E 7th St, Austin, TX 78702",
+          "distance_miles": 1.0,
+          "phones": [
+            "512-477-5460"
+          ],
+          "website": "https://heb.com",
+          "referral_type": "external",
+          "availability_status": "Help varies by store and season - ask customer service",
+          "description": "Get low-cost groceries and sometimes free food events or holiday meals. This H-E-B store in 78702 often works with local food banks and groups. They may have food drives, holiday meals, or low-cost meal deals. You can also buy store brands and sale items to stretch SNAP (food stamps). Ask at customer service about local food help or events. They can tell you about nearby pantries or special programs.\n\nBuy low-cost food and sometimes get free holiday meals. This H-E-B near you works with local food groups. They may have food drives or cheap meal deals. Use SNAP (food stamps) here to make money go farther. Ask customer service about food help or events. They can share info on nearby pantries or programs."
+        },
+        {
+          "name": "St. Vincent de Paul Thrift Store and Food Help (Diocese of Austin)",
+          "address": "901 W Braker Ln, Austin, TX 78758",
+          "distance_miles": 9.0,
+          "phones": [
+            "512-251-6995"
+          ],
+          "website": "https://ssvdp.org",
+          "referral_type": "external",
+          "availability_status": "Food help by local parish conferences - call for nearest help to 78702",
+          "description": "Get help with groceries and basic needs through local Catholic church groups. They help people with low income in many Austin zip codes. Food help is often by a home visit or pick up from a church pantry. You do not have to be Catholic. Call and give your address or zip code. They will connect you to the closest group that can help with food. Help depends on funds and food on hand.\n\nGet food help from church groups that serve your area. They help people with low income. You do not need to be Catholic. Call and share your address or zip code. They will link you to the closest group. You may get a home visit or pick up food at a church. Help depends on how much food and money they have."
+        },
+        {
+          "name": "Sunrise Homeless Navigation Center (Sunrise Church Austin)",
+          "address": "4430 Menchaca Rd, Austin, TX 78745",
+          "distance_miles": 7.5,
+          "phones": [
+            "512-444-1389"
+          ],
+          "website": "https://sunriseaustin.org",
+          "referral_type": "external",
+          "availability_status": "Meals on set days for people without stable housing",
+          "description": "Get free hot meals if you do not have stable housing. The center offers breakfast and other meals on certain days. You can also get showers, mail, and help finding other places. No ID is needed to eat. This place is best for people living outside, in a car, or in a shelter. Check the website or call for meal times before you travel from 78702.\n\nGet free hot food if you are homeless or staying in a car or shelter. They serve breakfast and other meals on some days. You can also get showers and mail help. You do not need ID to eat. Call or look online for meal times before you go from 78702."
+        },
+        {
+          "name": "City of Austin WIC (Women, Infants, and Children) Program",
+          "address": "8507 Research Blvd, Suite 110, Austin, TX 78758",
+          "distance_miles": 8.5,
+          "phones": [
+            "512-972-4942"
+          ],
+          "website": "https://austintexas.gov",
+          "referral_type": "government",
+          "availability_status": "Open for new clients; many visits by phone or online",
+          "description": "Get free healthy food for pregnant people, new parents, babies, and children under age 5. WIC gives monthly food benefits for things like milk, eggs, cereal, fruits, and baby formula. They also give support on breastfeeding and child growth. You must meet income limits and live in the area. Immigration status does not matter. Call to set up a first visit by phone or in person. Staff will explain what papers you need, like ID and proof of address.\n\nGet free healthy food for pregnant people, babies, and kids under 5. WIC gives monthly food money for milk, eggs, cereal, fruits, and baby formula. They also help with feeding and child growth questions. You must have low income and live nearby. Immigration does not matter. Call to set up a first visit. They will tell you what papers you need, like ID and proof of where you live."
+        }
+      ],
+      "resource_count": 7,
+      "usage": {
+        "prompt_tokens": 3384,
+        "completion_tokens": 1872,
+        "total_tokens": 5256
+      },
+      "finish_reason": "stop",
+      "latency_ms": 45378,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_002",
+    "user_query": "CPR Training\nInclude resources that support the following categories: Employment & Job Training\nFocus on resources close to the following location: Austin (Travis county), TX 78753",
+    "location": "Austin (Travis county), TX 78753",
+    "resources_context_length": 713,
+    "baseline": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"American Red Cross Central & South Texas (CPR and First Aid Classes)\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get CPR and first aid classes for work, school, or personal safety. Classes cover adult, child, and baby CPR, use of an AED (heart shock machine), and basic first aid. You can choose in-person, blended (online plus in-person), or online-only options. Many jobs accept these cards, but you should check with your boss or school first. You must register and pay online before class. Some discounts or group rates may be open for larger groups.\",\n      \"address\": \"2218 Pershing Drive, Austin, TX 78723\",\n      \"distance_miles\": 7.0,\n      \"phones\": [\n        \"512-928-4271\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://www.redcross.org\",\n      \"availability_status\": \"Classes fill fast - register early online\"\n    },\n    {\n      \"name\": \"CPR Training Austin (American Heart Association Classes)\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get American Heart Association CPR and first aid cards for work or school. They offer Basic Life Support (BLS) for health workers and Heartsaver CPR and first aid for regular jobs. Classes are in person and some have an online part plus a short in-person skills check. Many health care jobs and some other jobs accept these cards. You must sign up and pay online before class. They may offer group classes at your job site if you have enough people.\",\n      \"address\": \"7801 North Lamar Boulevard, Suite D-193, Austin, TX 78752\",\n      \"distance_miles\": 2.0,\n      \"phones\": [\n        \"512-200-2327\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://www.cprtrainingaustin.com\",\n      \"availability_status\": \"Open - class dates vary by week\"\n    },\n    {\n      \"name\": \"Code One Training Solutions Austin (CPR and First Aid Classes)\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get CPR, first aid, and Basic Life Support (BLS) cards for work or school. Classes follow American Heart Association rules. They offer in-person and blended (online plus in-person) options. You can choose classes for health workers or for regular jobs. Many jobs accept these cards, but ask your boss or school to be sure. You must register and pay online before class. Some classes run in the evenings or weekends.\",\n      \"address\": \"8868 Research Boulevard, Suite 304, Austin, TX 78758\",\n      \"distance_miles\": 3.0,\n      \"phones\": [\n        \"512-580-2877\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://code1web.com\",\n      \"availability_status\": \"Open - check website for class schedule\"\n    },\n    {\n      \"name\": \"CPR Resources Austin (Workplace CPR and First Aid Training)\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get CPR, first aid, and Basic Life Support (BLS) cards for job needs. They focus on training for child care, schools, health workers, and other jobs. Classes follow American Heart Association or American Safety and Health Institute rules. They offer in-person classes and can come to your job site for groups. You must call or go online to see class dates and prices. Many classes finish in one day.\",\n      \"address\": \"7801 North Lamar Boulevard, Suite D-193, Austin, TX 78752\",\n      \"distance_miles\": 2.0,\n      \"phones\": [\n        \"512-947-7287\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://www.cpr-resources.com\",\n      \"availability_status\": \"Open - group and single sign-ups welcome\"\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "American Red Cross Central & South Texas (CPR and First Aid Classes)",
+            "referral_type": "external",
+            "description": "Get CPR and first aid classes for work, school, or personal safety. Classes cover adult, child, and baby CPR, use of an AED (heart shock machine), and basic first aid. You can choose in-person, blended (online plus in-person), or online-only options. Many jobs accept these cards, but you should check with your boss or school first. You must register and pay online before class. Some discounts or group rates may be open for larger groups.",
+            "address": "2218 Pershing Drive, Austin, TX 78723",
+            "distance_miles": 7.0,
+            "phones": [
+              "512-928-4271"
+            ],
+            "emails": [],
+            "website": "https://www.redcross.org",
+            "availability_status": "Classes fill fast - register early online"
+          },
+          {
+            "name": "CPR Training Austin (American Heart Association Classes)",
+            "referral_type": "external",
+            "description": "Get American Heart Association CPR and first aid cards for work or school. They offer Basic Life Support (BLS) for health workers and Heartsaver CPR and first aid for regular jobs. Classes are in person and some have an online part plus a short in-person skills check. Many health care jobs and some other jobs accept these cards. You must sign up and pay online before class. They may offer group classes at your job site if you have enough people.",
+            "address": "7801 North Lamar Boulevard, Suite D-193, Austin, TX 78752",
+            "distance_miles": 2.0,
+            "phones": [
+              "512-200-2327"
+            ],
+            "emails": [],
+            "website": "https://www.cprtrainingaustin.com",
+            "availability_status": "Open - class dates vary by week"
+          },
+          {
+            "name": "Code One Training Solutions Austin (CPR and First Aid Classes)",
+            "referral_type": "external",
+            "description": "Get CPR, first aid, and Basic Life Support (BLS) cards for work or school. Classes follow American Heart Association rules. They offer in-person and blended (online plus in-person) options. You can choose classes for health workers or for regular jobs. Many jobs accept these cards, but ask your boss or school to be sure. You must register and pay online before class. Some classes run in the evenings or weekends.",
+            "address": "8868 Research Boulevard, Suite 304, Austin, TX 78758",
+            "distance_miles": 3.0,
+            "phones": [
+              "512-580-2877"
+            ],
+            "emails": [],
+            "website": "https://code1web.com",
+            "availability_status": "Open - check website for class schedule"
+          },
+          {
+            "name": "CPR Resources Austin (Workplace CPR and First Aid Training)",
+            "referral_type": "external",
+            "description": "Get CPR, first aid, and Basic Life Support (BLS) cards for job needs. They focus on training for child care, schools, health workers, and other jobs. Classes follow American Heart Association or American Safety and Health Institute rules. They offer in-person classes and can come to your job site for groups. You must call or go online to see class dates and prices. Many classes finish in one day.",
+            "address": "7801 North Lamar Boulevard, Suite D-193, Austin, TX 78752",
+            "distance_miles": 2.0,
+            "phones": [
+              "512-947-7287"
+            ],
+            "emails": [],
+            "website": "https://www.cpr-resources.com",
+            "availability_status": "Open - group and single sign-ups welcome"
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "American Red Cross Central & South Texas (CPR and First Aid Classes)",
+          "referral_type": "external",
+          "description": "Get CPR and first aid classes for work, school, or personal safety. Classes cover adult, child, and baby CPR, use of an AED (heart shock machine), and basic first aid. You can choose in-person, blended (online plus in-person), or online-only options. Many jobs accept these cards, but you should check with your boss or school first. You must register and pay online before class. Some discounts or group rates may be open for larger groups.",
+          "address": "2218 Pershing Drive, Austin, TX 78723",
+          "distance_miles": 7.0,
+          "phones": [
+            "512-928-4271"
+          ],
+          "emails": [],
+          "website": "https://www.redcross.org",
+          "availability_status": "Classes fill fast - register early online"
+        },
+        {
+          "name": "CPR Training Austin (American Heart Association Classes)",
+          "referral_type": "external",
+          "description": "Get American Heart Association CPR and first aid cards for work or school. They offer Basic Life Support (BLS) for health workers and Heartsaver CPR and first aid for regular jobs. Classes are in person and some have an online part plus a short in-person skills check. Many health care jobs and some other jobs accept these cards. You must sign up and pay online before class. They may offer group classes at your job site if you have enough people.",
+          "address": "7801 North Lamar Boulevard, Suite D-193, Austin, TX 78752",
+          "distance_miles": 2.0,
+          "phones": [
+            "512-200-2327"
+          ],
+          "emails": [],
+          "website": "https://www.cprtrainingaustin.com",
+          "availability_status": "Open - class dates vary by week"
+        },
+        {
+          "name": "Code One Training Solutions Austin (CPR and First Aid Classes)",
+          "referral_type": "external",
+          "description": "Get CPR, first aid, and Basic Life Support (BLS) cards for work or school. Classes follow American Heart Association rules. They offer in-person and blended (online plus in-person) options. You can choose classes for health workers or for regular jobs. Many jobs accept these cards, but ask your boss or school to be sure. You must register and pay online before class. Some classes run in the evenings or weekends.",
+          "address": "8868 Research Boulevard, Suite 304, Austin, TX 78758",
+          "distance_miles": 3.0,
+          "phones": [
+            "512-580-2877"
+          ],
+          "emails": [],
+          "website": "https://code1web.com",
+          "availability_status": "Open - check website for class schedule"
+        },
+        {
+          "name": "CPR Resources Austin (Workplace CPR and First Aid Training)",
+          "referral_type": "external",
+          "description": "Get CPR, first aid, and Basic Life Support (BLS) cards for job needs. They focus on training for child care, schools, health workers, and other jobs. Classes follow American Heart Association or American Safety and Health Institute rules. They offer in-person classes and can come to your job site for groups. You must call or go online to see class dates and prices. Many classes finish in one day.",
+          "address": "7801 North Lamar Boulevard, Suite D-193, Austin, TX 78752",
+          "distance_miles": 2.0,
+          "phones": [
+            "512-947-7287"
+          ],
+          "emails": [],
+          "website": "https://www.cpr-resources.com",
+          "availability_status": "Open - group and single sign-ups welcome"
+        }
+      ],
+      "resource_count": 4,
+      "usage": {
+        "prompt_tokens": 3135,
+        "completion_tokens": 842,
+        "total_tokens": 3977
+      },
+      "finish_reason": "stop",
+      "latency_ms": 11175,
+      "web_search_used": false
+    },
+    "variant": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"American Red Cross \u2013 Central & South Texas (CPR and First Aid Classes)\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get CPR and first aid classes for work, child care, or safety jobs. Classes include adult, child, and baby CPR, use of an AED (heart shock machine), and basic first aid. Some classes are online plus in-person skills. You get a card that many jobs accept. Cost varies by class. Some employers may pay for your class. You must register and pay online before class. This group also offers classes in Spanish at some times. If you need help paying, ask your case manager or job coach to check for funding.\",\n      \"address\": \"2218 Pershing Drive, Austin, TX 78723\",\n      \"distance_miles\": 7.0,\n      \"phones\": [\n        \"512-928-4271\"\n      ],\n      \"website\": \"https://redcross.org\",\n      \"emails\": [],\n      \"availability_status\": \"Classes fill fast \u2013 sign up early online\"\n    },\n    {\n      \"name\": \"CPR Resources \u2013 Austin (CPR, BLS, and First Aid Training)\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get CPR, first aid, and Basic Life Support (BLS) classes for health care and other jobs. They teach American Heart Association classes that many hospitals and clinics need. You can take weekday, evening, or some weekend classes. You get a card the same day for most classes. Cost depends on the class. You must sign up online before you go. This place is good if you need CPR for nursing, medical assistant, or child care work.\",\n      \"address\": \"7801 North Lamar Boulevard, Suite D-193, Austin, TX 78752\",\n      \"distance_miles\": 2.5,\n      \"phones\": [\n        \"512-257- CPR1 (2771)\"\n      ],\n      \"website\": \"https://cprresourcesaustin.com\",\n      \"emails\": [],\n      \"availability_status\": \"Open with many class times \u2013 check website for schedule\"\n    },\n    {\n      \"name\": \"HeartSaver CPR and First Aid \u2013 Austin\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get CPR and first aid classes for work, school, or personal safety. They teach American Heart Association HeartSaver and Basic Life Support (BLS) classes. These work for many jobs like child care, fitness, and some health care roles. You can choose group or one-on-one classes. Some classes are in English and Spanish. You must sign up before class. Prices are on the website. Ask about group rates if your job or class sends several people.\",\n      \"address\": \"7719 North Interstate Highway 35, Suite 510, Austin, TX 78752\",\n      \"distance_miles\": 3.0,\n      \"phones\": [\n        \"512-350-2747\"\n      ],\n      \"website\": \"https://heartsavercpr.net\",\n      \"emails\": [],\n      \"availability_status\": \"Open \u2013 class times change by week, see website\"\n    },\n    {\n      \"name\": \"Code One Training Solutions \u2013 Austin (CPR and BLS Classes)\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get CPR, first aid, and Basic Life Support (BLS) classes for health care and other jobs. They offer American Heart Association classes. You can do online study plus an in-person skills check. You get a card that many employers accept. Classes run on weekdays and some weekends. You must register and pay online. Good for people working in clinics, hospitals, or home health.\",\n      \"address\": \"7801 North Lamar Boulevard, Suite C-161, Austin, TX 78752\",\n      \"distance_miles\": 2.5,\n      \"phones\": [\n        \"512-222-8722\"\n      ],\n      \"website\": \"https://code1web.com\",\n      \"emails\": [],\n      \"availability_status\": \"Open \u2013 seats may be limited for some dates\"\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "American Red Cross \u2013 Central & South Texas (CPR and First Aid Classes)",
+            "referral_type": "external",
+            "description": "Get CPR and first aid classes for work, child care, or safety jobs. Classes include adult, child, and baby CPR, use of an AED (heart shock machine), and basic first aid. Some classes are online plus in-person skills. You get a card that many jobs accept. Cost varies by class. Some employers may pay for your class. You must register and pay online before class. This group also offers classes in Spanish at some times. If you need help paying, ask your case manager or job coach to check for funding.",
+            "address": "2218 Pershing Drive, Austin, TX 78723",
+            "distance_miles": 7.0,
+            "phones": [
+              "512-928-4271"
+            ],
+            "website": "https://redcross.org",
+            "emails": [],
+            "availability_status": "Classes fill fast \u2013 sign up early online"
+          },
+          {
+            "name": "CPR Resources \u2013 Austin (CPR, BLS, and First Aid Training)",
+            "referral_type": "external",
+            "description": "Get CPR, first aid, and Basic Life Support (BLS) classes for health care and other jobs. They teach American Heart Association classes that many hospitals and clinics need. You can take weekday, evening, or some weekend classes. You get a card the same day for most classes. Cost depends on the class. You must sign up online before you go. This place is good if you need CPR for nursing, medical assistant, or child care work.",
+            "address": "7801 North Lamar Boulevard, Suite D-193, Austin, TX 78752",
+            "distance_miles": 2.5,
+            "phones": [
+              "512-257- CPR1 (2771)"
+            ],
+            "website": "https://cprresourcesaustin.com",
+            "emails": [],
+            "availability_status": "Open with many class times \u2013 check website for schedule"
+          },
+          {
+            "name": "HeartSaver CPR and First Aid \u2013 Austin",
+            "referral_type": "external",
+            "description": "Get CPR and first aid classes for work, school, or personal safety. They teach American Heart Association HeartSaver and Basic Life Support (BLS) classes. These work for many jobs like child care, fitness, and some health care roles. You can choose group or one-on-one classes. Some classes are in English and Spanish. You must sign up before class. Prices are on the website. Ask about group rates if your job or class sends several people.",
+            "address": "7719 North Interstate Highway 35, Suite 510, Austin, TX 78752",
+            "distance_miles": 3.0,
+            "phones": [
+              "512-350-2747"
+            ],
+            "website": "https://heartsavercpr.net",
+            "emails": [],
+            "availability_status": "Open \u2013 class times change by week, see website"
+          },
+          {
+            "name": "Code One Training Solutions \u2013 Austin (CPR and BLS Classes)",
+            "referral_type": "external",
+            "description": "Get CPR, first aid, and Basic Life Support (BLS) classes for health care and other jobs. They offer American Heart Association classes. You can do online study plus an in-person skills check. You get a card that many employers accept. Classes run on weekdays and some weekends. You must register and pay online. Good for people working in clinics, hospitals, or home health.",
+            "address": "7801 North Lamar Boulevard, Suite C-161, Austin, TX 78752",
+            "distance_miles": 2.5,
+            "phones": [
+              "512-222-8722"
+            ],
+            "website": "https://code1web.com",
+            "emails": [],
+            "availability_status": "Open \u2013 seats may be limited for some dates"
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "American Red Cross \u2013 Central & South Texas (CPR and First Aid Classes)",
+          "referral_type": "external",
+          "description": "Get CPR and first aid classes for work, child care, or safety jobs. Classes include adult, child, and baby CPR, use of an AED (heart shock machine), and basic first aid. Some classes are online plus in-person skills. You get a card that many jobs accept. Cost varies by class. Some employers may pay for your class. You must register and pay online before class. This group also offers classes in Spanish at some times. If you need help paying, ask your case manager or job coach to check for funding.",
+          "address": "2218 Pershing Drive, Austin, TX 78723",
+          "distance_miles": 7.0,
+          "phones": [
+            "512-928-4271"
+          ],
+          "website": "https://redcross.org",
+          "emails": [],
+          "availability_status": "Classes fill fast \u2013 sign up early online"
+        },
+        {
+          "name": "CPR Resources \u2013 Austin (CPR, BLS, and First Aid Training)",
+          "referral_type": "external",
+          "description": "Get CPR, first aid, and Basic Life Support (BLS) classes for health care and other jobs. They teach American Heart Association classes that many hospitals and clinics need. You can take weekday, evening, or some weekend classes. You get a card the same day for most classes. Cost depends on the class. You must sign up online before you go. This place is good if you need CPR for nursing, medical assistant, or child care work.",
+          "address": "7801 North Lamar Boulevard, Suite D-193, Austin, TX 78752",
+          "distance_miles": 2.5,
+          "phones": [
+            "512-257- CPR1 (2771)"
+          ],
+          "website": "https://cprresourcesaustin.com",
+          "emails": [],
+          "availability_status": "Open with many class times \u2013 check website for schedule"
+        },
+        {
+          "name": "HeartSaver CPR and First Aid \u2013 Austin",
+          "referral_type": "external",
+          "description": "Get CPR and first aid classes for work, school, or personal safety. They teach American Heart Association HeartSaver and Basic Life Support (BLS) classes. These work for many jobs like child care, fitness, and some health care roles. You can choose group or one-on-one classes. Some classes are in English and Spanish. You must sign up before class. Prices are on the website. Ask about group rates if your job or class sends several people.",
+          "address": "7719 North Interstate Highway 35, Suite 510, Austin, TX 78752",
+          "distance_miles": 3.0,
+          "phones": [
+            "512-350-2747"
+          ],
+          "website": "https://heartsavercpr.net",
+          "emails": [],
+          "availability_status": "Open \u2013 class times change by week, see website"
+        },
+        {
+          "name": "Code One Training Solutions \u2013 Austin (CPR and BLS Classes)",
+          "referral_type": "external",
+          "description": "Get CPR, first aid, and Basic Life Support (BLS) classes for health care and other jobs. They offer American Heart Association classes. You can do online study plus an in-person skills check. You get a card that many employers accept. Classes run on weekdays and some weekends. You must register and pay online. Good for people working in clinics, hospitals, or home health.",
+          "address": "7801 North Lamar Boulevard, Suite C-161, Austin, TX 78752",
+          "distance_miles": 2.5,
+          "phones": [
+            "512-222-8722"
+          ],
+          "website": "https://code1web.com",
+          "emails": [],
+          "availability_status": "Open \u2013 seats may be limited for some dates"
+        }
+      ],
+      "resource_count": 4,
+      "usage": {
+        "prompt_tokens": 3383,
+        "completion_tokens": 873,
+        "total_tokens": 4256
+      },
+      "finish_reason": "stop",
+      "latency_ms": 8601,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_003",
+    "user_query": "Include resources that support the following categories: Housing Assistance, Utility Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78741",
+    "location": "Austin (Travis county), TX 78741",
+    "resources_context_length": 709,
+    "baseline": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"St. Vincent de Paul Society \u2013 Diocesan Council of Austin\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with rent, light, gas, or water bills. You must live in the Catholic Diocese of Austin area and have low income. They work through local church groups. You call first. They then connect you to the closest church group near your home. Help is not guaranteed and depends on money they have that week. They may also help with food or clothes. Be ready to share your story and show bills or lease. Call early in the week for best chance.\",\n      \"address\": \"901 W Braker Ln, Austin, TX 78758\",\n      \"distance_miles\": 10.0,\n      \"phones\": [\n        \"512-251-6995\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://ssvdp.org\",\n      \"availability_status\": \"Help depends on funds and may run out. Call first to check.\"\n    },\n    {\n      \"name\": \"St. Austin Catholic Parish \u2013 Financial Assistance Ministry\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help one time with rent or utility bills if you live in certain Central Austin zip codes. You must live in 78701, 78703, 78705, 78722, 78751, or 78756 and have low income. Help is by phone only. Leave a message and a helper will call you back. They may ask for your ID, lease, and bill. Help is not fast and not guaranteed. They can also share other places to call.\",\n      \"address\": \"2026 Guadalupe St, Austin, TX 78705\",\n      \"distance_miles\": 5.5,\n      \"phones\": [\n        \"512-477-9471\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://staustin.org\",\n      \"availability_status\": \"Limited funds. Phone line may close when many people call.\"\n    },\n    {\n      \"name\": \"Society of St. Louise \u2013 St. Louis King of France Catholic Church\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with rent or utility bills if you live in their church area and have low income. Help is by phone. Leave a message with your name, address, and phone number. A helper will call you back. They may ask for your lease, bill, and ID. Help is not guaranteed and depends on money they have. They may also share other places that can help.\",\n      \"address\": \"7601 Burnet Rd, Austin, TX 78757\",\n      \"distance_miles\": 11.0,\n      \"phones\": [\n        \"512-454-0384\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://stlouisparish.org\",\n      \"availability_status\": \"Funds are limited. Call and leave a message to see if help is open.\"\n    },\n    {\n      \"name\": \"Texas Health and Human Services \u2013 Benefits (SNAP, TANF, Medicaid)\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get help paying for food, cash help for families, and health care. You can apply for SNAP (food stamps), TANF (cash help for families), and Medicaid or CHIP (kids' health insurance). These programs can free money in your budget to help with rent and bills. You can apply online, by phone, or at a local office. Staff can explain what papers you need and who can get help.\",\n      \"address\": \"5800 E Martin Luther King Jr Blvd, Austin, TX 78721\",\n      \"distance_miles\": 4.5,\n      \"phones\": [\n        \"877-541-7905\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://hhs.texas.gov\",\n      \"availability_status\": \"Open, but wait times can be long. Best to start online or by phone.\"\n    },\n    {\n      \"name\": \"Austin Energy \u2013 Customer Assistance Programs\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get help lowering your City of Austin light bill if you have low income. You may get a discount on your bill each month. You may also get help with past-due bills in some cases. They work with people who get SNAP (food stamps), Medicaid, SSI (monthly cash help), or other aid. You can apply online, by phone, or through some local groups. This help is only for Austin Energy customers.\",\n      \"address\": \"4815 Mueller Blvd, Austin, TX 78723\",\n      \"distance_miles\": 6.0,\n      \"phones\": [\n        \"512-494-9400\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://austinenergy.com\",\n      \"availability_status\": \"Programs are open but some funds are limited. Call to ask what is open now.\"\n    },\n    {\n      \"name\": \"City of Austin \u2013 Housing Assistance (Rent and Mortgage Help)\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get information on current rent and housing help programs in Austin. Help may change during the year. Some programs pay part of your rent if you lost income or have low income. Others may help with move-in costs or past-due rent. Staff can explain who can get help and how to apply. They can also share other local places for housing help.\",\n      \"address\": \"1000 E 11th St, Austin, TX 78702\",\n      \"distance_miles\": 3.5,\n      \"phones\": [\n        \"512-974-3100\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://austintexas.gov\",\n      \"availability_status\": \"Programs open and close often. Call or check online for what is open now.\"\n    },\n    {\n      \"name\": \"2-1-1 Texas \u2013 United Way Helpline\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get live help finding rent and utility help close to your home. You can call any time, day or night. A helper will ask your zip code and needs. They then share phone numbers and places near you. They can look for housing, light, gas, water, and other bill help. This is a free call. You can also search on their website.\",\n      \"address\": \"Online/phone service only\",\n      \"distance_miles\": null,\n      \"phones\": [\n        \"211\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://211texas.org\",\n      \"availability_status\": \"Open 24 hours a day, 7 days a week.\"\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "referral_type": "external",
+            "description": "Get help with rent, light, gas, or water bills. You must live in the Catholic Diocese of Austin area and have low income. They work through local church groups. You call first. They then connect you to the closest church group near your home. Help is not guaranteed and depends on money they have that week. They may also help with food or clothes. Be ready to share your story and show bills or lease. Call early in the week for best chance.",
+            "address": "901 W Braker Ln, Austin, TX 78758",
+            "distance_miles": 10.0,
+            "phones": [
+              "512-251-6995"
+            ],
+            "emails": [],
+            "website": "https://ssvdp.org",
+            "availability_status": "Help depends on funds and may run out. Call first to check."
+          },
+          {
+            "name": "St. Austin Catholic Parish \u2013 Financial Assistance Ministry",
+            "referral_type": "external",
+            "description": "Get help one time with rent or utility bills if you live in certain Central Austin zip codes. You must live in 78701, 78703, 78705, 78722, 78751, or 78756 and have low income. Help is by phone only. Leave a message and a helper will call you back. They may ask for your ID, lease, and bill. Help is not fast and not guaranteed. They can also share other places to call.",
+            "address": "2026 Guadalupe St, Austin, TX 78705",
+            "distance_miles": 5.5,
+            "phones": [
+              "512-477-9471"
+            ],
+            "emails": [],
+            "website": "https://staustin.org",
+            "availability_status": "Limited funds. Phone line may close when many people call."
+          },
+          {
+            "name": "Society of St. Louise \u2013 St. Louis King of France Catholic Church",
+            "referral_type": "external",
+            "description": "Get help with rent or utility bills if you live in their church area and have low income. Help is by phone. Leave a message with your name, address, and phone number. A helper will call you back. They may ask for your lease, bill, and ID. Help is not guaranteed and depends on money they have. They may also share other places that can help.",
+            "address": "7601 Burnet Rd, Austin, TX 78757",
+            "distance_miles": 11.0,
+            "phones": [
+              "512-454-0384"
+            ],
+            "emails": [],
+            "website": "https://stlouisparish.org",
+            "availability_status": "Funds are limited. Call and leave a message to see if help is open."
+          },
+          {
+            "name": "Texas Health and Human Services \u2013 Benefits (SNAP, TANF, Medicaid)",
+            "referral_type": "government",
+            "description": "Get help paying for food, cash help for families, and health care. You can apply for SNAP (food stamps), TANF (cash help for families), and Medicaid or CHIP (kids' health insurance). These programs can free money in your budget to help with rent and bills. You can apply online, by phone, or at a local office. Staff can explain what papers you need and who can get help.",
+            "address": "5800 E Martin Luther King Jr Blvd, Austin, TX 78721",
+            "distance_miles": 4.5,
+            "phones": [
+              "877-541-7905"
+            ],
+            "emails": [],
+            "website": "https://hhs.texas.gov",
+            "availability_status": "Open, but wait times can be long. Best to start online or by phone."
+          },
+          {
+            "name": "Austin Energy \u2013 Customer Assistance Programs",
+            "referral_type": "government",
+            "description": "Get help lowering your City of Austin light bill if you have low income. You may get a discount on your bill each month. You may also get help with past-due bills in some cases. They work with people who get SNAP (food stamps), Medicaid, SSI (monthly cash help), or other aid. You can apply online, by phone, or through some local groups. This help is only for Austin Energy customers.",
+            "address": "4815 Mueller Blvd, Austin, TX 78723",
+            "distance_miles": 6.0,
+            "phones": [
+              "512-494-9400"
+            ],
+            "emails": [],
+            "website": "https://austinenergy.com",
+            "availability_status": "Programs are open but some funds are limited. Call to ask what is open now."
+          },
+          {
+            "name": "City of Austin \u2013 Housing Assistance (Rent and Mortgage Help)",
+            "referral_type": "government",
+            "description": "Get information on current rent and housing help programs in Austin. Help may change during the year. Some programs pay part of your rent if you lost income or have low income. Others may help with move-in costs or past-due rent. Staff can explain who can get help and how to apply. They can also share other local places for housing help.",
+            "address": "1000 E 11th St, Austin, TX 78702",
+            "distance_miles": 3.5,
+            "phones": [
+              "512-974-3100"
+            ],
+            "emails": [],
+            "website": "https://austintexas.gov",
+            "availability_status": "Programs open and close often. Call or check online for what is open now."
+          },
+          {
+            "name": "2-1-1 Texas \u2013 United Way Helpline",
+            "referral_type": "government",
+            "description": "Get live help finding rent and utility help close to your home. You can call any time, day or night. A helper will ask your zip code and needs. They then share phone numbers and places near you. They can look for housing, light, gas, water, and other bill help. This is a free call. You can also search on their website.",
+            "address": "Online/phone service only",
+            "distance_miles": null,
+            "phones": [
+              "211"
+            ],
+            "emails": [],
+            "website": "https://211texas.org",
+            "availability_status": "Open 24 hours a day, 7 days a week."
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+          "referral_type": "external",
+          "description": "Get help with rent, light, gas, or water bills. You must live in the Catholic Diocese of Austin area and have low income. They work through local church groups. You call first. They then connect you to the closest church group near your home. Help is not guaranteed and depends on money they have that week. They may also help with food or clothes. Be ready to share your story and show bills or lease. Call early in the week for best chance.",
+          "address": "901 W Braker Ln, Austin, TX 78758",
+          "distance_miles": 10.0,
+          "phones": [
+            "512-251-6995"
+          ],
+          "emails": [],
+          "website": "https://ssvdp.org",
+          "availability_status": "Help depends on funds and may run out. Call first to check."
+        },
+        {
+          "name": "St. Austin Catholic Parish \u2013 Financial Assistance Ministry",
+          "referral_type": "external",
+          "description": "Get help one time with rent or utility bills if you live in certain Central Austin zip codes. You must live in 78701, 78703, 78705, 78722, 78751, or 78756 and have low income. Help is by phone only. Leave a message and a helper will call you back. They may ask for your ID, lease, and bill. Help is not fast and not guaranteed. They can also share other places to call.",
+          "address": "2026 Guadalupe St, Austin, TX 78705",
+          "distance_miles": 5.5,
+          "phones": [
+            "512-477-9471"
+          ],
+          "emails": [],
+          "website": "https://staustin.org",
+          "availability_status": "Limited funds. Phone line may close when many people call."
+        },
+        {
+          "name": "Society of St. Louise \u2013 St. Louis King of France Catholic Church",
+          "referral_type": "external",
+          "description": "Get help with rent or utility bills if you live in their church area and have low income. Help is by phone. Leave a message with your name, address, and phone number. A helper will call you back. They may ask for your lease, bill, and ID. Help is not guaranteed and depends on money they have. They may also share other places that can help.",
+          "address": "7601 Burnet Rd, Austin, TX 78757",
+          "distance_miles": 11.0,
+          "phones": [
+            "512-454-0384"
+          ],
+          "emails": [],
+          "website": "https://stlouisparish.org",
+          "availability_status": "Funds are limited. Call and leave a message to see if help is open."
+        },
+        {
+          "name": "Texas Health and Human Services \u2013 Benefits (SNAP, TANF, Medicaid)",
+          "referral_type": "government",
+          "description": "Get help paying for food, cash help for families, and health care. You can apply for SNAP (food stamps), TANF (cash help for families), and Medicaid or CHIP (kids' health insurance). These programs can free money in your budget to help with rent and bills. You can apply online, by phone, or at a local office. Staff can explain what papers you need and who can get help.",
+          "address": "5800 E Martin Luther King Jr Blvd, Austin, TX 78721",
+          "distance_miles": 4.5,
+          "phones": [
+            "877-541-7905"
+          ],
+          "emails": [],
+          "website": "https://hhs.texas.gov",
+          "availability_status": "Open, but wait times can be long. Best to start online or by phone."
+        },
+        {
+          "name": "Austin Energy \u2013 Customer Assistance Programs",
+          "referral_type": "government",
+          "description": "Get help lowering your City of Austin light bill if you have low income. You may get a discount on your bill each month. You may also get help with past-due bills in some cases. They work with people who get SNAP (food stamps), Medicaid, SSI (monthly cash help), or other aid. You can apply online, by phone, or through some local groups. This help is only for Austin Energy customers.",
+          "address": "4815 Mueller Blvd, Austin, TX 78723",
+          "distance_miles": 6.0,
+          "phones": [
+            "512-494-9400"
+          ],
+          "emails": [],
+          "website": "https://austinenergy.com",
+          "availability_status": "Programs are open but some funds are limited. Call to ask what is open now."
+        },
+        {
+          "name": "City of Austin \u2013 Housing Assistance (Rent and Mortgage Help)",
+          "referral_type": "government",
+          "description": "Get information on current rent and housing help programs in Austin. Help may change during the year. Some programs pay part of your rent if you lost income or have low income. Others may help with move-in costs or past-due rent. Staff can explain who can get help and how to apply. They can also share other local places for housing help.",
+          "address": "1000 E 11th St, Austin, TX 78702",
+          "distance_miles": 3.5,
+          "phones": [
+            "512-974-3100"
+          ],
+          "emails": [],
+          "website": "https://austintexas.gov",
+          "availability_status": "Programs open and close often. Call or check online for what is open now."
+        },
+        {
+          "name": "2-1-1 Texas \u2013 United Way Helpline",
+          "referral_type": "government",
+          "description": "Get live help finding rent and utility help close to your home. You can call any time, day or night. A helper will ask your zip code and needs. They then share phone numbers and places near you. They can look for housing, light, gas, water, and other bill help. This is a free call. You can also search on their website.",
+          "address": "Online/phone service only",
+          "distance_miles": null,
+          "phones": [
+            "211"
+          ],
+          "emails": [],
+          "website": "https://211texas.org",
+          "availability_status": "Open 24 hours a day, 7 days a week."
+        }
+      ],
+      "resource_count": 7,
+      "usage": {
+        "prompt_tokens": 3133,
+        "completion_tokens": 1423,
+        "total_tokens": 4556
+      },
+      "finish_reason": "stop",
+      "latency_ms": 17542,
+      "web_search_used": false
+    },
+    "variant": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"St. Vincent de Paul Society \u2013 Diocesan Council of Austin\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with rent, light, gas, or water bills if you live in Central Texas. Help is given through local Catholic churches. You do not have to be Catholic. Help depends on money they have that week. Call first. They will connect you to the church near your home. Be ready to share your address, income, and bills. They may ask for papers you need like ID, lease, and shut-off or late notices. This group cannot help every time but can sometimes give one-time help. They may also give help finding other places for more support. Call early in the week for better chance.\",\n      \"address\": \"901 W Braker Ln, Austin, TX 78758\",\n      \"distance_miles\": 11.0,\n      \"phones\": [\n        \"512-251-6995\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://ssvdp.org\",\n      \"availability_status\": \"Help depends on funds \u2013 call to check current help\"\n    },\n    {\n      \"name\": \"Catholic Charities of Central Texas\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with rent or utilities if you are low income in Central Texas. Help can cover part of what you owe for light, gas, or water. They may also help with past-due rent to stop eviction. You must call first or fill out the online form. They will do a short phone talk to see who can get help. Be ready to share income, family size, and bills. They will tell you what papers you need, like ID, lease, and shut-off or late notices. Help is not fast and may take time. They also offer money classes and other support.\",\n      \"address\": \"1625 Rutherford Ln, Austin, TX 78754\",\n      \"distance_miles\": 10.0,\n      \"phones\": [\n        \"512-651-6100\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://ccctx.org\",\n      \"availability_status\": \"Funds change \u2013 call or check website for open programs\"\n    },\n    {\n      \"name\": \"Caritas of Austin\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with housing if you are homeless or close to losing your home. They focus on people who are homeless now or just got housing and need help to keep it. They may help with rent, deposits, and support to stay housed. They also help with food and job support. You usually need a referral from another group or local office. Call or check the website to learn how to start. Be ready to share your housing history and income. This group often has a wait list.\",\n      \"address\": \"611 Neches St, Austin, TX 78701\",\n      \"distance_miles\": 5.0,\n      \"phones\": [\n        \"512-479-4610\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://caritasofaustin.org\",\n      \"availability_status\": \"Often has a wait list \u2013 call to ask about openings\"\n    },\n    {\n      \"name\": \"Foundation Communities\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help finding low-cost apartments and support to stay housed if you have low income. They run many affordable apartment homes in Austin. Some homes are near 78741. They also offer help with money, health, and school. There may be a wait list for homes. You can ask about rent help for people who already live in their homes. Call or look online to see open homes and how to apply. You will need income proof and other papers you need. They do not give one-time rent help for people who do not live in their homes.\",\n      \"address\": \"3000 S IH 35, Suite 300, Austin, TX 78704\",\n      \"distance_miles\": 4.0,\n      \"phones\": [\n        \"512-610-7377\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://foundcom.org\",\n      \"availability_status\": \"Many properties have wait lists \u2013 call for current openings\"\n    },\n    {\n      \"name\": \"Austin Energy Customer Assistance Programs\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get help lowering your Austin Energy light bill if you have low income. Programs can give a monthly bill discount. They may also give one-time help if you are behind. Some help is for people who get SNAP (food stamps), Medicaid (free health care for low income), SSI (monthly cash help), or TANF (cash help for families). You must live in the Austin Energy area. Call or check online to see who can get help and how to apply. You may need ID, your bill, and income proof. Ask about the Customer Assistance Program and one-time bill help.\",\n      \"address\": \"4815 Mueller Blvd, Austin, TX 78723\",\n      \"distance_miles\": 6.0,\n      \"phones\": [\n        \"512-494-9400\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://austinenergy.com\",\n      \"availability_status\": \"Open but discounts and funds can change \u2013 call to confirm\"\n    },\n    {\n      \"name\": \"City of Austin \u2013 Austin Water Customer Assistance Program\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get help lowering your Austin Water bill if you have low income. Programs can give a monthly discount on water, drainage, and other fees. Some help is for people who get SNAP (food stamps), Medicaid (free health care for low income), SSI (monthly cash help), or TANF (cash help for families). You must live in the Austin Water area. Call or check online to see who can get help and how to apply. You may need ID, your bill, and income proof. Ask about the Customer Assistance Program for water.\",\n      \"address\": \"625 E 10th St, Austin, TX 78701\",\n      \"distance_miles\": 5.5,\n      \"phones\": [\n        \"512-494-9400\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://austintexas.gov\",\n      \"availability_status\": \"Open \u2013 discounts based on income and program rules\"\n    },\n    {\n      \"name\": \"Travis County Health and Human Services \u2013 Emergency Assistance\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get short-term help with rent, mortgage, light, gas, or water bills if you live in Travis County. This help is for people facing shut-off or eviction. You must meet income limits. Call the phone line to ask for a phone visit. Staff will do a short check-up to see if you can get help. Be ready to share income, family size, and bills. They will tell you what papers you need, like ID, lease, and shut-off or late notices. Funds are limited and may run out. Call early in the month.\",\n      \"address\": \"5325 Airport Blvd, Austin, TX 78751\",\n      \"distance_miles\": 8.0,\n      \"phones\": [\n        \"512-854-4120\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://traviscountytx.gov\",\n      \"availability_status\": \"Funds limited \u2013 may have wait times or closed periods\"\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "referral_type": "external",
+            "description": "Get help with rent, light, gas, or water bills if you live in Central Texas. Help is given through local Catholic churches. You do not have to be Catholic. Help depends on money they have that week. Call first. They will connect you to the church near your home. Be ready to share your address, income, and bills. They may ask for papers you need like ID, lease, and shut-off or late notices. This group cannot help every time but can sometimes give one-time help. They may also give help finding other places for more support. Call early in the week for better chance.",
+            "address": "901 W Braker Ln, Austin, TX 78758",
+            "distance_miles": 11.0,
+            "phones": [
+              "512-251-6995"
+            ],
+            "emails": [],
+            "website": "https://ssvdp.org",
+            "availability_status": "Help depends on funds \u2013 call to check current help"
+          },
+          {
+            "name": "Catholic Charities of Central Texas",
+            "referral_type": "external",
+            "description": "Get help with rent or utilities if you are low income in Central Texas. Help can cover part of what you owe for light, gas, or water. They may also help with past-due rent to stop eviction. You must call first or fill out the online form. They will do a short phone talk to see who can get help. Be ready to share income, family size, and bills. They will tell you what papers you need, like ID, lease, and shut-off or late notices. Help is not fast and may take time. They also offer money classes and other support.",
+            "address": "1625 Rutherford Ln, Austin, TX 78754",
+            "distance_miles": 10.0,
+            "phones": [
+              "512-651-6100"
+            ],
+            "emails": [],
+            "website": "https://ccctx.org",
+            "availability_status": "Funds change \u2013 call or check website for open programs"
+          },
+          {
+            "name": "Caritas of Austin",
+            "referral_type": "external",
+            "description": "Get help with housing if you are homeless or close to losing your home. They focus on people who are homeless now or just got housing and need help to keep it. They may help with rent, deposits, and support to stay housed. They also help with food and job support. You usually need a referral from another group or local office. Call or check the website to learn how to start. Be ready to share your housing history and income. This group often has a wait list.",
+            "address": "611 Neches St, Austin, TX 78701",
+            "distance_miles": 5.0,
+            "phones": [
+              "512-479-4610"
+            ],
+            "emails": [],
+            "website": "https://caritasofaustin.org",
+            "availability_status": "Often has a wait list \u2013 call to ask about openings"
+          },
+          {
+            "name": "Foundation Communities",
+            "referral_type": "external",
+            "description": "Get help finding low-cost apartments and support to stay housed if you have low income. They run many affordable apartment homes in Austin. Some homes are near 78741. They also offer help with money, health, and school. There may be a wait list for homes. You can ask about rent help for people who already live in their homes. Call or look online to see open homes and how to apply. You will need income proof and other papers you need. They do not give one-time rent help for people who do not live in their homes.",
+            "address": "3000 S IH 35, Suite 300, Austin, TX 78704",
+            "distance_miles": 4.0,
+            "phones": [
+              "512-610-7377"
+            ],
+            "emails": [],
+            "website": "https://foundcom.org",
+            "availability_status": "Many properties have wait lists \u2013 call for current openings"
+          },
+          {
+            "name": "Austin Energy Customer Assistance Programs",
+            "referral_type": "government",
+            "description": "Get help lowering your Austin Energy light bill if you have low income. Programs can give a monthly bill discount. They may also give one-time help if you are behind. Some help is for people who get SNAP (food stamps), Medicaid (free health care for low income), SSI (monthly cash help), or TANF (cash help for families). You must live in the Austin Energy area. Call or check online to see who can get help and how to apply. You may need ID, your bill, and income proof. Ask about the Customer Assistance Program and one-time bill help.",
+            "address": "4815 Mueller Blvd, Austin, TX 78723",
+            "distance_miles": 6.0,
+            "phones": [
+              "512-494-9400"
+            ],
+            "emails": [],
+            "website": "https://austinenergy.com",
+            "availability_status": "Open but discounts and funds can change \u2013 call to confirm"
+          },
+          {
+            "name": "City of Austin \u2013 Austin Water Customer Assistance Program",
+            "referral_type": "government",
+            "description": "Get help lowering your Austin Water bill if you have low income. Programs can give a monthly discount on water, drainage, and other fees. Some help is for people who get SNAP (food stamps), Medicaid (free health care for low income), SSI (monthly cash help), or TANF (cash help for families). You must live in the Austin Water area. Call or check online to see who can get help and how to apply. You may need ID, your bill, and income proof. Ask about the Customer Assistance Program for water.",
+            "address": "625 E 10th St, Austin, TX 78701",
+            "distance_miles": 5.5,
+            "phones": [
+              "512-494-9400"
+            ],
+            "emails": [],
+            "website": "https://austintexas.gov",
+            "availability_status": "Open \u2013 discounts based on income and program rules"
+          },
+          {
+            "name": "Travis County Health and Human Services \u2013 Emergency Assistance",
+            "referral_type": "government",
+            "description": "Get short-term help with rent, mortgage, light, gas, or water bills if you live in Travis County. This help is for people facing shut-off or eviction. You must meet income limits. Call the phone line to ask for a phone visit. Staff will do a short check-up to see if you can get help. Be ready to share income, family size, and bills. They will tell you what papers you need, like ID, lease, and shut-off or late notices. Funds are limited and may run out. Call early in the month.",
+            "address": "5325 Airport Blvd, Austin, TX 78751",
+            "distance_miles": 8.0,
+            "phones": [
+              "512-854-4120"
+            ],
+            "emails": [],
+            "website": "https://traviscountytx.gov",
+            "availability_status": "Funds limited \u2013 may have wait times or closed periods"
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+          "referral_type": "external",
+          "description": "Get help with rent, light, gas, or water bills if you live in Central Texas. Help is given through local Catholic churches. You do not have to be Catholic. Help depends on money they have that week. Call first. They will connect you to the church near your home. Be ready to share your address, income, and bills. They may ask for papers you need like ID, lease, and shut-off or late notices. This group cannot help every time but can sometimes give one-time help. They may also give help finding other places for more support. Call early in the week for better chance.",
+          "address": "901 W Braker Ln, Austin, TX 78758",
+          "distance_miles": 11.0,
+          "phones": [
+            "512-251-6995"
+          ],
+          "emails": [],
+          "website": "https://ssvdp.org",
+          "availability_status": "Help depends on funds \u2013 call to check current help"
+        },
+        {
+          "name": "Catholic Charities of Central Texas",
+          "referral_type": "external",
+          "description": "Get help with rent or utilities if you are low income in Central Texas. Help can cover part of what you owe for light, gas, or water. They may also help with past-due rent to stop eviction. You must call first or fill out the online form. They will do a short phone talk to see who can get help. Be ready to share income, family size, and bills. They will tell you what papers you need, like ID, lease, and shut-off or late notices. Help is not fast and may take time. They also offer money classes and other support.",
+          "address": "1625 Rutherford Ln, Austin, TX 78754",
+          "distance_miles": 10.0,
+          "phones": [
+            "512-651-6100"
+          ],
+          "emails": [],
+          "website": "https://ccctx.org",
+          "availability_status": "Funds change \u2013 call or check website for open programs"
+        },
+        {
+          "name": "Caritas of Austin",
+          "referral_type": "external",
+          "description": "Get help with housing if you are homeless or close to losing your home. They focus on people who are homeless now or just got housing and need help to keep it. They may help with rent, deposits, and support to stay housed. They also help with food and job support. You usually need a referral from another group or local office. Call or check the website to learn how to start. Be ready to share your housing history and income. This group often has a wait list.",
+          "address": "611 Neches St, Austin, TX 78701",
+          "distance_miles": 5.0,
+          "phones": [
+            "512-479-4610"
+          ],
+          "emails": [],
+          "website": "https://caritasofaustin.org",
+          "availability_status": "Often has a wait list \u2013 call to ask about openings"
+        },
+        {
+          "name": "Foundation Communities",
+          "referral_type": "external",
+          "description": "Get help finding low-cost apartments and support to stay housed if you have low income. They run many affordable apartment homes in Austin. Some homes are near 78741. They also offer help with money, health, and school. There may be a wait list for homes. You can ask about rent help for people who already live in their homes. Call or look online to see open homes and how to apply. You will need income proof and other papers you need. They do not give one-time rent help for people who do not live in their homes.",
+          "address": "3000 S IH 35, Suite 300, Austin, TX 78704",
+          "distance_miles": 4.0,
+          "phones": [
+            "512-610-7377"
+          ],
+          "emails": [],
+          "website": "https://foundcom.org",
+          "availability_status": "Many properties have wait lists \u2013 call for current openings"
+        },
+        {
+          "name": "Austin Energy Customer Assistance Programs",
+          "referral_type": "government",
+          "description": "Get help lowering your Austin Energy light bill if you have low income. Programs can give a monthly bill discount. They may also give one-time help if you are behind. Some help is for people who get SNAP (food stamps), Medicaid (free health care for low income), SSI (monthly cash help), or TANF (cash help for families). You must live in the Austin Energy area. Call or check online to see who can get help and how to apply. You may need ID, your bill, and income proof. Ask about the Customer Assistance Program and one-time bill help.",
+          "address": "4815 Mueller Blvd, Austin, TX 78723",
+          "distance_miles": 6.0,
+          "phones": [
+            "512-494-9400"
+          ],
+          "emails": [],
+          "website": "https://austinenergy.com",
+          "availability_status": "Open but discounts and funds can change \u2013 call to confirm"
+        },
+        {
+          "name": "City of Austin \u2013 Austin Water Customer Assistance Program",
+          "referral_type": "government",
+          "description": "Get help lowering your Austin Water bill if you have low income. Programs can give a monthly discount on water, drainage, and other fees. Some help is for people who get SNAP (food stamps), Medicaid (free health care for low income), SSI (monthly cash help), or TANF (cash help for families). You must live in the Austin Water area. Call or check online to see who can get help and how to apply. You may need ID, your bill, and income proof. Ask about the Customer Assistance Program for water.",
+          "address": "625 E 10th St, Austin, TX 78701",
+          "distance_miles": 5.5,
+          "phones": [
+            "512-494-9400"
+          ],
+          "emails": [],
+          "website": "https://austintexas.gov",
+          "availability_status": "Open \u2013 discounts based on income and program rules"
+        },
+        {
+          "name": "Travis County Health and Human Services \u2013 Emergency Assistance",
+          "referral_type": "government",
+          "description": "Get short-term help with rent, mortgage, light, gas, or water bills if you live in Travis County. This help is for people facing shut-off or eviction. You must meet income limits. Call the phone line to ask for a phone visit. Staff will do a short check-up to see if you can get help. Be ready to share income, family size, and bills. They will tell you what papers you need, like ID, lease, and shut-off or late notices. Funds are limited and may run out. Call early in the month.",
+          "address": "5325 Airport Blvd, Austin, TX 78751",
+          "distance_miles": 8.0,
+          "phones": [
+            "512-854-4120"
+          ],
+          "emails": [],
+          "website": "https://traviscountytx.gov",
+          "availability_status": "Funds limited \u2013 may have wait times or closed periods"
+        }
+      ],
+      "resource_count": 7,
+      "usage": {
+        "prompt_tokens": 3381,
+        "completion_tokens": 1588,
+        "total_tokens": 4969
+      },
+      "finish_reason": "stop",
+      "latency_ms": 15848,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_004",
+    "user_query": "Include resources that support the following categories: Childcare, Legal Services, Financial Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78745",
+    "location": "Austin (Travis county), TX 78745",
+    "resources_context_length": 755,
+    "baseline": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"Workforce Solutions Capital Area \u2013 Child Care Services\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get help paying for child care while you work, look for work, or go to school. Help is for low income families in Travis County. There may be a wait list. You can choose from many child care centers and home providers. Staff help you apply and explain what papers you need. They can also help you learn about other work and training help.\",\n      \"address\": \"9001 N Interstate Hwy 35, Suite 110, Austin, TX 78753\",\n      \"phones\": [\n        \"512-597-7191\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://wfscapitalarea.com\",\n      \"distance_miles\": 13.0,\n      \"availability_status\": \"Often has a wait list - call to ask about openings\"\n    },\n    {\n      \"name\": \"Texas Health and Human Services \u2013 Benefits (SNAP, TANF, Medicaid, Child Care Help)\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get help applying for SNAP (food stamps), TANF (cash help for families), and Medicaid (free health care for low income). You can also ask about help paying for child care. Staff can help you fill out forms and upload papers you need. You can apply online, by phone, or at a local office. This help is for low income people in Texas.\",\n      \"address\": \"2200 W Ben White Blvd, Austin, TX 78704\",\n      \"phones\": [\n        \"877-541-7905\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://hhs.texas.gov\",\n      \"distance_miles\": 3.0,\n      \"availability_status\": \"Open but may have long phone and office wait times\"\n    },\n    {\n      \"name\": \"Texas RioGrande Legal Aid \u2013 Austin\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get free legal help for low income people. They help with money problems, housing, work rights, family law, and some crime victim issues. They do not handle every type of case. Staff will do a quick check-up to see if they can help you. If they cannot help, they may help you find another place.\",\n      \"address\": \"4920 N Interstate 35, Austin, TX 78751\",\n      \"phones\": [\n        \"833-329-8752\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://trla.org\",\n      \"distance_miles\": 14.0,\n      \"availability_status\": \"Call first for a phone evaluation; help depends on income and case type\"\n    },\n    {\n      \"name\": \"Volunteer Legal Services of Central Texas\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get free legal help from volunteer lawyers if you have low income. They help with civil legal problems like housing, money issues, and family law. They do not handle crime cases. You first talk with staff by phone or online. Then they may match you with a lawyer for short or longer help.\",\n      \"address\": \"4920 N Interstate 35, Austin, TX 78751\",\n      \"phones\": [\n        \"512-476-5550\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://vlsoct.org\",\n      \"distance_miles\": 14.0,\n      \"availability_status\": \"Call or apply online; help depends on income and case type\"\n    },\n    {\n      \"name\": \"Catholic Charities of Central Texas \u2013 Financial Stability and Emergency Help\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with rent, utilities, and money planning if funds are open. Help is for low income people in Central Texas. They may also help with basic needs and money classes. You must call or go online to ask for help. Staff will do a quick money check-up to see if you can get help.\",\n      \"address\": \"1625 Rutherford Ln, Austin, TX 78754\",\n      \"phones\": [\n        \"512-651-6100\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://ccctx.org\",\n      \"distance_miles\": 15.0,\n      \"availability_status\": \"Funding changes often - call or check online for current openings\"\n    },\n    {\n      \"name\": \"St. Vincent de Paul Society \u2013 Diocesan Council of Austin\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get short-term help with rent, utilities, and basic needs if funds are open. Help is for low income people in the Austin area. You usually contact the St. Vincent group linked to a nearby Catholic church. Volunteers listen to your story and may offer help or store gift cards. They may also help you find other places.\",\n      \"address\": \"901 W Braker Ln, Austin, TX 78758\",\n      \"phones\": [\n        \"512-251-6995\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://ssvdp.org\",\n      \"distance_miles\": 17.0,\n      \"availability_status\": \"Help depends on funds; call first to see if your area group is open\"\n    },\n    {\n      \"name\": \"Foundation Communities \u2013 Prosper Financial Centers\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get free help with money, like budgeting, credit, and debt. Staff can help with taxes, health insurance sign-up, and sometimes small emergency help. Help is for low and moderate income people in Central Texas. You can meet in person or online. They also help you plan for goals like saving and better work.\",\n      \"address\": \"2600 W Stassney Ln, Austin, TX 78745\",\n      \"phones\": [\n        \"737-717-4000\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://foundcom.org\",\n      \"distance_miles\": 1.5,\n      \"availability_status\": \"Open; some programs need a scheduled visit\"\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "Workforce Solutions Capital Area \u2013 Child Care Services",
+            "referral_type": "government",
+            "description": "Get help paying for child care while you work, look for work, or go to school. Help is for low income families in Travis County. There may be a wait list. You can choose from many child care centers and home providers. Staff help you apply and explain what papers you need. They can also help you learn about other work and training help.",
+            "address": "9001 N Interstate Hwy 35, Suite 110, Austin, TX 78753",
+            "phones": [
+              "512-597-7191"
+            ],
+            "emails": [],
+            "website": "https://wfscapitalarea.com",
+            "distance_miles": 13.0,
+            "availability_status": "Often has a wait list - call to ask about openings"
+          },
+          {
+            "name": "Texas Health and Human Services \u2013 Benefits (SNAP, TANF, Medicaid, Child Care Help)",
+            "referral_type": "government",
+            "description": "Get help applying for SNAP (food stamps), TANF (cash help for families), and Medicaid (free health care for low income). You can also ask about help paying for child care. Staff can help you fill out forms and upload papers you need. You can apply online, by phone, or at a local office. This help is for low income people in Texas.",
+            "address": "2200 W Ben White Blvd, Austin, TX 78704",
+            "phones": [
+              "877-541-7905"
+            ],
+            "emails": [],
+            "website": "https://hhs.texas.gov",
+            "distance_miles": 3.0,
+            "availability_status": "Open but may have long phone and office wait times"
+          },
+          {
+            "name": "Texas RioGrande Legal Aid \u2013 Austin",
+            "referral_type": "external",
+            "description": "Get free legal help for low income people. They help with money problems, housing, work rights, family law, and some crime victim issues. They do not handle every type of case. Staff will do a quick check-up to see if they can help you. If they cannot help, they may help you find another place.",
+            "address": "4920 N Interstate 35, Austin, TX 78751",
+            "phones": [
+              "833-329-8752"
+            ],
+            "emails": [],
+            "website": "https://trla.org",
+            "distance_miles": 14.0,
+            "availability_status": "Call first for a phone evaluation; help depends on income and case type"
+          },
+          {
+            "name": "Volunteer Legal Services of Central Texas",
+            "referral_type": "external",
+            "description": "Get free legal help from volunteer lawyers if you have low income. They help with civil legal problems like housing, money issues, and family law. They do not handle crime cases. You first talk with staff by phone or online. Then they may match you with a lawyer for short or longer help.",
+            "address": "4920 N Interstate 35, Austin, TX 78751",
+            "phones": [
+              "512-476-5550"
+            ],
+            "emails": [],
+            "website": "https://vlsoct.org",
+            "distance_miles": 14.0,
+            "availability_status": "Call or apply online; help depends on income and case type"
+          },
+          {
+            "name": "Catholic Charities of Central Texas \u2013 Financial Stability and Emergency Help",
+            "referral_type": "external",
+            "description": "Get help with rent, utilities, and money planning if funds are open. Help is for low income people in Central Texas. They may also help with basic needs and money classes. You must call or go online to ask for help. Staff will do a quick money check-up to see if you can get help.",
+            "address": "1625 Rutherford Ln, Austin, TX 78754",
+            "phones": [
+              "512-651-6100"
+            ],
+            "emails": [],
+            "website": "https://ccctx.org",
+            "distance_miles": 15.0,
+            "availability_status": "Funding changes often - call or check online for current openings"
+          },
+          {
+            "name": "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "referral_type": "external",
+            "description": "Get short-term help with rent, utilities, and basic needs if funds are open. Help is for low income people in the Austin area. You usually contact the St. Vincent group linked to a nearby Catholic church. Volunteers listen to your story and may offer help or store gift cards. They may also help you find other places.",
+            "address": "901 W Braker Ln, Austin, TX 78758",
+            "phones": [
+              "512-251-6995"
+            ],
+            "emails": [],
+            "website": "https://ssvdp.org",
+            "distance_miles": 17.0,
+            "availability_status": "Help depends on funds; call first to see if your area group is open"
+          },
+          {
+            "name": "Foundation Communities \u2013 Prosper Financial Centers",
+            "referral_type": "external",
+            "description": "Get free help with money, like budgeting, credit, and debt. Staff can help with taxes, health insurance sign-up, and sometimes small emergency help. Help is for low and moderate income people in Central Texas. You can meet in person or online. They also help you plan for goals like saving and better work.",
+            "address": "2600 W Stassney Ln, Austin, TX 78745",
+            "phones": [
+              "737-717-4000"
+            ],
+            "emails": [],
+            "website": "https://foundcom.org",
+            "distance_miles": 1.5,
+            "availability_status": "Open; some programs need a scheduled visit"
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "Workforce Solutions Capital Area \u2013 Child Care Services",
+          "referral_type": "government",
+          "description": "Get help paying for child care while you work, look for work, or go to school. Help is for low income families in Travis County. There may be a wait list. You can choose from many child care centers and home providers. Staff help you apply and explain what papers you need. They can also help you learn about other work and training help.",
+          "address": "9001 N Interstate Hwy 35, Suite 110, Austin, TX 78753",
+          "phones": [
+            "512-597-7191"
+          ],
+          "emails": [],
+          "website": "https://wfscapitalarea.com",
+          "distance_miles": 13.0,
+          "availability_status": "Often has a wait list - call to ask about openings"
+        },
+        {
+          "name": "Texas Health and Human Services \u2013 Benefits (SNAP, TANF, Medicaid, Child Care Help)",
+          "referral_type": "government",
+          "description": "Get help applying for SNAP (food stamps), TANF (cash help for families), and Medicaid (free health care for low income). You can also ask about help paying for child care. Staff can help you fill out forms and upload papers you need. You can apply online, by phone, or at a local office. This help is for low income people in Texas.",
+          "address": "2200 W Ben White Blvd, Austin, TX 78704",
+          "phones": [
+            "877-541-7905"
+          ],
+          "emails": [],
+          "website": "https://hhs.texas.gov",
+          "distance_miles": 3.0,
+          "availability_status": "Open but may have long phone and office wait times"
+        },
+        {
+          "name": "Texas RioGrande Legal Aid \u2013 Austin",
+          "referral_type": "external",
+          "description": "Get free legal help for low income people. They help with money problems, housing, work rights, family law, and some crime victim issues. They do not handle every type of case. Staff will do a quick check-up to see if they can help you. If they cannot help, they may help you find another place.",
+          "address": "4920 N Interstate 35, Austin, TX 78751",
+          "phones": [
+            "833-329-8752"
+          ],
+          "emails": [],
+          "website": "https://trla.org",
+          "distance_miles": 14.0,
+          "availability_status": "Call first for a phone evaluation; help depends on income and case type"
+        },
+        {
+          "name": "Volunteer Legal Services of Central Texas",
+          "referral_type": "external",
+          "description": "Get free legal help from volunteer lawyers if you have low income. They help with civil legal problems like housing, money issues, and family law. They do not handle crime cases. You first talk with staff by phone or online. Then they may match you with a lawyer for short or longer help.",
+          "address": "4920 N Interstate 35, Austin, TX 78751",
+          "phones": [
+            "512-476-5550"
+          ],
+          "emails": [],
+          "website": "https://vlsoct.org",
+          "distance_miles": 14.0,
+          "availability_status": "Call or apply online; help depends on income and case type"
+        },
+        {
+          "name": "Catholic Charities of Central Texas \u2013 Financial Stability and Emergency Help",
+          "referral_type": "external",
+          "description": "Get help with rent, utilities, and money planning if funds are open. Help is for low income people in Central Texas. They may also help with basic needs and money classes. You must call or go online to ask for help. Staff will do a quick money check-up to see if you can get help.",
+          "address": "1625 Rutherford Ln, Austin, TX 78754",
+          "phones": [
+            "512-651-6100"
+          ],
+          "emails": [],
+          "website": "https://ccctx.org",
+          "distance_miles": 15.0,
+          "availability_status": "Funding changes often - call or check online for current openings"
+        },
+        {
+          "name": "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+          "referral_type": "external",
+          "description": "Get short-term help with rent, utilities, and basic needs if funds are open. Help is for low income people in the Austin area. You usually contact the St. Vincent group linked to a nearby Catholic church. Volunteers listen to your story and may offer help or store gift cards. They may also help you find other places.",
+          "address": "901 W Braker Ln, Austin, TX 78758",
+          "phones": [
+            "512-251-6995"
+          ],
+          "emails": [],
+          "website": "https://ssvdp.org",
+          "distance_miles": 17.0,
+          "availability_status": "Help depends on funds; call first to see if your area group is open"
+        },
+        {
+          "name": "Foundation Communities \u2013 Prosper Financial Centers",
+          "referral_type": "external",
+          "description": "Get free help with money, like budgeting, credit, and debt. Staff can help with taxes, health insurance sign-up, and sometimes small emergency help. Help is for low and moderate income people in Central Texas. You can meet in person or online. They also help you plan for goals like saving and better work.",
+          "address": "2600 W Stassney Ln, Austin, TX 78745",
+          "phones": [
+            "737-717-4000"
+          ],
+          "emails": [],
+          "website": "https://foundcom.org",
+          "distance_miles": 1.5,
+          "availability_status": "Open; some programs need a scheduled visit"
+        }
+      ],
+      "resource_count": 7,
+      "usage": {
+        "prompt_tokens": 3136,
+        "completion_tokens": 1298,
+        "total_tokens": 4434
+      },
+      "finish_reason": "stop",
+      "latency_ms": 13464,
+      "web_search_used": false
+    },
+    "variant": {
+      "raw_content": "{}",
+      "parsed_json": {},
+      "parse_error": null,
+      "resources": [],
+      "resource_count": 0,
+      "usage": {
+        "prompt_tokens": 3384,
+        "completion_tokens": 10,
+        "total_tokens": 3394
+      },
+      "finish_reason": "stop",
+      "latency_ms": 1579,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_005",
+    "user_query": "My client is a veteran who needs mental health support and employment assistance.\nInclude resources that support the following categories: Mental Health, Employment & Job Training, Veterans Services\nFocus on resources close to the following location: Austin (Travis county), TX 78723",
+    "location": "Austin (Travis county), TX 78723",
+    "resources_context_length": 596,
+    "baseline": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"Integral Care \u2013 Veterans Mental Health Services\",\n      \"description\": \"Get mental health help for veterans, like someone to talk to and treatment for stress, sadness, or trauma (post\u2011traumatic stress). They can also help with medicine, crisis help, and support groups. You must be a veteran or family member and live in Travis County. Call first to talk about what you need and set up a first visit. If you are in crisis, you can call their 24\u2011hour crisis line.\",\n      \"address\": \"1631 E 2nd St, Building A, Austin, TX 78702\",\n      \"phones\": [\n        \"512-472-4357\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://integralcare.org\",\n      \"referral_type\": \"external\",\n      \"distance_miles\": 4.0,\n      \"availability_status\": \"Call for current openings; crisis line is 24/7\",\n      \"categories\": [\n        \"Mental Health\",\n        \"Veterans Services\"\n      ]\n    },\n    {\n      \"name\": \"VA Austin Outpatient Clinic\",\n      \"description\": \"Get mental health help and medical care for veterans, like someone to talk to, treatment, and medicine. They also offer help with drug or alcohol problems and support for trauma and stress. You must be a veteran enrolled in U.S. Department of Veterans Affairs health care or start enrollment. Call first to sign up or make a visit. Ask for mental health when you call or check in.\",\n      \"address\": \"7901 Metropolis Dr, Austin, TX 78744\",\n      \"phones\": [\n        \"512-823-4000\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://www.va.gov\",\n      \"referral_type\": \"government\",\n      \"distance_miles\": 11.0,\n      \"availability_status\": \"Open but some services may have wait times; call to schedule\",\n      \"categories\": [\n        \"Mental Health\",\n        \"Veterans Services\"\n      ]\n    },\n    {\n      \"name\": \"Texas Veterans Commission \u2013 Veterans Employment Services (Austin)\",\n      \"description\": \"Get free help finding a job if you are a veteran, like help with resumes, job search, and talking with employers. Staff are trained to work with veterans and understand time in jail or prison or gaps in work. You must be a veteran, spouse of a veteran, or transitioning service member. Call to make a visit at the Workforce office or ask about online help.\",\n      \"address\": \"6505 Airport Blvd, Suite 101, Austin, TX 78752\",\n      \"phones\": [\n        \"512-463-6564\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://www.tvc.texas.gov\",\n      \"referral_type\": \"government\",\n      \"distance_miles\": 2.5,\n      \"availability_status\": \"Open; walk\u2011ins may be limited, call for visit times\",\n      \"categories\": [\n        \"Employment & Job Training\",\n        \"Veterans Services\"\n      ]\n    },\n    {\n      \"name\": \"Workforce Solutions Capital Area \u2013 North Career Center\",\n      \"description\": \"Get help finding work, like job leads, resume help, and practice interviews. They can also help you apply for job training money if you qualify. Veterans get priority for many programs. You must live or look for work in Travis County. Bring your ID and Social Security card if you have them. Call or go online to set up a first visit or workshop.\",\n      \"address\": \"9001 N Interstate Hwy 35, Suite 110, Austin, TX 78753\",\n      \"phones\": [\n        \"512-454-9675\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://www.wfscapitalarea.com\",\n      \"referral_type\": \"government\",\n      \"distance_miles\": 5.0,\n      \"availability_status\": \"Open; some help by visit only, call first\",\n      \"categories\": [\n        \"Employment & Job Training\",\n        \"Veterans Services\"\n      ]\n    },\n    {\n      \"name\": \"Easterseals Central Texas \u2013 Veterans Services\",\n      \"description\": \"Get free support for veterans and families, like help with stress, sadness, housing, and work. Staff can help you set goals, find jobs, and connect to mental health help. You must be a veteran, active duty, guard, reserve, or family member in Central Texas. Call to see what help is open now and how to start.\",\n      \"address\": \"8505 Cross Park Dr, Suite 120, Austin, TX 78754\",\n      \"phones\": [\n        \"512-615-6800\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://www.easterseals.com\",\n      \"referral_type\": \"external\",\n      \"distance_miles\": 4.0,\n      \"availability_status\": \"Open; some programs may have a wait list\",\n      \"categories\": [\n        \"Mental Health\",\n        \"Employment & Job Training\",\n        \"Veterans Services\"\n      ]\n    },\n    {\n      \"name\": \"Travis County Veterans Services\",\n      \"description\": \"Get help with U.S. Department of Veterans Affairs claims, benefits, and local support. Staff can help you apply for health care, money benefits, and connect you to mental health and job help. You must be a veteran or family member who lives in Travis County. Call to set up a first visit. They can meet in person or by phone.\",\n      \"address\": \"100 N IH 35, Suite 2000, Austin, TX 78701\",\n      \"phones\": [\n        \"512-854-9340\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://www.traviscountytx.gov\",\n      \"referral_type\": \"government\",\n      \"distance_miles\": 6.0,\n      \"availability_status\": \"Open; visits usually by appointment\",\n      \"categories\": [\n        \"Veterans Services\",\n        \"Mental Health\",\n        \"Employment & Job Training\"\n      ]\n    },\n    {\n      \"name\": \"Lone Star Circle of Care at William Cannon \u2013 Veterans Mental Health (Telehealth and In\u2011Person)\",\n      \"description\": \"Get low\u2011cost or free mental health help for veterans, like someone to talk to and treatment for depression, anxiety, or trauma. They offer in\u2011person and video visits. They take Medicaid, Medicare, many insurance plans, and have pay what you can afford options. Veterans and families in Central Texas can use this clinic. Call to register as a new patient and ask for mental health help.\",\n      \"address\": \"2701 W William Cannon Dr, Suite 101, Austin, TX 78745\",\n      \"phones\": [\n        \"877-800-5722\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://lonestarcares.org\",\n      \"referral_type\": \"external\",\n      \"distance_miles\": 15.0,\n      \"availability_status\": \"Open; new patients may wait for first visit\",\n      \"categories\": [\n        \"Mental Health\",\n        \"Veterans Services\"\n      ]\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "Integral Care \u2013 Veterans Mental Health Services",
+            "description": "Get mental health help for veterans, like someone to talk to and treatment for stress, sadness, or trauma (post\u2011traumatic stress). They can also help with medicine, crisis help, and support groups. You must be a veteran or family member and live in Travis County. Call first to talk about what you need and set up a first visit. If you are in crisis, you can call their 24\u2011hour crisis line.",
+            "address": "1631 E 2nd St, Building A, Austin, TX 78702",
+            "phones": [
+              "512-472-4357"
+            ],
+            "emails": [],
+            "website": "https://integralcare.org",
+            "referral_type": "external",
+            "distance_miles": 4.0,
+            "availability_status": "Call for current openings; crisis line is 24/7",
+            "categories": [
+              "Mental Health",
+              "Veterans Services"
+            ]
+          },
+          {
+            "name": "VA Austin Outpatient Clinic",
+            "description": "Get mental health help and medical care for veterans, like someone to talk to, treatment, and medicine. They also offer help with drug or alcohol problems and support for trauma and stress. You must be a veteran enrolled in U.S. Department of Veterans Affairs health care or start enrollment. Call first to sign up or make a visit. Ask for mental health when you call or check in.",
+            "address": "7901 Metropolis Dr, Austin, TX 78744",
+            "phones": [
+              "512-823-4000"
+            ],
+            "emails": [],
+            "website": "https://www.va.gov",
+            "referral_type": "government",
+            "distance_miles": 11.0,
+            "availability_status": "Open but some services may have wait times; call to schedule",
+            "categories": [
+              "Mental Health",
+              "Veterans Services"
+            ]
+          },
+          {
+            "name": "Texas Veterans Commission \u2013 Veterans Employment Services (Austin)",
+            "description": "Get free help finding a job if you are a veteran, like help with resumes, job search, and talking with employers. Staff are trained to work with veterans and understand time in jail or prison or gaps in work. You must be a veteran, spouse of a veteran, or transitioning service member. Call to make a visit at the Workforce office or ask about online help.",
+            "address": "6505 Airport Blvd, Suite 101, Austin, TX 78752",
+            "phones": [
+              "512-463-6564"
+            ],
+            "emails": [],
+            "website": "https://www.tvc.texas.gov",
+            "referral_type": "government",
+            "distance_miles": 2.5,
+            "availability_status": "Open; walk\u2011ins may be limited, call for visit times",
+            "categories": [
+              "Employment & Job Training",
+              "Veterans Services"
+            ]
+          },
+          {
+            "name": "Workforce Solutions Capital Area \u2013 North Career Center",
+            "description": "Get help finding work, like job leads, resume help, and practice interviews. They can also help you apply for job training money if you qualify. Veterans get priority for many programs. You must live or look for work in Travis County. Bring your ID and Social Security card if you have them. Call or go online to set up a first visit or workshop.",
+            "address": "9001 N Interstate Hwy 35, Suite 110, Austin, TX 78753",
+            "phones": [
+              "512-454-9675"
+            ],
+            "emails": [],
+            "website": "https://www.wfscapitalarea.com",
+            "referral_type": "government",
+            "distance_miles": 5.0,
+            "availability_status": "Open; some help by visit only, call first",
+            "categories": [
+              "Employment & Job Training",
+              "Veterans Services"
+            ]
+          },
+          {
+            "name": "Easterseals Central Texas \u2013 Veterans Services",
+            "description": "Get free support for veterans and families, like help with stress, sadness, housing, and work. Staff can help you set goals, find jobs, and connect to mental health help. You must be a veteran, active duty, guard, reserve, or family member in Central Texas. Call to see what help is open now and how to start.",
+            "address": "8505 Cross Park Dr, Suite 120, Austin, TX 78754",
+            "phones": [
+              "512-615-6800"
+            ],
+            "emails": [],
+            "website": "https://www.easterseals.com",
+            "referral_type": "external",
+            "distance_miles": 4.0,
+            "availability_status": "Open; some programs may have a wait list",
+            "categories": [
+              "Mental Health",
+              "Employment & Job Training",
+              "Veterans Services"
+            ]
+          },
+          {
+            "name": "Travis County Veterans Services",
+            "description": "Get help with U.S. Department of Veterans Affairs claims, benefits, and local support. Staff can help you apply for health care, money benefits, and connect you to mental health and job help. You must be a veteran or family member who lives in Travis County. Call to set up a first visit. They can meet in person or by phone.",
+            "address": "100 N IH 35, Suite 2000, Austin, TX 78701",
+            "phones": [
+              "512-854-9340"
+            ],
+            "emails": [],
+            "website": "https://www.traviscountytx.gov",
+            "referral_type": "government",
+            "distance_miles": 6.0,
+            "availability_status": "Open; visits usually by appointment",
+            "categories": [
+              "Veterans Services",
+              "Mental Health",
+              "Employment & Job Training"
+            ]
+          },
+          {
+            "name": "Lone Star Circle of Care at William Cannon \u2013 Veterans Mental Health (Telehealth and In\u2011Person)",
+            "description": "Get low\u2011cost or free mental health help for veterans, like someone to talk to and treatment for depression, anxiety, or trauma. They offer in\u2011person and video visits. They take Medicaid, Medicare, many insurance plans, and have pay what you can afford options. Veterans and families in Central Texas can use this clinic. Call to register as a new patient and ask for mental health help.",
+            "address": "2701 W William Cannon Dr, Suite 101, Austin, TX 78745",
+            "phones": [
+              "877-800-5722"
+            ],
+            "emails": [],
+            "website": "https://lonestarcares.org",
+            "referral_type": "external",
+            "distance_miles": 15.0,
+            "availability_status": "Open; new patients may wait for first visit",
+            "categories": [
+              "Mental Health",
+              "Veterans Services"
+            ]
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "Integral Care \u2013 Veterans Mental Health Services",
+          "description": "Get mental health help for veterans, like someone to talk to and treatment for stress, sadness, or trauma (post\u2011traumatic stress). They can also help with medicine, crisis help, and support groups. You must be a veteran or family member and live in Travis County. Call first to talk about what you need and set up a first visit. If you are in crisis, you can call their 24\u2011hour crisis line.",
+          "address": "1631 E 2nd St, Building A, Austin, TX 78702",
+          "phones": [
+            "512-472-4357"
+          ],
+          "emails": [],
+          "website": "https://integralcare.org",
+          "referral_type": "external",
+          "distance_miles": 4.0,
+          "availability_status": "Call for current openings; crisis line is 24/7",
+          "categories": [
+            "Mental Health",
+            "Veterans Services"
+          ]
+        },
+        {
+          "name": "VA Austin Outpatient Clinic",
+          "description": "Get mental health help and medical care for veterans, like someone to talk to, treatment, and medicine. They also offer help with drug or alcohol problems and support for trauma and stress. You must be a veteran enrolled in U.S. Department of Veterans Affairs health care or start enrollment. Call first to sign up or make a visit. Ask for mental health when you call or check in.",
+          "address": "7901 Metropolis Dr, Austin, TX 78744",
+          "phones": [
+            "512-823-4000"
+          ],
+          "emails": [],
+          "website": "https://www.va.gov",
+          "referral_type": "government",
+          "distance_miles": 11.0,
+          "availability_status": "Open but some services may have wait times; call to schedule",
+          "categories": [
+            "Mental Health",
+            "Veterans Services"
+          ]
+        },
+        {
+          "name": "Texas Veterans Commission \u2013 Veterans Employment Services (Austin)",
+          "description": "Get free help finding a job if you are a veteran, like help with resumes, job search, and talking with employers. Staff are trained to work with veterans and understand time in jail or prison or gaps in work. You must be a veteran, spouse of a veteran, or transitioning service member. Call to make a visit at the Workforce office or ask about online help.",
+          "address": "6505 Airport Blvd, Suite 101, Austin, TX 78752",
+          "phones": [
+            "512-463-6564"
+          ],
+          "emails": [],
+          "website": "https://www.tvc.texas.gov",
+          "referral_type": "government",
+          "distance_miles": 2.5,
+          "availability_status": "Open; walk\u2011ins may be limited, call for visit times",
+          "categories": [
+            "Employment & Job Training",
+            "Veterans Services"
+          ]
+        },
+        {
+          "name": "Workforce Solutions Capital Area \u2013 North Career Center",
+          "description": "Get help finding work, like job leads, resume help, and practice interviews. They can also help you apply for job training money if you qualify. Veterans get priority for many programs. You must live or look for work in Travis County. Bring your ID and Social Security card if you have them. Call or go online to set up a first visit or workshop.",
+          "address": "9001 N Interstate Hwy 35, Suite 110, Austin, TX 78753",
+          "phones": [
+            "512-454-9675"
+          ],
+          "emails": [],
+          "website": "https://www.wfscapitalarea.com",
+          "referral_type": "government",
+          "distance_miles": 5.0,
+          "availability_status": "Open; some help by visit only, call first",
+          "categories": [
+            "Employment & Job Training",
+            "Veterans Services"
+          ]
+        },
+        {
+          "name": "Easterseals Central Texas \u2013 Veterans Services",
+          "description": "Get free support for veterans and families, like help with stress, sadness, housing, and work. Staff can help you set goals, find jobs, and connect to mental health help. You must be a veteran, active duty, guard, reserve, or family member in Central Texas. Call to see what help is open now and how to start.",
+          "address": "8505 Cross Park Dr, Suite 120, Austin, TX 78754",
+          "phones": [
+            "512-615-6800"
+          ],
+          "emails": [],
+          "website": "https://www.easterseals.com",
+          "referral_type": "external",
+          "distance_miles": 4.0,
+          "availability_status": "Open; some programs may have a wait list",
+          "categories": [
+            "Mental Health",
+            "Employment & Job Training",
+            "Veterans Services"
+          ]
+        },
+        {
+          "name": "Travis County Veterans Services",
+          "description": "Get help with U.S. Department of Veterans Affairs claims, benefits, and local support. Staff can help you apply for health care, money benefits, and connect you to mental health and job help. You must be a veteran or family member who lives in Travis County. Call to set up a first visit. They can meet in person or by phone.",
+          "address": "100 N IH 35, Suite 2000, Austin, TX 78701",
+          "phones": [
+            "512-854-9340"
+          ],
+          "emails": [],
+          "website": "https://www.traviscountytx.gov",
+          "referral_type": "government",
+          "distance_miles": 6.0,
+          "availability_status": "Open; visits usually by appointment",
+          "categories": [
+            "Veterans Services",
+            "Mental Health",
+            "Employment & Job Training"
+          ]
+        },
+        {
+          "name": "Lone Star Circle of Care at William Cannon \u2013 Veterans Mental Health (Telehealth and In\u2011Person)",
+          "description": "Get low\u2011cost or free mental health help for veterans, like someone to talk to and treatment for depression, anxiety, or trauma. They offer in\u2011person and video visits. They take Medicaid, Medicare, many insurance plans, and have pay what you can afford options. Veterans and families in Central Texas can use this clinic. Call to register as a new patient and ask for mental health help.",
+          "address": "2701 W William Cannon Dr, Suite 101, Austin, TX 78745",
+          "phones": [
+            "877-800-5722"
+          ],
+          "emails": [],
+          "website": "https://lonestarcares.org",
+          "referral_type": "external",
+          "distance_miles": 15.0,
+          "availability_status": "Open; new patients may wait for first visit",
+          "categories": [
+            "Mental Health",
+            "Veterans Services"
+          ]
+        }
+      ],
+      "resource_count": 7,
+      "usage": {
+        "prompt_tokens": 3152,
+        "completion_tokens": 1521,
+        "total_tokens": 4673
+      },
+      "finish_reason": "stop",
+      "latency_ms": 16706,
+      "web_search_used": false
+    },
+    "variant": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"Integral Care\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get low-cost or free help for emotions and behavior, like stress, sadness, or worry. They also help with mental health medicine, crisis help, and support groups. Veterans can ask for staff who understand military life. They may help you find job help and other places too. You can call any time, day or night. Tell them you are a veteran and live in Travis County. They will do a quick phone check-up and help you plan next steps.\",\n      \"address\": \"1430 Collier St, Austin, TX 78704\",\n      \"phones\": [\"512-472-4357\"],\n      \"website\": \"https://integralcare.org\",\n      \"distance_miles\": null,\n      \"availability_status\": \"Open for new clients - call 24/7 for a phone check-up\",\n      \"emails\": []\n    },\n    {\n      \"name\": \"Texas Veterans Commission \u2013 Austin Office\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get free help with jobs, resumes, and job search made for veterans. They also help with VA (Veterans Affairs) claims, education benefits, and other veteran programs. Staff are trained to work with people who served in the military. They can connect you to mental health help, housing help, and money help. You can call to set up a first visit or ask questions. Bring your DD-214 and any other papers you have from the military.\",\n      \"address\": \"1701 Directors Blvd, Suite 530, Austin, TX 78744\",\n      \"phones\": [\"512-463-6564\"],\n      \"website\": \"https://tvc.texas.gov\",\n      \"distance_miles\": null,\n      \"availability_status\": \"Open - call for visit times and walk-in hours\",\n      \"emails\": []\n    },\n    {\n      \"name\": \"Workforce Solutions Capital Area\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get free help with job search, resumes, and job training in Travis County. Veterans can get priority help and may see a special veteran job coach. They can help you apply for training money, like for new job skills. They also help with job fairs and meeting hiring managers. Tell them you are a veteran when you call or visit. Bring your ID and work history if you can.\",\n      \"address\": \"9001 N IH-35, Suite 110, Austin, TX 78753\",\n      \"phones\": [\"512-454-9675\"],\n      \"website\": \"https://wfscapitalarea.com\",\n      \"distance_miles\": null,\n      \"availability_status\": \"Open - some help by phone or online, call before you go\",\n      \"emails\": []\n    },\n    {\n      \"name\": \"VA Austin Outpatient Clinic (Central Texas Veterans Health Care System)\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get mental health help, medical care, and support made for veterans. You can get help for post-traumatic stress (PTSD), sadness, worry, and drug or alcohol problems. They also have social workers who help with housing, money, and work support. You must be signed up for VA health care or ask how to sign up. Call to make a first visit or talk to the mental health team.\",\n      \"address\": \"7901 Metropolis Dr, Austin, TX 78744\",\n      \"phones\": [\"512-823-4000\"],\n      \"website\": \"https://www.va.gov\",\n      \"distance_miles\": null,\n      \"availability_status\": \"Open - some waits for non-urgent visits, call to schedule\",\n      \"emails\": [],\n      \"source\": \"Verified via Central Texas Veterans Health Care System website\"\n    },\n    {\n      \"name\": \"Austin Vet Center\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get free and private mental health help if you are a combat veteran or served in a war zone. You can talk one-on-one or in groups about stress, PTSD, family problems, or readjusting to life after service. They also support family members of veterans. You do not need to be in the VA health system to get help here. Call to ask who can get help and to set up a first visit.\",\n      \"address\": \"3207 W Slaughter Ln, Austin, TX 78748\",\n      \"phones\": [\"512-416-1314\"],\n      \"website\": \"https://www.va.gov\",\n      \"distance_miles\": null,\n      \"availability_status\": \"Open - evening visits may be limited, call for times\",\n      \"emails\": [],\n      \"source\": \"Verified via U.S. Department of Veterans Affairs Vet Center website\"\n    },\n    {\n      \"name\": \"Easterseals Central Texas\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with job skills and job search if you have a disability or mental health needs. They offer job coaching, help talking with bosses, and support to keep your job. Some programs are for veterans and people with learning or growth challenges. You may need a paper from a doctor or from Texas Workforce Commission. Call to ask who can get help and if there is a wait list.\",\n      \"address\": \"8505 Cross Park Dr, Suite 120, Austin, TX 78754\",\n      \"phones\": [\"512-615-6800\"],\n      \"website\": \"https://www.easterseals.com\",\n      \"distance_miles\": null,\n      \"availability_status\": \"Open - some programs may have a wait list\",\n      \"emails\": [],\n      \"source\": \"Verified via Easterseals Central Texas official website\"\n    },\n    {\n      \"name\": \"Travis County Veterans Services\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get free help with VA claims, money benefits, and local help for veterans in Travis County. Staff can help you fill out forms, gather papers, and follow up on VA cases. They can also connect you to mental health help, housing help, and job programs. You must be a veteran or family member living in Travis County. Call to set up a first visit. Walk-ins may be limited.\",\n      \"address\": \"1000 Guadalupe St, Austin, TX 78701\",\n      \"phones\": [\"512-854-9340\"],\n      \"website\": \"https://www.traviscountytx.gov\",\n      \"distance_miles\": null,\n      \"availability_status\": \"Open - visits by phone and in person, call first\",\n      \"emails\": [],\n      \"source\": \"Verified via Travis County official website\"\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "Integral Care",
+            "referral_type": "external",
+            "description": "Get low-cost or free help for emotions and behavior, like stress, sadness, or worry. They also help with mental health medicine, crisis help, and support groups. Veterans can ask for staff who understand military life. They may help you find job help and other places too. You can call any time, day or night. Tell them you are a veteran and live in Travis County. They will do a quick phone check-up and help you plan next steps.",
+            "address": "1430 Collier St, Austin, TX 78704",
+            "phones": [
+              "512-472-4357"
+            ],
+            "website": "https://integralcare.org",
+            "distance_miles": null,
+            "availability_status": "Open for new clients - call 24/7 for a phone check-up",
+            "emails": []
+          },
+          {
+            "name": "Texas Veterans Commission \u2013 Austin Office",
+            "referral_type": "government",
+            "description": "Get free help with jobs, resumes, and job search made for veterans. They also help with VA (Veterans Affairs) claims, education benefits, and other veteran programs. Staff are trained to work with people who served in the military. They can connect you to mental health help, housing help, and money help. You can call to set up a first visit or ask questions. Bring your DD-214 and any other papers you have from the military.",
+            "address": "1701 Directors Blvd, Suite 530, Austin, TX 78744",
+            "phones": [
+              "512-463-6564"
+            ],
+            "website": "https://tvc.texas.gov",
+            "distance_miles": null,
+            "availability_status": "Open - call for visit times and walk-in hours",
+            "emails": []
+          },
+          {
+            "name": "Workforce Solutions Capital Area",
+            "referral_type": "government",
+            "description": "Get free help with job search, resumes, and job training in Travis County. Veterans can get priority help and may see a special veteran job coach. They can help you apply for training money, like for new job skills. They also help with job fairs and meeting hiring managers. Tell them you are a veteran when you call or visit. Bring your ID and work history if you can.",
+            "address": "9001 N IH-35, Suite 110, Austin, TX 78753",
+            "phones": [
+              "512-454-9675"
+            ],
+            "website": "https://wfscapitalarea.com",
+            "distance_miles": null,
+            "availability_status": "Open - some help by phone or online, call before you go",
+            "emails": []
+          },
+          {
+            "name": "VA Austin Outpatient Clinic (Central Texas Veterans Health Care System)",
+            "referral_type": "government",
+            "description": "Get mental health help, medical care, and support made for veterans. You can get help for post-traumatic stress (PTSD), sadness, worry, and drug or alcohol problems. They also have social workers who help with housing, money, and work support. You must be signed up for VA health care or ask how to sign up. Call to make a first visit or talk to the mental health team.",
+            "address": "7901 Metropolis Dr, Austin, TX 78744",
+            "phones": [
+              "512-823-4000"
+            ],
+            "website": "https://www.va.gov",
+            "distance_miles": null,
+            "availability_status": "Open - some waits for non-urgent visits, call to schedule",
+            "emails": [],
+            "source": "Verified via Central Texas Veterans Health Care System website"
+          },
+          {
+            "name": "Austin Vet Center",
+            "referral_type": "government",
+            "description": "Get free and private mental health help if you are a combat veteran or served in a war zone. You can talk one-on-one or in groups about stress, PTSD, family problems, or readjusting to life after service. They also support family members of veterans. You do not need to be in the VA health system to get help here. Call to ask who can get help and to set up a first visit.",
+            "address": "3207 W Slaughter Ln, Austin, TX 78748",
+            "phones": [
+              "512-416-1314"
+            ],
+            "website": "https://www.va.gov",
+            "distance_miles": null,
+            "availability_status": "Open - evening visits may be limited, call for times",
+            "emails": [],
+            "source": "Verified via U.S. Department of Veterans Affairs Vet Center website"
+          },
+          {
+            "name": "Easterseals Central Texas",
+            "referral_type": "external",
+            "description": "Get help with job skills and job search if you have a disability or mental health needs. They offer job coaching, help talking with bosses, and support to keep your job. Some programs are for veterans and people with learning or growth challenges. You may need a paper from a doctor or from Texas Workforce Commission. Call to ask who can get help and if there is a wait list.",
+            "address": "8505 Cross Park Dr, Suite 120, Austin, TX 78754",
+            "phones": [
+              "512-615-6800"
+            ],
+            "website": "https://www.easterseals.com",
+            "distance_miles": null,
+            "availability_status": "Open - some programs may have a wait list",
+            "emails": [],
+            "source": "Verified via Easterseals Central Texas official website"
+          },
+          {
+            "name": "Travis County Veterans Services",
+            "referral_type": "government",
+            "description": "Get free help with VA claims, money benefits, and local help for veterans in Travis County. Staff can help you fill out forms, gather papers, and follow up on VA cases. They can also connect you to mental health help, housing help, and job programs. You must be a veteran or family member living in Travis County. Call to set up a first visit. Walk-ins may be limited.",
+            "address": "1000 Guadalupe St, Austin, TX 78701",
+            "phones": [
+              "512-854-9340"
+            ],
+            "website": "https://www.traviscountytx.gov",
+            "distance_miles": null,
+            "availability_status": "Open - visits by phone and in person, call first",
+            "emails": [],
+            "source": "Verified via Travis County official website"
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "Integral Care",
+          "referral_type": "external",
+          "description": "Get low-cost or free help for emotions and behavior, like stress, sadness, or worry. They also help with mental health medicine, crisis help, and support groups. Veterans can ask for staff who understand military life. They may help you find job help and other places too. You can call any time, day or night. Tell them you are a veteran and live in Travis County. They will do a quick phone check-up and help you plan next steps.",
+          "address": "1430 Collier St, Austin, TX 78704",
+          "phones": [
+            "512-472-4357"
+          ],
+          "website": "https://integralcare.org",
+          "distance_miles": null,
+          "availability_status": "Open for new clients - call 24/7 for a phone check-up",
+          "emails": []
+        },
+        {
+          "name": "Texas Veterans Commission \u2013 Austin Office",
+          "referral_type": "government",
+          "description": "Get free help with jobs, resumes, and job search made for veterans. They also help with VA (Veterans Affairs) claims, education benefits, and other veteran programs. Staff are trained to work with people who served in the military. They can connect you to mental health help, housing help, and money help. You can call to set up a first visit or ask questions. Bring your DD-214 and any other papers you have from the military.",
+          "address": "1701 Directors Blvd, Suite 530, Austin, TX 78744",
+          "phones": [
+            "512-463-6564"
+          ],
+          "website": "https://tvc.texas.gov",
+          "distance_miles": null,
+          "availability_status": "Open - call for visit times and walk-in hours",
+          "emails": []
+        },
+        {
+          "name": "Workforce Solutions Capital Area",
+          "referral_type": "government",
+          "description": "Get free help with job search, resumes, and job training in Travis County. Veterans can get priority help and may see a special veteran job coach. They can help you apply for training money, like for new job skills. They also help with job fairs and meeting hiring managers. Tell them you are a veteran when you call or visit. Bring your ID and work history if you can.",
+          "address": "9001 N IH-35, Suite 110, Austin, TX 78753",
+          "phones": [
+            "512-454-9675"
+          ],
+          "website": "https://wfscapitalarea.com",
+          "distance_miles": null,
+          "availability_status": "Open - some help by phone or online, call before you go",
+          "emails": []
+        },
+        {
+          "name": "VA Austin Outpatient Clinic (Central Texas Veterans Health Care System)",
+          "referral_type": "government",
+          "description": "Get mental health help, medical care, and support made for veterans. You can get help for post-traumatic stress (PTSD), sadness, worry, and drug or alcohol problems. They also have social workers who help with housing, money, and work support. You must be signed up for VA health care or ask how to sign up. Call to make a first visit or talk to the mental health team.",
+          "address": "7901 Metropolis Dr, Austin, TX 78744",
+          "phones": [
+            "512-823-4000"
+          ],
+          "website": "https://www.va.gov",
+          "distance_miles": null,
+          "availability_status": "Open - some waits for non-urgent visits, call to schedule",
+          "emails": [],
+          "source": "Verified via Central Texas Veterans Health Care System website"
+        },
+        {
+          "name": "Austin Vet Center",
+          "referral_type": "government",
+          "description": "Get free and private mental health help if you are a combat veteran or served in a war zone. You can talk one-on-one or in groups about stress, PTSD, family problems, or readjusting to life after service. They also support family members of veterans. You do not need to be in the VA health system to get help here. Call to ask who can get help and to set up a first visit.",
+          "address": "3207 W Slaughter Ln, Austin, TX 78748",
+          "phones": [
+            "512-416-1314"
+          ],
+          "website": "https://www.va.gov",
+          "distance_miles": null,
+          "availability_status": "Open - evening visits may be limited, call for times",
+          "emails": [],
+          "source": "Verified via U.S. Department of Veterans Affairs Vet Center website"
+        },
+        {
+          "name": "Easterseals Central Texas",
+          "referral_type": "external",
+          "description": "Get help with job skills and job search if you have a disability or mental health needs. They offer job coaching, help talking with bosses, and support to keep your job. Some programs are for veterans and people with learning or growth challenges. You may need a paper from a doctor or from Texas Workforce Commission. Call to ask who can get help and if there is a wait list.",
+          "address": "8505 Cross Park Dr, Suite 120, Austin, TX 78754",
+          "phones": [
+            "512-615-6800"
+          ],
+          "website": "https://www.easterseals.com",
+          "distance_miles": null,
+          "availability_status": "Open - some programs may have a wait list",
+          "emails": [],
+          "source": "Verified via Easterseals Central Texas official website"
+        },
+        {
+          "name": "Travis County Veterans Services",
+          "referral_type": "government",
+          "description": "Get free help with VA claims, money benefits, and local help for veterans in Travis County. Staff can help you fill out forms, gather papers, and follow up on VA cases. They can also connect you to mental health help, housing help, and job programs. You must be a veteran or family member living in Travis County. Call to set up a first visit. Walk-ins may be limited.",
+          "address": "1000 Guadalupe St, Austin, TX 78701",
+          "phones": [
+            "512-854-9340"
+          ],
+          "website": "https://www.traviscountytx.gov",
+          "distance_miles": null,
+          "availability_status": "Open - visits by phone and in person, call first",
+          "emails": [],
+          "source": "Verified via Travis County official website"
+        }
+      ],
+      "resource_count": 7,
+      "usage": {
+        "prompt_tokens": 3400,
+        "completion_tokens": 1407,
+        "total_tokens": 4807
+      },
+      "finish_reason": "stop",
+      "latency_ms": 15085,
+      "web_search_used": false
+    }
+  }
+]

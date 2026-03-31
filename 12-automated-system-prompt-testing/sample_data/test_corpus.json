@@ -1,0 +1,142 @@
+[
+  {
+    "id": "q_001",
+    "query": "My client needs food assistance.\nInclude resources that support the following categories: Food Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78702",
+    "location": "Austin (Travis county), TX 78702",
+    "categories": ["food"],
+    "resources_context": "Name: Central Texas Food Bank\nAddress: 6500 Metropolis Dr, Austin, TX 78744\nPhone: (512) 282-2111\nWebsite: https://www.centraltexasfoodbank.org\nDescription: Provides food assistance through a network of partner agencies across 21 counties in Central Texas.\n\nName: Meals on Wheels Central Texas\nAddress: 3227 E 5th St, Austin, TX 78702\nPhone: (512) 476-6325\nWebsite: https://www.mealsonwheelscentraltexas.org\nDescription: Delivers nutritious meals to homebound individuals and provides congregate dining for seniors.\n\nName: Trinity Center\nAddress: 304 E 7th St, Austin, TX 78701\nPhone: (512) 610-3500\nWebsite: https://trinitycenteraustin.org\nDescription: Day resource center providing meals, case management, and supportive services.\n\nName: St. David's Episcopal Church Food Pantry\nAddress: 301 E 8th St, Austin, TX 78701\nPhone: (512) 610-3500\nDescription: Weekly food pantry distribution open to community members in need."
+  },
+  {
+    "id": "q_002",
+    "query": "CPR Training\nInclude resources that support the following categories: Employment & Job Training\nFocus on resources close to the following location: Austin (Travis county), TX 78753",
+    "location": "Austin (Travis county), TX 78753",
+    "categories": ["education", "employment"],
+    "resources_context": "Name: Goodwill Central Texas\nAddress: 1015 Norwood Park Blvd, Austin, TX 78753\nPhone: (512) 637-7100\nWebsite: https://www.goodwillcentraltexas.org\nDescription: Provides job training, career services, and workforce development programs.\n\nName: American Red Cross Central Texas\nAddress: 2218 Pershing Dr, Austin, TX 78723\nPhone: (512) 928-4271\nWebsite: https://www.redcross.org/local/texas/central-and-south-texas.html\nDescription: Offers CPR, first aid, and lifeguard certification training courses.\n\nName: Capital IDEA\nAddress: 44 E Ave, Suite 300, Austin, TX 78701\nPhone: (512) 457-8610\nWebsite: https://www.capitalidea.org\nDescription: Provides education and career training for working adults in Central Texas."
+  },
+  {
+    "id": "q_003",
+    "query": "Include resources that support the following categories: Housing Assistance, Utility Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78741",
+    "location": "Austin (Travis county), TX 78741",
+    "categories": ["housing", "utilities"],
+    "resources_context": "Name: Foundation Communities\nAddress: 3036 S 1st St, Austin, TX 78704\nPhone: (512) 447-2026\nWebsite: https://www.foundcom.org\nDescription: Affordable housing and free tax preparation, financial coaching, and health screenings.\n\nName: Austin Tenants Council\nAddress: 1640 E 2nd St, Suite 150, Austin, TX 78702\nPhone: (512) 474-1961\nWebsite: https://www.housing-rights.org\nDescription: Provides tenant rights counseling, fair housing services, and mediation.\n\nName: City of Austin Utility Customer Assistance Program\nPhone: (512) 494-9400\nWebsite: https://www.austinenergy.com/ae/residential/your-bill/customer-assistance-programs\nDescription: Discount program for qualifying low-income Austin Energy customers."
+  },
+  {
+    "id": "q_004",
+    "query": "Include resources that support the following categories: Childcare, Legal Services, Financial Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78745",
+    "location": "Austin (Travis county), TX 78745",
+    "categories": ["childcare", "legal", "financial"],
+    "resources_context": "Name: Workforce Solutions Capital Area\nAddress: 6505 Airport Blvd, Suite 101, Austin, TX 78752\nPhone: (512) 597-7100\nWebsite: https://www.wfscapitalarea.com\nDescription: Provides childcare financial assistance, job search support, and career development services.\n\nName: Texas RioGrande Legal Aid\nAddress: 4920 N IH-35, Austin, TX 78751\nPhone: (512) 374-2700\nWebsite: https://www.trla.org\nDescription: Free civil legal services for low-income Texans including family law, housing, and benefits.\n\nName: VITA Free Tax Preparation\nAddress: Multiple locations across Austin\nPhone: (512) 447-2026\nWebsite: https://www.foundcom.org/our-programs/free-tax-prep\nDescription: Volunteer Income Tax Assistance providing free tax preparation for qualifying households."
+  },
+  {
+    "id": "q_005",
+    "query": "My client is a veteran who needs mental health support and employment assistance.\nInclude resources that support the following categories: Mental Health, Employment & Job Training, Veterans Services\nFocus on resources close to the following location: Austin (Travis county), TX 78723",
+    "location": "Austin (Travis county), TX 78723",
+    "categories": ["mental_health", "employment", "veterans"],
+    "resources_context": "Name: Veterans Crisis Line\nPhone: 988 (then press 1)\nWebsite: https://www.veteranscrisisline.net\nDescription: 24/7 crisis support for veterans and their families.\n\nName: Austin VA Outpatient Clinic\nAddress: 7901 Metropolis Dr, Austin, TX 78744\nPhone: (512) 823-4000\nWebsite: https://www.va.gov/central-texas-health-care\nDescription: Comprehensive healthcare services including mental health for eligible veterans.\n\nName: Hire Heroes USA\nWebsite: https://www.hireheroesusa.org\nDescription: Free career coaching, mentoring, and job search assistance for transitioning military members and veterans."
+  },
+  {
+    "id": "q_006",
+    "query": "My client is a single mom escaping domestic violence. She needs a safe place to stay tonight and help with a protective order.\nInclude resources that support the following categories: Domestic Violence, Emergency Shelter, Legal Services\nFocus on resources close to the following location: Austin (Travis county), TX 78704",
+    "location": "Austin (Travis county), TX 78704",
+    "categories": ["domestic_violence", "shelter", "legal"],
+    "resources_context": "Name: SafePlace (The SAFE Alliance)\nAddress: P.O. Box 19454, Austin, TX 78760\nPhone: (512) 267-7233\nWebsite: https://www.safeaustin.org\nDescription: Emergency shelter, crisis hotline, counseling, and legal advocacy for survivors of domestic violence and sexual assault.\n\nName: Texas Advocacy Project\nPhone: (800) 374-4673\nWebsite: https://www.texasadvocacyproject.org\nDescription: Free legal services including protective orders for survivors of domestic violence, sexual assault, and stalking.\n\nName: Austin Women's Shelter (SAFE)\nPhone: (512) 267-7233\nDescription: 24/7 emergency shelter for women and children fleeing domestic violence."
+  },
+  {
+    "id": "q_007",
+    "query": "My client is a senior citizen who can't drive and needs help getting to doctor appointments.\nInclude resources that support the following categories: Transportation, Senior Services\nFocus on resources close to the following location: Austin (Travis county), TX 78758",
+    "location": "Austin (Travis county), TX 78758",
+    "categories": ["transportation", "senior"],
+    "resources_context": "Name: Capital Metro Access\nPhone: (512) 389-7501\nWebsite: https://www.capmetro.org/access\nDescription: Paratransit service for individuals with disabilities who cannot use regular bus service.\n\nName: Drive a Senior\nAddress: 3710 Cedar St, Austin, TX 78705\nPhone: (512) 472-6339\nWebsite: https://www.driveasenior.org\nDescription: Volunteer drivers provide free rides to medical appointments for seniors in Austin.\n\nName: AGE of Central Texas\nAddress: 3710 Cedar St, Austin, TX 78705\nPhone: (512) 451-4611\nWebsite: https://www.ageofcentraltx.org\nDescription: Provides caregiver support, senior activities, and care coordination."
+  },
+  {
+    "id": "q_008",
+    "query": "Client recently released from incarceration, needs help finding a job and stable housing.\nInclude resources that support the following categories: Reentry Services, Employment, Housing\nFocus on resources close to the following location: Austin (Travis county), TX 78701",
+    "location": "Austin (Travis county), TX 78701",
+    "categories": ["reentry", "employment", "housing"],
+    "resources_context": "Name: Goodwill Excel Center\nAddress: 1015 Norwood Park Blvd, Austin, TX 78753\nPhone: (512) 637-7100\nWebsite: https://www.goodwillcentraltexas.org\nDescription: Adult high school program for those who need to complete their diploma.\n\nName: Integral Care\nAddress: 1430 Collier St, Austin, TX 78704\nPhone: (512) 472-4357\nWebsite: https://www.integralcare.org\nDescription: Mental health and substance use disorder services for Travis County residents.\n\nName: Caritas of Austin\nAddress: 611 Neches St, Austin, TX 78701\nPhone: (512) 479-4610\nWebsite: https://www.caritasofaustin.org\nDescription: Housing, emergency financial assistance, education, and workforce development for individuals experiencing poverty."
+  },
+  {
+    "id": "q_009",
+    "query": "I need help paying my electric bill this month. I'm behind on rent too.\nInclude resources that support the following categories: Utility Assistance, Rental Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78744",
+    "location": "Austin (Travis county), TX 78744",
+    "categories": ["utilities", "rental_assistance"],
+    "resources_context": "Name: City of Austin Utility Customer Assistance Program\nPhone: (512) 494-9400\nWebsite: https://www.austinenergy.com/ae/residential/your-bill/customer-assistance-programs\nDescription: Discount program for qualifying low-income Austin Energy customers.\n\nName: St. Vincent de Paul Society\nPhone: (512) 251-6995\nDescription: Emergency financial assistance for rent, utilities, and other basic needs.\n\nName: Foundation Communities\nAddress: 3036 S 1st St, Austin, TX 78704\nPhone: (512) 447-2026\nWebsite: https://www.foundcom.org\nDescription: Affordable housing and free tax preparation, financial coaching, and health screenings."
+  },
+  {
+    "id": "q_010",
+    "query": "My client is pregnant and uninsured. She needs prenatal care and help applying for Medicaid.\nInclude resources that support the following categories: Healthcare, Insurance Enrollment, Prenatal Care\nFocus on resources close to the following location: Austin (Travis county), TX 78752",
+    "location": "Austin (Travis county), TX 78752",
+    "categories": ["healthcare", "insurance", "prenatal"],
+    "resources_context": "Name: Lone Star Circle of Care\nAddress: 1500 W 38th St, Suite 63, Austin, TX 78731\nPhone: (512) 686-0207\nWebsite: https://www.lscc.net\nDescription: Federally qualified health center providing primary care, dental, and behavioral health services.\n\nName: People's Community Clinic\nAddress: 1101 Camino La Costa, Austin, TX 78752\nPhone: (512) 478-8924\nWebsite: https://www.austinpcc.org\nDescription: Nonprofit clinic offering primary care, prenatal care, pediatrics, and dental services on a sliding scale.\n\nName: Mama Sana Vibrant Woman\nAddress: 2200 E Cesar Chavez St, Austin, TX 78702\nPhone: (512) 638-0861\nWebsite: https://www.mamasana.org\nDescription: Culturally responsive doula and community health services for low-income women."
+  },
+  {
+    "id": "q_011",
+    "query": "Client needs substance abuse treatment. Prefers outpatient.\nInclude resources that support the following categories: Substance Abuse Treatment\nFocus on resources close to the following location: Austin (Travis county), TX 78721",
+    "location": "Austin (Travis county), TX 78721",
+    "categories": ["substance_abuse"],
+    "resources_context": "Name: Integral Care\nAddress: 1430 Collier St, Austin, TX 78704\nPhone: (512) 472-4357\nWebsite: https://www.integralcare.org\nDescription: Mental health and substance use disorder services for Travis County residents.\n\nName: Austin Recovery\nAddress: 8402 Cross Park Dr, Austin, TX 78754\nPhone: (512) 697-8500\nWebsite: https://www.austinrecovery.org\nDescription: Residential and outpatient treatment for substance use disorders.\n\nName: Communities for Recovery\nAddress: 2001 Chicon St, Austin, TX 78722\nPhone: (512) 292-4087\nWebsite: https://www.c4recovery.org\nDescription: Peer-led recovery support services and sober living community."
+  },
+  {
+    "id": "q_012",
+    "query": "My client is an immigrant and needs help understanding their rights. They also need English classes.\nInclude resources that support the following categories: Immigration Services, Education, ESL\nFocus on resources close to the following location: Austin (Travis county), TX 78753",
+    "location": "Austin (Travis county), TX 78753",
+    "categories": ["immigration", "education", "esl"],
+    "resources_context": "Name: American Gateways\nAddress: 314 E Highland Mall Blvd, Suite 501, Austin, TX 78752\nPhone: (512) 478-0546\nWebsite: https://www.americangateways.org\nDescription: Immigration legal services for refugees, asylum seekers, and low-income immigrants.\n\nName: Literacy Coalition of Central Texas\nAddress: 6500 Tracor Ln, Austin, TX 78725\nPhone: (512) 326-8655\nWebsite: https://www.willread.org\nDescription: Free adult literacy and ESL programs across Central Texas.\n\nName: Casa Marianella\nAddress: 821 Gunter St, Austin, TX 78702\nPhone: (512) 385-5571\nWebsite: https://www.casamarianella.org\nDescription: Emergency shelter and support services for immigrants and refugees."
+  },
+  {
+    "id": "q_013",
+    "query": "My client is a teenager who ran away from home. They need a safe place and someone to talk to.\nInclude resources that support the following categories: Youth Services, Crisis Intervention, Shelter\nFocus on resources close to the following location: Austin (Travis county), TX 78757",
+    "location": "Austin (Travis county), TX 78757",
+    "categories": ["youth", "crisis", "shelter"],
+    "resources_context": "Name: LifeWorks\nAddress: 3700 S 1st St, Austin, TX 78704\nPhone: (512) 735-2400\nWebsite: https://www.lifeworksaustin.org\nDescription: Youth development programs including housing, counseling, education, and workforce services for young people ages 10-24.\n\nName: National Runaway Safeline\nPhone: 1-800-786-2929\nWebsite: https://www.1800runaway.org\nDescription: 24/7 crisis services for runaway and homeless youth including referrals and family reunification.\n\nName: Texas Youth Helpline\nPhone: (800) 989-6884\nWebsite: https://www.texasyouth.org\nDescription: Free and confidential support for Texas youth and families in crisis."
+  },
+  {
+    "id": "q_014",
+    "query": "Client has diabetes and can't afford their insulin or test strips.\nInclude resources that support the following categories: Healthcare, Prescription Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78748",
+    "location": "Austin (Travis county), TX 78748",
+    "categories": ["healthcare", "prescription"],
+    "resources_context": "Name: People's Community Clinic\nAddress: 1101 Camino La Costa, Austin, TX 78752\nPhone: (512) 478-8924\nWebsite: https://www.austinpcc.org\nDescription: Nonprofit clinic offering primary care, prenatal care, pediatrics, and dental services on a sliding scale.\n\nName: CommUnityCare Health Centers\nAddress: 1313 Red River St, Austin, TX 78701\nPhone: (512) 978-9015\nWebsite: https://www.communitycaretx.org\nDescription: Federally qualified health center providing comprehensive primary care across multiple Austin locations.\n\nName: NeedyMeds\nWebsite: https://www.needymeds.org\nDescription: Database of patient assistance programs for prescription medications."
+  },
+  {
+    "id": "q_015",
+    "query": "My client is disabled and needs help applying for SSI and finding accessible housing.\nInclude resources that support the following categories: Disability Services, Benefits Enrollment, Housing\nFocus on resources close to the following location: Austin (Travis county), TX 78731",
+    "location": "Austin (Travis county), TX 78731",
+    "categories": ["disability", "benefits", "housing"],
+    "resources_context": "Name: Disability Rights Texas\nAddress: 2222 West Braker Ln, Austin, TX 78758\nPhone: (512) 454-4816\nWebsite: https://www.disabilityrightstx.org\nDescription: Legal advocacy and rights protection for people with disabilities in Texas.\n\nName: Austin Resource Center for Independent Living (ARCIL)\nAddress: 825 E Rundberg Ln, Suite A-1, Austin, TX 78753\nPhone: (512) 832-6349\nWebsite: https://www.arcil.com\nDescription: Services for people with disabilities including independent living skills, peer support, and benefits counseling.\n\nName: Foundation Communities\nAddress: 3036 S 1st St, Austin, TX 78704\nPhone: (512) 447-2026\nWebsite: https://www.foundcom.org\nDescription: Affordable housing and free tax preparation, financial coaching, and health screenings."
+  },
+  {
+    "id": "q_016",
+    "query": "Client is homeless and needs a place to shower, do laundry, and get mail.\nInclude resources that support the following categories: Homeless Services, Day Services\nFocus on resources close to the following location: Austin (Travis county), TX 78701",
+    "location": "Austin (Travis county), TX 78701",
+    "categories": ["homeless", "day_services"],
+    "resources_context": "Name: Trinity Center\nAddress: 304 E 7th St, Austin, TX 78701\nPhone: (512) 610-3500\nWebsite: https://trinitycenteraustin.org\nDescription: Day resource center providing meals, showers, laundry, case management, and supportive services.\n\nName: Austin Resource Center for the Homeless (ARCH)\nAddress: 500 E 7th St, Austin, TX 78701\nPhone: (512) 305-4100\nWebsite: https://www.frontsteps.org\nDescription: Day services and overnight shelter providing meals, showers, mail service, and case management.\n\nName: The Salvation Army Austin\nAddress: 4216 S Congress Ave, Austin, TX 78745\nPhone: (512) 476-1111\nWebsite: https://www.salvationarmyaustin.org\nDescription: Emergency shelter, meals, social services, and transitional housing programs."
+  },
+  {
+    "id": "q_017",
+    "query": "My client's child has been diagnosed with autism. They need therapy services and support groups.\nInclude resources that support the following categories: Disability Services, Youth Services, Mental Health\nFocus on resources close to the following location: Austin (Travis county), TX 78759",
+    "location": "Austin (Travis county), TX 78759",
+    "categories": ["disability", "youth", "mental_health"],
+    "resources_context": "Name: Autism Society of Central Texas\nPhone: (512) 479-4199\nWebsite: https://www.austinautismsociety.org\nDescription: Support groups, resource navigation, and community events for families affected by autism.\n\nName: Any Baby Can\nAddress: 6207 Sheridan Ave, Austin, TX 78723\nPhone: (512) 454-3743\nWebsite: https://www.anybabycan.org\nDescription: Early childhood intervention, developmental therapy, and family support services.\n\nName: Easter Seals Central Texas\nAddress: 8505 Cross Park Dr, Suite 120, Austin, TX 78754\nPhone: (512) 615-6800\nWebsite: https://www.easterseals.com/centraltx\nDescription: Disability services including autism therapy, workforce programs, and assistive technology."
+  },
+  {
+    "id": "q_018",
+    "query": "I just lost my job and need help with groceries this week and finding new employment.\nInclude resources that support the following categories: Food Assistance, Employment\nFocus on resources close to the following location: Austin (Travis county), TX 78660",
+    "location": "Austin (Travis county), TX 78660",
+    "categories": ["food", "employment"],
+    "resources_context": "Name: Central Texas Food Bank\nAddress: 6500 Metropolis Dr, Austin, TX 78744\nPhone: (512) 282-2111\nWebsite: https://www.centraltexasfoodbank.org\nDescription: Provides food assistance through a network of partner agencies across 21 counties in Central Texas.\n\nName: Workforce Solutions Capital Area\nAddress: 6505 Airport Blvd, Suite 101, Austin, TX 78752\nPhone: (512) 597-7100\nWebsite: https://www.wfscapitalarea.com\nDescription: Employment services including job search assistance, resume workshops, and training programs.\n\nName: Goodwill Central Texas\nAddress: 1015 Norwood Park Blvd, Austin, TX 78753\nPhone: (512) 637-7100\nWebsite: https://www.goodwillcentraltexas.org\nDescription: Provides job training, career services, and workforce development programs."
+  },
+  {
+    "id": "q_019",
+    "query": "Client needs dental care but has no insurance and very limited income.\nInclude resources that support the following categories: Dental Care, Healthcare\nFocus on resources close to the following location: Austin (Travis county), TX 78704",
+    "location": "Austin (Travis county), TX 78704",
+    "categories": ["dental", "healthcare"],
+    "resources_context": "Name: Manos de Cristo\nAddress: 4911 Harmon Ave, Austin, TX 78751\nPhone: (512) 477-7454\nWebsite: https://www.manosdecristo.org\nDescription: Free dental clinic and basic needs assistance for uninsured, low-income individuals.\n\nName: CommUnityCare Health Centers\nAddress: 1313 Red River St, Austin, TX 78701\nPhone: (512) 978-9015\nWebsite: https://www.communitycaretx.org\nDescription: Federally qualified health center providing dental, primary care, and behavioral health across Austin.\n\nName: UT School of Dentistry Patient Clinic\nPhone: (512) 471-1211\nDescription: Reduced-cost dental services provided by dental students under faculty supervision."
+  },
+  {
+    "id": "q_020",
+    "query": "My client is an elderly person living alone who has been the victim of financial exploitation by a family member.\nInclude resources that support the following categories: Elder Abuse, Legal Services, Senior Services\nFocus on resources close to the following location: Austin (Travis county), TX 78756",
+    "location": "Austin (Travis county), TX 78756",
+    "categories": ["elder_abuse", "legal", "senior"],
+    "resources_context": "Name: Adult Protective Services\nPhone: (800) 458-9858\nWebsite: https://www.txabusehotline.org\nDescription: Investigates abuse, neglect, and exploitation of elderly and disabled adults in Texas.\n\nName: Texas RioGrande Legal Aid\nAddress: 4920 N IH-35, Austin, TX 78751\nPhone: (512) 374-2700\nWebsite: https://www.trla.org\nDescription: Free civil legal services for low-income Texans including elder law and financial exploitation cases.\n\nName: AGE of Central Texas\nAddress: 3710 Cedar St, Austin, TX 78705\nPhone: (512) 451-4611\nWebsite: https://www.ageofcentraltx.org\nDescription: Provides caregiver support, senior activities, and care coordination for older adults."
+  }
+]

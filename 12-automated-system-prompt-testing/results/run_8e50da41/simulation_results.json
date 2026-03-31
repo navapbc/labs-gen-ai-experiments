@@ -1,0 +1,293 @@
+[
+  {
+    "query_id": "q_001",
+    "user_query": "My client needs food assistance.\nInclude resources that support the following categories: Food Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78702",
+    "location": "Austin (Travis county), TX 78702",
+    "resources_context_length": 922,
+    "baseline": {
+      "raw_content": "{}",
+      "parsed_json": {},
+      "parse_error": null,
+      "resources": [],
+      "resource_count": 0,
+      "usage": {
+        "prompt_tokens": 3384,
+        "completion_tokens": 10,
+        "total_tokens": 3394
+      },
+      "finish_reason": "stop",
+      "latency_ms": 1698,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_002",
+    "user_query": "CPR Training\nInclude resources that support the following categories: Employment & Job Training\nFocus on resources close to the following location: Austin (Travis county), TX 78753",
+    "location": "Austin (Travis county), TX 78753",
+    "resources_context_length": 713,
+    "baseline": {
+      "raw_content": "{}",
+      "parsed_json": {},
+      "parse_error": null,
+      "resources": [],
+      "resource_count": 0,
+      "usage": {
+        "prompt_tokens": 3383,
+        "completion_tokens": 10,
+        "total_tokens": 3393
+      },
+      "finish_reason": "stop",
+      "latency_ms": 4840,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_003",
+    "user_query": "Include resources that support the following categories: Housing Assistance, Utility Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78741",
+    "location": "Austin (Travis county), TX 78741",
+    "resources_context_length": 709,
+    "baseline": {
+      "raw_content": "{\n  \"resources\": [\n    {\n      \"name\": \"St. Vincent de Paul Society - Diocesan Council of Austin\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get short-term help with rent, light bills, water, and basic needs. Help is for people who live in the Central Texas area and have low income. You first contact the main office. They connect you to a local church group near your home. Each church group has its own rules and money limits. Help is usually one-time or short-term. They may also help you find other places for more support. Call early in the month, as money can run out fast.\",\n      \"address\": \"901 W Braker Ln, Austin, TX 78758\",\n      \"distance_miles\": 10.0,\n      \"phones\": [\n        \"512-251-6995\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://ssvdp.org\",\n      \"availability_status\": \"Funds can run out each month - call early and expect a call back\"\n    },\n    {\n      \"name\": \"Society of St. Vincent de Paul - St. Ignatius Martyr Conference\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with rent or light bills if you live in certain South Austin zip codes. This church group helps people with low income who live in their area. They may also give food or other basic help. You must live in their church area to get help. Call and leave a message with your name, zip code, and phone number. A volunteer will call you back to ask about your needs. Help is one-time or short-term and depends on money they have.\",\n      \"address\": \"126 W Oltorf St, Austin, TX 78704\",\n      \"distance_miles\": 4.5,\n      \"phones\": [\n        \"512-804-1915\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://st-ignatius.org\",\n      \"availability_status\": \"Call and leave a message; help depends on funds and where you live\"\n    },\n    {\n      \"name\": \"St. Austin Catholic Parish - Financial Assistance Ministry\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with rent or light bills if you live in certain Central Austin zip codes. This help is for people with low income and a current bill or late notice. They do not give cash. They pay the landlord or light company directly. You must call during open phone hours and leave a message. A volunteer will call you back to ask questions and explain what papers you need. Help is one-time and depends on money they have that week.\",\n      \"address\": \"2026 Guadalupe St, Austin, TX 78705\",\n      \"distance_miles\": 6.0,\n      \"phones\": [\n        \"512-477-9471\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://staustin.org\",\n      \"availability_status\": \"Very limited funds - call during listed phone hours for possible help\"\n    },\n    {\n      \"name\": \"St. Louis King of France Catholic Church - Gabriel Project / Parish Outreach\",\n      \"referral_type\": \"external\",\n      \"description\": \"Get help with rent, light bills, and basic needs for families in North and Central Austin. This church helps people with low income. They focus on families with children and pregnant people. They may also give diapers, baby items, and food. Help depends on money and items they have. You must call and leave a message. A volunteer will call you back and ask about your needs and where you live. They may also help you find other places.\",\n      \"address\": \"7601 Burnet Rd, Austin, TX 78757\",\n      \"distance_miles\": 11.0,\n      \"phones\": [\n        \"512-302-1200\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://st-louis.org\",\n      \"availability_status\": \"Limited funds - call and leave a message for a call back\"\n    },\n    {\n      \"name\": \"Travis County - Community Development Block Grant (CDBG) Home Repair and Housing Help\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get help with home repair, septic repair, or other housing help if you live in Travis County but outside Austin city limits. This help is for people with low income who own their home. It can help fix unsafe or unhealthy home problems. It does not help with rent. You must fill out forms and show income papers. There may be a wait list. Call or check the website to learn if they are taking new people.\",\n      \"address\": \"700 Lavaca St, 5th Floor, Austin, TX 78701\",\n      \"distance_miles\": 6.5,\n      \"phones\": [\n        \"512-854-3460\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://www.traviscountytx.gov\",\n      \"availability_status\": \"May have a wait list - call to ask if they are taking new people\"\n    },\n    {\n      \"name\": \"Texas Utility Help (State of Texas Program)\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get help paying electric, gas, water, or wastewater bills if you have low income in Texas. This is a state program that pays the light or water company for you. You can apply online and upload your papers, like ID and income proof. Renters and homeowners can both apply. Money is limited and may run out. If you need help with the online form, you can call or ask a local group like 211 to help you apply.\",\n      \"address\": null,\n      \"distance_miles\": null,\n      \"phones\": [\n        \"855-566-2057\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://texasutilityhelp.com\",\n      \"availability_status\": \"Funding opens and closes - check the website or call to see if open now\"\n    },\n    {\n      \"name\": \"City of Austin - Customer Assistance Programs (CAP) for Utilities\",\n      \"referral_type\": \"government\",\n      \"description\": \"Get help lowering your Austin Energy and Austin Water bills if you have low income. You may get a discount on your monthly bill or help with past-due bills. Some people are added automatically if they get SNAP (food stamps), Medicaid (free health care for low income), or SSI (monthly cash help). Others must apply. You can apply online, by mail, or by calling. This help is only for people who get bills from Austin Energy or Austin Water.\",\n      \"address\": \"4815 Mueller Blvd, Austin, TX 78723\",\n      \"distance_miles\": 7.5,\n      \"phones\": [\n        \"512-494-9400\"\n      ],\n      \"emails\": [],\n      \"website\": \"https://austinenergy.com\",\n      \"availability_status\": \"Ongoing program - discounts may take one or two bills to show\"\n    }\n  ]\n}",
+      "parsed_json": {
+        "resources": [
+          {
+            "name": "St. Vincent de Paul Society - Diocesan Council of Austin",
+            "referral_type": "external",
+            "description": "Get short-term help with rent, light bills, water, and basic needs. Help is for people who live in the Central Texas area and have low income. You first contact the main office. They connect you to a local church group near your home. Each church group has its own rules and money limits. Help is usually one-time or short-term. They may also help you find other places for more support. Call early in the month, as money can run out fast.",
+            "address": "901 W Braker Ln, Austin, TX 78758",
+            "distance_miles": 10.0,
+            "phones": [
+              "512-251-6995"
+            ],
+            "emails": [],
+            "website": "https://ssvdp.org",
+            "availability_status": "Funds can run out each month - call early and expect a call back"
+          },
+          {
+            "name": "Society of St. Vincent de Paul - St. Ignatius Martyr Conference",
+            "referral_type": "external",
+            "description": "Get help with rent or light bills if you live in certain South Austin zip codes. This church group helps people with low income who live in their area. They may also give food or other basic help. You must live in their church area to get help. Call and leave a message with your name, zip code, and phone number. A volunteer will call you back to ask about your needs. Help is one-time or short-term and depends on money they have.",
+            "address": "126 W Oltorf St, Austin, TX 78704",
+            "distance_miles": 4.5,
+            "phones": [
+              "512-804-1915"
+            ],
+            "emails": [],
+            "website": "https://st-ignatius.org",
+            "availability_status": "Call and leave a message; help depends on funds and where you live"
+          },
+          {
+            "name": "St. Austin Catholic Parish - Financial Assistance Ministry",
+            "referral_type": "external",
+            "description": "Get help with rent or light bills if you live in certain Central Austin zip codes. This help is for people with low income and a current bill or late notice. They do not give cash. They pay the landlord or light company directly. You must call during open phone hours and leave a message. A volunteer will call you back to ask questions and explain what papers you need. Help is one-time and depends on money they have that week.",
+            "address": "2026 Guadalupe St, Austin, TX 78705",
+            "distance_miles": 6.0,
+            "phones": [
+              "512-477-9471"
+            ],
+            "emails": [],
+            "website": "https://staustin.org",
+            "availability_status": "Very limited funds - call during listed phone hours for possible help"
+          },
+          {
+            "name": "St. Louis King of France Catholic Church - Gabriel Project / Parish Outreach",
+            "referral_type": "external",
+            "description": "Get help with rent, light bills, and basic needs for families in North and Central Austin. This church helps people with low income. They focus on families with children and pregnant people. They may also give diapers, baby items, and food. Help depends on money and items they have. You must call and leave a message. A volunteer will call you back and ask about your needs and where you live. They may also help you find other places.",
+            "address": "7601 Burnet Rd, Austin, TX 78757",
+            "distance_miles": 11.0,
+            "phones": [
+              "512-302-1200"
+            ],
+            "emails": [],
+            "website": "https://st-louis.org",
+            "availability_status": "Limited funds - call and leave a message for a call back"
+          },
+          {
+            "name": "Travis County - Community Development Block Grant (CDBG) Home Repair and Housing Help",
+            "referral_type": "government",
+            "description": "Get help with home repair, septic repair, or other housing help if you live in Travis County but outside Austin city limits. This help is for people with low income who own their home. It can help fix unsafe or unhealthy home problems. It does not help with rent. You must fill out forms and show income papers. There may be a wait list. Call or check the website to learn if they are taking new people.",
+            "address": "700 Lavaca St, 5th Floor, Austin, TX 78701",
+            "distance_miles": 6.5,
+            "phones": [
+              "512-854-3460"
+            ],
+            "emails": [],
+            "website": "https://www.traviscountytx.gov",
+            "availability_status": "May have a wait list - call to ask if they are taking new people"
+          },
+          {
+            "name": "Texas Utility Help (State of Texas Program)",
+            "referral_type": "government",
+            "description": "Get help paying electric, gas, water, or wastewater bills if you have low income in Texas. This is a state program that pays the light or water company for you. You can apply online and upload your papers, like ID and income proof. Renters and homeowners can both apply. Money is limited and may run out. If you need help with the online form, you can call or ask a local group like 211 to help you apply.",
+            "address": null,
+            "distance_miles": null,
+            "phones": [
+              "855-566-2057"
+            ],
+            "emails": [],
+            "website": "https://texasutilityhelp.com",
+            "availability_status": "Funding opens and closes - check the website or call to see if open now"
+          },
+          {
+            "name": "City of Austin - Customer Assistance Programs (CAP) for Utilities",
+            "referral_type": "government",
+            "description": "Get help lowering your Austin Energy and Austin Water bills if you have low income. You may get a discount on your monthly bill or help with past-due bills. Some people are added automatically if they get SNAP (food stamps), Medicaid (free health care for low income), or SSI (monthly cash help). Others must apply. You can apply online, by mail, or by calling. This help is only for people who get bills from Austin Energy or Austin Water.",
+            "address": "4815 Mueller Blvd, Austin, TX 78723",
+            "distance_miles": 7.5,
+            "phones": [
+              "512-494-9400"
+            ],
+            "emails": [],
+            "website": "https://austinenergy.com",
+            "availability_status": "Ongoing program - discounts may take one or two bills to show"
+          }
+        ]
+      },
+      "parse_error": null,
+      "resources": [
+        {
+          "name": "St. Vincent de Paul Society - Diocesan Council of Austin",
+          "referral_type": "external",
+          "description": "Get short-term help with rent, light bills, water, and basic needs. Help is for people who live in the Central Texas area and have low income. You first contact the main office. They connect you to a local church group near your home. Each church group has its own rules and money limits. Help is usually one-time or short-term. They may also help you find other places for more support. Call early in the month, as money can run out fast.",
+          "address": "901 W Braker Ln, Austin, TX 78758",
+          "distance_miles": 10.0,
+          "phones": [
+            "512-251-6995"
+          ],
+          "emails": [],
+          "website": "https://ssvdp.org",
+          "availability_status": "Funds can run out each month - call early and expect a call back"
+        },
+        {
+          "name": "Society of St. Vincent de Paul - St. Ignatius Martyr Conference",
+          "referral_type": "external",
+          "description": "Get help with rent or light bills if you live in certain South Austin zip codes. This church group helps people with low income who live in their area. They may also give food or other basic help. You must live in their church area to get help. Call and leave a message with your name, zip code, and phone number. A volunteer will call you back to ask about your needs. Help is one-time or short-term and depends on money they have.",
+          "address": "126 W Oltorf St, Austin, TX 78704",
+          "distance_miles": 4.5,
+          "phones": [
+            "512-804-1915"
+          ],
+          "emails": [],
+          "website": "https://st-ignatius.org",
+          "availability_status": "Call and leave a message; help depends on funds and where you live"
+        },
+        {
+          "name": "St. Austin Catholic Parish - Financial Assistance Ministry",
+          "referral_type": "external",
+          "description": "Get help with rent or light bills if you live in certain Central Austin zip codes. This help is for people with low income and a current bill or late notice. They do not give cash. They pay the landlord or light company directly. You must call during open phone hours and leave a message. A volunteer will call you back to ask questions and explain what papers you need. Help is one-time and depends on money they have that week.",
+          "address": "2026 Guadalupe St, Austin, TX 78705",
+          "distance_miles": 6.0,
+          "phones": [
+            "512-477-9471"
+          ],
+          "emails": [],
+          "website": "https://staustin.org",
+          "availability_status": "Very limited funds - call during listed phone hours for possible help"
+        },
+        {
+          "name": "St. Louis King of France Catholic Church - Gabriel Project / Parish Outreach",
+          "referral_type": "external",
+          "description": "Get help with rent, light bills, and basic needs for families in North and Central Austin. This church helps people with low income. They focus on families with children and pregnant people. They may also give diapers, baby items, and food. Help depends on money and items they have. You must call and leave a message. A volunteer will call you back and ask about your needs and where you live. They may also help you find other places.",
+          "address": "7601 Burnet Rd, Austin, TX 78757",
+          "distance_miles": 11.0,
+          "phones": [
+            "512-302-1200"
+          ],
+          "emails": [],
+          "website": "https://st-louis.org",
+          "availability_status": "Limited funds - call and leave a message for a call back"
+        },
+        {
+          "name": "Travis County - Community Development Block Grant (CDBG) Home Repair and Housing Help",
+          "referral_type": "government",
+          "description": "Get help with home repair, septic repair, or other housing help if you live in Travis County but outside Austin city limits. This help is for people with low income who own their home. It can help fix unsafe or unhealthy home problems. It does not help with rent. You must fill out forms and show income papers. There may be a wait list. Call or check the website to learn if they are taking new people.",
+          "address": "700 Lavaca St, 5th Floor, Austin, TX 78701",
+          "distance_miles": 6.5,
+          "phones": [
+            "512-854-3460"
+          ],
+          "emails": [],
+          "website": "https://www.traviscountytx.gov",
+          "availability_status": "May have a wait list - call to ask if they are taking new people"
+        },
+        {
+          "name": "Texas Utility Help (State of Texas Program)",
+          "referral_type": "government",
+          "description": "Get help paying electric, gas, water, or wastewater bills if you have low income in Texas. This is a state program that pays the light or water company for you. You can apply online and upload your papers, like ID and income proof. Renters and homeowners can both apply. Money is limited and may run out. If you need help with the online form, you can call or ask a local group like 211 to help you apply.",
+          "address": null,
+          "distance_miles": null,
+          "phones": [
+            "855-566-2057"
+          ],
+          "emails": [],
+          "website": "https://texasutilityhelp.com",
+          "availability_status": "Funding opens and closes - check the website or call to see if open now"
+        },
+        {
+          "name": "City of Austin - Customer Assistance Programs (CAP) for Utilities",
+          "referral_type": "government",
+          "description": "Get help lowering your Austin Energy and Austin Water bills if you have low income. You may get a discount on your monthly bill or help with past-due bills. Some people are added automatically if they get SNAP (food stamps), Medicaid (free health care for low income), or SSI (monthly cash help). Others must apply. You can apply online, by mail, or by calling. This help is only for people who get bills from Austin Energy or Austin Water.",
+          "address": "4815 Mueller Blvd, Austin, TX 78723",
+          "distance_miles": 7.5,
+          "phones": [
+            "512-494-9400"
+          ],
+          "emails": [],
+          "website": "https://austinenergy.com",
+          "availability_status": "Ongoing program - discounts may take one or two bills to show"
+        }
+      ],
+      "resource_count": 7,
+      "usage": {
+        "prompt_tokens": 3381,
+        "completion_tokens": 1486,
+        "total_tokens": 4867
+      },
+      "finish_reason": "stop",
+      "latency_ms": 16698,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_004",
+    "user_query": "Include resources that support the following categories: Childcare, Legal Services, Financial Assistance\nFocus on resources close to the following location: Austin (Travis county), TX 78745",
+    "location": "Austin (Travis county), TX 78745",
+    "resources_context_length": 755,
+    "baseline": {
+      "raw_content": "{}",
+      "parsed_json": {},
+      "parse_error": null,
+      "resources": [],
+      "resource_count": 0,
+      "usage": {
+        "prompt_tokens": 3384,
+        "completion_tokens": 10,
+        "total_tokens": 3394
+      },
+      "finish_reason": "stop",
+      "latency_ms": 1291,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_005",
+    "user_query": "My client is a veteran who needs mental health support and employment assistance.\nInclude resources that support the following categories: Mental Health, Employment & Job Training, Veterans Services\nFocus on resources close to the following location: Austin (Travis county), TX 78723",
+    "location": "Austin (Travis county), TX 78723",
+    "resources_context_length": 596,
+    "baseline": {
+      "raw_content": "{}",
+      "parsed_json": {},
+      "parse_error": null,
+      "resources": [],
+      "resource_count": 0,
+      "usage": {
+        "prompt_tokens": 3400,
+        "completion_tokens": 10,
+        "total_tokens": 3410
+      },
+      "finish_reason": "stop",
+      "latency_ms": 703,
+      "web_search_used": false
+    }
+  }
+]

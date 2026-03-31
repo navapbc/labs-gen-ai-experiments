@@ -1,0 +1,90 @@
+# End-to-End LLM Evaluation Pipeline — Configuration
+#
+# Copy and customize:
+#   cp config.example.yaml my_config.yaml
+#   python pipeline.py run --config my_config.yaml
+
+# Phoenix API connection
+phoenix:
+  url: https://your-phoenix-instance.example.com
+  # api_key: set via PHOENIX_API_KEY env var
+  project_name: default
+  days_back: 60        # How far back to fetch traces
+  max_pages: 100       # Max API pagination pages
+
+# Trace extraction
+extraction:
+  adapter: generic     # 'generic' or 'referral' (or write your own)
+  output_dir: results
+
+# Optional: load from file instead of Phoenix API
+# sample_data:
+#   traces_path: sample_data/traces.json
+
+# Automated evaluation
+evaluation:
+  resource_path: resources   # JSONPath to resources in output
+  dimensions:
+    output_structure:
+      enabled: true
+      required_keys: [resources]
+    resource_count:
+      enabled: true
+      min: 1
+      max: 10
+    url_validity:
+      enabled: true
+      skip_validation: false
+      timeout: 10
+    readability:
+      enabled: true
+      max_grade_level: 8.0
+    duplicates:
+      enabled: true
+      name_threshold: 0.8
+    contact_completeness:
+      enabled: true
+    rag_grounding:
+      enabled: true
+    location_match:
+      enabled: false
+
+# Sampling for deep review
+sampling:
+  referral_target: 100
+  actionplan_target: 50
+  strata_key: prompt_type
+  seed: 42
+
+# Statistical analysis
+analysis:
+  confidence_level: 0.95
+  output_path: results/eval_report.md
+
+# Prompt iteration A/B testing (optional — requires OPENAI_API_KEY)
+# iteration:
+#   versions:
+#     - name: baseline
+#       template_path: prompts/baseline.txt
+#     - name: improved
+#       template_path: prompts/improved.txt
+#   test_corpus_path: test_corpus.json
+#   model: gpt-4o
+#   temperature: 0.7
+#   template_format: jinja2
+#   rate_limit_delay: 2.0
+
+# Automated prompt optimization loop (requires OPENAI_API_KEY + PHOENIX_URL)
+# Loads a prompt, evaluates it, generates improved variants via LLM,
+# A/B tests them, and repeats until flags are below threshold.
+# optimize:
+#   prompt_name: generate_referrals_centraltx  # Load from Phoenix
+#   # prompt_file: prompts/baseline.txt        # OR load from local file
+#   test_corpus_path: test_corpus.json         # Required: test queries
+#   model: gpt-4o                              # Model for simulation
+#   temperature: 0.7
+#   template_format: jinja2
+#   max_iterations: 5                          # Hard cap on loop iterations
+#   flag_threshold: 2                          # Stop if total flags <= N
+#   auto_deploy: false                         # Deploy to Phoenix when done?
+#   improver_model: gpt-4o                     # Model for generating variants
