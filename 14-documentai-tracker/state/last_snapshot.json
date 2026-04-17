@@ -1,0 +1,251 @@
+{
+  "generated_at": "2026-04-17T19:19:36.633998+00:00",
+  "items": [
+    {
+      "assignees": [
+        "laurencegoolsby",
+        "ezekielsansing-hash"
+      ],
+      "closed_at": null,
+      "created_at": "2026-01-28T00:35:43Z",
+      "fields": {
+        "Labels": [
+          "cloud: aws"
+        ],
+        "Priority": "\ud83c\udfd4 High",
+        "Product": "DocumentAI",
+        "Product Category": "Deployable Microservices",
+        "Roadmap Status": "Now",
+        "Size": "\ud83e\udd91 Large",
+        "Started on": "2025-10-27",
+        "Status": "\ud83c\udfd7 In progress",
+        "Target date": "2026-03-31",
+        "Target start": "2026-01-01",
+        "Title": "DocumentAI API"
+      },
+      "issue_type": "Epic",
+      "item_id": "PVTI_lADOAKy-D84AFzXQzgkXaug",
+      "item_type": "Issue",
+      "labels": [
+        "cloud: aws"
+      ],
+      "milestone": null,
+      "number": 32,
+      "parent_number": null,
+      "parent_title": null,
+      "repo": "navapbc/strata",
+      "state": "OPEN",
+      "state_reason": null,
+      "sub_issues": [
+        {
+          "number": 986,
+          "state": "CLOSED",
+          "title": "Create Document Data Extraction module for AWS",
+          "url": "https://github.com/navapbc/template-infra/issues/986"
+        },
+        {
+          "number": 3,
+          "state": "OPEN",
+          "title": "Refactor Lambda handlers to command-line scripts",
+          "url": "https://github.com/navapbc/strata-template-documentai-api/issues/3"
+        },
+        {
+          "number": 4,
+          "state": "CLOSED",
+          "title": "Configure and use logging",
+          "url": "https://github.com/navapbc/strata-template-documentai-api/issues/4"
+        },
+        {
+          "number": 6,
+          "state": "CLOSED",
+          "title": "Configure instance CI",
+          "url": "https://github.com/navapbc/strata-template-documentai-api/issues/6"
+        },
+        {
+          "number": 10,
+          "state": "OPEN",
+          "title": "Configure template CI",
+          "url": "https://github.com/navapbc/strata-template-documentai-api/issues/10"
+        },
+        {
+          "number": 9,
+          "state": "CLOSED",
+          "title": "Add tests",
+          "url": "https://github.com/navapbc/strata-template-documentai-api/issues/9"
+        },
+        {
+          "number": 8,
+          "state": "CLOSED",
+          "title": "Add development and usage docs",
+          "url": "https://github.com/navapbc/strata-template-documentai-api/issues/8"
+        },
+        {
+          "number": 6,
+          "state": "CLOSED",
+          "title": "Make strata-template-documentai-api repo public",
+          "url": "https://github.com/navapbc/tss-internal/issues/6"
+        },
+        {
+          "number": 253,
+          "state": "OPEN",
+          "title": "Create DocumentAI API instance",
+          "url": "https://github.com/navapbc/platform-test/issues/253"
+        },
+        {
+          "number": 12,
+          "state": "CLOSED",
+          "title": "Configure Makefile targets for containerized development",
+          "url": "https://github.com/navapbc/strata-template-documentai-api/issues/12"
+        },
+        {
+          "number": 17,
+          "state": "CLOSED",
+          "title": "Minimal auth for demo purposes",
+          "url": "https://github.com/navapbc/strata-template-documentai-api/issues/17"
+        }
+      ],
+      "sub_issues_completed": 8,
+      "sub_issues_percent": 72,
+      "sub_issues_total": 11,
+      "title": "DocumentAI API",
+      "updated_at": "2026-04-17T16:16:10Z",
+      "url": "https://github.com/navapbc/strata/issues/32"
+    },
+    {
+      "assignees": [
+        "Afrothundr",
+        "ezekielsansing-hash"
+      ],
+      "closed_at": null,
+      "created_at": "2026-03-24T18:20:38Z",
+      "fields": {
+        "Product": "DocumentAI",
+        "Product Category": "Deployable Microservices",
+        "Roadmap Status": "Now",
+        "Status": "\ud83c\udfd7 In progress",
+        "Target date": "2026-04-30",
+        "Target start": "2026-02-20",
+        "Title": "Enhance document intelligence with Beam learnings"
+      },
+      "issue_type": "Epic",
+      "item_id": "PVTI_lADOAKy-D84AFzXQzgoOngw",
+      "item_type": "Issue",
+      "labels": [],
+      "milestone": null,
+      "number": 27,
+      "parent_number": 18,
+      "parent_title": "[Initiative] Integrate Beam components into Strata",
+      "repo": "navapbc/tss-internal",
+      "state": "OPEN",
+      "state_reason": null,
+      "sub_issues": [
+        {
+          "number": 38,
+          "state": "OPEN",
+          "title": "Determine recommended unique Doctopus functionality for the Strata Document AI roadmap",
+          "url": "https://github.com/navapbc/tss-internal/issues/38"
+        }
+      ],
+      "sub_issues_completed": 0,
+      "sub_issues_percent": 0,
+      "sub_issues_total": 2,
+      "title": "Enhance document intelligence with Beam learnings",
+      "updated_at": "2026-04-17T16:26:57Z",
+      "url": "https://github.com/navapbc/tss-internal/issues/27"
+    },
+    {
+      "assignees": [],
+      "closed_at": null,
+      "created_at": "2026-03-24T21:18:10Z",
+      "fields": {
+        "Priority": "\ud83c\udfd4 High",
+        "Product": "DocumentAI",
+        "Product Category": "Deployable Microservices",
+        "Status": "Prioritized",
+        "Target date": "2026-05-31",
+        "Target start": "2026-04-01",
+        "Title": "MD PBIF Document AI"
+      },
+      "issue_type": "Epic",
+      "item_id": "PVTI_lADOAKy-D84AFzXQzgoPbJY",
+      "item_type": "Issue",
+      "labels": [],
+      "milestone": null,
+      "number": 37,
+      "parent_number": null,
+      "parent_title": null,
+      "repo": "navapbc/tss-internal",
+      "state": "OPEN",
+      "state_reason": null,
+      "sub_issues": [],
+      "sub_issues_completed": 0,
+      "sub_issues_percent": 0,
+      "sub_issues_total": 0,
+      "title": "MD PBIF Document AI",
+      "updated_at": "2026-04-11T00:58:24Z",
+      "url": "https://github.com/navapbc/tss-internal/issues/37"
+    },
+    {
+      "assignees": [],
+      "closed_at": null,
+      "created_at": "2026-04-13T20:30:58Z",
+      "fields": {
+        "Product": "DocumentAI",
+        "Product Category": "Deployable Microservices",
+        "Status": "\ud83c\udd95 New",
+        "Target date": "2026-04-30",
+        "Target start": "2026-03-02",
+        "Title": "Batch File Uploads (Including ZIP Support)"
+      },
+      "issue_type": "Epic",
+      "item_id": "PVTI_lADOAKy-D84AFzXQzgqFVNY",
+      "item_type": "Issue",
+      "labels": [],
+      "milestone": null,
+      "number": 47,
+      "parent_number": null,
+      "parent_title": null,
+      "repo": "navapbc/strata",
+      "state": "OPEN",
+      "state_reason": null,
+      "sub_issues": [],
+      "sub_issues_completed": 0,
+      "sub_issues_percent": 0,
+      "sub_issues_total": 0,
+      "title": "Batch File Uploads (Including ZIP Support)",
+      "updated_at": "2026-04-16T00:55:51Z",
+      "url": "https://github.com/navapbc/strata/issues/47"
+    },
+    {
+      "assignees": [],
+      "closed_at": null,
+      "created_at": "2026-04-13T20:33:10Z",
+      "fields": {
+        "Product": "DocumentAI",
+        "Product Category": "Deployable Microservices",
+        "Status": "Prioritized",
+        "Target date": "2026-05-22",
+        "Target start": "2026-04-17",
+        "Title": "Optimize Identification Document Processing in DocumentAI"
+      },
+      "issue_type": "Epic",
+      "item_id": "PVTI_lADOAKy-D84AFzXQzgqFVho",
+      "item_type": "Issue",
+      "labels": [],
+      "milestone": null,
+      "number": 48,
+      "parent_number": null,
+      "parent_title": null,
+      "repo": "navapbc/strata",
+      "state": "OPEN",
+      "state_reason": null,
+      "sub_issues": [],
+      "sub_issues_completed": 0,
+      "sub_issues_percent": 0,
+      "sub_issues_total": 0,
+      "title": "Optimize Identification Document Processing in DocumentAI",
+      "updated_at": "2026-04-17T15:02:20Z",
+      "url": "https://github.com/navapbc/strata/issues/48"
+    }
+  ]
+}
