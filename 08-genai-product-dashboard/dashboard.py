@@ -163,7 +163,7 @@ def main():
 
         dev_url_default = os.getenv(
             "PHOENIX_DEV_SPANS_URL",
-            "https://phoenix.referral-pilot-dev.navateam.com:6006/projects/UHJvamVjdDoxOA==/spans",
+            "",
         )
         include_secondary_source = st.checkbox(
             "Include Keystone dev traces",

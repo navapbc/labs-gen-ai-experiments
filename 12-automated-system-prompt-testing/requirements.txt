@@ -1,0 +1,7 @@
+openai>=1.0
+pyyaml>=6.0
+jinja2>=3.0
+httpx>=0.24
+readability-lxml>=0.8
+python-dotenv>=1.0
+flask>=3.0

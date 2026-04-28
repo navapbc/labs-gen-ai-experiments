@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Improvement Workflow</title>
+  <link rel="stylesheet" href="/static/style.css?v=9">
+</head>
+<body>
+  <header>
+    <h1>Prompt Improvement Workflow</h1>
+    <span class="subtitle">Evaluate &rarr; Improve &rarr; Compare &rarr; Deploy</span>
+    <button id="btn-phoenix-settings" class="btn-settings" title="Phoenix Connection Settings">Settings</button>
+    <span id="phoenix-status" class="phoenix-badge disconnected">Disconnected</span>
+  </header>
+
+  <!-- Settings Panels (collapsible) -->
+  <div id="phoenix-settings-bar" class="settings-bar" style="display:none">
+    <div class="settings-inner">
+      <label for="phoenix-url">Phoenix URL</label>
+      <input id="phoenix-url" type="text" placeholder="https://phoenix.example.com:6006" spellcheck="false">
+      <label for="phoenix-key">API Key</label>
+      <input id="phoenix-key" type="password" placeholder="Enter API key">
+      <button id="btn-phoenix-connect" class="btn-primary btn-sm">Connect</button>
+      <span id="phoenix-connect-status" class="status-text"></span>
+    </div>
+    <div class="settings-inner" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);">
+      <label for="openai-key">OpenAI API Key</label>
+      <input id="openai-key" type="password" placeholder="sk-..." spellcheck="false">
+      <button id="btn-openai-save" class="btn-primary btn-sm">Save</button>
+      <span id="openai-key-status" class="status-text"></span>
+    </div>
+    <div class="settings-inner" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);">
+      <label for="anthropic-key">Anthropic API Key</label>
+      <input id="anthropic-key" type="password" placeholder="sk-ant-..." spellcheck="false">
+      <button id="btn-anthropic-save" class="btn-primary btn-sm">Save</button>
+      <span id="anthropic-key-status" class="status-text"></span>
+    </div>
+  </div>
+
+  <!-- Step Indicator Bar -->
+  <nav class="step-bar">
+    <div class="step-item active" data-step="1">
+      <div class="step-number">1</div>
+      <div class="step-label">Load</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item" data-step="2">
+      <div class="step-number">2</div>
+      <div class="step-label">Evaluate</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item" data-step="3">
+      <div class="step-number">3</div>
+      <div class="step-label">Improve</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item" data-step="4">
+      <div class="step-number">4</div>
+      <div class="step-label">Compare</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item" data-step="5">
+      <div class="step-number">5</div>
+      <div class="step-label">Deploy</div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ========== STEP 1: LOAD ========== -->
+    <section class="step-panel" id="step-1">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Load Prompt from Phoenix</h2>
+          <div class="phoenix-controls">
+            <select id="prompt-select" disabled>
+              <option value="">Loading prompts...</option>
+            </select>
+            <select id="version-select" disabled>
+              <option value="">Select prompt first</option>
+            </select>
+            <button id="btn-load-version" disabled>Load</button>
+          </div>
+        </div>
+        <div class="template-meta" id="baseline-meta"></div>
+        <textarea id="baseline-editor" readonly placeholder="Select a Phoenix prompt above or paste a template here..."></textarea>
+        <div class="char-count"><span id="baseline-chars">0</span> chars</div>
+      </div>
+
+      <!-- Configuration -->
+      <div class="panel config-panel-inline">
+        <h2>Configuration</h2>
+        <div class="config-grid-inline">
+          <div class="config-item">
+            <label for="corpus-select">Test Corpus</label>
+            <select id="corpus-select"><option value="">Loading...</option></select>
+          </div>
+          <div class="config-item">
+            <label for="model-select">Model</label>
+            <select id="model-select">
+              <option value="gpt-4o">gpt-4o</option>
+              <option value="gpt-4o-mini">gpt-4o-mini</option>
+              <option value="gpt-5-mini">gpt-5-mini</option>
+              <option value="gpt-5.1" selected>gpt-5.1</option>
+              <option value="gpt-5.3">gpt-5.3</option>
+              <option value="gpt-5.4">gpt-5.4</option>
+            </select>
+          </div>
+          <div class="config-item">
+            <label for="temperature-input">Temperature</label>
+            <input id="temperature-input" type="number" min="0" max="2" step="0.1" value="0.5">
+          </div>
+          <div class="config-item">
+            <label for="reasoning-select">Reasoning</label>
+            <select id="reasoning-select">
+              <option value="none" selected>None (production default)</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="config-item">
+            <label for="format-select">Template Format</label>
+            <select id="format-select">
+              <option value="plain" selected>Plain ({{var}})</option>
+              <option value="jinja2">Jinja2</option>
+            </select>
+          </div>
+          <div class="config-item">
+            <label for="limit-input">Query Limit (0=all) <span class="tooltip-trigger" onclick="event.preventDefault(); event.stopPropagation(); this.classList.toggle('active')">?<span class="tooltip-content">Limits how many test queries to run. Use a small number (3–5) for quick iteration, or 0 to run all queries for a thorough evaluation. Each query costs one LLM API call per version.</span></span></label>
+            <input id="limit-input" type="number" min="0" max="100" value="0">
+          </div>
+          <div class="config-item">
+            <label for="web-search-toggle">Web Search <span class="tooltip-trigger" onclick="event.preventDefault(); event.stopPropagation(); this.classList.toggle('active')">?<span class="tooltip-content">Enable OpenAI web search during simulation. When enabled, the LLM can search the web for resources beyond the RAG context. Ungrounded resources from web search are NOT flagged as hallucinations. Uses the Responses API.</span></span></label>
+            <label class="toggle-label"><input id="web-search-toggle" type="checkbox"> Enable</label>
+          </div>
+        </div>
+
+        <fieldset>
+          <legend>Evaluation Dimensions</legend>
+          <div class="dim-checkboxes">
+            <label><input type="checkbox" value="output_structure" checked> Output Structure</label>
+            <label><input type="checkbox" value="resource_count" checked> Resource Count</label>
+            <label><input type="checkbox" value="readability" checked> Readability</label>
+            <label><input type="checkbox" value="duplicates" checked> Duplicates</label>
+            <label><input type="checkbox" value="contact_completeness" checked> Contact Completeness</label>
+            <label><input type="checkbox" value="rag_grounding" checked> RAG Grounding</label>
+            <label><input type="checkbox" value="url_validity"> URL Validity (slow)</label>
+            <label><input type="checkbox" value="location_match"> Location Match</label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="step-actions">
+        <button id="btn-evaluate" class="btn-primary btn-lg" disabled>Evaluate This Prompt</button>
+      </div>
+    </section>
+
+    <!-- ========== STEP 2: EVALUATE ========== -->
+    <section class="step-panel" id="step-2" style="display:none">
+      <!-- Progress bar with query counter -->
+      <div id="eval-progress" class="progress-bar" style="display:none">
+        <div class="progress-spinner"></div>
+        <div class="progress-detail">
+          <span id="eval-progress-text">Starting evaluation...</span>
+          <div id="eval-progress-bar-track" class="progress-track" style="display:none">
+            <div id="eval-progress-bar-fill" class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results container — shown during streaming AND after completion -->
+      <div id="eval-results" style="display:none">
+        <!-- Flag Summary Cards -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Flag Summary</h2>
+            <span id="eval-query-counter" class="status-text"></span>
+          </div>
+          <div id="flag-cards" class="flag-cards"></div>
+        </div>
+
+        <!-- Aggregate Metrics -->
+        <div class="panel">
+          <h2>Aggregate Metrics</h2>
+          <div id="metrics-table-container"></div>
+        </div>
+
+        <!-- Metrics Key (collapsible) -->
+        <div class="panel panel-collapsible collapsed" id="eval-metrics-key-panel">
+          <div class="panel-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            <h2>Metrics Key</h2>
+          </div>
+          <div class="panel-body">
+            <div class="metrics-key">
+              <div class="key-section">
+                <h3>Flags</h3>
+                <dl>
+                  <dt>ABOVE_8TH_GRADE</dt>
+                  <dd>Resource descriptions exceed 8th-grade reading level (Flesch-Kincaid). Target: below 8.0.</dd>
+                  <dt>LOW_GROUNDING</dt>
+                  <dd>Less than 70% of output resources match the reference data (RAG context). Only flagged when web search is NOT used. When web search is enabled, ungrounded resources likely came from the web and are not fabricated.</dd>
+                  <dt>HALLUCINATION_RISK</dt>
+                  <dd>Low grounding + no web search + more output resources than input RAG resources. Strongly suggests the LLM fabricated resources from training data rather than citing the provided references.</dd>
+                  <dt>DUPLICATE_RESOURCE</dt>
+                  <dd>Same organization appears more than once in the output.</dd>
+                  <dt>BROKEN_URL</dt>
+                  <dd>Resource URL returns a 404 or server error (requires URL Validity dimension enabled).</dd>
+                  <dt>INVALID_JSON / EMPTY_OUTPUT</dt>
+                  <dd>LLM output could not be parsed as valid JSON, or returned an empty result.</dd>
+                  <dt>MISSING_CONTACT_*</dt>
+                  <dd>Resource is missing phone number, address, or website URL.</dd>
+                  <dt>CROSS_STATE</dt>
+                  <dd>Resource is located outside the user's state/region (requires Location Match dimension enabled).</dd>
+                </dl>
+              </div>
+              <div class="key-section">
+                <h3>Grounding Thresholds</h3>
+                <p>Grounding measures what % of output resources appear in the reference data (RAG context). When web search is enabled, grounding flags are suppressed since ungrounded resources likely came from web results.</p>
+                <dl>
+                  <dt><span class="flag-badge badge-green">High: 90%+</span></dt>
+                  <dd>LLM is closely following the reference data.</dd>
+                  <dt><span class="flag-badge badge-yellow">Medium: 70–90%</span></dt>
+                  <dd>Some resources may be from training data. Review ungrounded ones.</dd>
+                  <dt><span class="flag-badge badge-red">Low: &lt;70%</span></dt>
+                  <dd>Many fabricated resources. Triggers LOW_GROUNDING flag. Prompt may need stricter grounding instructions.</dd>
+                </dl>
+              </div>
+              <div class="key-section">
+                <h3>Grade Level</h3>
+                <p>Flesch-Kincaid grade level of resource descriptions. Lower is simpler.</p>
+                <dl>
+                  <dt><span class="flag-badge badge-green">Good: &le;8.0</span></dt>
+                  <dd>8th-grade reading level or below — accessible to most adults.</dd>
+                  <dt><span class="flag-badge badge-red">Flagged: &gt;8.0</span></dt>
+                  <dd>Triggers ABOVE_8TH_GRADE. Common causes: jargon, long sentences, formal vocabulary.</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Per-Query Detail (collapsible) -->
+        <div class="panel panel-collapsible" id="eval-per-query-panel">
+          <div class="panel-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            <h2>Per-Query Detail</h2>
+          </div>
+          <div class="panel-body">
+            <div id="per-query-table-container" class="table-scroll"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button id="btn-back-to-load" class="btn-secondary">Back to Load</button>
+        <div class="variant-model-picker">
+          <label for="variant-model-select">Variant model:</label>
+          <select id="variant-model-select">
+            <optgroup label="OpenAI">
+              <option value="gpt-4o">gpt-4o</option>
+              <option value="gpt-4o-mini">gpt-4o-mini</option>
+              <option value="gpt-5-mini">gpt-5-mini</option>
+              <option value="gpt-5.1" selected>gpt-5.1</option>
+              <option value="gpt-5.3">gpt-5.3</option>
+              <option value="gpt-5.4">gpt-5.4</option>
+              <option value="codex-mini-latest">codex-mini-latest</option>
+              <option value="o3-pro">o3-pro</option>
+            </optgroup>
+            <optgroup label="Anthropic">
+              <option value="claude-opus-4-6">Claude Opus 4.6</option>
+              <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>
+              <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5</option>
+            </optgroup>
+          </select>
+        </div>
+        <button id="btn-generate-variant" class="btn-primary btn-lg" disabled>Generate Improved Variant</button>
+      </div>
+    </section>
+
+    <!-- ========== STEP 3: IMPROVE ========== -->
+    <section class="step-panel" id="step-3" style="display:none">
+      <div id="variant-progress" class="progress-bar" style="display:none">
+        <div class="progress-spinner"></div>
+        <span id="variant-progress-text">AI is analyzing failures and generating improved prompt...</span>
+      </div>
+
+      <div id="variant-editors" style="display:none">
+        <!-- Flag annotations from baseline eval -->
+        <div id="baseline-flag-annotations" class="flag-annotation-bar"></div>
+
+        <!-- View toggle -->
+        <div class="diff-toolbar">
+          <div class="diff-tabs">
+            <button class="diff-tab active" data-view="diff" onclick="switchDiffView('diff')">Diff View</button>
+            <button class="diff-tab" data-view="edit" onclick="switchDiffView('edit')">Edit Variant</button>
+          </div>
+          <div id="diff-stats" class="diff-stats"></div>
+        </div>
+
+        <!-- Diff view (default) -->
+        <div id="diff-view" class="panel diff-panel">
+          <div id="diff-content" class="diff-content"></div>
+        </div>
+
+        <!-- Edit view (hidden by default) -->
+        <div id="edit-view" class="panel" style="display:none">
+          <div class="panel-header"><h2>Edit Variant</h2></div>
+          <textarea id="variant-editor" placeholder="AI-generated variant will appear here..."></textarea>
+          <div class="char-count"><span id="variant-chars">0</span> chars</div>
+        </div>
+
+        <!-- Hidden textarea to preserve baseline text for diff recalc -->
+        <textarea id="baseline-readonly" style="display:none"></textarea>
+      </div>
+
+      <div class="step-actions">
+        <button id="btn-back-to-eval" class="btn-secondary">Back to Evaluate</button>
+        <button id="btn-run-comparison" class="btn-primary btn-lg" disabled>Run A/B Comparison</button>
+      </div>
+    </section>
+
+    <!-- ========== STEP 4: COMPARE ========== -->
+    <section class="step-panel" id="step-4" style="display:none">
+      <div id="compare-progress" class="progress-bar" style="display:none">
+        <div class="progress-spinner"></div>
+        <div class="progress-detail">
+          <span id="compare-progress-text">Running comparison...</span>
+          <div id="compare-progress-bar-track" class="progress-track" style="display:none">
+            <div id="compare-progress-bar-fill" class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="compare-results" style="display:none">
+        <!-- Win/Loss Banner -->
+        <div id="win-loss-banner" class="win-loss-banner"></div>
+
+        <!-- Side-by-side Metrics -->
+        <div class="panel">
+          <h2>Metrics Comparison</h2>
+          <div id="compare-metrics-container"></div>
+        </div>
+
+        <!-- Flag Comparison -->
+        <div class="panel">
+          <h2>Flag Comparison (Baseline vs Variant)</h2>
+          <div id="flag-comparison-container"></div>
+        </div>
+
+        <!-- Per-Query Comparison -->
+        <div class="panel panel-collapsible" id="compare-per-query-panel">
+          <div class="panel-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            <h2>Per-Query Breakdown</h2>
+          </div>
+          <div class="panel-body">
+            <div id="compare-per-query-container" class="table-scroll"></div>
+          </div>
+        </div>
+
+        <!-- Full Report -->
+        <div class="panel panel-collapsible collapsed" id="compare-report-panel">
+          <div class="panel-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            <h2>Full Report</h2>
+          </div>
+          <div class="panel-body">
+            <div id="compare-report" class="report-md"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button id="btn-back-to-improve" class="btn-secondary">Back to Improve</button>
+        <button id="btn-deploy-winner" class="btn-primary btn-lg btn-deploy" disabled>Deploy Winner to Phoenix</button>
+      </div>
+    </section>
+
+    <!-- ========== STEP 5: DEPLOY ========== -->
+    <section class="step-panel" id="step-5" style="display:none">
+      <div class="panel deploy-panel">
+        <h2>Deploy to Phoenix</h2>
+        <div class="deploy-form">
+          <label for="deploy-prompt-name">Prompt Name</label>
+          <input id="deploy-prompt-name" type="text" placeholder="generate_referrals_centraltx" readonly>
+          <label for="deploy-description">Description</label>
+          <input id="deploy-description" type="text" placeholder="Improved via A/B workflow">
+          <label for="deploy-model">Model</label>
+          <input id="deploy-model" type="text" value="gpt-5.1">
+          <label for="deploy-temperature">Temperature</label>
+          <input id="deploy-temperature" type="number" min="0" max="2" step="0.1" value="0.5">
+        </div>
+        <div class="deploy-actions">
+          <button id="btn-deploy-confirm" class="btn-primary btn-lg">Deploy Now</button>
+          <span id="deploy-status" class="status-text"></span>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button id="btn-back-to-compare" class="btn-secondary">Back to Compare</button>
+        <button id="btn-new-iteration" class="btn-primary btn-lg" style="display:none">Start New Iteration</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // --- State ---
+    const state = {
+      currentStep: 1,
+      phoenixPrompts: [],
+      baselineTemplate: '',
+      variantTemplate: '',
+      baselineRunId: null,
+      compareRunId: null,
+      evalResults: null,     // structured metrics from baseline-only run
+      compareResults: null,  // structured metrics from comparison run
+      pollInterval: null,
+      deployedPromptName: '',
+      baselineVersionNum: null,  // sequence_number of loaded baseline
+      lastDeployedVersionNum: null,  // sequence_number after deploy
+    };
+
+    // --- Init ---
+    document.addEventListener('DOMContentLoaded', () => {
+      checkPhoenixSettings();
+      checkOpenAISettings();
+      checkAnthropicSettings();
+      loadTestCorpus();
+      setupEventListeners();
+
+      // Close tooltips on outside click
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.tooltip-trigger')) {
+          document.querySelectorAll('.tooltip-trigger.active').forEach(t => t.classList.remove('active'));
+        }
+      });
+    });
+
+    function setupEventListeners() {
+      // Step navigation (clicking completed steps)
+      document.querySelectorAll('.step-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const step = parseInt(el.dataset.step);
+          if (el.classList.contains('completed') || el.classList.contains('active')) {
+            goToStep(step);
+          }
+        });
+      });
+
+      // Phoenix settings
+      document.getElementById('btn-phoenix-settings').addEventListener('click', togglePhoenixSettings);
+      document.getElementById('btn-phoenix-connect').addEventListener('click', connectPhoenix);
+      document.getElementById('phoenix-key').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') connectPhoenix();
+      });
+
+      // OpenAI key
+      document.getElementById('btn-openai-save').addEventListener('click', saveOpenAIKey);
+      document.getElementById('openai-key').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') saveOpenAIKey();
+      });
+
+      // Anthropic key
+      document.getElementById('btn-anthropic-save').addEventListener('click', saveAnthropicKey);
+      document.getElementById('anthropic-key').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') saveAnthropicKey();
+      });
+
+      // Step 1: Load
+      document.getElementById('prompt-select').addEventListener('change', onPromptChange);
+      document.getElementById('btn-load-version').addEventListener('click', onLoadVersion);
+      document.getElementById('baseline-editor').addEventListener('input', () => {
+        document.getElementById('baseline-chars').textContent = document.getElementById('baseline-editor').value.length;
+        updateStep1Button();
+      });
+      document.getElementById('btn-evaluate').addEventListener('click', onEvaluateBaseline);
+
+      // Step 2: Evaluate
+      document.getElementById('btn-back-to-load').addEventListener('click', () => goToStep(1));
+      document.getElementById('btn-generate-variant').addEventListener('click', onGenerateVariant);
+
+      // Step 3: Improve
+      document.getElementById('btn-back-to-eval').addEventListener('click', () => goToStep(2));
+      document.getElementById('variant-editor').addEventListener('input', () => {
+        document.getElementById('variant-chars').textContent = document.getElementById('variant-editor').value.length;
+        updateStep3Button();
+      });
+      document.getElementById('btn-run-comparison').addEventListener('click', onRunComparison);
+
+      // Step 4: Compare
+      document.getElementById('btn-back-to-improve').addEventListener('click', () => goToStep(3));
+      document.getElementById('btn-deploy-winner').addEventListener('click', prepareAndGoToDeploy);
+
+      // Step 5: Deploy
+      document.getElementById('btn-back-to-compare').addEventListener('click', () => goToStep(4));
+      document.getElementById('btn-deploy-confirm').addEventListener('click', onDeploy);
+      document.getElementById('btn-new-iteration').addEventListener('click', onNewIteration);
+    }
+
+    // --- Step Navigation ---
+    function goToStep(n) {
+      state.currentStep = n;
+
+      // Hide all panels
+      document.querySelectorAll('.step-panel').forEach(el => el.style.display = 'none');
+      document.getElementById(`step-${n}`).style.display = 'block';
+
+      // Update step indicators
+      document.querySelectorAll('.step-item').forEach(el => {
+        const step = parseInt(el.dataset.step);
+        el.classList.remove('active');
+        if (step === n) {
+          el.classList.add('active');
+        } else if (step < n) {
+          el.classList.add('completed');
+        } else {
+          // Clear completed from future steps when going backwards
+          el.classList.remove('completed');
+        }
+      });
+
+      // Update connectors between steps
+      const connectors = document.querySelectorAll('.step-connector');
+      connectors.forEach((conn, i) => {
+        // Connector i is between step (i+1) and step (i+2)
+        if (i + 1 < n) {
+          conn.classList.add('filled');
+        } else {
+          conn.classList.remove('filled');
+        }
+      });
+    }
+
+    // --- Phoenix Settings ---
+    function togglePhoenixSettings() {
+      const bar = document.getElementById('phoenix-settings-bar');
+      bar.style.display = bar.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function checkPhoenixSettings() {
+      try {
+        const resp = await fetch('/api/phoenix/settings');
+        const data = await resp.json();
+        if (data.url) document.getElementById('phoenix-url').value = data.url;
+        if (data.source !== 'none' && data.has_key) {
+          updatePhoenixBadge('connecting');
+          loadPhoenixPrompts();
+        } else {
+          updatePhoenixBadge('disconnected');
+          document.getElementById('phoenix-settings-bar').style.display = 'block';
+          enableManualBaseline();
+        }
+      } catch {
+        updatePhoenixBadge('disconnected');
+        enableManualBaseline();
+      }
+    }
+
+    async function connectPhoenix() {
+      const url = document.getElementById('phoenix-url').value.trim();
+      const key = document.getElementById('phoenix-key').value.trim();
+      const statusEl = document.getElementById('phoenix-connect-status');
+      const btn = document.getElementById('btn-phoenix-connect');
+
+      if (!url) { statusEl.textContent = 'URL is required'; statusEl.className = 'error-text'; return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Connecting...';
+      statusEl.textContent = '';
+
+      try {
+        const resp = await fetch('/api/phoenix/settings', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ url, api_key: key }),
+        });
+        const data = await resp.json();
+        if (data.success) {
+          statusEl.textContent = data.message;
+          statusEl.className = 'success-text';
+          updatePhoenixBadge('connected');
+          document.getElementById('phoenix-key').value = '';
+          loadPhoenixPrompts();
+          setTimeout(() => { document.getElementById('phoenix-settings-bar').style.display = 'none'; }, 1500);
+        } else {
+          statusEl.textContent = data.message;
+          statusEl.className = 'error-text';
+          updatePhoenixBadge('disconnected');
+        }
+      } catch (e) {
+        statusEl.textContent = 'Connection failed: ' + e.message;
+        statusEl.className = 'error-text';
+        updatePhoenixBadge('disconnected');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Connect';
+      }
+    }
+
+    function updatePhoenixBadge(s) {
+      const badge = document.getElementById('phoenix-status');
+      badge.className = 'phoenix-badge ' + s;
+      badge.textContent = s === 'connected' ? 'Connected' : s === 'connecting' ? 'Connecting...' : 'Disconnected';
+    }
+
+    // --- OpenAI API Key ---
+    async function checkOpenAISettings() {
+      const statusEl = document.getElementById('openai-key-status');
+      try {
+        const resp = await fetch('/api/openai/settings');
+        const data = await resp.json();
+        if (data.has_key) {
+          statusEl.textContent = `Key configured (${data.key_preview}, source: ${data.source})`;
+          statusEl.className = 'success-text';
+        } else {
+          statusEl.textContent = 'No API key — enter one to run evaluations';
+          statusEl.className = 'error-text';
+          document.getElementById('phoenix-settings-bar').style.display = 'block';
+        }
+      } catch {
+        statusEl.textContent = '';
+      }
+    }
+
+    async function saveOpenAIKey() {
+      const key = document.getElementById('openai-key').value.trim();
+      const statusEl = document.getElementById('openai-key-status');
+      if (!key) { statusEl.textContent = 'Enter an API key'; statusEl.className = 'error-text'; return; }
+
+      try {
+        const resp = await fetch('/api/openai/settings', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ api_key: key }),
+        });
+        const data = await resp.json();
+        if (data.success) {
+          statusEl.textContent = 'OpenAI API key saved';
+          statusEl.className = 'success-text';
+          document.getElementById('openai-key').value = '';
+        } else {
+          statusEl.textContent = data.error;
+          statusEl.className = 'error-text';
+        }
+      } catch (e) {
+        statusEl.textContent = 'Failed: ' + e.message;
+        statusEl.className = 'error-text';
+      }
+    }
+
+    // --- Anthropic API Key ---
+    async function checkAnthropicSettings() {
+      const statusEl = document.getElementById('anthropic-key-status');
+      try {
+        const resp = await fetch('/api/anthropic/settings');
+        const data = await resp.json();
+        if (data.has_key) {
+          statusEl.textContent = `Key configured (${data.key_preview}, source: ${data.source})`;
+          statusEl.className = 'success-text';
+        } else {
+          statusEl.textContent = 'Optional — needed for Claude models';
+          statusEl.className = 'status-text';
+        }
+      } catch {
+        statusEl.textContent = '';
+      }
+    }
+
+    async function saveAnthropicKey() {
+      const key = document.getElementById('anthropic-key').value.trim();
+      const statusEl = document.getElementById('anthropic-key-status');
+      if (!key) { statusEl.textContent = 'Enter an API key'; statusEl.className = 'error-text'; return; }
+
+      try {
+        const resp = await fetch('/api/anthropic/settings', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ api_key: key }),
+        });
+        const data = await resp.json();
+        if (data.success) {
+          statusEl.textContent = 'Anthropic API key saved';
+          statusEl.className = 'success-text';
+          document.getElementById('anthropic-key').value = '';
+        } else {
+          statusEl.textContent = data.error;
+          statusEl.className = 'error-text';
+        }
+      } catch (e) {
+        statusEl.textContent = 'Failed: ' + e.message;
+        statusEl.className = 'error-text';
+      }
+    }
+
+    function enableManualBaseline() {
+      const el = document.getElementById('baseline-editor');
+      el.removeAttribute('readonly');
+      el.placeholder = 'Connect to Phoenix above, or paste your baseline template here...';
+      document.getElementById('prompt-select').innerHTML = '<option value="">Connect Phoenix first</option>';
+    }
+
+    // --- Phoenix Prompts ---
+    async function loadPhoenixPrompts() {
+      const select = document.getElementById('prompt-select');
+      try {
+        const resp = await fetch('/api/phoenix/prompts');
+        if (!resp.ok) throw new Error((await resp.json()).error || resp.statusText);
+        state.phoenixPrompts = await resp.json();
+
+        select.innerHTML = '<option value="">-- Select a Phoenix prompt --</option>';
+        state.phoenixPrompts.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          const latest = p.versions.length ? ` (v${p.versions[0].sequence_number})` : '';
+          opt.textContent = p.name + latest;
+          select.appendChild(opt);
+        });
+        select.disabled = false;
+        updatePhoenixBadge('connected');
+      } catch (e) {
+        select.innerHTML = `<option value="">Phoenix: ${e.message}</option>`;
+        enableManualBaseline();
+        updatePhoenixBadge('disconnected');
+      }
+    }
+
+    function onPromptChange() {
+      const promptId = document.getElementById('prompt-select').value;
+      const versionSelect = document.getElementById('version-select');
+      const btnLoad = document.getElementById('btn-load-version');
+
+      if (!promptId) {
+        versionSelect.innerHTML = '<option value="">Select prompt first</option>';
+        versionSelect.disabled = true;
+        btnLoad.disabled = true;
+        return;
+      }
+
+      const prompt = state.phoenixPrompts.find(p => p.id === promptId);
+      versionSelect.innerHTML = '';
+      prompt.versions.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.id;
+        opt.textContent = `v${v.sequence_number}${v.description ? ' — ' + v.description.substring(0, 40) : ''}`;
+        versionSelect.appendChild(opt);
+      });
+      versionSelect.disabled = false;
+      btnLoad.disabled = false;
+    }
+
+    async function onLoadVersion() {
+      const versionId = document.getElementById('version-select').value;
+      if (!versionId) return;
+
+      const btn = document.getElementById('btn-load-version');
+      btn.textContent = 'Loading...';
+      btn.disabled = true;
+
+      try {
+        const resp = await fetch(`/api/phoenix/version/${encodeURIComponent(versionId)}`);
+        const data = await resp.json();
+        if (data.error) throw new Error(data.error);
+
+        document.getElementById('baseline-editor').value = data.template_text;
+        document.getElementById('baseline-chars').textContent = data.template_text.length;
+        document.getElementById('baseline-meta').textContent =
+          `v${data.sequence_number} | ${data.model_name} | temp=${data.temperature} | ${data.template_format}`;
+
+        state.baselineTemplate = data.template_text;
+        state.baselineVersionNum = data.sequence_number || null;
+
+        // Pre-fill deploy form with production defaults
+        const promptName = document.getElementById('prompt-select');
+        const selectedPrompt = state.phoenixPrompts.find(p => p.id === promptName.value);
+        if (selectedPrompt) {
+          document.getElementById('deploy-prompt-name').value = selectedPrompt.name;
+          state.deployedPromptName = selectedPrompt.name;
+        }
+        // Always use production model/temp for deploy, not what the loaded version had
+        document.getElementById('deploy-model').value = 'gpt-5.1';
+        document.getElementById('deploy-temperature').value = 0.5;
+
+        updateStep1Button();
+      } catch (e) {
+        alert('Failed to load version: ' + e.message);
+      } finally {
+        btn.textContent = 'Load';
+        btn.disabled = false;
+      }
+    }
+
+    // --- Test Corpus ---
+    async function loadTestCorpus() {
+      const select = document.getElementById('corpus-select');
+      try {
+        const resp = await fetch('/api/test-corpus');
+        const files = await resp.json();
+        select.innerHTML = '';
+        files.forEach(f => {
+          const opt = document.createElement('option');
+          opt.value = f.path;
+          opt.textContent = `${f.path} (${f.count} queries)`;
+          select.appendChild(opt);
+        });
+        if (files.length === 0) select.innerHTML = '<option value="">No test corpus found</option>';
+        updateStep1Button();
+      } catch {
+        select.innerHTML = '<option value="">Error loading corpus</option>';
+      }
+    }
+
+    function updateStep1Button() {
+      const baseline = document.getElementById('baseline-editor').value.trim();
+      const corpus = document.getElementById('corpus-select').value;
+      document.getElementById('btn-evaluate').disabled = !(baseline && corpus);
+    }
+
+    // --- Step 2: Evaluate Baseline ---
+    async function onEvaluateBaseline() {
+      state.baselineTemplate = document.getElementById('baseline-editor').value;
+      goToStep(2);
+
+      const progressEl = document.getElementById('eval-progress');
+      const resultsEl = document.getElementById('eval-results');
+      progressEl.style.display = 'flex';
+      resultsEl.style.display = 'none';
+      document.getElementById('btn-generate-variant').disabled = true;
+
+      const dims = [];
+      document.querySelectorAll('.dim-checkboxes input:checked').forEach(cb => dims.push(cb.value));
+
+      const payload = {
+        baseline_template: state.baselineTemplate,
+        test_corpus_path: document.getElementById('corpus-select').value,
+        model: document.getElementById('model-select').value,
+        temperature: parseFloat(document.getElementById('temperature-input').value),
+        reasoning: document.getElementById('reasoning-select').value,
+        template_format: document.getElementById('format-select').value,
+        limit: parseInt(document.getElementById('limit-input').value) || 0,
+        dimensions: dims,
+        web_search: document.getElementById('web-search-toggle').checked,
+      };
+
+      try {
+        const resp = await fetch('/api/run/baseline-only', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload),
+        });
+        const data = await resp.json();
+        state.baselineRunId = data.run_id;
+        pollRun(data.run_id, 'eval');
+      } catch (e) {
+        progressEl.innerHTML = `<span class="error-text">Failed to start: ${escapeHtml(e.message)}</span>`;
+      }
+    }
+
+    function pollRun(runId, mode) {
+      if (state.pollInterval) clearInterval(state.pollInterval);
+      state.pollInterval = setInterval(async () => {
+        try {
+          const resp = await fetch(`/api/run/${runId}/status`);
+          const data = await resp.json();
+
+          const textEl = document.getElementById(mode === 'eval' ? 'eval-progress-text' : 'compare-progress-text');
+          textEl.textContent = data.progress || 'Processing...';
+
+          // Render streaming partial results during eval or compare
+          if (data.partial && data.status === 'running') {
+            renderPartialResults(data.partial, mode);
+          }
+
+          if (data.status === 'completed') {
+            clearInterval(state.pollInterval);
+            state.pollInterval = null;
+            await loadRunResults(runId, mode);
+          } else if (data.status === 'failed') {
+            clearInterval(state.pollInterval);
+            state.pollInterval = null;
+            const progressEl = document.getElementById(mode === 'eval' ? 'eval-progress' : 'compare-progress');
+            progressEl.innerHTML = `<span class="error-text">Run failed: ${escapeHtml(data.error)}</span>`;
+          }
+        } catch { /* keep polling */ }
+      }, 1500);
+    }
+
+    function renderPartialResults(partial, mode) {
+      const completed = partial.completed || 0;
+      const total = partial.total || 1;
+      const pct = Math.round(completed / total * 100);
+      const versionNames = partial.version_names || ['baseline'];
+      const isBaseline = versionNames.length === 1;
+
+      if (mode === 'eval') {
+        // Show results container and progress bar
+        document.getElementById('eval-results').style.display = 'block';
+
+        // Update progress bar track
+        const track = document.getElementById('eval-progress-bar-track');
+        const fill = document.getElementById('eval-progress-bar-fill');
+        track.style.display = 'block';
+        fill.style.width = pct + '%';
+
+        // Query counter
+        document.getElementById('eval-query-counter').textContent = `${completed}/${total} queries evaluated`;
+
+        // Flag cards from partial.flag_summary (baseline)
+        const flags = partial.flag_summary?.baseline || {};
+        const flagCards = document.getElementById('flag-cards');
+        if (Object.keys(flags).length === 0 && completed > 0) {
+          flagCards.innerHTML = '<div class="flag-card flag-green"><div class="flag-count">0</div><div class="flag-name">No Flags!</div><div class="flag-pct">0%</div></div>';
+        } else {
+          flagCards.innerHTML = Object.entries(flags)
+            .sort((a, b) => b[1] - a[1])
+            .map(([flag, count]) => {
+              const fpct = (count / completed * 100).toFixed(0);
+              const colorClass = count === 0 ? 'flag-green' : count <= completed * 0.3 ? 'flag-yellow' : 'flag-red';
+              return `<div class="flag-card ${colorClass}">
+                <div class="flag-count">${count}/${completed}</div>
+                <div class="flag-name">${flag.replace(/_/g, ' ')}</div>
+                <div class="flag-pct">${fpct}%</div>
+              </div>`;
+            }).join('');
+        }
+
+        // Running metrics
+        const pq = partial.per_query || [];
+        const totalFlags = pq.reduce((s, q) => s + (q.baseline_flags || 0), 0);
+        const totalResources = pq.reduce((s, q) => s + (q.baseline_resources || 0), 0);
+        const latencies = pq.map(q => q.baseline_latency_ms || 0).filter(l => l > 0);
+        const avgLatency = latencies.length > 0 ? Math.round(latencies.reduce((a, b) => a + b, 0) / latencies.length) : 0;
+        const wsCount = pq.filter(q => q.baseline_web_search).length;
+        const metricsContainer = document.getElementById('metrics-table-container');
+        metricsContainer.innerHTML = `
+          <table class="metrics-table">
+            <tr><th>Metric</th><th>Value (${completed}/${total} queries)</th></tr>
+            <tr><td>Total Flags</td><td>${totalFlags}</td></tr>
+            <tr><td>Avg Flags/Query</td><td>${completed > 0 ? (totalFlags / completed).toFixed(1) : 'N/A'}</td></tr>
+            <tr><td>Avg Resources</td><td>${completed > 0 ? (totalResources / completed).toFixed(1) : 'N/A'}</td></tr>
+            <tr><td>Avg Latency</td><td>${avgLatency > 0 ? formatLatency(avgLatency) : 'N/A'}</td></tr>
+            <tr><td>Web Search Used</td><td>${wsCount}/${completed} queries</td></tr>
+          </table>`;
+
+        // Per-query table (streaming rows)
+        const perQueryContainer = document.getElementById('per-query-table-container');
+        let rows = pq.map((q, i) => {
+          const flagList = (q.baseline_flag_list || []).join(', ') || 'None';
+          const flagCount = q.baseline_flags || 0;
+          const latency = q.baseline_latency_ms || 0;
+          const webSearch = q.baseline_web_search ? 'Yes' : 'No';
+          const rowClass = flagCount === 0 ? 'row-clean' : flagCount >= 3 ? 'row-bad' : '';
+          return `<tr class="${rowClass}">
+            <td>${i + 1}</td>
+            <td title="${escapeHtml(q.query)}">${escapeHtml((q.query || '').substring(0, 60))}${(q.query || '').length > 60 ? '...' : ''}</td>
+            <td>${q.baseline_resources || 0}</td>
+            <td>${flagCount}</td>
+            <td>${latency > 0 ? formatLatency(latency) : '-'}</td>
+            <td class="ws-cell ${q.baseline_web_search ? 'ws-yes' : 'ws-no'}">${webSearch}</td>
+            <td class="flag-list">${escapeHtml(flagList)}</td>
+          </tr>`;
+        }).join('');
+
+        perQueryContainer.innerHTML = `
+          <table class="per-query-table">
+            <thead><tr><th>#</th><th>Query</th><th>Resources</th><th>Flags</th><th>Latency</th><th>Web Search</th><th>Flag Details</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>`;
+
+      } else if (mode === 'compare') {
+        // Streaming for compare mode — show per-query table as it builds
+        document.getElementById('compare-results').style.display = 'block';
+        const pq = partial.per_query || [];
+
+        // Update progress bar
+        const compareTrack = document.getElementById('compare-progress-bar-track');
+        const compareFill = document.getElementById('compare-progress-bar-fill');
+        compareTrack.style.display = 'block';
+        compareFill.style.width = pct + '%';
+
+        const progressText = document.getElementById('compare-progress-text');
+        progressText.textContent = `Query ${completed}/${total}: Running comparison...`;
+
+        // Build a simple running win/loss tally
+        if (versionNames.length >= 2) {
+          let vWins = 0, bWins = 0, ties = 0;
+          pq.forEach(q => {
+            const bf = q.baseline_flags || 0;
+            const vf = q.variant_flags || 0;
+            if (vf < bf) vWins++;
+            else if (bf < vf) bWins++;
+            else ties++;
+          });
+
+          const banner = document.getElementById('win-loss-banner');
+          let bannerClass = 'win-loss-banner';
+          let bannerText = '';
+          if (vWins > bWins) { bannerClass += ' variant-wins'; bannerText = `Variant leading ${vWins}/${completed}`; }
+          else if (bWins > vWins) { bannerClass += ' baseline-wins'; bannerText = `Baseline leading ${bWins}/${completed}`; }
+          else { bannerClass += ' tied'; bannerText = `Tied at ${completed} queries`; }
+          banner.className = bannerClass;
+          banner.innerHTML = `<div class="wl-main">${bannerText}</div>
+            <div class="wl-detail">Baseline: ${bWins} | Variant: ${vWins} | Ties: ${ties} (${completed}/${total} done)</div>`;
+        }
+
+        // Per-query comparison table
+        const pqContainer = document.getElementById('compare-per-query-container');
+        let pqRows = pq.map((q, i) => {
+          const bFlags = q.baseline_flags || 0;
+          const vFlags = q.variant_flags || 0;
+          const best = vFlags < bFlags ? 'variant' : bFlags < vFlags ? 'baseline' : 'tie';
+          const winClass = best === 'variant' ? 'pq-winner-variant' : best === 'baseline' ? 'pq-winner-baseline' : 'pq-winner-tie';
+          const winLabel = best === 'variant' ? 'Variant' : best === 'baseline' ? 'Baseline' : 'Tie';
+          return `<tr>
+            <td>${i + 1}</td>
+            <td title="${escapeHtml(q.query)}">${escapeHtml((q.query || '').substring(0, 50))}${(q.query || '').length > 50 ? '...' : ''}</td>
+            <td>${q.baseline_resources || 0}</td>
+            <td>${bFlags}</td>
+            <td>${q.variant_resources || 0}</td>
+            <td>${vFlags}</td>
+            <td class="${winClass}">${winLabel}</td>
+          </tr>`;
+        }).join('');
+        pqContainer.innerHTML = `
+          <table class="per-query-table">
+            <thead><tr><th>#</th><th>Query</th><th>B Res</th><th>B Flags</th><th>V Res</th><th>V Flags</th><th>Winner</th></tr></thead>
+            <tbody>${pqRows}</tbody>
+          </table>`;
+      }
+    }
+
+    async function loadRunResults(runId, mode) {
+      const resp = await fetch(`/api/run/${runId}/results`);
+      const data = await resp.json();
+
+      if (mode === 'eval') {
+        state.evalResults = data.results;
+        renderEvalResults(data.results);
+        document.getElementById('eval-progress').style.display = 'none';
+        document.getElementById('eval-results').style.display = 'block';
+        document.getElementById('btn-generate-variant').disabled = false;
+      } else {
+        state.compareResults = data.results;
+        renderCompareResults(data.results, data.report);
+        document.getElementById('compare-progress').style.display = 'none';
+        document.getElementById('compare-results').style.display = 'block';
+        // Deploy button state is set by renderCompareResults (conditional on variant winning)
+      }
+    }
+
+    // --- Render Eval Results (Step 2) ---
+    function renderEvalResults(results) {
+      const metrics = results.metrics.baseline;
+
+      // Flag cards
+      const flagCards = document.getElementById('flag-cards');
+      const flags = metrics.flags || {};
+      const total = metrics.total || 1;
+
+      // Query counter (final)
+      document.getElementById('eval-query-counter').textContent = `${total}/${total} queries evaluated`;
+
+      if (Object.keys(flags).length === 0) {
+        flagCards.innerHTML = '<div class="flag-card flag-green"><div class="flag-count">0</div><div class="flag-name">No Flags!</div></div>';
+      } else {
+        flagCards.innerHTML = Object.entries(flags)
+          .sort((a, b) => b[1] - a[1])
+          .map(([flag, count]) => {
+            const pct = (count / total * 100).toFixed(0);
+            const colorClass = count === 0 ? 'flag-green' : count <= total * 0.3 ? 'flag-yellow' : 'flag-red';
+            return `<div class="flag-card ${colorClass}">
+              <div class="flag-count">${count}/${total}</div>
+              <div class="flag-name">${flag.replace(/_/g, ' ')}</div>
+              <div class="flag-pct">${pct}%</div>
+            </div>`;
+          }).join('');
+      }
+
+      // Metrics table
+      const metricsContainer = document.getElementById('metrics-table-container');
+      metricsContainer.innerHTML = `
+        <table class="metrics-table">
+          <tr><th>Metric</th><th>Value</th></tr>
+          <tr><td>Valid JSON</td><td>${metrics.valid_json}/${metrics.total}</td></tr>
+          <tr><td>Avg Resources</td><td>${metrics.avg_resources?.toFixed(1) || 'N/A'}</td></tr>
+          <tr><td>Avg Grade Level</td><td>${metrics.avg_grade?.toFixed(1) || 'N/A'}</td></tr>
+          <tr><td>Avg Grounding %</td><td>${metrics.avg_grounding?.toFixed(1) || 'N/A'}%</td></tr>
+          <tr><td>Total Flags</td><td>${metrics.total_flags}</td></tr>
+          <tr><td>Avg Flags/Query</td><td>${metrics.avg_flags?.toFixed(1) || 'N/A'}</td></tr>
+          <tr><td>Avg Latency</td><td>${metrics.avg_latency_ms ? formatLatency(metrics.avg_latency_ms) : 'N/A'}</td></tr>
+          <tr><td>P95 Latency</td><td>${metrics.p95_latency_ms ? formatLatency(metrics.p95_latency_ms) : 'N/A'}</td></tr>
+          <tr><td>Web Search Used</td><td>${metrics.web_search_queries || 0}/${metrics.total} queries</td></tr>
+        </table>`;
+
+      // Per-query table
+      const perQueryContainer = document.getElementById('per-query-table-container');
+      const perQuery = results.per_query || [];
+      let rows = perQuery.map((q, i) => {
+        const flagList = (q.baseline_flag_list || []).join(', ') || 'None';
+        const flagCount = q.baseline_flags || 0;
+        const latency = q.baseline_latency_ms || 0;
+        const webSearch = q.baseline_web_search ? 'Yes' : 'No';
+        const rowClass = flagCount === 0 ? 'row-clean' : flagCount >= 3 ? 'row-bad' : '';
+        return `<tr class="${rowClass}">
+          <td>${i + 1}</td>
+          <td title="${escapeHtml(q.query)}">${escapeHtml(q.query.substring(0, 60))}${q.query.length > 60 ? '...' : ''}</td>
+          <td>${q.baseline_resources || 0}</td>
+          <td>${flagCount}</td>
+          <td>${latency > 0 ? formatLatency(latency) : '-'}</td>
+          <td class="ws-cell ${q.baseline_web_search ? 'ws-yes' : 'ws-no'}">${webSearch}</td>
+          <td class="flag-list">${escapeHtml(flagList)}</td>
+        </tr>`;
+      }).join('');
+
+      perQueryContainer.innerHTML = `
+        <table class="per-query-table">
+          <thead><tr><th>#</th><th>Query</th><th>Resources</th><th>Flags</th><th>Latency</th><th>Web Search</th><th>Flag Details</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    // --- Step 3: Generate Variant ---
+    async function onGenerateVariant() {
+      goToStep(3);
+
+      const progressEl = document.getElementById('variant-progress');
+      const editorsEl = document.getElementById('variant-editors');
+      progressEl.style.display = 'flex';
+      editorsEl.style.display = 'none';
+      document.getElementById('btn-run-comparison').disabled = true;
+
+      // Copy baseline to read-only viewer
+      document.getElementById('baseline-readonly').value = state.baselineTemplate;
+
+      // Render flag annotations on baseline
+      const baselineFlags = state.evalResults.metrics.baseline.flags || {};
+      const totalQ = state.evalResults.metrics.baseline.total || 1;
+      const annotationBar = document.getElementById('baseline-flag-annotations');
+      if (Object.keys(baselineFlags).length > 0) {
+        annotationBar.innerHTML = Object.entries(baselineFlags)
+          .sort((a, b) => b[1] - a[1])
+          .map(([flag, count]) => {
+            const badgeClass = count > totalQ * 0.5 ? 'badge-red' : count > 0 ? 'badge-yellow' : 'badge-green';
+            return `<span class="flag-badge ${badgeClass}">${flag.replace(/_/g, ' ')}: ${count}</span>`;
+          }).join('');
+      } else {
+        annotationBar.innerHTML = '<span class="flag-badge badge-green">No flags detected</span>';
+      }
+
+      // Build eval summary for the meta-prompt
+      const metrics = state.evalResults.metrics.baseline;
+      const evalSummary = {
+        flags: metrics.flags || {},
+        total_queries: metrics.total || 0,
+      };
+
+      const perQueryFlags = (state.evalResults.per_query || []).map(q => ({
+        query: q.query,
+        flags: q.baseline_flag_list || [],
+      }));
+
+      try {
+        const resp = await fetch('/api/generate-variant', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            baseline_template: state.baselineTemplate,
+            eval_summary: evalSummary,
+            per_query_flags: perQueryFlags,
+            variant_model: document.getElementById('variant-model-select').value,
+          }),
+        });
+        const data = await resp.json();
+
+        if (data.error) throw new Error(data.error);
+
+        state.variantTemplate = data.variant_template;
+        document.getElementById('variant-editor').value = data.variant_template;
+        document.getElementById('variant-chars').textContent = data.variant_template.length;
+
+        // Show diff view
+        showDiff(state.baselineTemplate, data.variant_template);
+        // Reset to diff tab
+        switchDiffView('diff');
+
+        progressEl.style.display = 'none';
+        editorsEl.style.display = 'block';
+        document.getElementById('btn-run-comparison').disabled = false;
+      } catch (e) {
+        progressEl.innerHTML = `<span class="error-text">Generation failed: ${escapeHtml(e.message)}</span>`;
+      }
+    }
+
+    function updateStep3Button() {
+      const variant = document.getElementById('variant-editor').value.trim();
+      document.getElementById('btn-run-comparison').disabled = !variant;
+    }
+
+    // --- Step 4: Run Comparison ---
+    async function onRunComparison() {
+      state.variantTemplate = document.getElementById('variant-editor').value;
+      goToStep(4);
+
+      const progressEl = document.getElementById('compare-progress');
+      const resultsEl = document.getElementById('compare-results');
+      progressEl.style.display = 'flex';
+      resultsEl.style.display = 'none';
+      document.getElementById('btn-deploy-winner').disabled = true;
+
+      const dims = [];
+      document.querySelectorAll('.dim-checkboxes input:checked').forEach(cb => dims.push(cb.value));
+
+      const payload = {
+        baseline_template: state.baselineTemplate,
+        variant_template: state.variantTemplate,
+        test_corpus_path: document.getElementById('corpus-select').value,
+        model: document.getElementById('model-select').value,
+        temperature: parseFloat(document.getElementById('temperature-input').value),
+        reasoning: document.getElementById('reasoning-select').value,
+        template_format: document.getElementById('format-select').value,
+        limit: parseInt(document.getElementById('limit-input').value) || 0,
+        dimensions: dims,
+        web_search: document.getElementById('web-search-toggle').checked,
+      };
+
+      try {
+        const resp = await fetch('/api/run', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload),
+        });
+        const data = await resp.json();
+        state.compareRunId = data.run_id;
+        pollRun(data.run_id, 'compare');
+      } catch (e) {
+        progressEl.innerHTML = `<span class="error-text">Failed to start: ${escapeHtml(e.message)}</span>`;
+      }
+    }
+
+    // --- Render Compare Results (Step 4) ---
+    function renderCompareResults(results, report) {
+      const bm = results.metrics.baseline;
+      const vm = results.metrics.variant;
+      const wl = results.win_loss || {};
+
+      // Win/loss banner
+      const banner = document.getElementById('win-loss-banner');
+      const vWins = wl.variant_wins || 0;
+      const bWins = wl.baseline_wins || 0;
+      const ties = wl.ties || 0;
+      const total = vWins + bWins + ties;
+
+      let bannerClass = 'win-loss-banner';
+      let bannerText = '';
+      if (vWins > bWins) {
+        bannerClass += ' variant-wins';
+        bannerText = `Variant wins ${vWins}/${total} queries`;
+      } else if (bWins > vWins) {
+        bannerClass += ' baseline-wins';
+        bannerText = `Baseline wins ${bWins}/${total} queries`;
+      } else {
+        bannerClass += ' tied';
+        bannerText = `Tied: ${ties}/${total} queries`;
+      }
+      banner.className = bannerClass;
+      banner.innerHTML = `
+        <div class="wl-main">${bannerText}</div>
+        <div class="wl-detail">Baseline wins: ${bWins} | Variant wins: ${vWins} | Ties: ${ties}</div>`;
+
+      // Metrics comparison table
+      const metricsContainer = document.getElementById('compare-metrics-container');
+      metricsContainer.innerHTML = `
+        <table class="metrics-table">
+          <thead><tr><th>Metric</th><th>Baseline</th><th>Variant</th><th>Delta</th></tr></thead>
+          <tbody>
+            ${metricsRow('Total Flags', bm.total_flags, vm.total_flags, true)}
+            ${metricsRow('Avg Flags/Query', bm.avg_flags, vm.avg_flags, true)}
+            ${metricsRow('Valid JSON', bm.valid_json, vm.valid_json, false)}
+            ${metricsRow('Avg Resources', bm.avg_resources, vm.avg_resources, false)}
+            ${metricsRow('Avg Grade Level', bm.avg_grade, vm.avg_grade, true)}
+            ${metricsRow('Avg Grounding %', bm.avg_grounding, vm.avg_grounding, false)}
+            ${metricsRow('Avg Latency (ms)', bm.avg_latency_ms, vm.avg_latency_ms, true)}
+            ${metricsRow('P95 Latency (ms)', bm.p95_latency_ms, vm.p95_latency_ms, true)}
+          </tbody>
+        </table>`;
+
+      // Flag comparison
+      const flagContainer = document.getElementById('flag-comparison-container');
+      const allFlags = new Set([...Object.keys(bm.flags || {}), ...Object.keys(vm.flags || {})]);
+      let flagRows = [...allFlags].sort().map(flag => {
+        const bCount = (bm.flags || {})[flag] || 0;
+        const vCount = (vm.flags || {})[flag] || 0;
+        const delta = vCount - bCount;
+        const d = formatDelta(delta, true);  // lower flags = better
+        return `<tr>
+          <td>${flag.replace(/_/g, ' ')}</td>
+          <td>${bCount}</td>
+          <td>${vCount}</td>
+          <td class="${d.cls}">${d.str}</td>
+        </tr>`;
+      }).join('');
+
+      flagContainer.innerHTML = `
+        <table class="metrics-table">
+          <thead><tr><th>Flag</th><th>Baseline</th><th>Variant</th><th>Delta</th></tr></thead>
+          <tbody>${flagRows}</tbody>
+        </table>`;
+
+      // Per-query comparison table
+      const perQuery = results.per_query || [];
+      const pqContainer = document.getElementById('compare-per-query-container');
+      let pqRows = perQuery.map((q, i) => {
+        const bFlags = q.baseline_flags || 0;
+        const vFlags = q.variant_flags || 0;
+        const best = q.best || 'tie';
+        const winClass = best === 'variant' ? 'pq-winner-variant' : best === 'baseline' ? 'pq-winner-baseline' : 'pq-winner-tie';
+        const winLabel = best === 'variant' ? 'Variant' : best === 'baseline' ? 'Baseline' : 'Tie';
+        return `<tr>
+          <td>${i + 1}</td>
+          <td title="${escapeHtml(q.query)}">${escapeHtml((q.query || '').substring(0, 50))}${(q.query || '').length > 50 ? '...' : ''}</td>
+          <td>${q.baseline_resources || 0}</td>
+          <td>${bFlags}</td>
+          <td>${q.variant_resources || 0}</td>
+          <td>${vFlags}</td>
+          <td class="${winClass}">${winLabel}</td>
+        </tr>`;
+      }).join('');
+
+      pqContainer.innerHTML = `
+        <table class="per-query-table">
+          <thead><tr>
+            <th>#</th><th>Query</th>
+            <th>B Res</th><th>B Flags</th>
+            <th>V Res</th><th>V Flags</th>
+            <th>Winner</th>
+          </tr></thead>
+          <tbody>${pqRows}</tbody>
+        </table>`;
+
+      // Full report
+      if (report) {
+        document.getElementById('compare-report').innerHTML = renderMarkdown(report);
+      }
+
+      // Conditional deploy button — only enable if variant is better or tied
+      const deployBtn = document.getElementById('btn-deploy-winner');
+      if (vWins >= bWins) {
+        deployBtn.disabled = false;
+        deployBtn.textContent = vWins > bWins
+          ? `Deploy Variant (wins ${vWins}/${total})`
+          : 'Deploy (Tied — your choice)';
+      } else {
+        deployBtn.disabled = true;
+        deployBtn.textContent = `Baseline wins ${bWins}/${total} — variant not recommended`;
+      }
+    }
+
+    function formatDelta(delta, lowerIsBetter) {
+      if (delta === null) return { str: 'N/A', cls: 'delta-neutral' };
+      if (delta === 0) return { str: '=', cls: 'delta-neutral' };
+      const isGood = lowerIsBetter ? delta < 0 : delta > 0;
+      const arrow = delta > 0 ? '\u2191' : '\u2193';  // ↑ or ↓
+      const absVal = Math.abs(delta);
+      const numStr = Number.isInteger(absVal) ? absVal : absVal.toFixed(1);
+      return {
+        str: `${arrow} ${numStr}`,
+        cls: isGood ? 'delta-good' : 'delta-bad',
+      };
+    }
+
+    function metricsRow(label, bVal, vVal, lowerIsBetter) {
+      const bStr = typeof bVal === 'number' ? (Number.isInteger(bVal) ? bVal : bVal.toFixed(1)) : 'N/A';
+      const vStr = typeof vVal === 'number' ? (Number.isInteger(vVal) ? vVal : vVal.toFixed(1)) : 'N/A';
+      const delta = typeof bVal === 'number' && typeof vVal === 'number' ? vVal - bVal : null;
+      const d = formatDelta(delta, lowerIsBetter);
+      return `<tr><td>${label}</td><td>${bStr}</td><td>${vStr}</td><td class="${d.cls}">${d.str}</td></tr>`;
+    }
+
+    // --- Step 5: Deploy ---
+    function prepareAndGoToDeploy() {
+      // Auto-populate description with flag improvement summary
+      const nextVersion = state.baselineVersionNum ? state.baselineVersionNum + 1 : '?';
+      const descParts = [];
+
+      if (state.compareResults) {
+        const bm = state.compareResults.metrics.baseline || {};
+        const vm = state.compareResults.metrics.variant || {};
+        const bFlags = bm.flags || {};
+        const vFlags = vm.flags || {};
+
+        // Find flags that improved (count went down)
+        const improved = [];
+        for (const [flag, bCount] of Object.entries(bFlags)) {
+          const vCount = (vFlags[flag] || 0);
+          if (vCount < bCount) {
+            improved.push(`${flag.replace(/_/g, ' ')} ${bCount}->${vCount}`);
+          }
+        }
+        if (improved.length > 0) {
+          descParts.push(improved.join(', '));
+        }
+
+        // Overall flag reduction
+        const bTotal = bm.total_flags || 0;
+        const vTotal = vm.total_flags || 0;
+        if (vTotal < bTotal) {
+          descParts.push(`total flags ${bTotal}->${vTotal}`);
+        }
+      }
+
+      const description = descParts.length > 0
+        ? `v${nextVersion}: ${descParts.join('; ')}`
+        : `v${nextVersion}: Improved via A/B workflow`;
+
+      document.getElementById('deploy-description').value = description;
+      goToStep(5);
+    }
+
+    async function onDeploy() {
+      const btn = document.getElementById('btn-deploy-confirm');
+      const statusEl = document.getElementById('deploy-status');
+      btn.disabled = true;
+      statusEl.textContent = 'Deploying...';
+      statusEl.className = 'status-text';
+
+      // Deploy the variant (the winner)
+      const templateToDeploy = state.variantTemplate || document.getElementById('variant-editor').value;
+
+      try {
+        const resp = await fetch('/api/deploy', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            prompt_name: document.getElementById('deploy-prompt-name').value,
+            template_text: templateToDeploy,
+            description: document.getElementById('deploy-description').value || 'Deployed from improvement workflow',
+            model_name: document.getElementById('deploy-model').value,
+            temperature: parseFloat(document.getElementById('deploy-temperature').value),
+          }),
+        });
+        const data = await resp.json();
+        if (data.error) throw new Error(data.error);
+
+        const version = data.data?.version || {};
+        const deployedNum = version.sequence_number || (state.baselineVersionNum ? state.baselineVersionNum + 1 : '?');
+        state.lastDeployedVersionNum = deployedNum;
+        statusEl.textContent = `Deployed as v${deployedNum}`;
+        statusEl.className = 'success-text';
+
+        // Refresh Phoenix prompt list so new version appears
+        loadPhoenixPrompts();
+
+        // Show "Start New Iteration" button
+        document.getElementById('btn-new-iteration').style.display = 'inline-flex';
+        btn.style.display = 'none';
+      } catch (e) {
+        statusEl.textContent = 'Deploy failed: ' + e.message;
+        statusEl.className = 'error-text';
+        btn.disabled = false;
+      }
+    }
+
+    function onNewIteration() {
+      // The deployed variant becomes the new baseline
+      state.baselineTemplate = state.variantTemplate;
+      state.baselineVersionNum = state.lastDeployedVersionNum || (state.baselineVersionNum ? state.baselineVersionNum + 1 : null);
+
+      document.getElementById('baseline-editor').value = state.baselineTemplate;
+      document.getElementById('baseline-chars').textContent = state.baselineTemplate.length;
+
+      // Update baseline meta display
+      const vNum = state.baselineVersionNum || '?';
+      const model = document.getElementById('deploy-model').value || 'gpt-5.1';
+      const temp = document.getElementById('deploy-temperature').value || '0.5';
+      document.getElementById('baseline-meta').textContent = `v${vNum} | ${model} | temp=${temp} | deployed`;
+
+      // Reset UI state
+      state.variantTemplate = '';
+      state.evalResults = null;
+      state.compareResults = null;
+      document.getElementById('btn-deploy-confirm').style.display = 'inline-flex';
+      document.getElementById('btn-deploy-confirm').disabled = false;
+      document.getElementById('btn-new-iteration').style.display = 'none';
+      document.getElementById('deploy-status').textContent = '';
+
+      // Reset progress/results displays
+      document.getElementById('eval-progress').style.display = 'none';
+      document.getElementById('eval-results').style.display = 'none';
+      document.getElementById('compare-progress').style.display = 'none';
+      document.getElementById('compare-results').style.display = 'none';
+      document.getElementById('btn-generate-variant').disabled = true;
+
+      // Refresh prompts so the new version appears in the dropdown
+      loadPhoenixPrompts();
+
+      // Go to Step 1 (home) with the new baseline loaded
+      goToStep(1);
+      updateStep1Button();
+    }
+
+    // --- Utils ---
+    function formatLatency(ms) {
+      if (ms >= 1000) return (ms / 1000).toFixed(1) + 's';
+      return ms + 'ms';
+    }
+
+    // --- Diff Engine ---
+    function computeDiff(oldText, newText) {
+      const oldLines = oldText.split('\n');
+      const newLines = newText.split('\n');
+
+      // Myers-like LCS diff
+      const lcs = lcsMatrix(oldLines, newLines);
+      const hunks = buildHunks(oldLines, newLines, lcs);
+      return hunks;
+    }
+
+    function lcsMatrix(a, b) {
+      const m = a.length, n = b.length;
+      // Use rolling two rows to save memory
+      let prev = new Array(n + 1).fill(0);
+      let curr = new Array(n + 1).fill(0);
+      // We need full matrix for backtracking, so build it
+      const dp = [];
+      for (let i = 0; i <= m; i++) dp.push(new Array(n + 1).fill(0));
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          if (a[i - 1] === b[j - 1]) {
+            dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+            dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+          }
+        }
+      }
+      return dp;
+    }
+
+    function buildHunks(oldLines, newLines, dp) {
+      const result = []; // { type: 'context'|'add'|'remove', text, oldNum, newNum }
+      let i = oldLines.length, j = newLines.length;
+      const raw = [];
+
+      while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && oldLines[i - 1] === newLines[j - 1]) {
+          raw.push({ type: 'context', text: oldLines[i - 1], oldNum: i, newNum: j });
+          i--; j--;
+        } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+          raw.push({ type: 'add', text: newLines[j - 1], oldNum: null, newNum: j });
+          j--;
+        } else {
+          raw.push({ type: 'remove', text: oldLines[i - 1], oldNum: i, newNum: null });
+          i--;
+        }
+      }
+
+      return raw.reverse();
+    }
+
+    function renderDiff(hunks) {
+      let added = 0, removed = 0;
+
+      const lines = hunks.map(h => {
+        const lineNum = h.type === 'remove'
+          ? `<span class="diff-linenum diff-linenum-old">${h.oldNum}</span><span class="diff-linenum"></span>`
+          : h.type === 'add'
+          ? `<span class="diff-linenum"></span><span class="diff-linenum diff-linenum-new">${h.newNum}</span>`
+          : `<span class="diff-linenum">${h.oldNum}</span><span class="diff-linenum">${h.newNum}</span>`;
+
+        const prefix = h.type === 'add' ? '+' : h.type === 'remove' ? '-' : ' ';
+        const cls = h.type === 'add' ? 'diff-line-add' : h.type === 'remove' ? 'diff-line-remove' : 'diff-line-context';
+
+        if (h.type === 'add') added++;
+        if (h.type === 'remove') removed++;
+
+        return `<div class="diff-line ${cls}">${lineNum}<span class="diff-prefix">${prefix}</span><span class="diff-text">${escapeHtml(h.text)}</span></div>`;
+      }).join('');
+
+      return { html: lines, added, removed };
+    }
+
+    function switchDiffView(view) {
+      document.querySelectorAll('.diff-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`.diff-tab[data-view="${view}"]`).classList.add('active');
+
+      if (view === 'diff') {
+        document.getElementById('diff-view').style.display = 'block';
+        document.getElementById('edit-view').style.display = 'none';
+        // Recalculate diff in case user edited in edit view
+        const baseline = document.getElementById('baseline-readonly').value;
+        const variant = document.getElementById('variant-editor').value;
+        if (baseline && variant) {
+          const hunks = computeDiff(baseline, variant);
+          const { html, added, removed } = renderDiff(hunks);
+          document.getElementById('diff-content').innerHTML = html;
+          document.getElementById('diff-stats').innerHTML =
+            `<span class="diff-stat-add">+${added} lines</span> <span class="diff-stat-remove">-${removed} lines</span>`;
+        }
+      } else {
+        document.getElementById('diff-view').style.display = 'none';
+        document.getElementById('edit-view').style.display = 'block';
+      }
+    }
+
+    function showDiff(baseline, variant) {
+      const hunks = computeDiff(baseline, variant);
+      const { html, added, removed } = renderDiff(hunks);
+      document.getElementById('diff-content').innerHTML = html;
+      document.getElementById('diff-stats').innerHTML =
+        `<span class="diff-stat-add">+${added} lines</span> <span class="diff-stat-remove">-${removed} lines</span>`;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text || '';
+      return div.innerHTML;
+    }
+
+    function renderMarkdown(md) {
+      let html = escapeHtml(md);
+      html = html.replace(/^### (.+)$/gm, '<h4>$1</h4>');
+      html = html.replace(/^## (.+)$/gm, '<h3>$1</h3>');
+      html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+      html = html.replace(/^(\|.+\|)\n(\|[-| :]+\|)\n((?:\|.+\|\n?)+)/gm, (match, header, sep, body) => {
+        const headers = header.split('|').filter(c => c.trim()).map(c => `<th>${c.trim()}</th>`).join('');
+        const rows = body.trim().split('\n').map(row => {
+          const cells = row.split('|').filter(c => c.trim()).map(c => `<td>${c.trim()}</td>`).join('');
+          return `<tr>${cells}</tr>`;
+        }).join('');
+        return `<table><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
+      });
+      html = html.replace(/^---+$/gm, '<hr>');
+      html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.+<\/li>\n?)+/g, '<ul>$&</ul>');
+      html = html.replace(/\n\n/g, '</p><p>');
+      html = '<p>' + html + '</p>';
+      html = html.replace(/<p>\s*<\/p>/g, '');
+      html = html.replace(/<p>\s*(<h[234]>)/g, '$1');
+      html = html.replace(/(<\/h[234]>)\s*<\/p>/g, '$1');
+      html = html.replace(/<p>\s*(<table>)/g, '$1');
+      html = html.replace(/(<\/table>)\s*<\/p>/g, '$1');
+      html = html.replace(/<p>\s*(<ul>)/g, '$1');
+      html = html.replace(/(<\/ul>)\s*<\/p>/g, '$1');
+      html = html.replace(/<p>\s*<hr>\s*<\/p>/g, '<hr>');
+      return html;
+    }
+  </script>
+</body>
+</html>

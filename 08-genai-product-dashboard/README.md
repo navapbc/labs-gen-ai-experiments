@@ -1,4 +1,4 @@
-# Phoenix Arize Product Dashboard
+# GenAI Product Dashboard
 
 An interactive dashboard for analyzing GenAI product logs from Phoenix Arize, designed for product managers, data scientists, engineers, and research designers.
 

@@ -5,11 +5,12 @@ Focus on generate_referrals spans and their child LLM spans
 """
 import httpx
 import json
+import os
 import re
 
-PHOENIX_URL = "https://phoenix.referral-pilot-dev.navateam.com:6006"
-PHOENIX_PROJECT_NAME = "pilot-prod"
-PHOENIX_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJBcGlLZXk6MTMifQ.GA8Jh3OWNAAWd1hfHPUn4APm-TVMLClH_aeOYNQzm0Y"
+PHOENIX_URL = os.environ["PHOENIX_URL"]
+PHOENIX_PROJECT_NAME = os.environ.get("PHOENIX_PROJECT_NAME", "pilot-prod")
+PHOENIX_API_KEY = os.environ["PHOENIX_API_KEY"]
 
 headers = {"Authorization": f"Bearer {PHOENIX_API_KEY}"}
 

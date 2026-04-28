@@ -1,0 +1,44 @@
+simulation:
+  versions:
+    - name: baseline
+      template_path: prompts/baseline.txt
+    - name: improved
+      template_path: prompts/improved.txt
+  test_corpus_path: test_corpus.json
+  model: gpt-4o
+  temperature: 0.7
+  template_format: jinja2
+  message_format: system_only
+  output_dir: ../results
+  rate_limit_delay: 2.0
+
+evaluation:
+  resource_path: resources
+  dimensions:
+    output_structure:
+      enabled: true
+      required_keys: [resources]
+    resource_count:
+      enabled: true
+      min: 1
+      max: 10
+    url_validity:
+      enabled: true
+      skip_validation: false
+      timeout: 10
+    readability:
+      enabled: true
+      max_grade_level: 8.0
+    duplicates:
+      enabled: true
+      name_threshold: 0.8
+    contact_completeness:
+      enabled: true
+    rag_grounding:
+      enabled: true
+    location_match:
+      enabled: false
+
+report:
+  title: "Sample Prompt A/B Test Results"
+  output_path: ../results/comparison_report.md

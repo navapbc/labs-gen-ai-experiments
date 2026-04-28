@@ -1,0 +1,64 @@
+# Sample configuration — runs all phases on bundled sample data
+# No Phoenix API or OpenAI API key needed for phases 1-5
+
+# Phoenix config (not needed with sample data)
+phoenix:
+  url: https://your-phoenix-instance.example.com
+  project_name: default
+  days_back: 60
+
+extraction:
+  adapter: referral
+  output_dir: ../results
+
+# Use sample data instead of Phoenix API
+sample_data:
+  traces_path: traces.json
+
+evaluation:
+  resource_path: resources
+  dimensions:
+    output_structure:
+      enabled: true
+      required_keys: [resources]
+    resource_count:
+      enabled: true
+      min: 1
+      max: 10
+    url_validity:
+      enabled: true
+      skip_validation: true   # Skip HTTP checks for sample data
+      timeout: 10
+    readability:
+      enabled: true
+      max_grade_level: 8.0
+    duplicates:
+      enabled: true
+      name_threshold: 0.8
+    contact_completeness:
+      enabled: true
+    rag_grounding:
+      enabled: true
+    location_match:
+      enabled: false
+
+sampling:
+  referral_target: 10
+  strata_key: prompt_type
+  seed: 42
+
+analysis:
+  confidence_level: 0.95
+  output_path: ../results/eval_report.md
+
+# Iteration phase (optional — requires OPENAI_API_KEY)
+# Uncomment to enable prompt A/B testing
+# iteration:
+#   versions:
+#     - name: baseline
+#       template_path: ../12-automated-system-prompt-testing/sample_data/prompts/baseline.txt
+#     - name: improved
+#       template_path: ../12-automated-system-prompt-testing/sample_data/prompts/improved.txt
+#   test_corpus_path: ../12-automated-system-prompt-testing/sample_data/test_corpus.json
+#   model: gpt-4o
+#   temperature: 0.7

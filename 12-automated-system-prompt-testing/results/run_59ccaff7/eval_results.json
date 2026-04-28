@@ -1,0 +1,67 @@
+[
+  {
+    "query_id": "sample_001",
+    "user_query": "My client needs food assistance.\nInclude resources that support the following categories: Food Assis",
+    "location": "Austin (Travis county), TX 78702",
+    "baseline": {
+      "flags": [
+        "API_ERROR"
+      ],
+      "details": {},
+      "flag_count": 1,
+      "resource_count": 0
+    }
+  },
+  {
+    "query_id": "sample_002",
+    "user_query": "CPR Training\nInclude resources that support the following categories: Employment & Job Training\nFocu",
+    "location": "Austin (Travis county), TX 78753",
+    "baseline": {
+      "flags": [
+        "API_ERROR"
+      ],
+      "details": {},
+      "flag_count": 1,
+      "resource_count": 0
+    }
+  },
+  {
+    "query_id": "sample_003",
+    "user_query": "Include resources that support the following categories: Housing Assistance, Utility Assistance\nFocu",
+    "location": "Austin (Travis county), TX 78741",
+    "baseline": {
+      "flags": [
+        "API_ERROR"
+      ],
+      "details": {},
+      "flag_count": 1,
+      "resource_count": 0
+    }
+  },
+  {
+    "query_id": "sample_004",
+    "user_query": "Include resources that support the following categories: Childcare, Legal Services, Financial Assist",
+    "location": "Austin (Travis county), TX 78745",
+    "baseline": {
+      "flags": [
+        "API_ERROR"
+      ],
+      "details": {},
+      "flag_count": 1,
+      "resource_count": 0
+    }
+  },
+  {
+    "query_id": "sample_005",
+    "user_query": "My client is a veteran who needs mental health support and employment assistance.\nInclude resources ",
+    "location": "Austin (Travis county), TX 78723",
+    "baseline": {
+      "flags": [
+        "API_ERROR"
+      ],
+      "details": {},
+      "flag_count": 1,
+      "resource_count": 0
+    }
+  }
+]

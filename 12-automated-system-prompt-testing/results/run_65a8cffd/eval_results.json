@@ -1,0 +1,511 @@
+[
+  {
+    "query_id": "q_001",
+    "user_query": "My client needs food assistance.\nInclude resources that support the following categories: Food Assis",
+    "location": "Austin (Travis county), TX 78702",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 85.2,
+            "flesch_grade": 4.1,
+            "gunning_fog": 5.9,
+            "smog_index": 7.0,
+            "grade_level": 4.1
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 2,
+          "ungrounded": 5,
+          "total": 7,
+          "ungrounded_names": [
+            "SAFE Alliance - Food Pantry (for shelter and program clients)",
+            "Travis County Health and Human Services",
+            "St. Vincent de Paul Society of Austin",
+            "El Buen Samaritano",
+            "Sunrise Homeless Navigation Center"
+          ],
+          "grounding_pct": 28.6,
+          "web_search_used": false,
+          "rag_resource_count": 4
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 2,
+      "latency_ms": 17622,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [
+        "LOW_GROUNDING"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 4,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 88.2,
+            "flesch_grade": 3.8,
+            "gunning_fog": 5.9,
+            "smog_index": 6.9,
+            "grade_level": 3.8
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 4
+        },
+        "rag_grounding": {
+          "grounded": 2,
+          "ungrounded": 2,
+          "total": 4,
+          "ungrounded_names": [
+            "H-E-B Free Summer Meals (Austin Independent School District partner sites)",
+            "City of Austin - Fresh for Less / Healthy Food Access Programs"
+          ],
+          "grounding_pct": 50.0,
+          "web_search_used": false,
+          "rag_resource_count": 4
+        }
+      },
+      "resource_count": 4,
+      "flag_count": 1,
+      "latency_ms": 10991,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_002",
+    "user_query": "CPR Training\nInclude resources that support the following categories: Employment & Job Training\nFocu",
+    "location": "Austin (Travis county), TX 78753",
+    "baseline": {
+      "flags": [
+        "LOW_GROUNDING"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 3,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 88.0,
+            "flesch_grade": 3.5,
+            "gunning_fog": 5.0,
+            "smog_index": 6.1,
+            "grade_level": 3.5
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 3
+        },
+        "rag_grounding": {
+          "grounded": 2,
+          "ungrounded": 1,
+          "total": 3,
+          "ungrounded_names": [
+            "American Heart Association \u2013 Find CPR Classes Near You"
+          ],
+          "grounding_pct": 66.7,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 3,
+      "flag_count": 1,
+      "latency_ms": 8996,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 5,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 80.0,
+            "flesch_grade": 4.2,
+            "gunning_fog": 5.5,
+            "smog_index": 7.2,
+            "grade_level": 4.2
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 5
+        },
+        "rag_grounding": {
+          "grounded": 3,
+          "ungrounded": 2,
+          "total": 5,
+          "ungrounded_names": [
+            "EMTS Academy - CPR and Basic Life Support Classes",
+            "Austin Community College - Continuing Education Health & Safety (CPR)"
+          ],
+          "grounding_pct": 60.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 5,
+      "flag_count": 2,
+      "latency_ms": 10413,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_003",
+    "user_query": "Include resources that support the following categories: Housing Assistance, Utility Assistance\nFocu",
+    "location": "Austin (Travis county), TX 78741",
+    "baseline": {
+      "flags": [
+        "DUPLICATE_RESOURCE",
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 89.4,
+            "flesch_grade": 3.4,
+            "gunning_fog": 6.0,
+            "smog_index": 7.2,
+            "grade_level": 3.4
+          }
+        },
+        "duplicates": {
+          "duplicates": [
+            {
+              "resource_a": "Society of St. Vincent de Paul \u2013 St. Ignatius Martyr Conference",
+              "resource_b": "Society of St. Vincent de Paul \u2013 San Jose Conference",
+              "similarity": 0.82,
+              "match_type": "name"
+            },
+            {
+              "resource_a": "Society of St. Vincent de Paul \u2013 St. Ignatius Martyr Conference",
+              "resource_b": "Society of St. Vincent de Paul \u2013 St. Austin Catholic Parish Conference",
+              "similarity": 0.84,
+              "match_type": "name"
+            },
+            {
+              "resource_a": "Society of St. Vincent de Paul \u2013 San Jose Conference",
+              "resource_b": "Society of St. Vincent de Paul \u2013 St. Catherine of Siena Conference",
+              "similarity": 0.86,
+              "match_type": "name"
+            },
+            {
+              "resource_a": "Society of St. Vincent de Paul \u2013 San Jose Conference",
+              "resource_b": "Society of St. Vincent de Paul \u2013 St. Austin Catholic Parish Conference",
+              "similarity": 0.82,
+              "match_type": "name"
+            },
+            {
+              "resource_a": "Society of St. Vincent de Paul \u2013 Dolores Catholic Church Conference",
+              "resource_b": "Society of St. Vincent de Paul \u2013 St. Austin Catholic Parish Conference",
+              "similarity": 0.83,
+              "match_type": "name"
+            },
+            {
+              "resource_a": "Society of St. Vincent de Paul \u2013 St. Catherine of Siena Conference",
+              "resource_b": "Society of St. Vincent de Paul \u2013 St. Louis King of France Conference",
+              "similarity": 0.82,
+              "match_type": "name"
+            },
+            {
+              "resource_a": "Society of St. Vincent de Paul \u2013 St. Catherine of Siena Conference",
+              "resource_b": "Society of St. Vincent de Paul \u2013 St. Austin Catholic Parish Conference",
+              "similarity": 0.81,
+              "match_type": "name"
+            }
+          ]
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 7,
+          "total": 7,
+          "ungrounded_names": [
+            "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "Society of St. Vincent de Paul \u2013 St. Ignatius Martyr Conference",
+            "Society of St. Vincent de Paul \u2013 San Jose Conference",
+            "Society of St. Vincent de Paul \u2013 Dolores Catholic Church Conference",
+            "Society of St. Vincent de Paul \u2013 St. Catherine of Siena Conference",
+            "Society of St. Vincent de Paul \u2013 St. Louis King of France Conference",
+            "Society of St. Vincent de Paul \u2013 St. Austin Catholic Parish Conference"
+          ],
+          "grounding_pct": 0.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 3,
+      "latency_ms": 16958,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [
+        "DUPLICATE_RESOURCE",
+        "LOW_GROUNDING",
+        "HALLUCINATION_RISK"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 93.2,
+            "flesch_grade": 2.4,
+            "gunning_fog": 4.5,
+            "smog_index": 5.9,
+            "grade_level": 2.4
+          }
+        },
+        "duplicates": {
+          "duplicates": [
+            {
+              "resource_a": "St. Louis King of France Catholic Church \u2013 St. Vincent de Paul",
+              "resource_b": "St. Catherine of Siena Catholic Church \u2013 St. Vincent de Paul",
+              "similarity": 0.8,
+              "match_type": "name"
+            },
+            {
+              "resource_a": "St. Catherine of Siena Catholic Church \u2013 St. Vincent de Paul",
+              "resource_b": "St. Albert the Great Catholic Church \u2013 St. Vincent de Paul",
+              "similarity": 0.83,
+              "match_type": "name"
+            }
+          ]
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 7,
+          "total": 7,
+          "ungrounded_names": [
+            "St. Vincent de Paul Society \u2013 Diocesan Council of Austin",
+            "Society of St. Vincent de Paul \u2013 St. Ignatius Martyr Conference",
+            "Society of St. Vincent de Paul \u2013 Dolores Catholic Church Conference",
+            "St. Austin Catholic Parish \u2013 Outreach and St. Vincent de Paul",
+            "St. Louis King of France Catholic Church \u2013 St. Vincent de Paul",
+            "St. Catherine of Siena Catholic Church \u2013 St. Vincent de Paul",
+            "St. Albert the Great Catholic Church \u2013 St. Vincent de Paul"
+          ],
+          "grounding_pct": 0.0,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 3,
+      "latency_ms": 25002,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_004",
+    "user_query": "Include resources that support the following categories: Childcare, Legal Services, Financial Assist",
+    "location": "Austin (Travis county), TX 78745",
+    "baseline": {
+      "flags": [
+        "EMPTY_OUTPUT",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": false
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 965,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 85.2,
+            "flesch_grade": 4.5,
+            "gunning_fog": 6.5,
+            "smog_index": 7.4,
+            "grade_level": 4.5
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "Catholic Charities of Central Texas",
+            "Saint Louise House"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 17574,
+      "web_search_used": false
+    }
+  },
+  {
+    "query_id": "q_005",
+    "user_query": "My client is a veteran who needs mental health support and employment assistance.\nInclude resources ",
+    "location": "Austin (Travis county), TX 78723",
+    "baseline": {
+      "flags": [
+        "EMPTY_OUTPUT",
+        "TOO_FEW_RESOURCES"
+      ],
+      "details": {
+        "resource_count": {
+          "resource_count": 0,
+          "min": 1,
+          "max": 10
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 0
+        },
+        "rag_grounding": {
+          "grounded": 0,
+          "ungrounded": 0,
+          "total": 0,
+          "grounding_pct": 0,
+          "web_search_used": false
+        }
+      },
+      "resource_count": 0,
+      "flag_count": 2,
+      "latency_ms": 776,
+      "web_search_used": false
+    },
+    "variant": {
+      "flags": [],
+      "details": {
+        "resource_count": {
+          "resource_count": 7,
+          "min": 1,
+          "max": 10
+        },
+        "readability": {
+          "readability": {
+            "flesch_ease": 74.8,
+            "flesch_grade": 5.9,
+            "gunning_fog": 7.9,
+            "smog_index": 8.8,
+            "grade_level": 5.9
+          }
+        },
+        "duplicates": {
+          "duplicates": []
+        },
+        "contact_completeness": {
+          "missing_contact_count": 0,
+          "total": 7
+        },
+        "rag_grounding": {
+          "grounded": 5,
+          "ungrounded": 2,
+          "total": 7,
+          "ungrounded_names": [
+            "Workforce Solutions Capital Area",
+            "American GI Forum National Veterans Outreach Program \u2013 Austin"
+          ],
+          "grounding_pct": 71.4,
+          "web_search_used": false,
+          "rag_resource_count": 3
+        }
+      },
+      "resource_count": 7,
+      "flag_count": 0,
+      "latency_ms": 15843,
+      "web_search_used": false
+    }
+  }
+]

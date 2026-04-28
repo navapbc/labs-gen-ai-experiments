@@ -1,0 +1,105 @@
+# Automated System Prompt A/B Testing — Configuration
+#
+# Copy this file and customize for your use case:
+#   cp config.example.yaml my_config.yaml
+#   python prompt_test.py run --config my_config.yaml
+
+simulation:
+  # Prompt versions to test (at least 2)
+  # Each version supports a 'source' field:
+  #   local (default) — reads from template_path file
+  #   phoenix         — fetches from Phoenix API
+  #   inline          — uses template_text directly
+  versions:
+    - name: baseline
+      template_path: sample_data/prompts/baseline.txt
+      # source: local  (default, can be omitted)
+    - name: improved
+      template_path: sample_data/prompts/improved.txt
+
+  # Example: pull baseline from Phoenix instead of a local file
+  # versions:
+  #   - name: production
+  #     source: phoenix
+  #     prompt_name: generate_referrals_centraltx
+  #     version: latest  # or a specific number like 53
+  #     template_format: plain  # per-version override
+  #   - name: variant
+  #     template_path: prompts/my_variant.txt
+
+  # Path to test corpus JSON file
+  # Each entry needs at minimum: id, query
+  # Optional: location, resources_context, categories
+  test_corpus_path: sample_data/test_corpus.json
+
+  # OpenAI model to use (any chat completion model)
+  model: gpt-4o
+
+  # Sampling temperature (0.0 = deterministic, 1.0 = creative)
+  temperature: 0.7
+
+  # Template format: 'jinja2' (full Jinja2) or 'plain' (simple {{var}} replacement)
+  template_format: jinja2
+
+  # Message format: 'system_only' or 'system_user'
+  # system_only: entire rendered prompt goes in system message
+  # system_user: template is system message, query goes in user message
+  message_format: system_only
+
+  # Directory for output files
+  output_dir: results
+
+  # Delay between API calls (seconds) to respect rate limits
+  rate_limit_delay: 2.0
+
+evaluation:
+  # JSONPath to resources array in output JSON
+  # Examples: 'resources', 'logs.resources', 'data.items'
+  resource_path: resources
+
+  # Quality dimensions to evaluate
+  # Set enabled: false to skip a dimension
+  dimensions:
+    output_structure:
+      enabled: true
+      required_keys: [resources]    # Keys that must exist in output JSON
+
+    resource_count:
+      enabled: true
+      min: 1                        # Flag if fewer resources than this
+      max: 10                       # Flag if more resources than this
+
+    url_validity:
+      enabled: true
+      skip_validation: false        # Set true to skip HTTP checks (faster)
+      timeout: 10                   # Seconds to wait for HTTP response
+
+    readability:
+      enabled: true
+      max_grade_level: 8.0          # Flesch-Kincaid grade level threshold
+
+    duplicates:
+      enabled: true
+      name_threshold: 0.8           # SequenceMatcher ratio for name similarity
+
+    contact_completeness:
+      enabled: true                 # Checks for phone/address presence
+
+    rag_grounding:
+      enabled: true                 # Checks output resources vs input context
+
+    location_match:
+      enabled: false                # Checks geographic consistency
+      state_patterns:               # Regex patterns for state detection
+        TX: '\bTX\b|\bTexas\b'
+        PA: '\bPA\b|\bPennsylvania\b'
+
+report:
+  title: "Prompt A/B Test Results"
+  output_path: results/comparison_report.md
+
+# Phoenix integration (optional — for 'source: phoenix' and web UI)
+# Credentials can also be set via PHOENIX_URL and PHOENIX_API_KEY env vars
+# phoenix:
+#   url: https://phoenix.your-instance.com:6006
+#   api_key: your-api-key  # prefer env var instead

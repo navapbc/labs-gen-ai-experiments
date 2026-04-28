@@ -117,7 +117,7 @@ These files show actual test execution with SUCCESS/ERROR indicators, response t
 - Parameters tested: temperature (0.0-2.0), reasoning (none, low, medium, high)
 
 ### Production Context
-- Phoenix tracing: Production observability at phoenix.referral-pilot-dev.navateam.com:6006
+- Phoenix tracing: Production observability via Phoenix (configure via PHOENIX_COLLECTOR_ENDPOINT)
 - Database resources: ~Hundreds of resources injected at runtime (not in static prompt)
 - System prompt: Jinja2 template with runtime variable injection
 

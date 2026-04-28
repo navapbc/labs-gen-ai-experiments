@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 # - Any @navapbc.* email
 # - Specific known test/admin accounts
 EXCLUDED_USER_EMAILS: Set[str] = {
-    'kasminscott@gmail.com',
     'nava.product@gwctx.com',
     'excluded.user@gwctx.org',
 }

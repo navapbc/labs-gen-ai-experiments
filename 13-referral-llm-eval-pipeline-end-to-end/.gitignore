@@ -1,0 +1,15 @@
+.env
+__pycache__/
+*.pyc
+results/*.json
+results/*.md
+results/*.csv
+!results/.gitkeep
+.DS_Store
+
+# Reasoning quality experiment: exclude production data and intermediate checkpoints.
+# These contain real production queries with RAG-injected org contact info.
+# The aggregated results (per-call flags/timing) in reasoning_quality_test_results.json
+# and the final report are safe and are committed.
+data/production_test_corpus.json
+data/reasoning_checkpoint.json
