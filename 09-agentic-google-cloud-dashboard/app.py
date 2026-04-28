@@ -547,35 +547,37 @@ def get_bigquery_client():
     """Initialize BigQuery client - supports st.secrets (cloud) and local file"""
     from google.cloud import bigquery
     from google.oauth2 import service_account
-    
+
+    # GCP project is read from secrets/env so no project name is hardcoded here.
+    gcp_project = os.environ.get("GCP_PROJECT_ID")
+
     scopes = [
         "https://www.googleapis.com/auth/bigquery",
         "https://www.googleapis.com/auth/cloud-platform"
     ]
-    
+
     # Method 1: Try st.secrets (for Streamlit Cloud deployment)
     try:
         creds_dict = dict(st.secrets["gcp_service_account"])
         credentials = service_account.Credentials.from_service_account_info(
             creds_dict, scopes=scopes
         )
-        return bigquery.Client(
-            credentials=credentials,
-            project=creds_dict.get("project_id", "nava-labs")
-        )
+        # Prefer explicit env var; fall back to project_id from the credentials dict.
+        project = gcp_project or creds_dict.get("project_id")
+        return bigquery.Client(credentials=credentials, project=project)
     except (KeyError, FileNotFoundError):
         pass
-    
+
     # Method 2: Try local service account file
     key_path = os.path.join(os.path.dirname(__file__), 'service-account.json')
     if os.path.exists(key_path):
         credentials = service_account.Credentials.from_service_account_file(
             key_path, scopes=scopes
         )
-        return bigquery.Client(credentials=credentials, project="nava-labs")
-    
+        return bigquery.Client(credentials=credentials, project=gcp_project)
+
     # Method 3: Fall back to default credentials (gcloud auth)
-    return bigquery.Client(project="nava-labs")
+    return bigquery.Client(project=gcp_project)
 
 def get_cache_path():
     """Get path to the local cache file"""
@@ -603,7 +605,7 @@ def save_to_cache(df):
 
 def fetch_bigquery_data(use_cache=True):
     """Fetch ALL data from BigQuery with smart caching"""
-    
+
     # Check cache first (valid for 1 hour)
     if use_cache:
         cached_df, cache_time = load_cached_data()
@@ -611,12 +613,20 @@ def fetch_bigquery_data(use_cache=True):
             cache_age = datetime.now() - cache_time
             if cache_age.total_seconds() < 3600:  # 1 hour cache
                 return cached_df, cache_time
-    
+
     # Fetch from BigQuery
     client = get_bigquery_client()
-    
-    query = """
-    SELECT 
+
+    # Table path is read from env so no project/dataset name is hardcoded here.
+    # Set BQ_TABLE in .env or Streamlit secrets, e.g.:
+    #   BQ_TABLE=my-project.my_dataset.request_response_logging
+    bq_table = os.environ.get("BQ_TABLE")
+    if not bq_table:
+        raise RuntimeError("BQ_TABLE environment variable is not set. "
+                           "Set it to the fully-qualified BigQuery table path.")
+
+    query = f"""
+    SELECT
         endpoint,
         deployed_model_id,
         logging_time,
@@ -626,7 +636,7 @@ def fetch_bigquery_data(use_cache=True):
         model,
         model_version,
         api_method
-    FROM `nava-labs.anthropic_logging.request_response_logging`
+    FROM `{bq_table}`
     ORDER BY logging_time DESC
     """
     

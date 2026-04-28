@@ -1,5 +1,6 @@
 service-account.json
 .streamlit/secrets.toml
+.env
 .cache/
 __pycache__/
 *.py[cod]

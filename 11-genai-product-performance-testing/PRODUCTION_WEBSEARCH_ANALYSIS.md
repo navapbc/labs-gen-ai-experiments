@@ -2,7 +2,7 @@
 
 **Date:** February 19, 2026
 **Environment:** Production (pilot-prod)
-**Phoenix URL:** https://phoenix.referral-pilot-dev.navateam.com:6006
+**Phoenix URL:** Set via `PHOENIX_COLLECTOR_ENDPOINT` environment variable
 
 ## Executive Summary
 
@@ -112,7 +112,7 @@ Comprehensive analysis of all historical production traces.
 
 **Usage:**
 ```bash
-export PHOENIX_COLLECTOR_ENDPOINT="https://phoenix.referral-pilot-dev.navateam.com:6006"
+export PHOENIX_COLLECTOR_ENDPOINT="https://your-phoenix-instance:6006"
 export PHOENIX_PROJECT_NAME="pilot-prod"
 export PHOENIX_API_KEY="<your-key>"
 python3 complete_websearch_analysis.py
@@ -128,7 +128,7 @@ Quick analysis of recent 1,000 spans for rapid health check.
 
 **Usage:**
 ```bash
-export PHOENIX_COLLECTOR_ENDPOINT="https://phoenix.referral-pilot-dev.navateam.com:6006"
+export PHOENIX_COLLECTOR_ENDPOINT="https://your-phoenix-instance:6006"
 export PHOENIX_PROJECT_NAME="pilot-prod"
 export PHOENIX_API_KEY="<your-key>"
 python3 quick_websearch_check.py

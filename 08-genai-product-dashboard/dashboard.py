@@ -161,10 +161,8 @@ def main():
             help="Your Phoenix instance URL"
         )
 
-        dev_url_default = os.getenv(
-            "PHOENIX_DEV_SPANS_URL",
-            "https://phoenix.referral-pilot-dev.navateam.com:6006/projects/UHJvamVjdDoxOA==/spans",
-        )
+        # Default is empty so no internal URL is hardcoded in source. Set PHOENIX_DEV_SPANS_URL in .env.
+        dev_url_default = os.getenv("PHOENIX_DEV_SPANS_URL", "")
         include_secondary_source = st.checkbox(
             "Include Keystone dev traces",
             value=True,
