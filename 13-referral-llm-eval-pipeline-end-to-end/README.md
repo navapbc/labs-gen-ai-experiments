@@ -2,6 +2,13 @@
 
 A pipeline for evaluating and optimizing LLM-generated resource referrals. Given access to a Phoenix observability instance (or trace data), it extracts traces, runs automated quality checks across 8 dimensions, performs statistical analysis, generates improvement recommendations, and can automatically iterate on prompts until quality targets are met.
 
+> ## 📖 Case study website
+>
+> For a scrollable, presentation-friendly walkthrough of the evaluation pipeline, open the live website:
+> [gobrando.github.io/labs-gen-ai-experiments](https://gobrando.github.io/labs-gen-ai-experiments/)
+>
+> Repo copy: [docs/case-study/index.html](docs/case-study/index.html)
+
 > **Scope:** This pipeline is purpose-built for **resource referral systems** — LLMs that recommend community services (food banks, shelters, legal aid, etc.) to people in need. The evaluation dimensions, fix strategies, and optimization logic encode domain-specific knowledge from the v48-v53 prompt iteration cycle. For a generalized version applicable to other GenAI products, see the [Generalizing Beyond Referrals](#generalizing-beyond-referrals) section.
 
 ## Quickstart
